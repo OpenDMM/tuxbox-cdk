@@ -45,7 +45,7 @@ libffi;make:install
 libfreetype;make:install;link:TARGET/bin/freetype-config:HOST/bin/freetype-config
 libfribidi;rewrite-pkgconfig:fribidi.pc;make:install:DESTDIR=TARGET
 libjpeg;make:install-lib:install-headers
-libmad;make:install:DESTDIR=TARGET
+libmad;rewrite-pkgconfig:libid3tag/id3tag.pc;rewrite-pkgconfig:libmad/mad.pc;make:install:DESTDIR=TARGET
 libncurses;make:install.libs:install.includes:DESTDIR=TARGET
 libnet;make:install;install:-m755:libnet-config:TARGET/bin/libnet-config;link:TARGET/bin/libnet-config:HOST/bin/libnet-config
 libnids;make:install
