@@ -70,7 +70,7 @@ mkdir /dbox2
 chown tuxbox /dbox2
 
 
- - Um alles zu bauen, was das Makefile hergibt:
+ - Um alles zu bauen, was das Makefile hergibt: (wieder als normaler Benutzer)
 
 make all
 make extra
