@@ -331,7 +331,7 @@ root_optional: \
 
 libs: \
 	.libcrypto .libcurl .libdvbpsi .libffi .libfreetype .libjpeg \
-	.libmad .libncurses .libpng .libreadline .libsdl .libsigc .libz 
+	.libmad .libncurses .libpng .libreadline .libsdl .libsigc .libz
 
 libs_optional: \
 	.libcommoncplusplus .libdb2 .libnet .libnids .libpcap .libpopt \
@@ -583,7 +583,7 @@ libs_optional: \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
-			--prefix=$(targetprefix) && \
+			--prefix= && \
 		$(MAKE) shared && \
 		@INSTALL_libreadline@
 	@CLEANUP_libreadline@
@@ -596,7 +596,7 @@ libs_optional: \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
-			--prefix=$(targetprefix) \
+			--prefix= \
 			--disable-alsa \
 			--disable-openbsdaudio \
 			--disable-esd \
