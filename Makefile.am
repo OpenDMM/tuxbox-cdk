@@ -889,17 +889,18 @@ devel_optional: .gdb-remote .ksymoops
 .gdb: .bootstrap .libncurses @DEPENDS_gdb@
 	@PREPARE_gdb@
 	cd @DIR_gdb@ && \
+		$(BUILDENV) \
 		LD_LIBRARY_PATH=$(libdir) \
-		CFLAGS="$(TARGET_CFLAGS)" \
-		LDFLAGS="$(TARGET_LDFLAGS)" \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
-			--target=$(target) \
 			--nfp \
 			--disable-sim \
-			--prefix=$(targetprefix) && \
-		$(MAKE) all && \
+			--without-sim \
+			--without-expect \
+			--disable-expect \
+			--prefix= && \
+		$(MAKE) all-gdb && \
 		@INSTALL_gdb@
 	@CLEANUP_gdb@
 	touch $@
