@@ -252,6 +252,7 @@ TUXBOX_RULES_MAKE(watchdog)
 #
 # contrib libs
 #
+TUXBOX_RULES_MAKE(libboost)
 TUXBOX_RULES_MAKE(libcommoncplusplus)
 TUXBOX_RULES_MAKE(libcrypto)
 TUXBOX_RULES_MAKE(libcurl)
