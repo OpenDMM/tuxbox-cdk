@@ -292,7 +292,7 @@ libs: \
 
 libs_optional: \
 	.libcommoncplusplus .libdb2 .libnet .libnids .libpcap .libpopt .libungif \
-	.libxml2 .libxmlparse .libxmlwrapp
+	.libxml2 .libxmlparse .libxmlwrapp .libgif
 
 .libboost: .bootstrap @DEPENDS_libboost@
 	@PREPARE_libboost@
@@ -679,6 +679,21 @@ endif
 		$(MAKE) && \
 		@INSTALL_libungif@
 	@CLEANUP_libungif@
+	touch $@
+
+.giflib: .bootstrap @DEPENDS_giflib@
+	@PREPARE_giflib@
+	cd @DIR_giflib@ && \
+		$(BUILDENV) \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--prefix= \
+			--enable-static \
+			--enable-shared && \
+		$(MAKE) all && \
+		@INSTALL_giflib@
+	@CLEANUP_giflib@
 	touch $@
 
 .libxml2: .bootstrap @DEPENDS_libxml2@
