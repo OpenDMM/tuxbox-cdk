@@ -1539,15 +1539,19 @@ if CPU_MODEL_405
 	$(INSTALL) $(targetprefix)/sbin/hotplug $(flashprefix)/root/sbin
 	for i in hdd root/platform/kernel var/bin var/etc/ppp var/log var/mnt/nfs var/mnt/usb var/run ; do \
 		$(INSTALL) -d $(flashprefix)/root/$$i ; done
-	mv $(flashprefix)/root/etc/cables.xml $(flashprefix)/root/share/tuxbox
-	mv $(flashprefix)/root/etc/satellites.xml $(flashprefix)/root/share/tuxbox
+	for i in cables.xml satellites.xml ; do \
+		rm $(flashprefix)/root/share/tuxbox/$$i ; \
+		mv $(flashprefix)/root/etc/$$i $(flashprefix)/root/share/tuxbox ; \
+		ln -sf tuxbox/$$i $(flashprefix)/root/share ; done
+	for i in modules.conf thttpd.conf ; do \
+		rm $(flashprefix)/root/etc/$$i ; done
 	ln -sf /var/mnt $(flashprefix)/root
 	ln -sf /tmp $(flashprefix)/root/var
 	for i in group hosts passwd ; do \
 		mv $(flashprefix)/root/etc/$$i $(flashprefix)/root/var/etc ; \
 		ln -sf ../var/etc/$$i $(flashprefix)/root/etc ; done
 	ln -sf /var/etc/smb.conf $(flashprefix)/root/etc
-	ln -sf /var/etc/ppp/resolv.conf $(flashprefix)/root/etc
+	ln -sf /var/etc/resolv.conf $(flashprefix)/root/etc
 	@echo "none		/proc/bus/usb	usbdevfs	defaults	0 0" >> $(flashprefix)/root/etc/fstab
 endif
 	@touch $@
