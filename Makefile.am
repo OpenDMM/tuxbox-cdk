@@ -1488,7 +1488,7 @@ dreamboximage_root: core .enigma .reiserfsprogs .e2fsprogs .samba \
 	.etherwake .utillinux .linuxkernel .dreamfiles \
 	flash-enigma flash-plugin_tetris flash-plugin_snake \
 	flash-plugin_pacman flash-plugin_tuxtxt flash-plugin_ngrabstartstop \
-	flash-ftpd flash-dvb-tools flash-reiserfsck flash-fstools flash-sambaserver \
+	flash-ftpd flash-dvb-tools flash-reiserfs flash-fstools flash-sambaserver \
 	flash-etherwake flash-dreamfiles
 else
 dreamboximage_root: core .enigma .etherwake .linuxkernel .dreamfiles \
@@ -1526,6 +1526,10 @@ if BOXTYPE_DM7000
 	@if [ ! -f $(flashprefix)/.part_sambaclient -a -d $(flashprefix)/root/lib/modules/$(KERNELVERSION)/kernel/fs/smbfs ] ; then \
 		rm -rf $(flashprefix)/root/lib/modules/$(KERNELVERSION)/kernel/fs/smbfs; \
 	fi
+#remove reiserfs module when no reiserfs is requested
+	@if [ ! -f $(flashprefix)/.part_reiserfs -a -d $(flashprefix)/root/lib/modules/$(KERNELVERSION)/kernel/fs/reiserfs ] ; then \
+		rm -rf $(flashprefix)/root/lib/modules/$(KERNELVERSION)/kernel/fs/reiserfs; \
+	fi
 endif
 	ln -sf /var/mnt $(flashprefix)/root/mnt
 	@touch $@
@@ -1544,8 +1548,8 @@ $(flashprefix)/.part_dvb_tools: $(flashprefix)/.flash .stream
 	$(INSTALL) $(targetprefix)/bin/dvbnet $(flashprefix)/root/bin;
 	@touch $@
 
-flash-reiserfsck: $(flashprefix)/.part_reiserfsck
-$(flashprefix)/.part_reiserfsck: $(flashprefix)/.flash .reiserfsprogs
+flash-reiserfs: $(flashprefix)/.part_reiserfs
+$(flashprefix)/.part_reiserfs: $(flashprefix)/.flash .reiserfsprogs
 	@touch $@
 
 flash-fstools: $(flashprefix)/.part_fstools
@@ -1553,7 +1557,7 @@ $(flashprefix)/.part_fstools: $(flashprefix)/.flash .e2fsprogs .reiserfsprogs .u
 	$(INSTALL) -d $(flashprefix)/root/sbin
 # reiserfsck is only copied to flashroot when .part_reiserfsck exist
 	@for i in reiserfsck e2fsck sfdisk mke2fs; do \
-		if [ $$i != reiserfsck -o -f $(flashprefix)/.part_reiserfsck ]; then \
+		if [ $$i != reiserfsck -o -f $(flashprefix)/.part_reiserfs ]; then \
 			$(INSTALL) $(targetprefix)/sbin/$$i $(flashprefix)/root/sbin; \
 		fi; \
 	done;
