@@ -1,5 +1,6 @@
 #!/usr/bin/perl
 use strict;
+use warnings;
 
 sub load
 {
@@ -11,15 +12,18 @@ sub load
     {
       chomp;
       @_ = split ( /;/, $_ );
-      if ( $_[0] eq ">>>" )
+      if ( defined $_[0] )
       {
-        close ( RULES );
-        return load ( $_[1] );
-      }
-      elsif ( $_[0] eq $ARGV[1] )
-      {
-        close ( RULES );
-        return @_;
+	if ( $_[0] eq ">>>" )
+	{
+	  close ( RULES );
+	  return load ( $_[1] );
+	}
+	elsif ( $_[0] eq $ARGV[1] )
+	{
+	  close ( RULES );
+	  return @_;
+	}
       }
     }
   }
@@ -52,11 +56,15 @@ if ( $#ARGV >= 2 )
       {
         $output .= "Archive/" . $_ . " ";
       }
-      elsif ( $_ =~ m#\.diff$# )
+      elsif ( $_ =~ m#\.(config|diff)$# )
       {
         $output .= "Patches/" . $_ . " ";
       }
       elsif ( $_ =~ m#\.exe$# )
+      {
+        $output .= "Archive/" . $_ . " ";
+      }
+      elsif ( $_ =~ m#\.tgz$# )
       {
         $output .= "Archive/" . $_ . " ";
       }
@@ -96,6 +104,10 @@ if ( $#ARGV >= 2 )
         {
           $output .= "gunzip -cd Archive/" . $_[1] . " | tar -x";
         }
+        elsif ( $_[1] =~ m#\.tgz$# )
+        {
+          $output .= "gunzip -cd Archive/" . $_[1] . " | tar -x";
+        }
         elsif ( $_[1] =~ m#\.exe$# )
         {
           $output .= "cabextract Archive/" . $_[1];
@@ -128,19 +140,22 @@ if ( $#ARGV >= 2 )
 
         $output .= " )";
       }
-      elsif ( $_[0] eq "patch" )
+      elsif ( $_[0] =~ m/patch(time)?(-(\d+))?/ )
       {
+        $_ = "-p1 ";
+        $_ = "-p$3 " if defined $3;
+        $_ .= "-Z " if defined $1;
         if ( $_[1] =~ m#\.bz2$# )
         {
-          $output .= "( cd " . $dir . "; bunzip2 -cd ../Archive/" . $_[1] . " | patch -p1 )";
+          $output .= "( cd " . $dir . "; bunzip2 -cd ../Archive/" . $_[1] . " | patch $_ )";
         }
         elsif ( $_[1] =~ m#\.gz$# )
         {
-          $output .= "( cd " . $dir . "; gunzip -cd ../Archive/" . $_[1] . " | patch -p1 )";
+          $output .= "( cd " . $dir . "; gunzip -cd ../Archive/" . $_[1] . " | patch $_ )";
         }
         else
         {
-          $output .= "( cd " . $dir . "; patch -p1 < ../Patches/" . $_[1] . " )";
+          $output .= "( cd " . $dir . "; patch $_ < ../Patches/" . $_[1] . " )";
         }
       }
       elsif ( $_[0] eq "move" )
