@@ -54,7 +54,6 @@ libreadline;make:install:DESTDIR=TARGET
 libsdl;make:install:DESTDIR=TARGET
 libsigc;rewrite-pkgconfig:sigc++-1.2.pc;make:install:DESTDIR=TARGET
 libungif;make:install:DESTDIR=TARGET
-giflib;make:install:prefix=TARGET
 libvorbisidec;make:install:DESTDIR=TARGET
 libxmlparse;make:install
 libxmlwrapp;make:install;link:TARGET/bin/xmlwrapp-config:HOST/bin/xmlwrapp-config
