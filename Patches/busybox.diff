@@ -88,7 +88,7 @@ diff -Naur busybox-1.00/libbb/messages.c busybox-1.00-patched/libbb/messages.c
  
 diff -Naur busybox-1.00/libbb/procps.c busybox-1.00-patched/libbb/procps.c
 --- busybox-1.00/libbb/procps.c	2004-08-27 00:18:58.000000000 +0200
-+++ busybox-1.00-patched/libbb/procps.c	2005-02-03 21:17:13.000000000 +0100
++++ busybox-1.00-patched/libbb/procps.c	2005-02-05 20:19:11.000000000 +0100
 @@ -22,7 +22,7 @@
  #endif
  	)
@@ -106,7 +106,7 @@ diff -Naur busybox-1.00/libbb/procps.c busybox-1.00-patched/libbb/procps.c
  	long tasknice;
  	struct stat sb;
  
-@@ -40,111 +41,149 @@
+@@ -40,111 +41,150 @@
  		if(!dir)
  			bb_error_msg_and_die("Can't open /proc");
  	}
@@ -327,7 +327,8 @@ diff -Naur busybox-1.00/libbb/procps.c busybox-1.00-patched/libbb/procps.c
 +			sprintf(status, "/proc/%d/task", pid);
 +			taskdir = opendir(status);
 +			if(!taskdir)
-+				bb_error_msg_and_die("Can't open /proc/XXX/task");
++					// ignore processes without taskdir
++				continue;
 +			parentpid = pid;
 +			return procps_scan(save_user_arg0
 +#ifdef CONFIG_SELINUX
