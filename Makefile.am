@@ -21,6 +21,14 @@ extra: java contrib_apps fun dvb_apps
 
 core: .directories .binutils .linuxdir .glibc .gcc
 
+checkout:
+	@for i in apps/tuxbox/enigma apps/dvb/dvbsnoop \
+		apps/dvb/tools/stream apps/tuxbox/plugins ; do \
+		CURRENT_PATH=`pwd`; \
+		cd ../$$i && cvs update -d -P -A; \
+		cd $$CURRENT_PATH; \
+	done
+
 .bootstrap:
 	@if [ ! -f .glibc ]; then \
 		$(MAKE) .glibc .gcc; \
@@ -30,28 +38,14 @@ core: .directories .binutils .linuxdir .glibc .gcc
 	touch $@
 
 .directories:
-	$(INSTALL) -d $(targetprefix)/bin
-	$(INSTALL) -d $(targetprefix)/boot
-	$(INSTALL) -d $(targetprefix)/dev
-	$(INSTALL) -d $(targetprefix)/etc
-	$(INSTALL) -d $(targetprefix)/include
-	$(INSTALL) -d $(targetprefix)/mnt
-	$(INSTALL) -d $(targetprefix)/lib
-	$(INSTALL) -d $(targetprefix)/lib/pkgconfig
-	$(INSTALL) -d $(targetprefix)/proc
-	$(INSTALL) -d $(targetprefix)/root
-	$(INSTALL) -d $(targetprefix)/sbin
-	$(INSTALL) -d $(targetprefix)/tmp
-	$(INSTALL) -d $(targetprefix)/var/run
-	$(INSTALL) -d $(targetprefix)$(UCODEDIR)
+	@for i in bin boot dev etc include mnt lib lib/pkgconfig proc root sbin tmp var/run $(UCODEDIR); do \
+		$(INSTALL) -d $(targetprefix)/$$i ; done;
 	$(INSTALL) -d $(hostprefix)/$(target)
 	$(INSTALL) -d $(bootprefix)
 	-rm $(hostprefix)/$(target)/include
 	-rm $(hostprefix)/$(target)/lib
 	-ln -s $(targetprefix)/include $(hostprefix)/$(target)/include
 	-ln -s $(targetprefix)/lib $(hostprefix)/$(target)/lib
-	-ln -s $(buildprefix)/linux/include/asm $(hostprefix)/$(target)/include
-	-ln -s $(buildprefix)/linux/include/linux $(hostprefix)/$(target)/include
 if TARGETRULESET_FLASH
 	$(INSTALL) -d $(flashprefix)
 endif
@@ -62,11 +56,20 @@ endif
 		$(MAKE) .directories; \
 	fi
 	@PREPARE_linux@
-	cat Patches/linux-dbox2.config > @DIR_linux@/.config
+if BOXTYPE_DM7000
+	cat @DIR_linux@/arch/ppc/configs/dm7000_defconfig > @DIR_linux@/.config
+endif
+if BOXTYPE_DM56x0
+	cat @DIR_linux@/arch/ppc/configs/dm56x0_defconfig > @DIR_linux@/.config
+endif
+if BOXTYPE_DM500
+	cat @DIR_linux@/arch/ppc/configs/dm500_defconfig > @DIR_linux@/.config
+endif
 	$(MAKE) -C @DIR_linux@ oldconfig \
 		ARCH=ppc
 	$(MAKE) -C @DIR_linux@ include/linux/version.h \
 		ARCH=ppc
+	-ln -sf $(buildprefix)/linux/include/asm-ppc $(buildprefix)/linux/include/asm
 	touch $@
 
 .binutils: @DEPENDS_binutils@
@@ -97,6 +100,10 @@ bootstrap_gcc: @DEPENDS_bootstrap_gcc@
 	@PREPARE_bootstrap_gcc@
 	$(INSTALL) -d $(hostprefix)/$(target)/sys-include
 	ln -sf $(buildprefix)/linux/include/asm $(hostprefix)/$(target)/sys-include/
+	@for i in linux asm-generic asm mtd ; do \
+		rm -rf $(hostprefix)/$(target)/include/$$i 2> /dev/null || /bin/true; \
+		ln -sf $(buildprefix)/linux/include/$$i $(hostprefix)/$(target)/include; \
+	done;
 	cd @DIR_bootstrap_gcc@ && \
 		CC=$(CC) CFLAGS="$(CFLAGS)" \
 		@CONFIGURE_bootstrap_gcc@ \
@@ -110,14 +117,15 @@ bootstrap_gcc: @DEPENDS_bootstrap_gcc@
 			--disable-shared \
 			--disable-nls \
 			--disable-threads \
-			--nfp && \
+			--with-float=soft && \
 		$(MAKE) all && \
 		@INSTALL_bootstrap_gcc@
 	rm -rf $(hostprefix)/$(target)/sys-include
 	@CLEANUP_bootstrap_gcc@
 
-.glibc: @DEPENDS_glibc@
-	@if [ ! -f $(hostprefix)/$(target)/lib/libc.so -a ! -f $(hostprefix)/bin/$(target)-gcc ]; then \
+.glibc: @DEPENDS_glibc@ @DEPENDS_linux_libc_headers@
+	@rm $(hostprefix)/bin/$(target)-gcc 2>/dev/null || /bin/true
+	@if [ ! -f $(hostprefix)/bin/$(target)-gcc ]; then \
 		$(MAKE) bootstrap_gcc; \
 	elif [ ! -f $(hostprefix)/bin/$(target)-gcc ]; then \
 		$(MAKE) .gcc; \
@@ -134,14 +142,27 @@ bootstrap_gcc: @DEPENDS_bootstrap_gcc@
 			--host=$(target) \
 			--prefix= \
 			--with-headers=$(buildprefix)/linux/include \
-			--enable-kernel=$(KERNELVERSION) \
+			--enable-kernel=2.6.5 \
 			--disable-profile \
 			--enable-shared \
-			--enable-add-ons=linuxthreads \
-			--without-fp && \
+			--enable-add-ons=nptl \
+			--with-__thread \
+			--without-fp \
+			--with-tls && \
 		$(MAKE) all && \
 		@INSTALL_glibc@
 	@CLEANUP_glibc@
+	@PREPARE_linux_libc_headers@
+	mv $(buildprefix)/linux-libc-headers/include/asm-ppc $(buildprefix)/linux-libc-headers/include/asm
+	for i in linux asm asm_generic; do \
+		rm -R $(hostprefix)/$(target)/include/$$i 2> /dev/null || /bin/true; \
+		if [ $$i != asm_generic ] ; then \
+			mv $(buildprefix)/linux-libc-headers/include/$$i $(hostprefix)/$(target)/include; \
+		fi; \
+	done;
+	@CLEANUP_linux_libc_headers@
+	rm $(hostprefix)/$(target)/include/asm-generic 2> /dev/null || /bin/true;
+	rm $(buildprefix)/linux-libc-headers 2> /dev/null || /bin/true
 	touch $@
 
 #
@@ -177,12 +198,17 @@ bootstrap_gcc: @DEPENDS_bootstrap_gcc@
 			--enable-target-optspace \
 			--enable-languages="c,c++" \
 			--enable-shared \
-			--enable-threads \
+			--enable-threads=posix \
 			--disable-nls \
-			--nfp && \
+			--with-float=soft \
+			--enable-__cxa_atexit && \
 		$(MAKE) all && \
 		@INSTALL_gcc@
 	rm -rf $(hostprefix)/$(target)/sys-include
+	@for i in `find $(hostprefix)/$(target)/lib/nof -type f` ; do mv $$i $(hostprefix)/$(target)/lib; done
+	@for i in `find $(hostprefix)/$(target)/lib/nof -type l` ; do mv $$i $(hostprefix)/$(target)/lib; done
+	rm -rf $(hostprefix)/$(target)/lib/nof
+	ln -sf $(hostprefix)/$(target)/lib $(hostprefix)/$(target)/lib/nof
 	@CLEANUP_gcc@
 	touch $@
 
@@ -200,15 +226,11 @@ root_optional: \
 
 .busybox: .bootstrap .etc @DEPENDS_busybox@
 	@PREPARE_busybox@
-if TARGETRULESET_FLASH
-	cat Patches/busybox-flash.config > @DIR_busybox@/.config
-else
 	cat Patches/busybox.config > @DIR_busybox@/.config
-endif
 	cd @DIR_busybox@ && \
 		$(MAKE) dep all \
 			CROSS=$(target)- \
-			CFLAGS_EXTRA="$(TARGET_CFLAGS)" && \
+			CFLAGS_EXTRA="-Os -msoft-float" && \
 		@INSTALL_busybox@
 	@CLEANUP_busybox@
 	touch $@
@@ -292,7 +314,7 @@ libs: \
 
 libs_optional: \
 	.libcommoncplusplus .libdb2 .libnet .libnids .libpcap .libpopt .libungif \
-	.libxml2 .libxmlparse .libxmlwrapp
+	.libxml2 .libxmlparse .libxmlwrapp .libgif
 
 .libboost: .bootstrap @DEPENDS_libboost@
 	@PREPARE_libboost@
@@ -410,6 +432,10 @@ libs_optional: \
 			--enable-memopt && \
 		$(MAKE) all && \
 		@INSTALL_libfribidi@
+if TARGETRULESET_FLASH
+		cd $(hostprefix)/$(target)/lib && \
+		ln -sf libfribidi.a libfribidi_pic.a
+endif
 	@CLEANUP_libfribidi@
 	touch $@
 
@@ -438,10 +464,13 @@ libs_optional: \
 			--enable-shared && \
 		$(MAKE) libjpeg.la && \
 		@INSTALL_libjpeg@
+if TARGETRULESET_FLASH
+		cd $(hostprefix)/$(target)/lib && \
+		ln -sf libjpeg.a libjpeg_pic.a
+endif
 	@CLEANUP_libjpeg@
 	touch $@
 
-if CPU_MODEL_405
 .libmad: .bootstrap .libz @DEPENDS_libmad@
 	@PREPARE_libmad@
 	cd @DIR_libmad@ && \
@@ -460,26 +489,6 @@ if CPU_MODEL_405
 		@INSTALL_libmad@
 	@CLEANUP_libmad@
 	touch $@
-else
-.libmad: .bootstrap .libz @DEPENDS_libmad@
-	@PREPARE_libmad@
-	cd @DIR_libmad@ && \
-		$(BUILDENV) \
-		./configure \
-			--build=$(build) \
-			--host=$(target) \
-			--prefix= \
-			--enable-shared=yes \
-			--disable-nls \
-			--without-esd \
-			--enable-fpm=ppc \
-			--enable-sso \
-			--enable-speed && \
-		$(MAKE) all && \
-		@INSTALL_libmad@
-	@CLEANUP_libmad@
-	touch $@
-endif
 
 .libid3tag: .bootstrap .libz @DEPENDS_libid3tag@
 	@PREPARE_libid3tag@
@@ -678,6 +687,10 @@ endif
 			--without-x && \
 		$(MAKE) && \
 		@INSTALL_libungif@
+if TARGETRULESET_FLASH
+		cd $(hostprefix)/$(target)/lib && \
+		ln -sf libungif.a libungif_pic.a
+endif
 	@CLEANUP_libungif@
 	touch $@
 
@@ -832,6 +845,88 @@ contrib_apps_optional: .dsniff .pump .thttpd
 	@CLEANUP_lirc@
 	touch $@
 
+.utillinux: .bootstrap @DEPENDS_utillinux@
+	@PREPARE_utillinux@
+	cd @DIR_utillinux@ && \
+		CC=$(target)-gcc \
+		CFLAGS="-Os -msoft-float" \
+		LDFLAGS="$(TARGET_LDFLAGS)" \
+		./configure && \
+		$(MAKE) ARCH=ppc all && \
+		@INSTALL_utillinux@
+	@CLEANUP_utillinux@
+	touch $@
+
+.samba: .bootstrap @DEPENDS_samba@
+	@PREPARE_samba@
+	cd @DIR_samba@ && \
+		cd source && \
+		(for i in smbd nmbd smbmount smbmnt; do \
+			$(MAKE) $$i; \
+			cp $$i $(targetprefix)/bin; \
+		done)
+	@CLEANUP_samba@
+	touch $@
+
+.etherwake: .bootstrap @DEPENDS_etherwake@
+	@PREPARE_etherwake@
+	cd @DIR_etherwake@ && \
+		CC=$(target)-gcc \
+		CFLAGS="$(TARGET_CFLAGS)" \
+		LDFLAGS="$(TARGET_LDFLAGS)" \
+		$(MAKE) && \
+		@INSTALL_etherwake@
+	@CLEANUP_etherwake@
+	touch $@
+
+.reiserfsprogs: .bootstrap @DEPENDS_reiserfsprogs@
+	@PREPARE_reiserfsprogs@
+	cd @DIR_reiserfsprogs@ && \
+		CC=$(target)-gcc \
+		RANLIB=$(target)-ranlib \
+		CFLAGS="-Os -msoft-float" \
+		LDFLAGS="$(TARGET_LDFLAGS)" \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--target=$(target) \
+			--prefix=$(targetprefix) && \
+		$(MAKE) && \
+		@INSTALL_reiserfsprogs@
+	@CLEANUP_reiserfsprogs@
+	touch $@
+
+.e2fsprogs: .bootstrap @DEPENDS_e2fsprogs@
+	@PREPARE_e2fsprogs@
+	cd @DIR_e2fsprogs@ && \
+		CC=$(target)-gcc \
+		RANLIB=$(target)-ranlib \
+		CFLAGS="-Os -msoft-float" \
+		LDFLAGS="$(TARGET_LDFLAGS)" \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--target=$(target) \
+			--prefix=$(targetprefix) \
+			--with-cc=$(target)-gcc \
+			--with-linker=$(target)-ld \
+			--disable-evms \
+			--enable-elf-shlibs \
+			--enable-htree \
+			--disable-profile \
+			--disable-swapfs \
+			--disable-debugfs \
+			--disable-image \
+			--disable-resizer \
+			--enable-dynamic-e2fsck \
+			--enable-fsck \
+			--with-gnu-ld \
+			--disable-nls && \
+		$(MAKE) libs progs && \
+		@INSTALL_e2fsprogs@
+	@CLEANUP_e2fsprogs@
+	touch $@
+
 .lsof: .bootstrap @DEPENDS_lsof@
 	@PREPARE_lsof@
 	cd @DIR_lsof@ && \
@@ -947,8 +1042,6 @@ devel_optional: .gdb-remote .insight .ksymoops
 			--without-tui \
 			--disable-sim \
 			--without-sim \
-			--without-expect \
-			--disable-expect \
 			--prefix= && \
 		$(MAKE) all-gdb && \
 		@INSTALL_gdb@
@@ -1100,11 +1193,15 @@ fun: .gnuboy .scummvm .sdldoom
 .scummvm: .bootstrap .libreadline .libsdl @DEPENDS_scummvm@
 	@PREPARE_scummvm@
 	cd @DIR_scummvm@ && \
+		./configure \
+		    --host=$(target) && \
 		$(MAKE) \
-			CC=$(target)-g++ \
+			AR="$(target)-ar cru" \
+			LD=$(target)-ld \
+			CC=$(target)-gcc \
+			CXX=$(target)-g++ \
 			CFLAGS="$(TARGET_CFLAGS)" \
-			LDFLAGS="$(TAGET_LDFLAGS)" \
-			DEFINES="-DUNIX" && \
+			LDFLAGS="$(TAGET_LDFLAGS)" && \
 		@INSTALL_scummvm@
 	@CLEANUP_scummvm@
 	touch $@
@@ -1191,29 +1288,12 @@ dvb_apps: .dvbdate .dvbstream .dvbtext .dvbtune .vls
 
 #######################
 #
-#   own kernel and driver
+#   own kernel
 #
 
-boot: .ppcboot .linuxkernel .driver
+boot: .linuxkernel
 
-.ppcboot: .bootstrap $(bootdir)/ppcboot/Makefile
-if HOSTRULESET_CYGWIN
-	$(MAKE) -C $(bootdir)/ppcboot dbox2_config CYGWIN=1
-	$(MAKE) -C $(bootdir)/ppcboot CROSS_COMPILE=$(target)- CYGWIN=1
-	$(INSTALL) Patches/cygwin/mkimage.exe $(hostprefix)/bin
-else
-	$(MAKE) -C $(bootdir)/ppcboot dbox2_config
-	$(MAKE) -C $(bootdir)/ppcboot CROSS_COMPILE=$(target)-
-	$(INSTALL) $(bootdir)/ppcboot/tools/mkimage $(hostprefix)/bin
-endif
-	$(INSTALL) -m644 $(bootdir)/ppcboot/ppcboot $(bootprefix)
-if MAINTAINER_MODE
-else
-	$(MAKE) -C $(bootdir)/ppcboot distclean
-endif
-	touch $@
-
-.linuxkernel: .bootstrap .linuxdir .ppcboot
+.linuxkernel: .bootstrap .linuxdir
 	$(MAKE) -C @DIR_linux@ zImage modules \
 		ARCH=ppc \
 		CROSS_COMPILE=$(target)-
@@ -1222,45 +1302,12 @@ endif
 		CROSS_COMPILE=$(target)- \
 		DEPMOD=/bin/true \
 		INSTALL_MOD_PATH=$(targetprefix)
-	$(hostprefix)/bin/mkimage \
-		-n 'dbox2' -A ppc -O linux -T kernel -C gzip \
-		-a 00000000 -e 00000000 \
-		-d @DIR_linux@/arch/ppc/boot/images/vmlinux.gz \
-		$(bootprefix)/kernel-cdk;
-
-	$(INSTALL) -m644 @DIR_linux@/vmlinux $(targetprefix)/boot/vmlinux-$(KERNELVERSION)
-	$(INSTALL) -m644 @DIR_linux@/System.map $(targetprefix)/boot/System.map-$(KERNELVERSION)
 
 if MAINTAINER_MODE
 else
 	$(MAKE) -C @DIR_linux@ clean
 endif
 	touch $@
-
-.driver: .bootstrap .linuxkernel
-	$(MAKE) -C $(driverdir) \
-		KERNEL_LOCATION=$(buildprefix)/linux \
-		CROSS_COMPILE=$(target)- \
-		HARDWARE=$(HARDWARERULESET)
-	$(MAKE) -C $(driverdir) \
-		KERNEL_LOCATION=$(buildprefix)/linux \
-		BIN_DEST=$(targetprefix)/bin \
-		INSTALL_MOD_PATH=$(targetprefix) \
-		HARDWARE=$(HARDWARERULESET) \
-		install
-
-if MAINTAINER_MODE
-else
-	$(MAKE) -C $(driverdir) distclean \
-		KERNEL_LOCATION=$(buildprefix)/linux
-endif
-	touch $@
-
-driver-clean:
-	$(MAKE) -C $(driverdir) \
-		KERNEL_LOCATION=$(buildprefix)/linux \
-		distclean
-	-rm .driver
 
 #######################
 #
@@ -1275,7 +1322,8 @@ CONFIGURE_OPTS = \
 	--prefix=$(targetprefix) \
 	--with-driver=$(driverdir) \
 	--with-dvbincludes=$(driverdir)/include \
-	--with-target=cdk
+	--with-target=cdk \
+	--with-boxtype=$(BOXTYPE)
 
 if MAINTAINER_MODE
 CONFIGURE_OPTS_MAINTAINER = \
@@ -1327,6 +1375,12 @@ $(appsdir)/misc/libs/Makefile: .bootstrap .libz
 
 .misc_libs: $(appsdir)/misc/libs/Makefile
 	$(MAKE) -C $(appsdir)/misc/libs all install
+if TARGETRULESET_FLASH
+	cd $(hostprefix)/$(target)/lib && \
+	ln -sf libxmltree.a libxmltree_pic.a && \
+	ln -sf libmd5sum.a libmd5sum_pic.a && \
+	ln -sf libmpegtools.a libmpegtools_pic.a
+endif
 	touch $@
 
 # tuxbox/enigma
@@ -1390,6 +1444,7 @@ $(appsdir)/tuxbox/plugins/Makefile: .bootstrap .libcurl .libpng
 
 .plugins: $(appsdir)/tuxbox/plugins/Makefile
 	$(MAKE) -C $(appsdir)/tuxbox/plugins all install
+	cd $(hostprefix)/$(target)/lib && ln -sf tuxbox/plugins/libfx2.so libfx2.so
 	touch $@
 
 # tuxbox/tools
@@ -1407,56 +1462,216 @@ $(appsdir)/tuxbox/tools/Makefile: .bootstrap .libtuxbox
 #
 
 if TARGETRULESET_FLASH
+if BOXTYPE_DM7000
+.dreamfiles: @DEPENDS_dreamdriver_dm7000@ @DEPENDS_dreamfiles@
+	@PREPARE_dreamfiles@
+	@PREPARE_dreamdriver_dm7000@
+endif
+if BOXTYPE_DM56x0
+.dreamfiles: @DEPENDS_dreamdriver_dm56x0@ @DEPENDS_dreamfiles@
+	@PREPARE_dreamfiles@
+	@PREPARE_dreamdriver_dm56x0@
+endif
+if BOXTYPE_DM500
+.dreamfiles: @DEPENDS_dreamdriver_dm500@ @DEPENDS_dreamfiles@
+	@PREPARE_dreamfiles@
+	@PREPARE_dreamdriver_dm500@
+endif
+	@for i in dreamfiles boot mkcramfs-e mksquashfs mklibs.py ; do \
+		rm -R $(flashprefix)/$$i 2>/dev/null || /bin/true; \
+		mv $$i $(flashprefix) 2>/dev/null || /bin/true; \
+	done
+	touch $@
+
+if BOXTYPE_DM7000
+dreamboximage_root: core .enigma .reiserfsprogs .e2fsprogs .samba \
+	.etherwake .utillinux .linuxkernel .dreamfiles \
+	flash-enigma flash-plugin_tetris flash-plugin_snake \
+	flash-plugin_pacman flash-plugin_tuxtxt flash-plugin_ngrabstartstop \
+	flash-ftpd flash-dvb-tools flash-reiserfsck flash-fstools flash-sambaserver \
+	flash-etherwake flash-dreamfiles
+else
+dreamboximage_root: core .enigma .etherwake .linuxkernel .dreamfiles \
+	flash-enigma flash-plugin_tetris flash-plugin_snake \
+	flash-plugin_pacman flash-plugin_tuxtxt flash-plugin_ngrabstartstop \
+	flash-ftpd flash-dvb-tools flash-etherwake flash-dreamfiles flash-sambaclient
+endif
+
 rebuild-flash:
 	-rm -rf $(flashprefix)/root
 	-rm -f $(flashprefix)/.flash
+	@for i in `find $(flashprefix) -type f -name "*.img"` ; do rm $$i; done
+	-rm -f $(flashprefix)/*.img
 	$(MAKE) flash-lib
 
-$(flashprefix)/.flash: .busybox .driver .modutils
+$(flashprefix)/.flash: .busybox
 	-rm -rf $(flashprefix)/root
-	$(INSTALL) -d $(flashprefix)/root/bin
-	$(INSTALL) -d $(flashprefix)/root/dev
-	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox
-	$(INSTALL) -d $(flashprefix)/root/proc
-	$(INSTALL) -d $(flashprefix)/root/sbin
-	$(INSTALL) -d $(flashprefix)/root/var/tuxbox/config
-if CPU_MODEL_823
-	$(INSTALL) -d $(flashprefix)/root/mnt
-	$(INSTALL) -d $(flashprefix)/root/share/tuxbox/image
-	$(INSTALL) -d $(flashprefix)/root/var/tuxbox/ucodes
-endif
-	$(INSTALL) -d $(flashprefix)/root/tmp
-	$(MAKE) -C etc install targetprefix=$(flashprefix)/root
+	@for i in bin dev lib/tuxbox proc sbin var tmp etc; do \
+		$(INSTALL) -d $(flashprefix)/root/$$i ; done
 
 	$(INSTALL) $(targetprefix)/bin/busybox $(flashprefix)/root/bin
-	for i in `find $(targetprefix)/bin/ -lname "*busybox"` ; do cp -a $$i $(flashprefix)/root/bin/ ; done
-	for i in `find $(targetprefix)/sbin/ -lname "*busybox"` ; do cp -a $$i $(flashprefix)/root/sbin/ ; done
-	for i in insmod lsmod rmmod ; do ln -sf ../bin/busybox $(flashprefix)/root/sbin/$$i ; done
+	@for i in `find $(targetprefix)/bin/ -lname "*busybox"` ; do cp -a $$i $(flashprefix)/root/bin/; done
+	@for i in `find $(targetprefix)/sbin/ -lname "*busybox"` ; do cp -a $$i $(flashprefix)/root/sbin/; done
+	ln -sf busybox $(flashprefix)/root/bin/udhcpc
 	ln -sf telnetd $(flashprefix)/root/sbin/in.telnetd
-	ln -sf busybox $(flashprefix)/root/bin/ps
-
-if WITH_FLASHMODUTILS
-	$(INSTALL) $(targetprefix)/sbin/insmod $(flashprefix)/root/sbin
-	$(INSTALL) $(targetprefix)/sbin/depmod $(flashprefix)/root/sbin
-	for i in `find $(targetprefix)/sbin/ -lname "*insmod"` ; do cp -pa $$i $(flashprefix)/root/sbin/ ; done
-endif
 
 	$(INSTALL) -d $(flashprefix)/root/lib/modules/$(KERNELVERSION)
-	cp -a $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel $(targetprefix)/lib/modules/$(KERNELVERSION)/misc \
-		$(flashprefix)/root/lib/modules/$(KERNELVERSION)
-	cp -a $(bootprefix)/kernel-cdk $(flashprefix)/root/vmlinuz
+	cp -R $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel $(flashprefix)/root/lib/modules/$(KERNELVERSION)
+if BOXTYPE_DM7000
+#remove cifs module when no cifs is requested
+	@if [ ! -f $(flashprefix)/.part_cifs -a -d $(flashprefix)/root/lib/modules/$(KERNELVERSION)/kernel/fs/cifs ] ; then \
+		rm -rf $(flashprefix)/root/lib/modules/$(KERNELVERSION)/kernel/fs/cifs; \
+	fi
+#remove cifs module when no smbfs is requested
+	@if [ ! -f $(flashprefix)/.part_sambaclient -a -d $(flashprefix)/root/lib/modules/$(KERNELVERSION)/kernel/fs/smbfs ] ; then \
+		rm -rf $(flashprefix)/root/lib/modules/$(KERNELVERSION)/kernel/fs/smbfs; \
+	fi
+endif
+	ln -sf /var/mnt $(flashprefix)/root/mnt
 	@touch $@
 
 flash-ftpd: $(flashprefix)/.part_ftpd
-
 $(flashprefix)/.part_ftpd: $(flashprefix)/.flash .ftpd
 	$(INSTALL) -m644 $(targetprefix)/etc/vsftpd.conf $(flashprefix)/root/etc
 	$(INSTALL) $(targetprefix)/sbin/in.ftpd $(flashprefix)/root/sbin
 	$(INSTALL) -d $(flashprefix)/root/share/empty
 	@touch $@
 
-flash-ssh: $(flashprefix)/.part_ssh
+flash-dvb-tools: $(flashprefix)/.part_dvb_tools
+$(flashprefix)/.part_dvb_tools: $(flashprefix)/.flash .stream
+	@for i in streampes streamsec streamts; do \
+		$(INSTALL) $(targetprefix)/sbin/$$i $(flashprefix)/root/sbin; done;
+	$(INSTALL) $(targetprefix)/bin/dvbnet $(flashprefix)/root/bin;
+	@touch $@
 
+flash-reiserfsck: $(flashprefix)/.part_reiserfsck
+$(flashprefix)/.part_reiserfsck: $(flashprefix)/.flash .reiserfsprogs
+	@touch $@
+
+flash-fstools: $(flashprefix)/.part_fstools
+$(flashprefix)/.part_fstools: $(flashprefix)/.flash .e2fsprogs .reiserfsprogs .utillinux
+	$(INSTALL) -d $(flashprefix)/root/sbin
+# reiserfsck is only copied to flashroot when .part_reiserfsck exist
+	@for i in reiserfsck e2fsck sfdisk mke2fs; do \
+		if [ $$i != reiserfsck -o -f $(flashprefix)/.part_reiserfsck ]; then \
+			$(INSTALL) $(targetprefix)/sbin/$$i $(flashprefix)/root/sbin; \
+		fi; \
+	done;
+	cd $(flashprefix)/root/sbin && \
+	    ln -sf mke2fs mkfs.ext3 && \
+	    ln -sf mke2fs mkfs.ext2 && \
+	    ln -sf e2fsck fsck.ext2 && \
+	    ln -sf e2fsck fsck.ext3 
+	@touch $@
+
+flash-sambaserver: $(flashprefix)/.part_sambaserver
+$(flashprefix)/.part_sambaserver: $(flashprefix)/.flash .samba
+	$(INSTALL) -d $(flashprefix)/root/bin
+	@for i in smbd nmbd ; do \
+		$(INSTALL) $(targetprefix)/bin/$$i $(flashprefix)/root/bin; done
+	@touch $@
+
+flash-sambaclient: $(flashprefix)/.part_sambaclient
+$(flashprefix)/.part_sambaclient: $(flashprefix)/.flash .samba
+	$(INSTALL) -d $(flashprefix)/root/bin
+	@for i in smbmount smbmnt ; do \
+		$(INSTALL) $(targetprefix)/bin/$$i $(flashprefix)/root/bin; done
+	@touch $@
+
+flash-cifs: $(flashprefix)/.part_cifs
+$(flashprefix)/.part_cifs: $(flashprefix)/.flash .linuxkernel
+	@touch $@
+
+flash-etherwake: $(flashprefix)/.part_etherwake
+$(flashprefix)/.part_etherwake: $(flashprefix)/.flash .etherwake
+	$(INSTALL) -d $(flashprefix)/root/bin
+	$(INSTALL) $(targetprefix)/bin/etherwake $(flashprefix)/root/bin
+	@touch $@
+
+flash-dreamfiles: $(flashprefix)/.part_dreamfiles
+$(flashprefix)/.part_dreamfiles: $(flashprefix)/.flash .dreamfiles
+	cp -R $(flashprefix)/dreamfiles/* $(flashprefix)/root
+	if [ -f $(flashprefix)/dreamfiles/.version ] ; then \
+		cp $(flashprefix)/dreamfiles/.version $(flashprefix)/root; \
+	fi
+if BOXTYPE_DM7000
+	@echo ""
+else
+	@echo "i:/ezap/osd/alpha=00000000" >> $(flashprefix)/root/var_init/tuxbox/config/enigma/config
+	@echo "i:/ezap/osd/brightness=00000073" >> $(flashprefix)/root/var_init/tuxbox/config/enigma/config
+	@echo "i:/ezap/osd/gamma=00000066" >> $(flashprefix)/root/var_init/tuxbox/config/enigma/config
+endif
+if BOXTYPE_DM56x0
+	@echo ""
+else
+	@for i in skins/small_red.esml skins/small_red.info pictures/small-red pictures/triaxlogo-fs8.png ; do \
+		rm -R $(flashprefix)/root/share/tuxbox/enigma/$$i; done
+endif
+if BOXTYPE_DM500
+	@echo ""
+else
+	@for i in cables.xml terrestrial.xml; do \
+		if [ -f $(flashprefix)/root/share/tuxbox/$$i ]; then \
+			rm $(flashprefix)/root/share/tuxbox/$$i; \
+		fi; \
+	done;
+endif
+	@touch $@
+
+flash-enigma: $(flashprefix)/.part_enigma
+$(flashprefix)/.part_enigma: $(flashprefix)/.flash .enigma
+	$(INSTALL) $(targetprefix)/bin/enigma $(flashprefix)/root/bin
+
+	$(INSTALL) -d $(flashprefix)/root/share/fonts
+	@for i in blue*.ttf md_khmurabi_10.ttf pakenham.ttf unmrs.pfa ; do \
+		$(INSTALL) -m644 $(targetprefix)/share/fonts/$$i $(flashprefix)/root/share/fonts; done
+
+	$(INSTALL) -d $(flashprefix)/root/share/locale
+	@for i in `find $(targetprefix)/share/locale -name "tuxbox-enigma.mo"` ; \
+		do cp -pa $${i%%/LC_MESSAGES/tuxbox-enigma.mo} $(flashprefix)/root/share/locale; done
+	@for i in ar sr ur ; do rm -R $(flashprefix)/root/share/locale/$$i; done
+	rm -rf $(flashprefix)/root/share/locale/LC_MESSAGES
+	find $(flashprefix)/root/share/locale -name libc.mo -o -name nano.mo | xargs rm -f
+	$(INSTALL) $(appsdir)/tuxbox/enigma/po/locale.alias $(flashprefix)/root/share/locale
+	$(INSTALL) -d $(flashprefix)/root/share/tuxbox/enigma
+
+	cp -pa $(targetprefix)/share/tuxbox/enigma/* $(flashprefix)/root/share/tuxbox/enigma
+	@for i in `find $(flashprefix)/root/share/tuxbox/enigma/htdocs` ; do \
+		case $$i in \
+		*/rc_dbox2.jpg | */topbalk?.png | */topbalk?_small.png) \
+			rm $$i;; \
+		esac; \
+	done;
+if BOXTYPE_DM7000
+	@for i in `find $(flashprefix)/root/share/tuxbox/enigma/resources -type f` ; do \
+		case $$i in \
+		/*keymappings.xml | */rcdboxold.xml | \
+		*/rcdm7000.xml | */rcdreambox_keyboard.xml ) ;; \
+		*) rm $$i;; \
+		esac; \
+	done;
+else
+	CURRENT_PATH=`pwd` && \
+	cd $(flashprefix)/root/share/tuxbox/enigma/skins && \
+	patch -p0 < $$CURRENT_PATH/Patches/default_lc.esml.diff
+	@for i in `find $(flashprefix)/root/share/tuxbox/enigma/resources -type f` ; do \
+		case $$i in \
+		/*keymappings.xml | */rcdboxold.xml | \
+		*/rcdm5xxx.xml | */rcdreambox_keyboard.xml ) ;; \
+		*) rm $$i;; \
+		esac; \
+	done;
+endif
+
+	$(INSTALL) -d $(flashprefix)/root/share/zoneinfo
+	$(INSTALL) -m644 $(targetprefix)/share/zoneinfo/* $(flashprefix)/root/share/zoneinfo
+	rm -f $(flashprefix)/root/share/zoneinfo/*tab
+
+	$(INSTALL) -m644 $(targetprefix)/etc/timezone.xml $(flashprefix)/root/etc
+	ln -sf /var/etc/localtime $(flashprefix)/root/etc
+	@touch $@
+
+flash-ssh: $(flashprefix)/.part_ssh
 $(flashprefix)/.part_ssh: $(flashprefix)/.flash .ssh
 	$(INSTALL) -d $(flashprefix)/root/etc/ssh
 	cp -ap $(targetprefix)/etc/ssh/ssh_config $(flashprefix)/root/etc/ssh
@@ -1465,7 +1680,6 @@ $(flashprefix)/.part_ssh: $(flashprefix)/.flash .ssh
 	@touch $@
 
 flash-sshd: $(flashprefix)/.part_sshd
-
 $(flashprefix)/.part_sshd: $(flashprefix)/.flash .ssh
 	$(INSTALL) -d $(flashprefix)/root/etc/ssh
 	$(INSTALL) -d $(flashprefix)/root/libexec
@@ -1477,16 +1691,161 @@ $(flashprefix)/.part_sshd: $(flashprefix)/.flash .ssh
 	$(INSTALL) $(targetprefix)/sbin/sshd $(flashprefix)/root/sbin
 	@touch $@
 
-flash-dvb-tools: $(flashprefix)/.part_dvb_tools
-
-$(flashprefix)/.part_dvb_tools: $(flashprefix)/.flash .stream
-	$(INSTALL) $(targetprefix)/sbin/streampes $(flashprefix)/root/sbin
-	$(INSTALL) $(targetprefix)/sbin/streamsec $(flashprefix)/root/sbin
-	$(INSTALL) $(targetprefix)/sbin/streamts $(flashprefix)/root/sbin
+flash-plugin_tuxtxt: $(flashprefix)/.part_plugin_tuxtxt
+$(flashprefix)/.part_plugin_tuxtxt: $(flashprefix)/.flash .plugins
+	$(INSTALL) -d $(flashprefix)/root/share/fonts
+	$(INSTALL) -m644 $(targetprefix)/share/fonts/tuxtxt.ttf $(flashprefix)/root/share/fonts/
+	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/tuxtxt.so $(flashprefix)/root/lib/tuxbox/plugins/
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/tuxtxt.cfg $(flashprefix)/root/lib/tuxbox/plugins/
 	@touch $@
 
-flash-neutrino: $(flashprefix)/.part_neutrino
+flash-plugin_tuxcom: $(flashprefix)/.part_plugin_tuxcom
+$(flashprefix)/.part_plugin_tuxcom: $(flashprefix)/.flash .plugins
+	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/tuxcom.so $(flashprefix)/root/lib/tuxbox/plugins/
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/tuxcom.cfg $(flashprefix)/root/lib/tuxbox/plugins/
+	@touch $@
 
+flash-plugin_tuxmail: $(flashprefix)/.part_plugin_tuxmail
+$(flashprefix)/.part_plugin_tuxmail: $(flashprefix)/.flash .plugins
+	$(INSTALL) -d $(flashprefix)/root/share/fonts
+	$(INSTALL) -m644 $(targetprefix)/share/fonts/tuxtxt.ttf $(flashprefix)/root/share/fonts/
+	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/tuxmail.so $(flashprefix)/root/lib/tuxbox/plugins/
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/tuxmail.cfg $(flashprefix)/root/lib/tuxbox/plugins/
+	$(INSTALL) $(targetprefix)/bin/tuxmaild $(flashprefix)/root/bin/
+	@touch $@
+
+flash-plugin_libfx2: $(flashprefix)/.part_plugin_libfx2
+$(flashprefix)/.part_plugin_libfx2: $(flashprefix)/.flash .plugins
+	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
+	cd $(flashprefix)/root/lib/tuxbox/plugins && ln -sf /lib/libfx2.so libfx2.so
+	@touch $@
+
+flash-plugin_lcdcirc: $(flashprefix)/.part_plugin_lcdcirc
+$(flashprefix)/.part_plugin_lcdcirc: $(flashprefix)/.flash flash-libfx2
+	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/lcdcirc.so $(flashprefix)/root/lib/tuxbox/plugins/
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/lcdcirc.cfg $(flashprefix)/root/lib/tuxbox/plugins/
+	@touch $@
+
+flash-plugin_satfind: $(flashprefix)/.part_plugin_satfind
+$(flashprefix)/.part_plugin_satfind: $(flashprefix)/.flash flash-plugin_libfx2
+	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/satfind.so $(flashprefix)/root/lib/tuxbox/plugins/
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/satfind.cfg $(flashprefix)/root/lib/tuxbox/plugins/
+	@touch $@
+
+flash-plugin_pacman: $(flashprefix)/.part_plugin_pacman
+$(flashprefix)/.part_plugin_pacman: $(flashprefix)/.flash flash-plugin_libfx2
+	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/pacman.so $(flashprefix)/root/lib/tuxbox/plugins/
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/pacman.cfg $(flashprefix)/root/lib/tuxbox/plugins/
+	@touch $@
+
+flash-plugin_snake: $(flashprefix)/.part_plugin_snake
+$(flashprefix)/.part_plugin_snake: $(flashprefix)/.flash flash-plugin_libfx2
+	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/snake.so $(flashprefix)/root/lib/tuxbox/plugins/
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/snake.cfg $(flashprefix)/root/lib/tuxbox/plugins/
+	@touch $@
+
+flash-plugin_tetris: $(flashprefix)/.part_plugin_tetris
+$(flashprefix)/.part_plugin_tetris: $(flashprefix)/.flash flash-plugin_libfx2
+	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/tetris.so $(flashprefix)/root/lib/tuxbox/plugins/
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/tetris.cfg $(flashprefix)/root/lib/tuxbox/plugins/
+	@touch $@
+
+flash-plugin_links: $(flashprefix)/.part_plugin_links
+$(flashprefix)/.part_plugin_links: $(flashprefix)/.flash
+	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/links.so $(flashprefix)/root/lib/tuxbox/plugins/
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/links.cfg $(flashprefix)/root/lib/tuxbox/plugins/
+	$(INSTALL) -d $(flashprefix)/root/var_init/tuxbox/plugins
+	$(INSTALL) -d $(flashprefix)/root/var_init/etc
+	@echo "#!/bin/sh" >> $(flashprefix)/root/var_init/etc/init
+	@echo "#Wo ist links" >> $(flashprefix)/root/var_init/etc/init
+	@echo "if [ -d /hdd/links ] ; then LINKSHOME=/hdd/links ; fi" >> $(flashprefix)/root/var_init/etc/init
+	@echo "if [ -d /var/mnt/usb/links ] ; then LINKSHOME=/var/mnt/usb/links ; fi" >> $(flashprefix)/root/var_init/etc/init
+	@echo "ln -sf \$$LINKSHOME/links.so /var/tuxbox/plugins/links.so" >> $(flashprefix)/root/var_init/etc/init
+	@echo "ln -sf \$$LINKSHOME/links.cfg /var/tuxbox/plugins/links.cfg" >> $(flashprefix)/root/var_init/etc/init
+	@echo "export WWW_HOME="www.dream-multimedia-tv.de"" >> $(flashprefix)/root/var_init/etc/init
+	@touch $@
+
+flash-plugin_lemmings: $(flashprefix)/.part_plugin_lemmings
+$(flashprefix)/.part_plugin_lemmings: $(flashprefix)/.flash flash-plugin_libfx2
+	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/lemmings.so $(flashprefix)/root/lib/tuxbox/plugins/
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/lemmings.cfg $(flashprefix)/root/lib/tuxbox/plugins/
+	@touch $@
+
+flash-plugin_solitair: $(flashprefix)/.part_plugin_solitair
+$(flashprefix)/.part_plugin_solitair: $(flashprefix)/.flash flash-plugin_libfx2
+	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/solitair.so $(flashprefix)/root/lib/tuxbox/plugins/
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/solitair.cfg $(flashprefix)/root/lib/tuxbox/plugins/
+	@touch $@
+
+flash-plugin_sol: $(flashprefix)/.part_plugin_sol
+$(flashprefix)/.part_plugin_sol: $(flashprefix)/.flash flash-plugin-libfx2
+	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/sol.so $(flashprefix)/root/lib/tuxbox/plugins/
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/sol.cfs $(flashprefix)/root/lib/tuxbox/plugins/
+	@touch $@
+
+flash-plugin_mastermind: $(flashprefix)/.part_plugin_mastermind
+$(flashprefix)/.part_plugin_mastermind: $(flashprefix)/.flash flash-plugin_libfx2
+	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/master.so $(flashprefix)/root/lib/tuxbox/plugins/
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/master.cfg $(flashprefix)/root/lib/tuxbox/plugins/
+	@touch $@
+
+flash-plugin_sokoban: $(flashprefix)/.part_plugin_sokoban
+$(flashprefix)/.part_plugin_sokoban: $(flashprefix)/.flash flash-plugin_libfx2
+	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/soko.so $(flashprefix)/root/lib/tuxbox/plugins/
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/soko.cfg $(flashprefix)/root/lib/tuxbox/plugins/
+	$(INSTALL) -d $(flashprefix)/root/share/tuxbox/sokoban
+	cp -pa $(targetprefix)/share/tuxbox/sokoban/*.xsb $(flashprefix)/root/share/tuxbox/sokoban/
+	@touch $@
+
+flash-plugin_tankwars: $(flashprefix)/.part_plugin_tankwars
+$(flashprefix)/.part_plugin_tankwars: $(flashprefix)/.flash flash-plugin_libfx2
+	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/tank.so $(flashprefix)/root/lib/tuxbox/plugins/
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/tank.cfg $(flashprefix)/root/lib/tuxbox/plugins/
+	@touch $@
+
+flash-plugin_viergewinnt: $(flashprefix)/.part_plugin_viergewinnt
+$(flashprefix)/.part_plugin_viergewinnt: $(flashprefix)/.flash flash-plugin_libfx2
+	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/vierg.so $(flashprefix)/root/lib/tuxbox/plugins/
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/vierg.cfg $(flashprefix)/root/lib/tuxbox/plugins/
+	@touch $@
+
+flash-plugin_yahtzee: $(flashprefix)/.part_plugin_yahtzee
+$(flashprefix)/.part_plugin_yahtzee: $(flashprefix)/.flash flash-plugin_libfx2
+	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/yahtzee.so $(flashprefix)/root/lib/tuxbox/plugins/
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/yahtzee.cfg $(flashprefix)/root/lib/tuxbox/plugins/
+	@touch $@
+
+flash-plugin_ngrabstartstop: $(flashprefix)/.part_plugin_ngrabstartstop
+$(flashprefix)/.part_plugin_ngrabstartstop: $(flashprefix)/.flash .plugins flash-enigma
+	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
+# copy enigma plugins after mklibs.. (mklibs.py do not detect enigma as a shared lib)
+	@touch $@
+
+flash-plugin_dslstartstop: $(flashprefix)/.part_plugin_ngrabtools
+$(flashprefix)/.part_plugin_dslstartstop: $(flashprefix)/.flash .plugins flash-enigma
+	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
+# copy enigma plugins after mklibs.. (mklibs.py do not detect enigma as a shared lib)
+	@touch $@
+
+############################# UNTESTED!!! ##################################
+flash-neutrino: $(flashprefix)/.part_neutrino
 $(flashprefix)/.part_neutrino: $(flashprefix)/.flash .neutrino
 	$(INSTALL) $(targetprefix)/bin/controld $(targetprefix)/bin/lcdd $(targetprefix)/bin/neutrino \
 		$(targetprefix)/bin/nhttpd $(targetprefix)/bin/timerd \
@@ -1504,63 +1863,7 @@ $(flashprefix)/.part_neutrino: $(flashprefix)/.flash .neutrino
 
 	@touch $@
 
-flash-enigma: $(flashprefix)/.part_enigma
-
-$(flashprefix)/.part_enigma: $(flashprefix)/.flash .enigma
-	$(INSTALL) $(targetprefix)/bin/enigma $(flashprefix)/root/bin
-
-	$(INSTALL) -d $(flashprefix)/root/share/fonts
-	for i in blue*.ttf md_khmurabi_10.ttf pakenham.ttf unmrs.pfa ; do \
-		$(INSTALL) -m644 $(targetprefix)/share/fonts/$$i $(flashprefix)/root/share/fonts ; done
-
-	$(INSTALL) -d $(flashprefix)/root/share/locale
-	for i in `find $(targetprefix)/share/locale -name "tuxbox-enigma.mo"` ; \
-		do cp -pa $${i%%/LC_MESSAGES/*} $(flashprefix)/root/share/locale ; done
-	rm -rf $(flashprefix)/root/share/locale/LC_MESSAGES
-	find $(flashprefix)/root/share/locale -name libc.mo -o -name nano.mo | xargs rm -f
-
-	$(INSTALL) -d $(flashprefix)/root/share/tuxbox/enigma
-	cp -pa $(targetprefix)/share/tuxbox/enigma/* $(flashprefix)/root/share/tuxbox/enigma
-	for i in cables.xml satellites.xml ; do \
-		ln -sf /etc/$$i $(flashprefix)/root/share/tuxbox ; done
-	
-	$(INSTALL) -d $(flashprefix)/root/share/zoneinfo
-	$(INSTALL) -m644 $(targetprefix)/share/zoneinfo/* $(flashprefix)/root/share/zoneinfo
-	rm -f $(flashprefix)/root/share/zoneinfo/*tab
-
-	$(INSTALL) -d $(flashprefix)/root/var/tuxbox/config/enigma
-	for i in fonts resources pictures skins ; \
-		do $(INSTALL) -d $(flashprefix)/root/var/tuxbox/config/enigma/$$i ; done
-
-	$(INSTALL) -m644 $(targetprefix)/etc/timezone.xml $(flashprefix)/root/etc
-	ln -sf /var/etc/localtime $(flashprefix)/root/etc
-
-if CPU_MODEL_823
-	$(INSTALL) $(targetprefix)/var/tuxbox/config/*.lirc $(flashprefix)/root/var/tuxbox/config
-endif
-if CPU_MODEL_405
-	$(INSTALL) $(targetprefix)/sbin/hotplug $(flashprefix)/root/sbin
-	for i in hdd root/platform/kernel var/bin var/etc/ppp var/log var/mnt/nfs var/mnt/usb var/run ; do \
-		$(INSTALL) -d $(flashprefix)/root/$$i ; done
-	for i in cables.xml satellites.xml ; do \
-		rm $(flashprefix)/root/share/tuxbox/$$i ; \
-		mv $(flashprefix)/root/etc/$$i $(flashprefix)/root/share/tuxbox ; \
-		ln -sf tuxbox/$$i $(flashprefix)/root/share ; done
-	for i in modules.conf thttpd.conf ; do \
-		rm $(flashprefix)/root/etc/$$i ; done
-	ln -sf /var/mnt $(flashprefix)/root
-	ln -sf /tmp $(flashprefix)/root/var
-	for i in group hosts passwd ; do \
-		mv $(flashprefix)/root/etc/$$i $(flashprefix)/root/var/etc ; \
-		ln -sf ../var/etc/$$i $(flashprefix)/root/etc ; done
-	ln -sf /var/etc/smb.conf $(flashprefix)/root/etc
-	ln -sf /var/etc/resolv.conf $(flashprefix)/root/etc
-	@echo "none		/proc/bus/usb	usbdevfs	defaults	0 0" >> $(flashprefix)/root/etc/fstab
-endif
-	@touch $@
-
 flash-lcars: $(flashprefix)/.part_lcars
-
 $(flashprefix)/.part_lcars: $(flashprefix)/.flash .lcars
 	$(INSTALL) -d $(flashprefix)/root/share/fonts
 	$(INSTALL) $(targetprefix)/bin/lcars $(flashprefix)/root/bin
@@ -1569,34 +1872,20 @@ $(flashprefix)/.part_lcars: $(flashprefix)/.flash .lcars
 	cp -pa $(targetprefix)/var/tuxbox/config/lcars $(flashprefix)/root/var/tuxbox/config
 	@touch $@
 
-flash-plugins: $(flashprefix)/.part_plugins
-
-$(flashprefix)/.part_plugins: $(flashprefix)/.flash .plugins
-	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
-	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/* $(flashprefix)/root/lib/tuxbox/plugins/
-	$(INSTALL) -d $(flashprefix)/root/share/fonts
-	$(INSTALL) -m644 $(targetprefix)/share/fonts/tuxtxt?.fon $(flashprefix)/root/share/fonts/
-	$(INSTALL) -d $(flashprefix)/root/var/tuxbox/config/tuxtxt
-	$(INSTALL) $(targetprefix)/var/tuxbox/config/tuxtxt/tuxtxt.conf $(flashprefix)/root/var/tuxbox/config/tuxtxt/
-	$(INSTALL) $(targetprefix)/var/tuxbox/config/games.cfg $(flashprefix)/root/var/tuxbox/config/
-	@touch $@
-
 flash-lcdmenu: $(flashprefix)/.part_lcdmenu
-
 $(flashprefix)/.part_lcdmenu: $(flashprefix)/.flash .lcdmenu
 	$(INSTALL) -d $(flashprefix)/root/share/fonts
 	$(INSTALL) $(targetprefix)/bin/lcdmenu $(flashprefix)/root/bin
-	cp -pa $(targetprefix)/var/tuxbox/config/lcdmenu.conf $(flashprefix)/root/var/tuxbox/config
-#	cp -pa $(targetprefix)/share/fonts/micron.ttf $(flashprefix)/root/share/fonts
+	cp -pa $(targetprefix)/share/fonts/micron.ttf $(flashprefix)/root/share/fonts
 	@touch $@
+############################################################################
 
-flash-lib: $(flashprefix)/.lib
-
-$(flashprefix)/.lib: $(flashprefix)/.flash $(shell ls -1 $(flashprefix)/.part_*)
+flash-lib: $(flashprefix)/.lib 
+$(flashprefix)/.lib: $(flashprefix)/.flash $(shell ls -r -1 $(flashprefix)/.part_* 2>/dev/null)
 	@find $(flashprefix)/root/lib -maxdepth 1 -type f -o -type l | xargs rm -f
 	@cp -a $(targetprefix)/lib/libnss_dns-?.*.so $(flashprefix)/root/lib
 	@cp -a $(targetprefix)/lib/libnss_files-?.*.so $(flashprefix)/root/lib
-	@$(PYTHON) mklibs.py --target $(target) --ldlib ld.so.1 --libc-extras-dir $(targetprefix)/lib/libc_pic \
+	@$(PYTHON) $(flashprefix)/mklibs.py --target $(target) --ldlib ld.so.1 --libc-extras-dir $(targetprefix)/lib/libc_pic \
 		-d $(flashprefix)/root/lib \
 		-D -L $(targetprefix)/lib \
 		--root $(flashprefix)/root \
@@ -1604,57 +1893,50 @@ $(flashprefix)/.lib: $(flashprefix)/.flash $(shell ls -1 $(flashprefix)/.part_*)
 		`find $(flashprefix)/root/lib/ -name "libnss_*"` \
 		`find $(flashprefix)/root/lib/tuxbox/ -name "*.so" -type f` \
 		`find $(flashprefix)/root/sbin/ -path "*sbin/?*"`
-	$(target)-strip --remove-section=.comment --remove-section=.note \
-		`find $(flashprefix)/root/bin/ -path "*bin/?*"` 2>/dev/null || /bin/true
+	@if [ -f $(flashprefix)/.part_plugin_ngrabstartstop ] ; then \
+		cp $(targetprefix)/lib/tuxbox/plugins/ngrab*.so $(flashprefix)/root/lib/tuxbox/plugins/ ; \
+		cp $(targetprefix)/lib/tuxbox/plugins/ngrab*.cfg $(flashprefix)/root/lib/tuxbox/plugins/ ; \
+	fi
+	@if [ -f $(flashprefix)/.part_plugin_dslstartstop ] ; then \
+		cp $(targetprefix)/lib/tuxbox/plugins/dsl*con*.so $(flashprefix)/root/lib/tuxbox/plugins/ ; \
+		cp $(targetprefix)/lib/tuxbox/plugins/dsl*con*.cfg $(flashprefix)/root/lib/tuxbox/plugins/ ; \
+	fi
+	cd $(flashprefix)/root/lib && ln -sf libgcc_s_nof.so.1 libgcc_s.so.1
 	$(target)-strip --remove-section=.comment --remove-section=.note --strip-unneeded \
-		`find $(flashprefix)/root/lib/tuxbox -name "*.so"` 2>/dev/null || /bin/true
+		`find $(flashprefix)/root/ -path "*bin/?*"` 2>/dev/null || /bin/true
+	$(target)-strip --remove-section=.comment --remove-section=.note --strip-unneeded \
+		`find $(flashprefix)/root/lib -name "*.so*"` 2>/dev/null || /bin/true
+	rm `find $(flashprefix)/root/lib/ -name "*.la"` 2>/dev/null || /bin/true
+	@if [ -e $(flashprefix)/.part_plugin_links ] ; then \
+		mv $(flashprefix)/root/lib/tuxbox/plugins/links.* $(flashprefix); \
+	fi
 	@chmod u+rwX,go+rX-w -R $(flashprefix)/root/
 	@touch $@
 
-flash-compress: $(flashprefix)/root-cramfs.img $(flashprefix)/var-jffs2.img
+flash-compress: $(flashprefix)/boot-cramfs.img $(flashprefix)/root-squashfs.img $(flashprefix)/complete.img
 
-flash-compress-complete-jffs2: $(flashprefix)/root-jffs2.img
+$(flashprefix)/boot-cramfs.img: .linuxkernel $(flashprefix)/.part_dreamfiles
+	cp $(buildprefix)/linux/arch/ppc/boot/images/zImage.treeboot $(flashprefix)/boot/root/platform/kernel/os
+if BOXTYPE_DM7000
+	$(flashprefix)/mkcramfs-e -eb $(flashprefix)/boot $(flashprefix)/boot-cramfs.img
+endif
+if BOXTYPE_DM56x0
+	mv $(flashprefix)/boot/root/platform/kernel/bild .
+	$(flashprefix)/mkcramfs-e -eb $(flashprefix)/boot $(flashprefix)/boot-cramfs.img
+	mv ./bild $(flashprefix)/boot/root/platform/kernel
+endif
+if BOXTYPE_DM500
+	mv $(flashprefix)/boot/root/platform/kernel/bild .
+	$(flashprefix)/mkcramfs-e -eb $(flashprefix)/boot $(flashprefix)/boot-cramfs.img
+	mv ./bild $(flashprefix)/boot/root/platform/kernel
+endif
 
-$(flashprefix)/root-cramfs.img: $(flashprefix)/.lib
-	@cp -a $(flashprefix)/root $(flashprefix)/temp
+$(flashprefix)/root-squashfs.img:
+	$(flashprefix)/mksquashfs $(flashprefix)/root $(flashprefix)/root-squashfs.img -be -all-root
 
-	@$(INSTALL) -d $(flashprefix)/temp/var/etc/init.d
-	@echo "/dev/mtdblock/3	/var	jffs2	defaults	0 0" >> $(flashprefix)/temp/etc/fstab
-
-	@mv $(flashprefix)/temp/etc/init.d/start $(flashprefix)/temp/var/etc/init.d
-	@ln -sf /var/etc/init.d/start $(flashprefix)/temp/etc/init.d/start
-
-	@if [ -d $(flashprefix)/temp/etc/network ] ; then \
-		ln -sf /tmp/ifstate $(flashprefix)/temp/etc/network/ifstate ; \
-		mv $(flashprefix)/temp/etc/network $(flashprefix)/temp/var/etc/network ; \
-		ln -sf /var/etc/network $(flashprefix)/temp/etc/network ; \
-	fi
-
-	@if [ -d $(flashprefix)/temp/etc/ssh ] ; then \
-		mv $(flashprefix)/temp/etc/ssh $(flashprefix)/temp/var/etc/ssh ; \
-		ln -sf /var/etc/ssh $(flashprefix)/temp/etc/ssh ; \
-	fi
-
-	@mv $(flashprefix)/temp/var $(flashprefix)/temp/share/tuxbox/image
-	@$(INSTALL) -d $(flashprefix)/temp/var
-
-	@$(FAKEROOT) $(MKCRAMFS) -n "TuxBox-`date +%Y%m%d`" $(flashprefix)/temp/ $(flashprefix)/root-cramfs.img
-	@rm -rf $(flashprefix)/temp/
-
-$(flashprefix)/var-jffs2.img: $(flashprefix)/.lib
-	@cp -a $(flashprefix)/root/var $(flashprefix)/temp
-	@$(FAKEROOT) $(MKJFFS2) -b -e 131072 -p -o $(flashprefix)/var-jffs2.img -r $(flashprefix)/temp/
-	@rm -rf $(flashprefix)/temp/
-
-$(flashprefix)/mix-cramfs-jffs2.img: $(flashprefix)/ppcboot-flfs.img $(flashprefix)/root-cramfs.img $(flashprefix)/var-jffs2.img
-	@rm -f  $(flashprefix)/mix.img
-	$(hostappsdir)/flash/flashmanage.pl -i $(flashprefix)/mix-cramfs-jffs2.img -o build \
-		--part ppcboot=$(flashprefix)/ppcboot-flfs.img \
-		--part root=$(flashprefix)/root-cramfs.img \
-		--part var=$(flashprefix)/var-jffs2.img
-
-$(flashprefix)/root-jffs2.img: $(flashprefix)/.lib
-	@$(FAKEROOT) $(MKJFFS2) -b -e 131072 -o $(flashprefix)/root-jffs2.img -r $(flashprefix)/root/
+$(flashprefix)/complete.img: $(flashprefix)/boot-cramfs.img $(flashprefix)/root-squashfs.img
+	cp $(flashprefix)/boot-cramfs.img $(flashprefix)/complete.img; \
+	dd if=$(flashprefix)/root-squashfs.img of=$(flashprefix)/complete.img bs=1024 seek=1152
 endif
 
 #######################
@@ -1665,7 +1947,6 @@ endif
 clean-local:
 	-$(MAKE) -C etc clean
 	-$(MAKE) -C $(appsdir) clean
-	-$(MAKE) -C $(bootdir)/ppcboot distclean
 	-$(MAKE) -C $(driverdir) clean \
 		KERNEL_LOCATION=$(buildprefix)/linux
 	-rm -f linux
@@ -1681,12 +1962,12 @@ distclean-local:
 	-rm .etc .busybox .ftpd .modutils .procps .watchdog
 	-rm .libboost .libcommoncplusplus .libcrypto .libcurl .libdb2 .libdvbpsi .libffi .libfreetype
 	-rm .libncurses .libfribidi .libjpeg .libmad .libid3tag .libnet .libnids .libpcap .libpng .libpopt
-	-rm .libreadline .libsdl .libsigc .libungif .libxml2 .libxmlwrapp .libz .libvorbisidec
+	-rm .libreadline .libsdl .libsigc .libungif .libxml2 .libxmlwrapp .libz .libvorbisidec .libgmp
 	-rm .cabextract
 	-rm .gdb .gdb-remote .insight .ksymoops .ltrace .strace .nano
 	-rm .kaffeh .kaffe
 	-rm .gnuboy .scummvm .sdldoom
-	-rm .ppcboot .linuxkernel .driver
+	-rm .linuxkernel .reiserfsprogs .e2fsprogs .samba .dreamfiles .etherwake .utillinux
 	-rm .dvbsnoop .enigma .lcars .lcdmenu .neutrino .stream .zapit
 	-rm .console_data .console_tools .dsniff .fbset .lirc .pump .ssh .tcpdump .xrc .thttpd
 	-rm .dvbdate .dvbstream .dvbtext .dvbtune .vls

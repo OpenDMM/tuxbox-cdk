@@ -1,7 +1,7 @@
-diff -Naur busybox-1.00-pre7/init/init.c busybox-1.00-pre7-dbox2/init/init.c
---- busybox-1.00-pre7/init/init.c	2003-09-26 12:45:55.000000000 +0200
-+++ busybox-1.00-pre7-dbox2/init/init.c	2004-02-22 16:13:00.000000000 +0100
-@@ -376,7 +376,7 @@
+diff -Naur busybox-1.00/init/init.c busybox-1.00-patched/init/init.c
+--- busybox-1.00/init/init.c	2004-10-08 10:21:54.000000000 +0200
++++ busybox-1.00-patched/init/init.c	2005-02-03 21:14:50.000000000 +0100
+@@ -374,7 +374,7 @@
  	while ((fd = open(console, O_RDONLY | O_NONBLOCK)) < 0 && tried < 2) {
  		/* Can't open selected console -- try
  			logical system console and VT_MASTER */
@@ -30,9 +30,9 @@ diff -Naur busybox-1.00-pre7/init/init.c busybox-1.00-pre7-dbox2/init/init.c
  	}
  	return wpid;
  }
-diff -Naur busybox-1.00-pre7/libbb/messages.c busybox-1.00-pre7-dbox2/libbb/messages.c
---- busybox-1.00-pre7/libbb/messages.c	2003-09-02 04:36:11.000000000 +0200
-+++ busybox-1.00-pre7-dbox2/libbb/messages.c	2004-02-22 16:11:11.000000000 +0100
+diff -Naur busybox-1.00/libbb/messages.c busybox-1.00-patched/libbb/messages.c
+--- busybox-1.00/libbb/messages.c	2004-03-15 09:28:42.000000000 +0100
++++ busybox-1.00-patched/libbb/messages.c	2005-02-03 21:14:50.000000000 +0100
 @@ -56,27 +56,47 @@
  #endif
  
@@ -86,39 +86,322 @@ diff -Naur busybox-1.00-pre7/libbb/messages.c busybox-1.00-pre7-dbox2/libbb/mess
  const char * const bb_path_nologin_file = NOLOGIN_FILE;
  #endif
  
-diff -Naur busybox-1.00-pre7/networking/ifupdown.c busybox-1.00-pre7-dbox2/networking/ifupdown.c
---- busybox-1.00-pre7/networking/ifupdown.c	2003-12-19 11:46:00.000000000 +0100
-+++ busybox-1.00-pre7-dbox2/networking/ifupdown.c	2004-02-22 16:11:11.000000000 +0100
-@@ -1022,7 +1022,7 @@
- 
- static int execute_all(struct interface_defn_t *ifd, execfn *exec, const char *opt)
+diff -Naur busybox-1.00/libbb/procps.c busybox-1.00-patched/libbb/procps.c
+--- busybox-1.00/libbb/procps.c	2004-08-27 00:18:58.000000000 +0200
++++ busybox-1.00-patched/libbb/procps.c	2005-02-03 21:17:13.000000000 +0100
+@@ -22,7 +22,7 @@
+ #endif
+ 	)
  {
--	int i;
-+	int i, fd;
- 	char *buf;
- 	for (i = 0; i < ifd->n_options; i++) {
- 		if (strcmp(ifd->option[i].name, opt) == 0) {
-@@ -1031,9 +1031,13 @@
- 			}
- 		}
- 	}
--	
--	bb_xasprintf(&buf, "run-parts /etc/network/if-%s.d", opt);
--	(*exec)(buf);
-+
-+	bb_xasprintf(&buf, "/etc/network/if-%s.d", opt);
-+	if ((fd = open(buf, O_RDONLY)) >= 0) {
-+		close(fd);
-+		bb_xasprintf(&buf, "run-parts /etc/network/if-%s.d", opt);
-+		(*exec)(buf);
-+	}
+-	static DIR *dir;
++	static DIR *dir, *taskdir;
+ 	struct dirent *entry;
+ 	static procps_status_t ret_status;
+ 	char *name;
+@@ -32,6 +32,7 @@
+ 	FILE *fp;
+ 	procps_status_t curstatus;
+ 	int pid;
++	static int parentpid;
+ 	long tasknice;
+ 	struct stat sb;
  
- 	return (1);
+@@ -40,111 +41,149 @@
+ 		if(!dir)
+ 			bb_error_msg_and_die("Can't open /proc");
+ 	}
+-	for(;;) {
+-		if((entry = readdir(dir)) == NULL) {
+-			closedir(dir);
+-			dir = 0;
+-			return 0;
+-		}
+-		name = entry->d_name;
+-		if (!(*name >= '0' && *name <= '9'))
+-			continue;
+ 
+-		memset(&curstatus, 0, sizeof(procps_status_t));
+-		pid = atoi(name);
+-		curstatus.pid = pid;
++	if (taskdir) {
++		for(;;) {
++			if((entry = readdir(taskdir)) == NULL) {
++				closedir(taskdir);
++				taskdir = 0;
++				break;
++			}
++			name = entry->d_name;
++			if (!(*name >= '0' && *name <= '9'))
++				continue;
+ 
+-		sprintf(status, "/proc/%d", pid);
+-		if(stat(status, &sb))
+-			continue;
+-		my_getpwuid(curstatus.user, sb.st_uid, sizeof(curstatus.user));
++			memset(&curstatus, 0, sizeof(procps_status_t));
++			pid = atoi(name);
++			curstatus.pid = pid;
+ 
+-		sprintf(status, "/proc/%d/stat", pid);
+-		if((fp = fopen(status, "r")) == NULL)
+-			continue;
+-#ifdef CONFIG_SELINUX
+-		if(use_selinux)
+-		{
+-			if(fstat_secure(fileno(fp), &sb, sid))
++			sprintf(status, "/proc/%d/task/%d", parentpid, pid);
++			if(stat(status, &sb))
+ 				continue;
+-		}
+-		else
++			my_getpwuid(curstatus.user, sb.st_uid, sizeof(curstatus.user));
++
++			sprintf(status, "/proc/%d/task/%d/stat", parentpid, pid);
++			if((fp = fopen(status, "r")) == NULL)
++				continue;
++#ifdef CONFIG_SELINUX
++			if(use_selinux)
++			{
++				if(fstat_secure(fileno(fp), &sb, sid))
++					continue;
++			}
++			else
+ #endif
+-		name = fgets(buf, sizeof(buf), fp);
+-		fclose(fp);
+-		if(name == NULL)
+-			continue;
+-		name = strrchr(buf, ')'); /* split into "PID (cmd" and "<rest>" */
+-		if(name == 0 || name[1] != ' ')
+-			continue;
+-		*name = 0;
+-		sscanf(buf, "%*s (%15c", curstatus.short_cmd);
+-		n = sscanf(name+2,
+-		"%c %d "
+-		"%*s %*s %*s %*s "     /* pgrp, session, tty, tpgid */
+-		"%*s %*s %*s %*s %*s " /* flags, min_flt, cmin_flt, maj_flt, cmaj_flt */
++			name = fgets(buf, sizeof(buf), fp);
++			fclose(fp);
++			if(name == NULL)
++				continue;
++			name = strrchr(buf, ')'); /* split into "PID (cmd" and "<rest>" */
++			if(name == 0 || name[1] != ' ')
++				continue;
++			*name = 0;
++			sscanf(buf, "%*s (%15c", curstatus.short_cmd);
++			n = sscanf(name+2,
++			"%c %d "
++			"%*s %*s %*s %*s "     /* pgrp, session, tty, tpgid */
++			"%*s %*s %*s %*s %*s " /* flags, min_flt, cmin_flt, maj_flt, cmaj_flt */
+ #ifdef FEATURE_CPU_USAGE_PERCENTAGE
+-		"%lu %lu "
++			"%lu %lu "
+ #else
+-		"%*s %*s "
++			"%*s %*s "
+ #endif
+-		"%*s %*s %*s "         /* cutime, cstime, priority */
+-		"%ld "
+-		"%*s %*s %*s "         /* timeout, it_real_value, start_time */
+-		"%*s "                 /* vsize */
+-		"%ld",
+-		curstatus.state, &curstatus.ppid,
++			"%*s %*s %*s "         /* cutime, cstime, priority */
++			"%ld "
++			"%*s %*s %*s "         /* timeout, it_real_value, start_time */
++			"%*s "                 /* vsize */
++			"%ld",
++			curstatus.state, &curstatus.ppid,
+ #ifdef FEATURE_CPU_USAGE_PERCENTAGE
+-		&curstatus.utime, &curstatus.stime,
++			&curstatus.utime, &curstatus.stime,
+ #endif
+-		&tasknice,
+-		&curstatus.rss);
++			&tasknice,
++			&curstatus.rss);
++			if ( pid != parentpid )
++				curstatus.ppid = parentpid;
+ #ifdef FEATURE_CPU_USAGE_PERCENTAGE
+-		if(n != 6)
++			if(n != 6)
+ #else
+-		if(n != 4)
++			if(n != 4)
+ #endif
+-			continue;
++				continue;
+ 
+-		if (curstatus.rss == 0 && curstatus.state[0] != 'Z')
+-			curstatus.state[1] = 'W';
+-		else
+-			curstatus.state[1] = ' ';
+-		if (tasknice < 0)
+-			curstatus.state[2] = '<';
+-		else if (tasknice > 0)
+-			curstatus.state[2] = 'N';
+-		else
+-			curstatus.state[2] = ' ';
++			if (curstatus.rss == 0 && curstatus.state[0] != 'Z')
++				curstatus.state[1] = 'W';
++			else
++				curstatus.state[1] = ' ';
++			if (tasknice < 0)
++				curstatus.state[2] = '<';
++			else if (tasknice > 0)
++				curstatus.state[2] = 'N';
++			else
++				curstatus.state[2] = ' ';
+ 
+ #ifdef PAGE_SHIFT
+-		curstatus.rss <<= (PAGE_SHIFT - 10);     /* 2**10 = 1kb */
++			curstatus.rss <<= (PAGE_SHIFT - 10);     /* 2**10 = 1kb */
+ #else
+-		curstatus.rss *= (getpagesize() >> 10);     /* 2**10 = 1kb */
++			curstatus.rss *= (getpagesize() >> 10);     /* 2**10 = 1kb */
+ #endif
+ 
+-		if(save_user_arg0) {
+-			sprintf(status, "/proc/%d/cmdline", pid);
+-			if((fp = fopen(status, "r")) == NULL)
+-				continue;
+-			if((n=fread(buf, 1, sizeof(buf)-1, fp)) > 0) {
+-				if(buf[n-1]=='\n')
+-					buf[--n] = 0;
+-				name = buf;
+-				while(n) {
+-					if(((unsigned char)*name) < ' ')
+-						*name = ' ';
+-					name++;
+-					n--;
++			if(save_user_arg0) {
++				sprintf(status, "/proc/%d/task/%d/cmdline", parentpid, pid);
++				if((fp = fopen(status, "r")) == NULL)
++					continue;
++				if((n=fread(buf, 1, sizeof(buf)-1, fp)) > 0) {
++					if(buf[n-1]=='\n')
++						buf[--n] = 0;
++					name = buf;
++					while(n) {
++						if(((unsigned char)*name) < ' ')
++							*name = ' ';
++						name++;
++						n--;
++					}
++					*name = 0;
++					if(buf[0])
++						curstatus.cmd = strdup(buf);
++					/* if NULL it work true also */
+ 				}
+-				*name = 0;
+-				if(buf[0])
+-					curstatus.cmd = strdup(buf);
+-				/* if NULL it work true also */
++				fclose(fp);
+ 			}
+-			fclose(fp);
++			return memcpy(&ret_status, &curstatus, sizeof(procps_status_t));
++		}
++	}
++
++	for(;;) {
++		if((entry = readdir(dir)) == NULL) {
++			closedir(dir);
++			dir = 0;
++			return 0;
++		}
++		name = entry->d_name;
++		if (!(*name >= '0' && *name <= '9'))
++			continue;
++
++		memset(&curstatus, 0, sizeof(procps_status_t));
++		pid = atoi(name);
++		curstatus.pid = pid;
++
++		sprintf(status, "/proc/%d", pid);
++		if(stat(status, &sb))
++			continue;
++		my_getpwuid(curstatus.user, sb.st_uid, sizeof(curstatus.user));
++
++		if (!taskdir) {
++			sprintf(status, "/proc/%d/task", pid);
++			taskdir = opendir(status);
++			if(!taskdir)
++				bb_error_msg_and_die("Can't open /proc/XXX/task");
++			parentpid = pid;
++			return procps_scan(save_user_arg0
++#ifdef CONFIG_SELINUX
++						,use_selinux, sid
++#endif
++				);
+ 		}
+-		return memcpy(&ret_status, &curstatus, sizeof(procps_status_t));
+ 	}
  }
-diff -Naur busybox-1.00-pre7/sysdeps/linux/Config.in busybox-1.00-pre7-dbox2/sysdeps/linux/Config.in
---- busybox-1.00-pre7/sysdeps/linux/Config.in	2003-10-22 11:58:50.000000000 +0200
-+++ busybox-1.00-pre7-dbox2/sysdeps/linux/Config.in	2004-02-22 16:11:11.000000000 +0100
-@@ -195,6 +195,14 @@
+ 
+diff -Naur busybox-1.00/miscutils/hdparm.c busybox-1.00-patched/miscutils/hdparm.c
+--- busybox-1.00/miscutils/hdparm.c	2004-07-21 00:53:59.000000000 +0200
++++ busybox-1.00-patched/miscutils/hdparm.c	2005-02-03 21:14:50.000000000 +0100
+@@ -1254,6 +1254,7 @@
+ static unsigned long set_sleepnow   = 0, get_sleepnow   = 0;
+ static unsigned long get_powermode  = 0;
+ static unsigned long set_apmmode = 0, get_apmmode= 0, apmmode = 0;
++static unsigned long set_acoustic = 0, get_acoustic = 0, acoustic = 0;
+ #endif
+ #ifdef CONFIG_FEATURE_HDPARM_GET_IDENTITY
+ static int get_IDentity = 0;
+@@ -2123,6 +2124,20 @@
+ 		}
+ 		bb_ioctl(fd, HDIO_DRIVE_CMD, &args,"HDIO_DRIVE_CMD");
+ 	}
++	if (set_acoustic)
++	{
++		no_scsi();
++		acoustic=check_if_min_and_set_val(acoustic,0);
++		acoustic=check_if_maj_and_set_val(acoustic,254);
++		if_printf(get_acoustic," setting AAM level to 0x%02lX (%ld)\n", acoustic, acoustic);
++		bb_ioctl(fd, HDIO_SET_ACOUSTIC, (int*)acoustic,"HDIO_SET_ACOUSTIC");
++	}
++	if (get_acoustic)
++	{
++		no_scsi();
++		bb_ioctl(fd, HDIO_GET_ACOUSTIC, (unsigned long*)&parm,"HDIO_GET_ACOUSTIC");
++		printf(" acoustic     = %2ld (128=quiet ... 254=fast)\n", parm);
++	}
+ 	if (set_wcache)
+ 	{
+ #ifdef DO_FLUSHCACHE
+@@ -2831,6 +2846,13 @@
+ 							p = *argv++, --argc;
+ 						p=GET_NUMBER(p,&set_readahead,&Xreadahead);
+ 						break;
++					case 'M':
++						get_acoustic = noisy; 
++						noisy = 1;
++						if (!*p && argc && isalnum(**argv))
++							p = *argv++, --argc;
++						p=GET_NUMBER(p,&set_acoustic,&acoustic);
++						break;
+ 					case 'B':
+ 						get_apmmode = noisy;
+ 						noisy = 1;
+diff -Naur busybox-1.00/modutils/lsmod.c busybox-1.00-patched/modutils/lsmod.c
+--- busybox-1.00/modutils/lsmod.c	2004-03-15 09:28:47.000000000 +0100
++++ busybox-1.00-patched/modutils/lsmod.c	2005-02-03 21:14:50.000000000 +0100
+@@ -38,6 +38,9 @@
+ #include <sys/file.h>
+ #include "busybox.h"
+ 
++#ifdef CONFIG_FEATURE_2_6_MODULES
++#undef CONFIG_FEATURE_QUERY_MODULE_INTERFACE
++#endif
+ 
+ #ifndef CONFIG_FEATURE_CHECK_TAINTED_MODULE
+ static inline void check_tainted(void) { printf("\n"); }
+diff -Naur busybox-1.00/sysdeps/linux/Config.in busybox-1.00-patched/sysdeps/linux/Config.in
+--- busybox-1.00/sysdeps/linux/Config.in	2004-05-25 13:30:22.000000000 +0200
++++ busybox-1.00-patched/sysdeps/linux/Config.in	2005-02-03 21:14:50.000000000 +0100
+@@ -196,6 +196,14 @@
  	  if you want to add some simple compiler switches (like -march=i686),
  	  or check for warnings using -Werror, just those options here.
  

@@ -27,7 +27,7 @@ AM_CONDITIONAL(WITH_FLASHMODUTILS,test "$enable_flashmodutils" = "yes")
 
 AC_ARG_WITH(cpu,
 	[  --with-cpu=MODEL        cpu model [[823,405]]],
-	[CPU_MODEL="$withval"],[CPU_MODEL="823"])
+	[CPU_MODEL="$withval"],[CPU_MODEL="405"])
 
 AC_SUBST(CPU_MODEL)
 AM_CONDITIONAL(CPU_MODEL_823,test "$CPU_MODEL" = "823")
@@ -58,6 +58,15 @@ AC_SUBST(HOSTRULESET)
 AM_CONDITIONAL(HOSTRULESET_STANDARD,test "$HOSTRULESET" = "standard")
 AM_CONDITIONAL(HOSTRULESET_CYGWIN,test "$HOSTRULESET" = "cygwin")
 
+AC_ARG_WITH(boxtype,
+	[  --with-boxtype=NAME dreambox type [[dm7000,dm56x0,dm500]]],
+	[BOXTYPE="$withval"],[BOXTYPE="dm7000"])
+
+AC_SUBST(BOXTYPE)
+AM_CONDITIONAL(BOXTYPE_DM7000,test "$BOXTYPE" = "dm7000")
+AM_CONDITIONAL(BOXTYPE_DM56x0,test "$BOXTYPE" = "dm56x0")
+AM_CONDITIONAL(BOXTYPE_DM500,test "$BOXTYPE" = "dm500")
+
 AC_ARG_WITH(targetruleset,
 	[  --with-targetruleset=NAME target ruleset [[standard,flash]]],
 	[TARGETRULESET="$withval"],[TARGETRULESET="standard"])
@@ -78,17 +87,9 @@ if test -z "$CFLAGS" ; then
 	CFLAGS="-O2"
 fi
 
-if test -z "$TARGET_CFLAGS" -o -z "$TARGET_CXXFLAGS"; then
-	TARGET_CFLAGS="-mcpu=$CPU_MODEL -mmultiple -mstring -meabi -pipe"
-	if test "$TARGETRULESET" = "standard"; then
-		TARGET_CFLAGS="$TARGET_CFLAGS -O2 -ggdb3"
-		TARGET_LDFLAGS=""
-	elif test "$TARGETRULESET" = "flash"; then
-		TARGET_CFLAGS="$TARGET_CFLAGS -Os"
-		TARGET_LDFLAGS="-s"
-	fi
-	TARGET_CXXFLAGS="$TARGET_CFLAGS"
-fi
+TARGET_CFLAGS="-mcpu=$CPU_MODEL -msoft-float -mmultiple -mstring -meabi -pipe -Os -ggdb3 -DHAVE_DREAMBOX_HARDWARE"
+TARGET_LDFLAGS=""
+TARGET_CXXFLAGS="$TARGET_CFLAGS"
 
 AC_SUBST(CFLAGS)
 AC_SUBST(TARGET_CFLAGS)
@@ -181,7 +182,7 @@ else
 fi
 
 if test "$gnuserver" = "NONE"; then
-	gnuserver="ftp.gwdg.de/pub/misc/gnu"
+	gnuserver="ftp.gnu.org/gnu"
 fi
 
 AC_MSG_CHECKING([for apps directory])
@@ -263,6 +264,7 @@ AC_SUBST(CLEANUP)
 #
 AC_SUBST(KERNELVERSION)
 TUXBOX_RULES_MAKE(linux)
+TUXBOX_RULES_MAKE(linux_libc_headers)
 KERNELVERSION=$VERSION_linux
 TUXBOX_RULES_MAKE_EXDIR(binutils)
 TUXBOX_RULES_MAKE_EXDIR(bootstrap_gcc)
@@ -326,6 +328,15 @@ TUXBOX_RULES_MAKE(ssh)
 TUXBOX_RULES_MAKE(tcpdump)
 TUXBOX_RULES_MAKE(xrc)
 TUXBOX_RULES_MAKE(thttpd)
+TUXBOX_RULES_MAKE(e2fsprogs)
+TUXBOX_RULES_MAKE(reiserfsprogs)
+TUXBOX_RULES_MAKE(utillinux)
+TUXBOX_RULES_MAKE(samba)
+TUXBOX_RULES_MAKE(etherwake)
+TUXBOX_RULES_MAKE(dreamfiles)
+TUXBOX_RULES_MAKE(dreamdriver_dm7000)
+TUXBOX_RULES_MAKE(dreamdriver_dm56x0)
+TUXBOX_RULES_MAKE(dreamdriver_dm500)
 
 #
 # additional
@@ -375,6 +386,7 @@ AC_MSG_RESULT([
 summary:
 ----------------------------------------
 target cpu:		$CPU_MODEL
+target box:		$BOXTYPE
 host rule set:		$HOSTRULESET
 target rule set:	$TARGETRULESET
 target prefix:		$targetprefix

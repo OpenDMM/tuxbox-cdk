@@ -10,12 +10,14 @@
 # core
 #
 linux
+linux_libc_headers
 binutils;make:install
 bootstrap_gcc;make:install
 gcc;make:install
 glibc;make:install:install_root=TARGET
 uclibc;make:install:DEVEL_PREFIX=TARGET;install:-m644:lib/libc.a:TARGET/lib/libc_pic.a;install:-m644:lib/libcrypt.a:TARGET/lib/libcrypt_pic.a;install:-m644:lib/libm.a:TARGET/lib/libm_pic.a;
 watchdog;make:install:DESTDIR=TARGET
+
 
 #
 # root
@@ -74,6 +76,11 @@ ssh;make:install:DESTDIR=TARGET
 tcpdump;make:install
 xrc;make:install
 thttpd;make:install
+e2fsprogs;make:install
+reiserfsprogs;make:install
+utillinux;make:install:SBINDIR=TARGET/sbin MAN8DIR=TARGET/man
+samba;make
+etherwake;make:install:INSTALL="$(INSTALL)" DESTDIR=$(targetprefix)
 
 #
 # development tools

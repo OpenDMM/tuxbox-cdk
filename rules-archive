@@ -9,27 +9,31 @@
 #
 # core
 #
-linux-2.4.20.tar.bz2;ftp://ftp.de.kernel.org/pub/linux/kernel/v2.4;ftp://ftp.kernel.org/pub/linux/kernel/v2.4
-linux-dbox2-2.4.20-2.diff.bz2;http://download.berlios.de/tuxbox
-binutils-2.13.90.0.16.tar.bz2;ftp://ftp.de.kernel.org/pub/linux/devel/binutils;ftp://ftp.kernel.org/pub/linux/devel/binutils
-gcc-core-3.2.3.tar.gz;ftp://$(gnuserver)/gcc/gcc-3.2.3
-gcc-g++-3.2.3.tar.gz;ftp://$(gnuserver)/gcc/gcc-3.2.3
-glibc-2.2.5.tar.bz2;ftp://$(gnuserver)/glibc
-glibc-linuxthreads-2.2.5.tar.bz2;ftp://$(gnuserver)/glibc
+linux-libc-headers-2.6.9.1.tar.bz2;ftp://ftp.belnet.be/mirror/linuxfromscratch.org/ftp/lfs-packages/conglomeration/linux-libc-headers
+linux-2.6.9.tar.bz2;ftp://ftp.de.kernel.org/pub/linux/kernel/v2.6;ftp://ftp.kernel.org/pub/linux/kernel/v2.6
+linuxppc-2.6.9-r1.diff.bz2;http://sources.dreamboxupdate.com/download/kernel-patches
+linuxppc-2.6.9-dream-s4.diff.bz2;http://sources.dreamboxupdate.com/download/kernel-patches
+squashfs2.0r2.diff.bz2;http://sources.dreamboxupdate.com/download/kernel-patches
+binutils-2.15.91.0.2.tar.bz2;ftp://ftp.de.kernel.org/pub/linux/devel/binutils;ftp://ftp.kernel.org/pub/linux/devel/binutils
+gcc-core-3.4.3.tar.bz2;ftp://$(gnuserver)/gcc/gcc-3.4.3
+gcc-g++-3.4.3.tar.bz2;ftp://$(gnuserver)/gcc/gcc-3.4.3
+glibc-2.3.2.tar.bz2;ftp://$(gnuserver)/glibc
+glibc-2.3.2-r0.diff.bz2;http://sources.dreamboxupdate.com/download/patches
+nptl-0.60.tar.bz2;http://www.arte.unipi.it/Public/Linux
 uClibc-0.9.11.tar.bz2
 watchdog_5.2.orig.tar.gz;ftp://ftp.debian.org/debian/pool/main/w/watchdog
 
 #
 # root
 #
-busybox-1.00-pre8.tar.bz2;http://www.busybox.net/downloads
+busybox-1.00.tar.bz2;http://www.busybox.net/downloads
 modutils-2.4.21.tar.bz2;ftp://ftp.de.kernel.org/pub/linux/utils/kernel/modutils/v2.4;ftp://ftp.kernel.org/pub/linux/kernel/v2.4
 netkit-base-0.17.tar.gz;ftp://ftp.uk.linux.org/pub/linux/Networking/base
 netkit-rsh-0.17.tar.gz;ftp://ftp.uk.linux.org/pub/linux/Networking/netkit
 netkit-telnet-0.17.tar.gz;ftp://ftp.uk.linux.org/pub/linux/Networking/netkit
 portmap-5.tar.bz2
 procps-010114.tar.gz;http://www.cs.uml.edu/~acahalan/procps/
-vsftpd-1.0.1.tar.gz;ftp://vsftpd.beasts.org/users/cevans/
+vsftpd-1.1.0.tar.gz;ftp://vsftpd.beasts.org/users/cevans/
 
 #
 # contrib libs
@@ -37,19 +41,19 @@ vsftpd-1.0.1.tar.gz;ftp://vsftpd.beasts.org/users/cevans/
 openssl-0.9.7a.tar.gz;http://www.openssl.org/source
 curl-7.10.1.tar.bz2;http://curl.haxx.se/download
 freetype-2.0.9.tar.bz2;http://telia.dl.sourceforge.net/sourceforge/freetype
-ncurses-5.3.tar.gz;ftp://ftp.gnu.org/gnu/ncurses
+ncurses-5.3.tar.gz;ftp://$(gnuserver)/ncurses
 jpegsrc.v6b.tar.gz;http://www.xfig.org/jpeg
-libpng-1.2.5.tar.bz2;ftp://swrinde.nde.swri.edu/pub/png/src
+libpng-1.2.6.tar.bz2;ftp://swrinde.nde.swri.edu/pub/png/src
 popt-1.6.4.tar.gz;ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.0.x
 libxml2-2.4.22.tar.bz2;ftp://ftp.gnome.org/pub/GNOME/sources/libxml2/2.4
-zlib-1.1.4.tar.bz2;ftp://ftp.info-zip.org/pub/infozip/zlib
+zlib-1.2.1.tar.bz2;http://www.zlib.net
 libffi-1.20.tar.gz;ftp://sourceware.cygnus.com/pub/libffi
-SDL-1.2.4.tar.gz;http://www.libsdl.org/release
-readline-4.3.tar.gz;ftp://ftp.gnu.org/gnu/readline
+SDL-1.2.6.tar.gz;http://www.libsdl.org/release
+readline-4.3.tar.gz;ftp://$(gnuserver)/readline
 libsigc++-1.2.5.tar.gz;http://switch.dl.sourceforge.net/sourceforge/libsigc
 libpcap-0.7.1.tar.gz;http://www.tcpdump.org/release
 xmlwrapp-0.2.1.tar.gz;http://pmade.org/pjones/software/xmlwrapp/download
-commoncpp2-0.99.7.tar.gz;ftp://ftp.gnu.org/gnu/commonc++
+commoncpp2-0.99.7.tar.gz;ftp://$(gnuserver)/commonc++
 libdvbpsi-0.1.2.tar.gz;http://www.videolan.org/pub/videolan/libdvbpsi/0.1.2
 xmlparse_0.9.3.tar.bz2;http://private.addcom.de/morus_walter/xmlparse
 libnet-1.0.2a.tar.gz;http://www.packetfactory.net/libnet/dist/deprecated
@@ -60,6 +64,7 @@ boost_1_29_0.tar.gz;http://belnet.dl.sourceforge.net/sourceforge/boost
 fribidi-0.10.4.tar.bz2;http://belnet.dl.sourceforge.net/sourceforge/fribidi
 gmp-4.1.2.tar.gz;ftp://mirrors.kernel.org/gnu/gmp/
 libungif-4.1.3.tar.bz2;http://distro.ibiblio.org/pub/linux/distributions/sorcerer/sources/libungif/4.1.3
+
 
 
 #
@@ -76,14 +81,23 @@ tcpdump-3.7.1.tar.gz;http://www.tcpdump.org/release
 xrc-0.6.3.tar.gz;http://switch.dl.sourceforge.net/sourceforge/lirc
 thttpd-2.23beta1.tar.gz;http://www.acme.com/software/thttpd
 lsof_4.64_src.tar.bz2;
+e2fsprogs-1.35.tar.gz;http://mesh.dl.sourceforge.net/sourceforge/e2fsprogs/
+reiserfsprogs-3.6.14.tar.gz;http://ftp.roedu.net/pub/mirrors/ftp.namesys.com/pub/reiserfsprogs/
+util-linux-2.12i.tar.bz2;http://www.kernel.org/pub/linux/utils/util-linux/
+samba-1.9.18p8.tar.gz;http://mirrors.xmission.com/samba/ftp/stable/
+etherwake_1.08.orig.tar.gz;http://ftp.debian.org/debian/pool/main/e/etherwake/
+dreamfiles_20050204.tar.bz2;http://sources.dreamboxupdate.com/download/snapshots
+dreamdriver_dm7000_20050130.tar.bz2;http://sources.dreamboxupdate.com/download/snapshots
+dreamdriver_dm56x0_20050130.tar.bz2;http://sources.dreamboxupdate.com/download/snapshots
+dreamdriver_dm500_20050130.tar.bz2;http://sources.dreamboxupdate.com/download/snapshots
 
 #
 # development tools
 #
-gdb-6.1.1.tar.bz2;ftp://sources.redhat.com/pub/gdb/releases
+gdb-6.3.tar.bz2;ftp://sources.redhat.com/pub/gdb/releases
 insight-6.1.tar.bz2;ftp://sources.redhat.com/pub/gdb/releases
-ltrace_0.3.26.tar.gz;ftp://ftp.debian.org/debian/pool/main/l/ltrace
-strace_4.4-1.tar.gz;http://switch.dl.sourceforge.net/sourceforge/strace
+ltrace_0.3.35.tar.gz;ftp://ftp.debian.org/debian/pool/main/l/ltrace
+strace_4.5.7.tar.gz;http://switch.dl.sourceforge.net/sourceforge/strace
 ksymoops-2.4.9.tar.bz2;ftp://ftp.de.kernel.org/pub/linux/utils/kernel/ksymoops/v2.4
 nano-1.2.4.tar.gz;http://www.nano-editor.org/dist/v1.2
 
@@ -98,7 +112,7 @@ kaffe-1.0.6.tar.gz;ftp://ftp.kaffe.org/pub/kaffe/v1.0.x-production
 gnuboy-1.0.3.tar.gz;http://gnuboy.unix-fu.org/src
 libmad-0.15.0b.tar.gz;http://telia.dl.sourceforge.net/sourceforge/mad
 libid3tag-0.15.0b.tar.gz;http://telia.dl.sourceforge.net/sourceforge/mad
-scummvm-20020717.tar.bz2;http://scummvm.sourceforge.net/daily
+scummvm-0.6.1b.tar.bz2;http://heanet.dl.sourceforge.net/sourceforge/scummvm
 sdldoom-1.10.tar.gz;ftp://ftp2.3ddownloads.com/89958/doomworld/ports/sdldoom-1.10.tar.gz
 
 #

@@ -9,7 +9,7 @@ diff -Naur libpng-1.2.5/Makefile libpng-1.2.5new/Makefile
 +
 +LIBNAME = libpng12
 +PNGMAJ = 0
-+PNGMIN = 1.2.5
++PNGMIN = 1.2.6
 +PNGVER = $(PNGMAJ).$(PNGMIN)
 +
 +CC=powerpc-tuxbox-linux-gnu-gcc
@@ -214,3 +214,4 @@ diff -Naur libpng-1.2.5/Makefile libpng-1.2.5new/Makefile
 +pngpread.o pngpread.pic.o: png.h pngconf.h
 +
 +pngtest.o: png.h pngconf.h
+    

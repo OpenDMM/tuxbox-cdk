@@ -12,19 +12,20 @@
 #
 # core
 #
-linux;2.4.20-dbox2;linux-2.4.20;linux-2.4.20.tar.bz2:linux-dbox2-2.4.20-2.diff.bz2;remove:linux;extract:linux-2.4.20.tar.bz2;patch:linux-dbox2-2.4.20-2.diff.bz2;link:linux-2.4.20:linux
-binutils;2.13.90.0.16;binutils-2.13.90.0.16;binutils-2.13.90.0.16.tar.bz2;extract:binutils-2.13.90.0.16.tar.bz2
-bootstrap_gcc;3.2.3;gcc-3.2.3;gcc-core-3.2.3.tar.gz:gcc-core.diff;extract:gcc-core-3.2.3.tar.gz;patch:gcc-core.diff
-gcc;3.2.3;gcc-3.2.3;gcc-core-3.2.3.tar.gz:gcc-g++-3.2.3.tar.gz;extract:gcc-core-3.2.3.tar.gz;extract:gcc-g++-3.2.3.tar.gz
-glibc;2.2.5;glibc-2.2.5;glibc-2.2.5.tar.bz2:glibc-linuxthreads-2.2.5.tar.bz2:glibc.diff;extract:glibc-2.2.5.tar.bz2;dirextract:glibc-linuxthreads-2.2.5.tar.bz2;patch:glibc.diff
+linux;2.6.9;linux-2.6.9;linux-2.6.9.tar.bz2:linuxppc-2.6.9-r1.diff.bz2:linuxppc-2.6.9-dream-s4.diff.bz2:squashfs2.0r2.diff.bz2;remove:linux;extract:linux-2.6.9.tar.bz2;patch:linuxppc-2.6.9-r1.diff.bz2;patch:linuxppc-2.6.9-dream-s4.diff.bz2;patch:squashfs2.0r2.diff.bz2;link:linux-2.6.9:linux
+linux_libc_headers;2.6.9.1;linux-libc-headers-2.6.9.1;linux-libc-headers-2.6.9.1.tar.bz2:linux-libc-headers.diff;remove:linux-libc-headers;extract:linux-libc-headers-2.6.9.1.tar.bz2;link:linux-libc-headers-2.6.9.1:linux-libc-headers;patch:linux-libc-headers.diff
+binutils;2.15.91.0.2;binutils-2.15.91.0.2;binutils-2.15.91.0.2.tar.bz2;extract:binutils-2.15.91.0.2.tar.bz2
+bootstrap_gcc;3.4.3;gcc-3.4.3;gcc-core-3.4.3.tar.bz2:gcc-core.diff;extract:gcc-core-3.4.3.tar.bz2;patch:gcc-core.diff
+gcc;3.4.3;gcc-3.4.3;gcc-core-3.4.3.tar.bz2:gcc-g++-3.4.3.tar.bz2:gcc-g++.diff;extract:gcc-core-3.4.3.tar.bz2;extract:gcc-g++-3.4.3.tar.bz2;patch:gcc-g++.diff;patch:gcc-ibmppc4xx_fp_perflib.diff
+glibc;2.3.2;glibc-2.3.2;glibc-2.3.2.tar.bz2:nptl-0.60.tar.bz2:glibc-2.3.2-r0.diff.bz2;extract:glibc-2.3.2.tar.bz2;dirextract:nptl-0.60.tar.bz2;patch:glibc-2.3.2-r0.diff.bz2;patch:glibc_ppc4xx_ibmstropt.diff;patch:glibc-ibmppc4xx_fp_perflib.diff
 uclibc;0.9.11;uClibc-0.9.11;uClibc-0.9.11.tar.bz2:uclibc-0.9.11.diff;extract:uClibc-0.9.11.tar.bz2;patch:uclibc-0.9.11.diff
 watchdog;5.2;watchdog-5.2.orig;watchdog_5.2.orig.tar.gz:watchdog.diff;extract:watchdog_5.2.orig.tar.gz;patch:watchdog.diff
 
 #
 # root
 #
-busybox;1.00-pre8;busybox-1.00-pre8;busybox-1.00-pre8.tar.bz2;extract:busybox-1.00-pre8.tar.bz2;patch:busybox.diff
-ftpd;1.0.1;vsftpd-1.0.1;vsftpd-1.0.1.tar.gz:ftpd.diff;extract:vsftpd-1.0.1.tar.gz;patch:ftpd.diff
+busybox;1.00;busybox-1.00;busybox-1.00.tar.bz2;extract:busybox-1.00.tar.bz2;patch:busybox.diff
+ftpd;1.1.0;vsftpd-1.1.0;vsftpd-1.1.0.tar.gz:ftpd.diff;extract:vsftpd-1.1.0.tar.gz;patch:ftpd.diff
 modutils;2.4.21;modutils-2.4.21;modutils-2.4.21.tar.bz2;extract:modutils-2.4.21.tar.bz2
 portmap;5;portmap-5;portmap-5.tar.bz2:portmap-5.diff;extract:portmap-5.tar.bz2;patch:portmap-5.diff
 procps;010114;procps-010114;procps-010114.tar.gz:procps.diff;extract:procps-010114.tar.gz;patch:procps.diff
@@ -49,17 +50,17 @@ libncurses;5.3;ncurses-5.3;ncurses-5.3.tar.gz;extract:ncurses-5.3.tar.gz
 libnet;1.0.2a;Libnet-1.0.2a;libnet-1.0.2a.tar.gz:libnet.diff;extract:libnet-1.0.2a.tar.gz;patch:libnet.diff
 libnids;1.16;libnids-1.16;libnids-1.16.tar.gz;extract:libnids-1.16.tar.gz
 libpcap;0.7.1;libpcap-0.7.1;libpcap-0.7.1.tar.gz;extract:libpcap-0.7.1.tar.gz;patch:libpcap.diff
-libpng;1.2.5;libpng-1.2.5;libpng-1.2.5.tar.bz2:libpng.diff;extract:libpng-1.2.5.tar.bz2;patch:libpng.diff
+libpng;1.2.6;libpng-1.2.6;libpng-1.2.6.tar.bz2:libpng.diff;extract:libpng-1.2.6.tar.bz2;patch:libpng.diff
 libpopt;1.6.4;popt-1.6.4;popt-1.6.4.tar.gz;extract:popt-1.6.4.tar.gz
 libreadline;4.3;readline-4.3;readline-4.3.tar.gz:readline.diff;extract:readline-4.3.tar.gz;patch:readline.diff
-libsdl;1.2.4;SDL-1.2.4;SDL-1.2.4.tar.gz:sdl.diff;extract:SDL-1.2.4.tar.gz;patch:sdl.diff
+libsdl;1.2.6;SDL-1.2.6;SDL-1.2.6.tar.gz:sdl.diff;extract:SDL-1.2.6.tar.gz;patch:sdl.diff
 libsigc;1.2.5;libsigc++-1.2.5;libsigc++-1.2.5.tar.gz;extract:libsigc++-1.2.5.tar.gz
 libvorbisidec;20040525;tremor-20040525;tremor-20040525.tar.bz2;extract:tremor-20040525.tar.bz2;patch:tremor.diff
-libungif;4.1.3;libungif-4.1.3;libungif-4.1.3.tar.bz2;extract:libungif-4.1.3.tar.bz2;
+libungif;4.1.3;libungif-4.1.3;libungif-4.1.3.tar.bz2;extract:libungif-4.1.3.tar.bz2
 libxml2;2.4.22;libxml2-2.4.22;libxml2-2.4.22.tar.bz2;extract:libxml2-2.4.22.tar.bz2
 libxmlparse;0.9.3;xmlparse-0.9.3;xmlparse_0.9.3.tar.bz2:xmlparse.diff;extract:xmlparse_0.9.3.tar.bz2;patch:xmlparse.diff
 libxmlwrapp;0.2.1;xmlwrapp-0.2.1;xmlwrapp-0.2.1.tar.gz;extract:xmlwrapp-0.2.1.tar.gz
-libz;1.1.4;zlib-1.1.4;zlib-1.1.4.tar.bz2:zlib.diff;extract:zlib-1.1.4.tar.bz2;patch:zlib.diff
+libz;1.2.1;zlib-1.2.1;zlib-1.2.1.tar.bz2:zlib.diff;extract:zlib-1.2.1.tar.bz2;patch:zlib.diff
 
 #
 # contrib apps
@@ -75,14 +76,23 @@ ssh;3.5p1;openssh-3.5p1;openssh-3.5p1.tar.gz:ssh.diff;extract:openssh-3.5p1.tar.
 tcpdump;3.7.1;tcpdump-3.7.1;tcpdump-3.7.1.tar.gz;extract:tcpdump-3.7.1.tar.gz;patch:tcpdump.diff
 xrc;0.6.3;xrc-0.6.3;xrc-0.6.3.tar.gz:xrc.diff;extract:xrc-0.6.3.tar.gz;patch:xrc.diff
 thttpd;2.23beta1;thttpd-2.23beta1;thttpd-2.23beta1.tar.gz;extract:thttpd-2.23beta1.tar.gz;patch:thttpd.diff
+e2fsprogs;1.35;e2fsprogs-1.35;e2fsprogs-1.35.tar.gz;extract:e2fsprogs-1.35.tar.gz
+reiserfsprogs;3.6.14;reiserfsprogs-3.6.14;reiserfsprogs-3.6.14.tar.gz;extract:reiserfsprogs-3.6.14.tar.gz;patch:reiserfsprogs_add_credits.diff
+utillinux;2.12i;util-linux-2.12i;util-linux-2.12i.tar.bz2;extract:util-linux-2.12i.tar.bz2;patch:util-linux.diff
+samba;1.9.18p8;samba-1.9.18p8;samba-1.9.18p8.tar.gz:samba_ppc.diff;extract:samba-1.9.18p8.tar.gz;patch:samba_ppc.diff
+etherwake;1.08;etherwake-1.08.orig;etherwake_1.08.orig.tar.gz;extract:etherwake_1.08.orig.tar.gz;patch:etherwake.diff
+dreamfiles;20050204;dreamfiles_20050204;dreamfiles_20050204.tar.bz2;extract:dreamfiles_20050204.tar.bz2
+dreamdriver_dm7000;20050130;dreamdriver_dm7000_20050130;dreamdriver_dm7000_20050130.tar.bz2;extract:dreamdriver_dm7000_20050130.tar.bz2
+dreamdriver_dm56x0;20050130;dreamdriver_dm56x0_20050130;dreamdriver_dm56x0_20050130.tar.bz2;extract:dreamdriver_dm56x0_20050130.tar.bz2
+dreamdriver_dm500;20050130;dreamdriver_dm500_20050130;dreamdriver_dm500_20050130.tar.bz2;extract:dreamdriver_dm500_20050130.tar.bz2
 
 #
 # development tools
 #
-gdb;6.1.1;gdb-6.1.1;gdb-6.1.1.tar.bz2:gdb.diff;extract:gdb-6.1.1.tar.bz2;patch:gdb.diff
+gdb;6.3;gdb-6.3;gdb-6.3.tar.bz2:gdb.diff:gdb-6.3-5.diff;extract:gdb-6.3.tar.bz2;patch:gdb-6.3-5.diff;patch:gdb.diff
 insight;6.1;insight-6.1;insight-6.1.tar.bz2;extract:insight-6.1.tar.bz2
-ltrace;0.3.26;ltrace-0.3.26;ltrace_0.3.26.tar.gz;extract:ltrace_0.3.26.tar.gz;patch:ltrace.diff
-strace;4.4;strace-4.4;strace_4.4-1.tar.gz:strace.diff;extract:strace_4.4-1.tar.gz;patch:strace.diff
+ltrace;0.3.35;ltrace-0.3.35;ltrace_0.3.35.tar.gz;extract:ltrace_0.3.35.tar.gz;patch:ltrace.diff
+strace;4.5.7;strace-4.5.7;strace_4.5.7.tar.gz;extract:strace_4.5.7.tar.gz
 nano;1.2.4;nano-1.2.4;nano-1.2.4.tar.gz:nano.diff;extract:nano-1.2.4.tar.gz;patch:nano.diff
 ksymoops;2.4.9;ksymoops-2.4.9;ksymoops-2.4.9.tar.bz2;extract:ksymoops-2.4.9.tar.bz2
 
@@ -98,7 +108,7 @@ kaffeh;1.0.6;kaffe-1.0.6;kaffe-1.0.6.tar.gz:kaffeh.diff;extract:kaffe-1.0.6.tar.
 # fun stuff
 #
 gnuboy;1.0.3;gnuboy-1.0.3;gnuboy-1.0.3.tar.gz:gnuboy.diff;extract:gnuboy-1.0.3.tar.gz;patch:gnuboy.diff
-scummvm;20020717;scummvm;scummvm-20020717.tar.bz2:scummvm.diff;extract:scummvm-20020717.tar.bz2;patch:scummvm.diff
+scummvm;0.6.1b;scummvm-0.6.1b;scummvm-0.6.1b.tar.bz2:scummvm.diff;extract:scummvm-0.6.1b.tar.bz2;patch:scummvm.diff
 sdldoom;1.10;sdldoom-1.10;sdldoom-1.10.tar.gz;extract:sdldoom-1.10.tar.gz;patch:sdldoom.diff
 
 #

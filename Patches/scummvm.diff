@@ -1,20 +1,31 @@
---- scummvm/sdl.cpp	Tue Jun  4 20:18:43 2002
-+++ sdl.cpp	Sun Jun  9 18:29:46 2002
-@@ -312,7 +312,7 @@
- 		uint16 *tmp_screen = (uint16*)calloc((SCREEN_WIDTH+3)*(SCREEN_HEIGHT+3),sizeof(uint16));
- 		_mode_flags = DF_WANT_RECT_OPTIM | DF_SEPARATE_TEMPSCREEN | DF_UPDATE_EXPAND_1_PIXEL;
+diff -Naur scummvm-0.6.0/backends/sdl/sdl.cpp scummvm-0.6.0-pached/backends/sdl/sdl.cpp
+--- scummvm-0.6.0/backends/sdl/sdl.cpp	2004-02-28 14:01:43.000000000 +0100
++++ scummvm-0.6.0/backends/sdl/sdl.cpp	2004-11-20 18:30:26.000000000 +0100
+@@ -127,9 +127,8 @@
+ 	// Create the surface that contains the scaled graphics in 16 bit mode
+ 	//
  
--		sdl_hwscreen = SDL_SetVideoMode(SCREEN_WIDTH * scaling, SCREEN_HEIGHT * scaling, 16, 
-+		sdl_hwscreen = SDL_SetVideoMode(640, 480, 16, 
- 			_full_screen ? (SDL_FULLSCREEN|SDL_SWSURFACE) : SDL_SWSURFACE
- 		);
- 		if (sdl_hwscreen == NULL)
-@@ -348,7 +348,7 @@
- 
- 		_mode_flags = DF_WANT_RECT_OPTIM | DF_REAL_8BIT;
- 
--		sdl_hwscreen = SDL_SetVideoMode(SCREEN_WIDTH * scaling, SCREEN_HEIGHT * scaling, 8, 
-+		sdl_hwscreen = SDL_SetVideoMode(640, 480, 8, 
- 			_full_screen ? (SDL_FULLSCREEN|SDL_SWSURFACE) : SDL_SWSURFACE
- 		);
- 		if (sdl_hwscreen == NULL)
+-	_hwscreen = SDL_SetVideoMode(_screenWidth * _scaleFactor, (_adjustAspectRatio ? 240 : _screenHeight) * _scaleFactor, 16, 
+-		_full_screen ? (SDL_FULLSCREEN|SDL_SWSURFACE) : SDL_SWSURFACE
+-	);
++	_hwscreen = SDL_SetVideoMode(720, 576, 16,
++		_full_screen ? (SDL_FULLSCREEN|SDL_SWSURFACE) : SDL_SWSURFACE);
+ 	if (_hwscreen == NULL) {
+ 		// DON'T use error(), as this tries to bring up the debug
+ 		// console, which WON'T WORK now that _hwscreen is hosed.
+diff -Naur scummvm-0.6.0/configure scummvm-0.6.0-pached/configure
+--- scummvm-0.6.0/configure	2004-02-15 01:42:36.000000000 +0100
++++ scummvm-0.6.0/configure	2004-11-20 17:29:01.000000000 +0100
+@@ -419,10 +419,10 @@
+ if test -n "$_host"; then
+     # Cross-compiling mode - add your target here if needed
+     case "$_host" in
+-	arm-linux)
++	powerpc-tuxbox-linux-gnu)
+ 	    echo "Cross-compiling to $_host, forcing endianness, alignment and type sizes"
+ 	    DEFINES="$DEFINES -DUNIX"
+-	    _def_endianess='#define SCUMM_LITTLE_ENDIAN'
++	    _def_endianess='#define SCUMM_BIG_ENDIAN'
+ 	    _def_align='#define SCUMM_NEED_ALIGNMENT'
+ 	    type_1_byte='char'
+ 	    type_2_byte='short'
