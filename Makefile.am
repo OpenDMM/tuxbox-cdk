@@ -621,6 +621,9 @@ libs_optional: \
 			--disable-stdio-redirect \
 			--disable-directx && \
 		$(MAKE) all && \
+		rm -f $(hostprefix)/bin/sdl-config && \
+		sed -e "s,^prefix=,prefix=$(targetprefix)," < sdl-config > $(hostprefix)/bin/sdl-config && \
+		chmod 755 $(hostprefix)/bin/sdl-config && \
 		@INSTALL_libsdl@
 	@CLEANUP_libsdl@
 	touch $@
@@ -1051,13 +1054,11 @@ fun: .gnuboy .scummvm .sdldoom
 .sdldoom: .bootstrap .libsdl @DEPENDS_sdldoom@
 	@PREPARE_sdldoom@
 	cd @DIR_sdldoom@ && \
-		CC=$(target)-gcc \
-		CFLAGS="$(TARGET_CFLAGS)" \
+		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
-			--target=$(target) \
-			--prefix=$(targetprefix) && \
+			--prefix= && \
 		$(MAKE) all && \
 		@INSTALL_sdldoom@
 	@CLEANUP_sdldoom@
