@@ -36,6 +36,7 @@ Prerequisiten:
  - yacc
  - flex
  - bison
+ - pkg-config
 
 
 Hier die Kommandos zum Bauen des cdk:

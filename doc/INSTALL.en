@@ -35,6 +35,7 @@ Prerequistes:
  - yacc
  - flex
  - bison
+ - pkg-config
 
 1. Getting the sources:
 -----------------------
