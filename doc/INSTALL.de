@@ -47,8 +47,8 @@ Hier die Kommandos zum Bauen des cdk:
 
 mkdir $HOME/tuxbox-cvs
 cd $HOME/tuxbox-cvs
-cvs -dbernroth@cvs.berlios.de:/cvsroot/tuxbox login
-cvs -dbernroth@cvs.berlios.de:/cvsroot/tuxbox -z3 co .
+cvs -d:pserver:anonymous@cvs.berlios.de:/cvsroot/tuxbox login
+cvs -d:pserver:anonymous@cvs.berlios.de:/cvsroot/tuxbox -z3 co .
 cd cdk
 ./autogen.sh
 ./configure --prefix=/dbox2 --with-cvsdir=$HOME/tuxbox-cvs --enable-maintainer-mode
