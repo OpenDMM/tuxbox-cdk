@@ -1807,7 +1807,7 @@ $(flashprefix)/.part_plugin_tuxmail: $(flashprefix)/.flash .plugins
 flash-plugin_libfx2: $(flashprefix)/.part_plugin_libfx2
 $(flashprefix)/.part_plugin_libfx2: $(flashprefix)/.flash .plugins
 	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
-	cd $(flashprefix)/root/lib/tuxbox/plugins && ln -sf /lib/libfx2.so libfx2.so
+#	cd $(flashprefix)/root/lib/tuxbox/plugins && ln -sf /lib/libfx2.so libfx2.so ... link doesn't seem to make sense... does it?
 	@touch $@
 
 flash-plugin_lcdcirc: $(flashprefix)/.part_plugin_lcdcirc
