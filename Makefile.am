@@ -1512,11 +1512,10 @@ $(flashprefix)/.lib: $(flashprefix)/.flash $(shell ls -1 $(flashprefix)/.part_*)
 		`find $(flashprefix)/root/lib/ -name "libnss_*"` \
 		`find $(flashprefix)/root/lib/tuxbox/ -name "*.so" -type f` \
 		`find $(flashprefix)/root/sbin/ -path "*sbin/?*"`
-	@for i in `find $(flashprefix)/root/lib/ -name ld*.so -o -name lib*.so.?.* -o -name lib*-?.*.so` ; do \
-		ln -sf `basename $$i` $(flashprefix)/root/lib/`objdump -x $$i 2>/dev/null | grep SONAME | awk '{print $$2}'` ; \
-	done
-	@strip --remove-section=.comment --remove-section=.note `find $(flashprefix)/root/bin/ -path "*bin/?*"` 2>/dev/null || /bin/true
-	@strip --remove-section=.comment --remove-section=.note --strip-unneeded `find $(flashprefix)/root/lib/tuxbox -name "*.so"` 2>/dev/null || /bin/true
+	$(target)-strip --remove-section=.comment --remove-section=.note \
+		`find $(flashprefix)/root/bin/ -path "*bin/?*"` 2>/dev/null || /bin/true
+	$(target)-strip --remove-section=.comment --remove-section=.note --strip-unneeded \
+		`find $(flashprefix)/root/lib/tuxbox -name "*.so"` 2>/dev/null || /bin/true
 	@chmod u+rwX,go+rX-w -R $(flashprefix)/root/
 	@touch $@
 
