@@ -11,7 +11,7 @@ BUILDENV := \
 	LDFLAGS="$(TARGET_LDFLAGS)" \
 	PKG_CONFIG_PATH=$(targetprefix)/lib/pkgconfig
 
-all: core libs root apps boot devel
+all: core libs root boot apps devel
 extra: java contrib_apps fun dvb_apps
 
 #######################
@@ -27,7 +27,7 @@ core: .directories .binutils .linuxdir .glibc .gcc
 	elif [ ! -f $(hostprefix)/bin/$(target)-gcc ]; then \
 		$(MAKE) .gcc; \
 	fi
-	touch .bootstrap
+	touch $@
 
 .directories:
 	$(INSTALL) -d $(targetprefix)/bin
@@ -41,7 +41,7 @@ core: .directories .binutils .linuxdir .glibc .gcc
 	$(INSTALL) -d $(targetprefix)/root
 	$(INSTALL) -d $(targetprefix)/sbin
 	$(INSTALL) -d $(targetprefix)/tmp
-	$(INSTALL) -d $(targetprefix)/var
+	$(INSTALL) -d $(targetprefix)/var/run
 	$(INSTALL) -d $(targetprefix)$(UCODEDIR)
 	$(INSTALL) -d $(hostprefix)/$(target)
 	$(INSTALL) -d $(bootprefix)
@@ -54,7 +54,7 @@ core: .directories .binutils .linuxdir .glibc .gcc
 if TARGETRULESET_FLASH
 	$(INSTALL) -d $(flashprefix)
 endif
-	touch .directories
+	touch $@
 
 .linuxdir: @DEPENDS_linux@
 	@if [ ! -d $(targetprefix)/bin ]; then \
@@ -66,7 +66,7 @@ endif
 		ARCH=ppc
 	$(MAKE) -C @DIR_linux@ include/linux/version.h \
 		ARCH=ppc
-	touch .linuxdir
+	touch $@
 
 .binutils: @DEPENDS_binutils@
 	@if [ ! -h linux ]; then \
@@ -84,7 +84,7 @@ endif
 		$(MAKE) all all-gprof && \
 		@INSTALL_binutils@
 	@CLEANUP_binutils@
-	touch .binutils
+	touch $@
 
 #
 # gcc first stage without glibc
@@ -141,7 +141,7 @@ bootstrap_gcc: @DEPENDS_bootstrap_gcc@
 		$(MAKE) all && \
 		@INSTALL_glibc@
 	@CLEANUP_glibc@
-	touch .glibc
+	touch $@
 
 #
 # uClibc
@@ -153,7 +153,7 @@ bootstrap_gcc: @DEPENDS_bootstrap_gcc@
 		$(MAKE) all CROSS=$(target)- && \
 		@INSTALL_uclibc@
 	@CLEANUP_uclibc@
-	touch .uclibc
+	touch $@
 
 #
 # gcc second stage with glibc
@@ -183,7 +183,7 @@ bootstrap_gcc: @DEPENDS_bootstrap_gcc@
 		@INSTALL_gcc@
 	rm -rf $(hostprefix)/$(target)/sys-include
 	@CLEANUP_gcc@
-	touch .gcc
+	touch $@
 
 #######################
 #
@@ -206,11 +206,11 @@ root_optional: \
 			CFLAGS_EXTRA="$(TARGET_CFLAGS)" && \
 		@INSTALL_busybox@
 	@CLEANUP_busybox@
-	touch .busybox
+	touch $@
 
 .etc:
 	$(MAKE) -C etc install
-	touch .etc
+	touch $@
 
 .ftpd: .bootstrap .inetd @DEPENDS_ftpd@
 	@PREPARE_ftpd@
@@ -220,7 +220,7 @@ root_optional: \
 		$(MAKE) && \
 		@INSTALL_ftpd@
 	@CLEANUP_ftpd@
-	touch .ftpd
+	touch $@
 
 .ifupdown: .bootstrap @DEPENDS_ifupdown@
 	@PREPARE_ifupdown@
@@ -230,7 +230,7 @@ root_optional: \
 		CFLAGS="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)" && \
 		@INSTALL_ifupdown@
 	@CLEANUP_ifupdown@
-	touch .ifupdown
+	touch $@
 
 .inetd: .bootstrap @DEPENDS_inetd@
 	@PREPARE_inetd@
@@ -241,7 +241,7 @@ root_optional: \
 		$(MAKE) all && \
 		@INSTALL_inetd@
 	@CLEANUP_inetd@
-	touch .inetd
+	touch $@
 
 .modutils: .bootstrap @DEPENDS_modutils@
 	@PREPARE_modutils@
@@ -258,7 +258,7 @@ root_optional: \
 		$(MAKE) && \
 		@INSTALL_modutils@
 	@CLEANUP_modutils@
-	touch .modutils
+	touch $@
 
 .netkit_telnet: .bootstrap .inetd .tinylogin .libncurses @DEPENDS_netkit_telnet@
 	@PREPARE_netkit_telnet@
@@ -274,7 +274,7 @@ root_optional: \
 		$(MAKE) -C telnetd && \
 		@INSTALL_netkit_telnet@
 	@CLEANUP_netkit_telnet@
-	touch .netkit_telnet
+	touch $@
 
 .portmap: .bootstrap @DEPENDS_portmap@
 	@PREPARE_portmap@
@@ -284,7 +284,7 @@ root_optional: \
 		$(MAKE) && \
 		@INSTALL_portmap@
 	@CLEANUP_portmap@
-	touch .portmap
+	touch $@
 
 .procps: .bootstrap .libncurses @DEPENDS_procps@
 	@PREPARE_procps@
@@ -294,7 +294,7 @@ root_optional: \
 		$(MAKE) top ps && \
 		@INSTALL_procps@
 	@CLEANUP_procps@
-	touch .procps
+	touch $@
 
 .tinylogin: .bootstrap .busybox @DEPENDS_tinylogin@
 	@PREPARE_tinylogin@
@@ -305,7 +305,7 @@ root_optional: \
 			CFLAGS_EXTRA="$(TARGET_CFLAGS)" && \
 		@INSTALL_tinylogin@
 	@CLEANUP_tinylogin@
-	touch .tinylogin
+	touch $@
 
 .watchdog: .bootstrap @DEPENDS_watchdog@
 	@PREPARE_watchdog@
@@ -321,7 +321,7 @@ root_optional: \
 		$(MAKE) all && \
 		@INSTALL_watchdog@
 	@CLEANUP_watchdog@
-	touch .watchdog
+	touch $@
 
 
 #######################
@@ -342,7 +342,7 @@ libs_optional: \
 	cd @DIR_libboost@ && \
 		@INSTALL_libboost@
 	@CLEANUP_libboost@
-	touch .libboost
+	touch $@
 
 .libcommoncplusplus: .bootstrap .libxml2 @DEPENDS_libcommoncplusplus@
 	@PREPARE_libcommoncplusplus@
@@ -355,7 +355,7 @@ libs_optional: \
 		$(MAKE) all && \
 		@INSTALL_libcommoncplusplus@
 	@CLEANUP_libcommoncplusplus@
-	touch .libcommoncplusplus
+	touch $@
 
 .libcrypto: .bootstrap @DEPENDS_libcrypto@
 	@PREPARE_libcrypto@
@@ -364,7 +364,7 @@ libs_optional: \
 		$(MAKE) all && \
 		@INSTALL_libcrypto@
 	@CLEANUP_libcrypto@
-	touch .libcrypto
+	touch $@
 
 .libcurl: .bootstrap @DEPENDS_libcurl@
 	@PREPARE_libcurl@
@@ -378,7 +378,7 @@ libs_optional: \
 		$(MAKE) all && \
 		@INSTALL_libcurl@
 	@CLEANUP_libcurl@
-	touch .libcurl
+	touch $@
 
 .libdb2: .bootstrap @DEPENDS_libdb2@
 	@PREPARE_libdb2@
@@ -395,7 +395,7 @@ libs_optional: \
 		$(MAKE) all && \
 		@INSTALL_libdb2@
 	@CLEANUP_libdb2@
-	touch .libdb2
+	touch $@
 
 .libdvbpsi: .bootstrap @DEPENDS_libdvbpsi@
 	@PREPARE_libdvbpsi@
@@ -408,7 +408,7 @@ libs_optional: \
 		$(MAKE) all && \
 		@INSTALL_libdvbpsi@
 	@CLEANUP_libdvbpsi@
-	touch .libdvbpsi
+	touch $@
 
 .libffi: .bootstrap @DEPENDS_libffi@
 	@PREPARE_libffi@
@@ -421,19 +421,23 @@ libs_optional: \
 		$(MAKE) all && \
 		@INSTALL_libffi@
 	@CLEANUP_libffi@
-	touch .libffi
+	touch $@
 
 .libfreetype: .bootstrap @DEPENDS_libfreetype@
 	@PREPARE_libfreetype@
 	cd @DIR_libfreetype@ && \
-		$(MAKE) \
-			CC=$(target)-gcc \
-			CFLAGS="$(TARGET_CFLAGS)" \
-			CFG="--build=${build} --host=${target} --prefix=${targetprefix}" && \
+		$(BUILDENV) \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--prefix= && \
 		$(MAKE) all && \
+		rm -f $(hostprefix)/bin/freetype-config && \
+		sed -e "s,^prefix=,prefix=$(targetprefix)," < builds/unix/freetype-config > $(hostprefix)/bin/freetype-config && \
+		chmod 755 $(hostprefix)/bin/freetype-config && \
 		@INSTALL_libfreetype@
 	@CLEANUP_libfreetype@
-	touch .libfreetype
+	touch $@
 
 .libfribidi: .bootstrap @DEPENDS_libfribidi@
 	@PREPARE_libfribidi@
@@ -447,20 +451,19 @@ libs_optional: \
 		$(MAKE) all && \
 		@INSTALL_libfribidi@
 	@CLEANUP_libfribidi@
-	touch .libfribidi
+	touch $@
 
 .libjpeg: .bootstrap @DEPENDS_libjpeg@
 	@PREPARE_libjpeg@
 	cd @DIR_libjpeg@ && \
-		CC=$(target)-gcc \
-		CFLAGS="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)" \
+		$(BUILDENV) \
 		./configure \
 			--host=$(target) \
-			--prefix=$(targetprefix) && \
+			--prefix= && \
 		$(MAKE) libjpeg.so.6 && \
 		@INSTALL_libjpeg@
 	@CLEANUP_libjpeg@
-	touch .libjpeg
+	touch $@
 
 .libmad: .bootstrap .libz @DEPENDS_libmad@
 	@PREPARE_libmad@
@@ -479,7 +482,7 @@ libs_optional: \
 		$(MAKE) all && \
 		@INSTALL_libmad@
 	@CLEANUP_libmad@
-	touch .libmad
+	touch $@
 
 .libncurses: .bootstrap @DEPENDS_libncurses@
 	@PREPARE_libncurses@
@@ -505,7 +508,7 @@ libs_optional: \
 			HOSTLDFLAGS="$(LDFLAGS)" && \
 		@INSTALL_libncurses@
 	@CLEANUP_libncurses@
-	touch .libncurses
+	touch $@
 
 .libnet: .bootstrap @DEPENDS_libnet@
 	@PREPARE_libnet@
@@ -520,7 +523,7 @@ libs_optional: \
 		$(MAKE) all && \
 		@INSTALL_libnet@
 	@CLEANUP_libnet@
-	touch .libnet
+	touch $@
 
 .libnids: .bootstrap .libnet @DEPENDS_libnids@
 	@PREPARE_libnids@
@@ -533,7 +536,7 @@ libs_optional: \
 		$(MAKE) all && \
 		@INSTALL_libnids@
 	@CLEANUP_libnids@
-	touch .libnids
+	touch $@
 
 .libpcap: .bootstrap @DEPENDS_libpcap@
 	@PREPARE_libpcap@
@@ -547,7 +550,7 @@ libs_optional: \
 		$(MAKE) all && \
 		@INSTALL_libpcap@
 	@CLEANUP_libpcap@
-	touch .libpcap
+	touch $@
 
 .libpng: .bootstrap .libz @DEPENDS_libpng@
 	@PREPARE_libpng@
@@ -557,7 +560,7 @@ libs_optional: \
 			prefix=$(targetprefix) && \
 		@INSTALL_libpng@
 	@CLEANUP_libpng@
-	touch .libpng
+	touch $@
 
 .libpopt: .bootstrap @DEPENDS_libpopt@
 	@PREPARE_libpopt@
@@ -571,7 +574,7 @@ libs_optional: \
 		$(MAKE) all && \
 		@INSTALL_libpopt@
 	@CLEANUP_libpopt@
-	touch .libpopt
+	touch $@
 
 .libreadline: .bootstrap @DEPENDS_libreadline@
 	@PREPARE_libreadline@
@@ -584,7 +587,7 @@ libs_optional: \
 		$(MAKE) shared && \
 		@INSTALL_libreadline@
 	@CLEANUP_libreadline@
-	touch .libreadline
+	touch $@
 
 .libsdl: .bootstrap @DEPENDS_libsdl@
 	@PREPARE_libsdl@
@@ -619,7 +622,7 @@ libs_optional: \
 		$(MAKE) all && \
 		@INSTALL_libsdl@
 	@CLEANUP_libsdl@
-	touch .libsdl
+	touch $@
 
 .libsigc: .bootstrap @DEPENDS_libsigc@
 	@PREPARE_libsigc@
@@ -633,7 +636,7 @@ libs_optional: \
 		$(MAKE) all && \
 		@INSTALL_libsigc@
 	@CLEANUP_libsigc@
-	touch .libsigc
+	touch $@
 
 .libxml2: .bootstrap @DEPENDS_libxml2@
 	@PREPARE_libxml2@
@@ -649,7 +652,7 @@ libs_optional: \
 		$(MAKE) all && \
 		@INSTALL_libxml2@
 	@CLEANUP_libxml2@
-	touch .libxml2
+	touch $@
 
 .libxmlparse: .bootstrap @DEPENDS_libxmlparse@
 	@PREPARE_libxmlparse@
@@ -668,7 +671,7 @@ libs_optional: \
 		$(MAKE) all && \
 		@INSTALL_libxmlparse@
 	@CLEANUP_libxmlparse@
-	touch .libxmlparse
+	touch $@
 
 .libxmlwrapp: .bootstrap .libxml2 @DEPENDS_libxmlwrapp@
 	@PREPARE_libxmlwrapp@
@@ -680,7 +683,7 @@ libs_optional: \
 		$(MAKE) all && \
 		@INSTALL_libxmlwrapp@
 	@CLEANUP_libxmlwrapp@
-	touch .libxmlwrapp
+	touch $@
 
 .libz: .bootstrap @DEPENDS_libz@
 	@PREPARE_libz@
@@ -692,7 +695,7 @@ libs_optional: \
 		$(MAKE) libz.so.1.1.4 && \
 		@INSTALL_libz@
 	@CLEANUP_libz@
-	touch .libz
+	touch $@
 
 #######################
 #
@@ -715,7 +718,7 @@ contrib_apps_optional: .dsniff .pump .thttpd
 			--with-main_compressor=gzip && \
 		@INSTALL_console_data@
 	@CLEANUP_console_data@
-	touch .console_data
+	touch $@
 
 .console_tools: .bootstrap .console_data @DEPENDS_console_tools@
 	@PREPARE_console_tools@
@@ -730,7 +733,7 @@ contrib_apps_optional: .dsniff .pump .thttpd
 			--disable-nls && \
 		@INSTALL_console_tools@
 	@CLEANUP_console_tools@
-	touch .console_tools
+	touch $@
 
 .dsniff: .bootstrap .libnet .libnids .libdb2 .rpcgen @DEPENDS_dsniff@
 	@PREPARE_dsniff@
@@ -747,7 +750,7 @@ contrib_apps_optional: .dsniff .pump .thttpd
 		$(MAKE) all && \
 		@INSTALL_dsniff@
 	@CLEANUP_dsniff@
-	touch .dsniff
+	touch $@
 
 .fbset: .bootstrap @DEPENDS_fbset@
 	@PREPARE_fbset@
@@ -758,7 +761,7 @@ contrib_apps_optional: .dsniff .pump .thttpd
 			LDFLAGS="$(TARGET_LDFLAGS)" && \
 		@INSTALL_fbset@
 	@CLEANUP_fbset@
-	touch .fbset
+	touch $@
 
 .lirc: .bootstrap @DEPENDS_lirc@
 	@PREPARE_lirc@
@@ -778,7 +781,7 @@ contrib_apps_optional: .dsniff .pump .thttpd
 			--without-x && \
 		@INSTALL_lirc@
 	@CLEANUP_lirc@
-	touch .lirc
+	touch $@
 
 .lsof: .bootstrap @DEPENDS_lsof@
 	@PREPARE_lsof@
@@ -792,7 +795,7 @@ contrib_apps_optional: .dsniff .pump .thttpd
 		$(MAKE) all && \
 		@INSTALL_lsof@
 	@CLEANUP_lsof@
-	touch .lsof
+	touch $@
 
 .pump: .bootstrap .libpopt @DEPENDS_pump@
 	@PREPARE_pump@
@@ -803,7 +806,7 @@ contrib_apps_optional: .dsniff .pump .thttpd
 		$(MAKE) all && \
 		@INSTALL_pump@
 	@CLEANUP_pump@
-	touch .pump
+	touch $@
 
 .ssh: .bootstrap .libcrypto .libz @DEPENDS_ssh@
 	@PREPARE_ssh@
@@ -825,7 +828,7 @@ contrib_apps_optional: .dsniff .pump .thttpd
 		$(MAKE) all && \
 		@INSTALL_ssh@
 	@CLEANUP_ssh@
-	touch .ssh
+	touch $@
 
 .tcpdump: .bootstrap .libpcap @DEPENDS_tcpdump@
 	@PREPARE_tcpdump@
@@ -840,7 +843,7 @@ contrib_apps_optional: .dsniff .pump .thttpd
 		$(MAKE) && \
 		@INSTALL_tcpdump@
 	@CLEANUP_tcpdump@
-	touch .tcpdump
+	touch $@
 
 .thttpd: @DEPENDS_thttpd@
 	@PREPARE_thttpd@
@@ -855,7 +858,7 @@ contrib_apps_optional: .dsniff .pump .thttpd
 		$(MAKE) all && \
 		@INSTALL_thttpd@
 	@CLEANUP_thttpd@
-	touch .thttpd
+	touch $@
 
 .xrc: .bootstrap .lirc @DEPENDS_xrc@
 	@PREPARE_xrc@
@@ -872,34 +875,8 @@ contrib_apps_optional: .dsniff .pump .thttpd
 			--without-x && \
 		@INSTALL_xrc@
 	@CLEANUP_xrc@
-	touch .xrc
+	touch $@
 
-
-#######################
-#
-# msttf
-#
-
-.cabextract: .bootstrap @DEPENDS_cabextract@
-	@PREPARE_cabextract@
-	cd @DIR_cabextract@ && \
-		CC=$(CC) CFLAGS="$(CFLAGS)" \
-		./configure \
-			--prefix=$(hostprefix) && \
-		$(MAKE) all && \
-		@INSTALL_cabextract@
-	@CLEANUP_cabextract@
-	touch .cabextract
-
-.msttf: .bootstrap .cabextract @DEPENDS_msttf@
-	@PREPARE_msttf@
-	$(INSTALL) -d $(targetprefix)$(FONTDIR)
-	$(INSTALL) -m 0644 @DIR_msttf@/AriBlk.TTF $(targetprefix)$(FONTDIR)/Arial_Black.ttf
-	$(INSTALL) -m 0644 @DIR_msttf@/Arial.TTF $(targetprefix)$(FONTDIR)/Arial.ttf
-	$(INSTALL) -m 0644 @DIR_msttf@/Arialbd.TTF $(targetprefix)$(FONTDIR)/Arial_Bold.ttf
-	$(INSTALL) -m 0644 @DIR_msttf@/Ariali.TTF $(targetprefix)$(FONTDIR)/Arial_Italic.ttf
-	@CLEANUP_msttf@
-	touch .msttf
 
 #######################
 #
@@ -925,7 +902,7 @@ devel_optional: .gdb-remote .ksymoops
 		$(MAKE) all && \
 		@INSTALL_gdb@
 	@CLEANUP_gdb@
-	touch .gdb
+	touch $@
 
 .gdb-remote: .bootstrap @DEPENDS_gdb@
 	@PREPARE_gdb@
@@ -939,7 +916,7 @@ devel_optional: .gdb-remote .ksymoops
 		$(MAKE) all && \
 		@INSTALL_gdb@
 	@CLEANUP_gdb@
-	touch .gdb-remote
+	touch $@
 
 .ksymoops: .bootstrap @DEPENDS_ksymoops@
 	@PREPARE_ksymoops@
@@ -947,7 +924,7 @@ devel_optional: .gdb-remote .ksymoops
 	$(MAKE) CC=$(target)-gcc DEF_MAP="\\\"/boot/System.map-*r\\\"" DEF_VMLINUX="\\\"/boot/vmlinux-*r\\\"" &&\
 	@INSTALL_ksymoops@
 	@CLEANUP_ksymoops@
-	touch .ksymoops
+	touch $@
 
 .ltrace: .bootstrap @DEPENDS_ltrace@
 	@PREPARE_ltrace@
@@ -962,7 +939,7 @@ devel_optional: .gdb-remote .ksymoops
 		$(MAKE) clean all LD=$(target)-ld && \
 		@INSTALL_ltrace@
 	@CLEANUP_ltrace@
-	touch .ltrace
+	touch $@
 
 .strace: .bootstrap @DEPENDS_strace@
 	@PREPARE_strace@
@@ -977,7 +954,7 @@ devel_optional: .gdb-remote .ksymoops
 		$(MAKE) all && \
 		@INSTALL_strace@
 	@CLEANUP_strace@
-	touch .strace
+	touch $@
 
 .nano: .bootstrap @DEPENDS_nano@
 	@PREPARE_nano@
@@ -989,7 +966,7 @@ devel_optional: .gdb-remote .ksymoops
 		$(MAKE) all && \
 		@INSTALL_nano@
 	@CLEANUP_nano@
-	touch .nano
+	touch $@
 
 #######################
 #
@@ -1011,7 +988,7 @@ java: .kaffeh .kaffe
 		$(MAKE) all && \
 		@INSTALL_kaffeh@
 	@CLEANUP_kaffeh@
-	touch .kaffeh
+	touch $@
 
 # for ppc
 .kaffe: .bootstrap .kaffeh .libffi @DEPENDS_kaffe@
@@ -1032,7 +1009,7 @@ java: .kaffeh .kaffe
 		$(MAKE) all && \
 		@INSTALL_kaffe@
 	@CLEANUP_kaffe@
-	touch .kaffe
+	touch $@
 
 #######################
 #
@@ -1055,7 +1032,7 @@ fun: .gnuboy .scummvm .sdldoom
 		$(MAKE) all && \
 		@INSTALL_gnuboy@
 	@CLEANUP_gnuboy@
-	touch .gnuboy
+	touch $@
 
 .scummvm: .bootstrap .libreadline .libsdl @DEPENDS_scummvm@
 	@PREPARE_scummvm@
@@ -1067,7 +1044,7 @@ fun: .gnuboy .scummvm .sdldoom
 			DEFINES="-DUNIX" && \
 		@INSTALL_scummvm@
 	@CLEANUP_scummvm@
-	touch .scummvm
+	touch $@
 
 .sdldoom: .bootstrap .libsdl @DEPENDS_sdldoom@
 	@PREPARE_sdldoom@
@@ -1082,7 +1059,7 @@ fun: .gnuboy .scummvm .sdldoom
 		$(MAKE) all && \
 		@INSTALL_sdldoom@
 	@CLEANUP_sdldoom@
-	touch .sdldoom
+	touch $@
 
 #######################
 #
@@ -1100,7 +1077,7 @@ dvb_apps: .dvbdate .dvbstream .dvbtext .dvbtune .vls
 			LDFLAGS="$(TARGET_LDFLAGS)" && \
 		@INSTALL_dvbdate@
 	@CLEANUP_dvbdate@
-	touch .dvbdate
+	touch $@
 
 .dvbstream: .bootstrap @DEPENDS_dvbstream@
 	@PREPARE_dvbstream@
@@ -1111,7 +1088,7 @@ dvb_apps: .dvbdate .dvbstream .dvbtext .dvbtune .vls
 			CFLAGS="$(TARGET_CFLAGS) -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE" && \
 		@INSTALL_dvbstream@
 	@CLEANUP_dvbstream@
-	touch .dvbstream
+	touch $@
 
 .dvbtext: .bootstrap @DEPENDS_dvbtext@
 	@PREPARE_dvbtext@
@@ -1119,7 +1096,7 @@ dvb_apps: .dvbdate .dvbstream .dvbtext .dvbtune .vls
 		$(target)-gcc $(TARGET_CFLAGS) -I$(driverdir)/include -o dvbtext dvbtext.c && \
 		@INSTALL_dvbtext@
 	@CLEANUP_dvbtext@
-	touch .dvbtext
+	touch $@
 
 .dvbtune: .bootstrap @DEPENDS_dvbtune@
 	@PREPARE_dvbtune@
@@ -1130,7 +1107,7 @@ dvb_apps: .dvbdate .dvbstream .dvbtext .dvbtune .vls
 			LDFLAGS="$(TARGET_LDFLAGS)" && \
 		@INSTALL_dvbtune@
 	@CLEANUP_dvbtune@
-	touch .dvbtune
+	touch $@
 
 .vls: .bootstrap .libdvbpsi @DEPENDS_vls@
 	@PREPARE_vls@
@@ -1149,7 +1126,7 @@ dvb_apps: .dvbdate .dvbstream .dvbtext .dvbtune .vls
 		$(MAKE) all && \
 		@INSTALL_vls@
 	@CLEANUP_vls@
-	touch .vls
+	touch $@
 
 #######################
 #
@@ -1173,7 +1150,7 @@ if MAINTAINER_MODE
 else
 	$(MAKE) -C $(bootdir)/ppcboot distclean
 endif
-	touch .ppcboot
+	touch $@
 
 .linuxkernel: .bootstrap .linuxdir .ppcboot
 	$(MAKE) -C @DIR_linux@ zImage modules \
@@ -1197,7 +1174,7 @@ if MAINTAINER_MODE
 else
 	$(MAKE) -C @DIR_linux@ clean
 endif
-	touch .linuxkernel
+	touch $@
 
 .driver: .bootstrap .linuxkernel
 	$(MAKE) -C $(driverdir) \
@@ -1216,7 +1193,7 @@ else
 	$(MAKE) -C $(driverdir) distclean \
 		KERNEL_LOCATION=$(buildprefix)/linux
 endif
-	touch .driver
+	touch $@
 
 driver-clean:
 	$(MAKE) -C $(driverdir) \
@@ -1264,14 +1241,14 @@ $(appsdir)/dvb/dvbsnoop/Makefile: .bootstrap
 
 .dvbsnoop: $(appsdir)/dvb/dvbsnoop/Makefile
 	$(MAKE) -C $(appsdir)/dvb/dvbsnoop all install
-	touch .dvbsnoop
+	touch $@
 
-$(appsdir)/dvb/zapit/Makefile: .bootstrap .camd .misc_libs
+$(appsdir)/dvb/zapit/Makefile: .bootstrap .misc_libs
 	cd $(appsdir)/dvb/zapit && $(CONFIGURE) --with-neutrino-source=$(appsdir)/tuxbox/neutrino
 
 .zapit: $(appsdir)/dvb/zapit/Makefile
 	$(MAKE) -C $(appsdir)/dvb/zapit all install
-	touch .zapit
+	touch $@
 
 # dvb/tools
 
@@ -1280,7 +1257,7 @@ $(appsdir)/dvb/tools/Makefile: .bootstrap .misc_libs
 
 .stream: $(appsdir)/dvb/tools/Makefile .inetd
 	$(MAKE) -C $(appsdir)/dvb/tools/stream all install
-	touch .stream
+	touch $@
 
 # misc/libs
 
@@ -1289,7 +1266,7 @@ $(appsdir)/misc/libs/Makefile: .bootstrap .libz
 
 .misc_libs: $(appsdir)/misc/libs/Makefile
 	$(MAKE) -C $(appsdir)/misc/libs all install
-	touch .misc_libs
+	touch $@
 
 # tuxbox/enigma
 
@@ -1298,7 +1275,7 @@ $(appsdir)/tuxbox/enigma/Makefile: .bootstrap .libfreetype .libfribidi .libmad .
 
 .enigma: $(appsdir)/tuxbox/enigma/Makefile .tuxbox_tools
 	$(MAKE) -C $(appsdir)/tuxbox/enigma all install
-	touch .enigma
+	touch $@
 
 # tuxbox/lcars
 
@@ -1307,7 +1284,7 @@ $(appsdir)/tuxbox/lcars/Makefile: .bootstrap .libcurl .libfreetype .plugins
 
 .lcars: $(appsdir)/tuxbox/lcars/Makefile
 	$(MAKE) -C $(appsdir)/tuxbox/lcars all install
-	touch .lcars
+	touch $@
 
 # tuxbox/lcd
 
@@ -1316,7 +1293,7 @@ $(appsdir)/tuxbox/lcd/Makefile: .bootstrap .libfreetype .misc_libs .tuxbox_libs
 
 .lcdmenu: $(appsdir)/tuxbox/lcd/Makefile
 	$(MAKE) -C $(appsdir)/tuxbox/lcd/lcdmenu all install
-	touch .lcdmenu
+	touch $@
 
 # tuxbox/libs
 
@@ -1325,7 +1302,7 @@ $(appsdir)/tuxbox/libs/Makefile: .bootstrap .libfreetype
 
 .tuxbox_libs: $(appsdir)/tuxbox/libs/Makefile
 	$(MAKE) -C $(appsdir)/tuxbox/libs all install
-	touch .tuxbox_libs
+	touch $@
 
 # tuxbox/libtuxbox
 
@@ -1343,7 +1320,7 @@ $(appsdir)/tuxbox/neutrino/Makefile: .bootstrap .libboost .libcurl .libfreetype 
 
 .neutrino: $(appsdir)/tuxbox/neutrino/Makefile
 	$(MAKE) -C $(appsdir)/tuxbox/neutrino all install
-	touch .neutrino
+	touch $@
 
 # tuxbox/plugins
 
@@ -1352,20 +1329,16 @@ $(appsdir)/tuxbox/plugins/Makefile: .bootstrap .libcurl .libpng
 
 .plugins: $(appsdir)/tuxbox/plugins/Makefile
 	$(MAKE) -C $(appsdir)/tuxbox/plugins all install
-	touch .plugins
+	touch $@
 
 # tuxbox/tools
 
 $(appsdir)/tuxbox/tools/Makefile: .bootstrap .libtuxbox
 	cd $(appsdir)/tuxbox/tools && $(CONFIGURE)
 
-.camd: $(appsdir)/tuxbox/tools/Makefile
-	$(MAKE) -C $(appsdir)/tuxbox/tools/camd all install
-	touch .camd
-
 .tuxbox_tools: $(appsdir)/tuxbox/tools/Makefile
 	$(MAKE) -C $(appsdir)/tuxbox/tools/misc all install
-	touch .tuxbox_tools
+	touch $@
 
 #######################
 #
@@ -1602,12 +1575,12 @@ distclean-local:
 	-rm .libboost .libcommoncplusplus .libcrypto .libcurl .libdb2 .libdvbpsi .libffi .libfreetype
 	-rm .libncurses .libjpeg .libmad .libnet .libnids .libpcap .libpng .libpopt
 	-rm .libreadline .libsdl .libsigc .libxml2 .libxmlwrapp .libz
-	-rm .cabextract .msttf
+	-rm .cabextract
 	-rm .gdb .ksymoops .ltrace .strace .nano
 	-rm .kaffeh .kaffe
 	-rm .gnuboy .scummvm .sdldoom
 	-rm .ppcboot .linuxkernel .driver
-	-rm .camd .dvbsnoop .enigma .lcars .lcdmenu .neutrino .stream .zapit
+	-rm .dvbsnoop .enigma .lcars .lcdmenu .neutrino .stream .zapit
 	-rm .console_data .console_tools .dsniff .fbset .lirc .pump .ssh .tcpdump .xrc .thttpd
 	-rm .dvbdate .dvbstream .dvbtext .dvbtune .vls
 	-rm .misc_libs .misc_tools .plugins .libtuxbox .tuxbox_libs .tuxbox_tools
