@@ -39,6 +39,7 @@ I. Prerequistes:
  - bison
  - pkg-config
  - wget
+ - libpng2 or libpng3 (DirectFB)
 
  Ensure that you have these programs installed and accessible on your system.
  Compare version numbers where applicable. Don't report any bugs before having
