@@ -1349,6 +1349,7 @@ $(appsdir)/tuxbox/tools/Makefile: .bootstrap .libtuxbox
 if TARGETRULESET_FLASH
 rebuild-flash:
 	-rm -rf $(flashprefix)/root
+	-rm -rf $(flashprefix)/.flash
 	$(MAKE) flash-lib
 
 $(flashprefix)/.flash: .busybox .driver .modutils
@@ -1377,14 +1378,14 @@ $(flashprefix)/.flash: .busybox .driver .modutils
 	cp -a $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel $(targetprefix)/lib/modules/$(KERNELVERSION)/misc \
 		$(flashprefix)/root/lib/modules/$(KERNELVERSION)
 	cp -a $(bootprefix)/kernel-cdk $(flashprefix)/root/vmlinuz
-	@touch $(flashprefix)/.flash
+	@touch $@
 
-$(flashprefix)/.part_network: $(flashprefix)/.flash .ifupdown .pump
+$(flashprefix)/.part_network: $(flashprefix)/.flash .ifupdown
 	$(INSTALL) -d $(flashprefix)/root/etc/network
 	cp -a $(targetprefix)/etc/network/* $(flashprefix)/root/etc/network
 	$(INSTALL) $(targetprefix)/sbin/ifup $(targetprefix)/sbin/ifdown \
-		$(targetprefix)/sbin/pump $(flashprefix)/root/sbin
-	@touch $(flashprefix)/.part_network
+		$(flashprefix)/root/sbin
+	@touch $@
 
 flash-ftpd: $(flashprefix)/.part_ftpd
 
@@ -1392,11 +1393,11 @@ $(flashprefix)/.part_ftpd: $(flashprefix)/.flash $(flashprefix)/.part_inetd .ftp
 	$(INSTALL) -m644 $(targetprefix)/etc/vsftpd.conf $(flashprefix)/root/etc
 	$(INSTALL) $(targetprefix)/sbin/in.ftpd $(flashprefix)/root/sbin
 	$(INSTALL) -d $(flashprefix)/root/share/empty
-	@touch $(flashprefix)/.part_ftpd
+	@touch $@
 
 $(flashprefix)/.part_inetd: $(flashprefix)/.flash $(flashprefix)/.part_network .inetd
 	$(INSTALL) $(targetprefix)/sbin/inetd $(flashprefix)/root/sbin
-	@touch $(flashprefix)/.part_inetd
+	@touch $@
 
 flash-telnetd: $(flashprefix)/.part_telnetd
 
@@ -1407,29 +1408,29 @@ $(flashprefix)/.part_telnetd: $(flashprefix)/.flash $(flashprefix)/.part_inetd $
 $(flashprefix)/.part_tinylogin: $(flashprefix)/.flash .tinylogin
 	$(INSTALL) $(targetprefix)/bin/tinylogin $(flashprefix)/root/bin
 	for i in `find $(targetprefix)/sbin/ -lname "*tinylogin"` ; do cp -a $$i $(flashprefix)/root/bin/ ; done
-	@touch $(flashprefix)/.part_tinylogin
+	@touch $@
 
 flash-ssh: $(flashprefix)/.part_ssh
 
 $(flashprefix)/.part_ssh: $(flashprefix)/.flash $(flashprefix)/.part_network .ssh
 	$(INSTALL) -d $(flashprefix)/root/etc/ssh
-	cp -a $(targetprefix)/etc/ssh/ssh_config $(flashprefix)/root/etc/ssh
+	cp -ap $(targetprefix)/etc/ssh/ssh_config $(flashprefix)/root/etc/ssh
 	$(INSTALL) $(targetprefix)/bin/ssh $(targetprefix)/bin/scp \
 		$(targetprefix)/bin/sftp $(flashprefix)/root/bin
-	@touch $(flashprefix)/.part_ssh
+	@touch $@
 
 flash-sshd: $(flashprefix)/.part_sshd
 
 $(flashprefix)/.part_sshd: $(flashprefix)/.flash $(flashprefix)/.part_network .ssh
 	$(INSTALL) -d $(flashprefix)/root/etc/ssh
-	cp -a $(targetprefix)/etc/ssh/* $(flashprefix)/root/etc/ssh
+	$(INSTALL) -d $(flashprefix)/root/libexec
+	$(INSTALL) -d $(flashprefix)/root/share/empty
 	$(INSTALL) $(targetprefix)/bin/ssh-keygen $(targetprefix)/bin/scp \
 		$(flashprefix)/root/bin
-	$(INSTALL) -d $(flashprefix)/root/libexec
+	cp -ap $(targetprefix)/etc/ssh/* $(flashprefix)/root/etc/ssh
 	$(INSTALL) $(targetprefix)/libexec/sftp-server $(flashprefix)/root/libexec
 	$(INSTALL) $(targetprefix)/sbin/sshd $(flashprefix)/root/sbin
-	$(INSTALL) -d $(flashprefix)/root/share/empty
-	@touch $(flashprefix)/.part_sshd
+	@touch $@
 
 flash-neutrino: $(flashprefix)/.part_neutrino
 
@@ -1448,41 +1449,46 @@ $(flashprefix)/.part_neutrino: $(flashprefix)/.flash .neutrino
 	$(INSTALL) -d $(flashprefix)/root/share/fonts
 	cp -a $(targetprefix)/share/fonts/micron*.ttf $(flashprefix)/root/share/fonts
 
-	@touch $(flashprefix)/.part_neutrino
+	@touch $@
 
 flash-enigma: $(flashprefix)/.part_enigma
 
 $(flashprefix)/.part_enigma: $(flashprefix)/.flash .enigma
 	$(INSTALL) $(targetprefix)/bin/enigma $(flashprefix)/root/bin
-	cp -a $(targetprefix)/share/tuxbox/enigma $(flashprefix)/root/share/tuxbox
+	cp -pa $(targetprefix)/share/tuxbox/enigma $(flashprefix)/root/share/tuxbox
 	$(INSTALL) -d $(flashprefix)/root/share/fonts
-	cp -pa $(targetprefix)/share/fonts/blue*.ttf $(targetprefix)/share/fonts/md_khmurabi_10.ttf $(targetprefix)/share/fonts/pakenham.ttf $(targetprefix)/share/fonts/unmrs.pfa \
+	cp -pa $(targetprefix)/share/fonts/blue*.ttf $(targetprefix)/share/fonts/md_khmurabi_10.ttf \
+		$(targetprefix)/share/fonts/pakenham.ttf $(targetprefix)/share/fonts/unmrs.pfa \
 		$(flashprefix)/root/share/fonts
-	@touch $(flashprefix)/.part_enigma
+	@touch $@
 
 flash-lcars: $(flashprefix)/.part_lcars
 
 $(flashprefix)/.part_lcars: $(flashprefix)/.flash .lcars
-	$(INSTALL) $(targetprefix)/bin/lcars $(flashprefix)/root/bin
 	$(INSTALL) -d $(flashprefix)/root/share/fonts
-	cp -a $(targetprefix)/share/fonts/ds9.ttf $(flashprefix)/root/share/fonts
-	cp -a $(targetprefix)/var/tuxbox/config/lcars $(flashprefix)/root/var/tuxbox/config
-	@touch $(flashprefix)/.part_lcars
+	$(INSTALL) $(targetprefix)/bin/lcars $(flashprefix)/root/bin
+	cp -pa $(targetprefix)/share/fonts/ds9.ttf $(flashprefix)/root/share/fonts
+	cp -pa $(targetprefix)/share/tuxbox/lcars $(flashprefix)/root/share/tuxbox
+	cp -pa $(targetprefix)/var/tuxbox/config/lcars $(flashprefix)/root/var/tuxbox/config
+	@touch $@
 
-flash-fx2: $(flashprefix)/.part_fx2
+flash-plugins: $(flashprefix)/.part_plugins
 
-$(flashprefix)/.part_fx2: $(flashprefix)/.flash .plugins
+$(flashprefix)/.part_plugins: $(flashprefix)/.flash .plugins
 	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
-	cp -a $(targetprefix)/lib/tuxbox/plugins/* $(flashprefix)/root/lib/tuxbox/plugins
-	$(INSTALL) -m644 $(targetprefix)/var/tuxbox/config/games.cfg $(flashprefix)/root/var/tuxbox/config
-	@touch $(flashprefix)/.part_fx2
+	$(INSTALL) -d $(flashprefix)/root/var/tuxbox/config/tuxtxt
+	cp -pa $(targetprefix)/lib/tuxbox/plugins/* $(flashprefix)/root/lib/tuxbox/plugins/
+	cp -pa $(targetprefix)/share/fonts/tuxtxt?.fon $(flashprefix)/root/share/fonts/
+	cp -pa $(targetprefix)/var/tuxbox/config/games.cfg $(flashprefix)/root/var/tuxbox/config/
+	cp -pa $(targetprefix)/var/tuxbox/config/tuxtxt/tuxtxt.conf $(flashprefix)/root/var/tuxbox/config/tuxtxt/
+	@touch $@
 
 flash-lcdmenu: $(flashprefix)/.part_lcdmenu
 
 $(flashprefix)/.part_lcdmenu: $(flashprefix)/.flash .lcdmenu
 	$(INSTALL) $(targetprefix)/bin/lcdmenu $(flashprefix)/root/bin
-	cp -a $(targetprefix)/var/tuxbox/config/lcdmenu.conf $(flashprefix)/root/var/tuxbox/config
-	@touch $(flashprefix)/.part_lcdmenu
+	cp -pa $(targetprefix)/var/tuxbox/config/lcdmenu.conf $(flashprefix)/root/var/tuxbox/config
+	@touch $@
 
 flash-lib: $(flashprefix)/.lib
 
@@ -1492,7 +1498,7 @@ $(flashprefix)/.lib: $(flashprefix)/.flash $(shell ls -1 $(flashprefix)/.part_*)
 	@cp -a $(targetprefix)/lib/libnss_files-?.*.so $(flashprefix)/root/lib
 	@$(PYTHON) mklibs.py --target $(target) --ldlib ld.so.1 --libc-extras-dir $(targetprefix)/lib/libc_pic \
 		-d $(flashprefix)/root/lib \
-		-L $(targetprefix)/lib \
+		-D -L $(targetprefix)/lib \
 		`find $(flashprefix)/root/bin/ -path "*bin/?*"` \
 		`find $(flashprefix)/root/lib/ -name "libnss_*"` \
 		`find $(flashprefix)/root/lib/tuxbox/ -name "*.so" -type f` \
@@ -1503,7 +1509,7 @@ $(flashprefix)/.lib: $(flashprefix)/.flash $(shell ls -1 $(flashprefix)/.part_*)
 	@strip --remove-section=.comment --remove-section=.note `find $(flashprefix)/root/bin/ -path "*bin/?*"` 2>/dev/null || /bin/true
 	@strip --remove-section=.comment --remove-section=.note --strip-unneeded `find $(flashprefix)/root/lib/tuxbox -name "*.so"` 2>/dev/null || /bin/true
 	@chmod u+rwX,go+rX-w -R $(flashprefix)/root/
-	@touch $(flashprefix)/.lib
+	@touch $@
 
 flash-compress: $(flashprefix)/root-cramfs.img $(flashprefix)/var-jffs2.img
 
@@ -1574,7 +1580,7 @@ distclean-local:
 	-rm .directories .linuxdir .binutils .glibc .gcc .rpcgen
 	-rm .etc .busybox .ftpd .ifupdown .inetd .modutils .netkit_telnet .procps .tinylogin .watchdog
 	-rm .libboost .libcommoncplusplus .libcrypto .libcurl .libdb2 .libdvbpsi .libffi .libfreetype
-	-rm .libncurses .libjpeg .libmad .libnet .libnids .libpcap .libpng .libpopt
+	-rm .libncurses .libfribidi .libjpeg .libmad .libnet .libnids .libpcap .libpng .libpopt
 	-rm .libreadline .libsdl .libsigc .libxml2 .libxmlwrapp .libz
 	-rm .cabextract
 	-rm .gdb .ksymoops .ltrace .strace .nano
