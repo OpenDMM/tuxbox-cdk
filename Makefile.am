@@ -453,6 +453,19 @@ libs_optional: \
 	@CLEANUP_libfribidi@
 	touch $@
 
+.libgmp: .bootstrap @DEPENDS_libgmp@
+	@PREPARE_libgmp@
+	cd @DIR_libgmp@ && \
+		$(BUILDENV) \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--prefix=$(targetprefix) && \
+		$(MAKE) all && \
+		@INSTALL_libgmp@
+	@CLEANUP_libgmp@
+	touch $@
+
 .libjpeg: .bootstrap @DEPENDS_libjpeg@
 	@PREPARE_libjpeg@
 	cd @DIR_libjpeg@ && \
