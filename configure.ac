@@ -20,7 +20,7 @@ AC_ARG_ENABLE(libcrypto,
 AM_CONDITIONAL(WITH_LIBCRYPTO,test "$enable_libcrypto" = "yes")
 
 AC_ARG_ENABLE(flashmodutils,
-	AC_HELP_STRING([--disable-flashmodutils], [disable installation of modutils when targetruleset=flash (insmod lsmod rmmod are covered by busybox]),
+	AC_HELP_STRING([--disable-flashmodutils], [disable installation of modutils when targetruleset=flash (insmod lsmod rmmod are covered by busybox)]),
 	,[enable_flashmodutils=yes])
 
 AM_CONDITIONAL(WITH_FLASHMODUTILS,test "$enable_flashmodutils" = "yes")
@@ -30,6 +30,9 @@ AC_ARG_WITH(cpu,
 	[CPU_MODEL="$withval"],[CPU_MODEL="823"])
 
 AC_SUBST(CPU_MODEL)
+AM_CONDITIONAL(CPU_MODEL_823,test "$CPU_MODEL" = "823")
+AM_CONDITIONAL(CPU_MODEL_405,test "$CPU_MODEL" = "405")
+
 
 AC_ARG_WITH(hostruleset,
 	[  --with-hostruleset=NAME host ruleset [[standard,cygwin]]],

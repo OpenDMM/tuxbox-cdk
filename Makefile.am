@@ -623,9 +623,19 @@ libs_optional: \
 		./configure \
 			--host=$(target) \
 			--prefix=$(targetprefix) \
-			--without-html-dir --with-threads --without-ftp --without-http --without-html \
-			--without-catalog --without-docbook --with-xpath --without-xptr \
-			--without-xinclude --without-iconv --without-debug --without-mem-debug \
+			--without-html-dir \
+			--with-threads \
+			--without-ftp \
+			--without-http \
+			--without-html \
+			--without-catalog \
+			--without-docbook \
+			--with-xpath \
+			--without-xptr \
+			--without-xinclude \
+			--without-iconv \
+			--without-debug \
+			--without-mem-debug \
 			--without-python && \
 		$(MAKE) all && \
 		@INSTALL_libxml2@
@@ -1330,7 +1340,9 @@ $(flashprefix)/.flash: .busybox .driver .modutils
 	$(INSTALL) -d $(flashprefix)/root/sbin
 	$(INSTALL) -d $(flashprefix)/root/share/tuxbox/image
 	$(INSTALL) -d $(flashprefix)/root/var/tuxbox/config
-	$(INSTALL) -d $(flashprefix)/root/var/tuxbox/ucodes
+if CPU_MODEL_823
+ 	$(INSTALL) -d $(flashprefix)/root/var/tuxbox/ucodes
+endif
 	$(INSTALL) -d $(flashprefix)/root/tmp
 	$(MAKE) -C etc install targetprefix=$(flashprefix)/root
 
@@ -1339,6 +1351,7 @@ $(flashprefix)/.flash: .busybox .driver .modutils
 	for i in `find $(targetprefix)/sbin/ -lname "*busybox"` ; do cp -a $$i $(flashprefix)/root/sbin/ ; done
 	for i in insmod lsmod rmmod ; do ln -sf ../bin/busybox $(flashprefix)/root/sbin/$$i ; done
 	ln -sf telnetd $(flashprefix)/root/sbin/in.telnetd
+	ln -sf busybox $(flashprefix)/root/bin/ps
 
 if WITH_FLASHMODUTILS
 	$(INSTALL) $(targetprefix)/sbin/insmod $(flashprefix)/root/sbin
@@ -1426,8 +1439,28 @@ $(flashprefix)/.part_enigma: $(flashprefix)/.flash .enigma
 	rm -rf $(flashprefix)/root/share/locale/LC_MESSAGES
 	find $(flashprefix)/root/share/locale -name libc.mo -o -name nano.mo | xargs rm -f
 
+	$(INSTALL) -d $(flashprefix)/root/var/tuxbox/plugins
+	cp -a $(targetprefix)/var/tuxbox/config/*.lirc $(flashprefix)/root/var/tuxbox/config
 	for i in fonts resources pictures skins ; \
-		do $(INSTALL) -d $(flashprefix)/root/var/tuxbox/config/enigma ; done
+		do $(INSTALL) -d $(flashprefix)/root/var/tuxbox/config/enigma/$$i ; done
+
+	cp -a $(targetprefix)/etc/timezone.xml $(flashprefix)/root/etc
+
+if CPU_MODEL_405
+	$(INSTALL) $(targetprefix)/sbin/hotplug $(flashprefix)/root/sbin
+	for i in cables.xml satellites.xml ; do
+		mv $(flashprefix)/root/etc/$$i $(flashprefix)/root/var/tuxbox/config ; \
+		ln -sf ../var/tuxbox/config/$$i $(flashprefix)/root/etc ; done
+	for i in etc/ppp log mnt/nfs mnt/usb run tmp ; do
+		$(INSTALL) -d $(flashprefix)/root/var/$$i ; done
+	touch $(flashprefix)/root/var/tmp/init
+	for i in group hosts passwd ; do
+		mv $(flashprefix)/root/etc/$$i $(flashprefix)/root/var/etc ; \
+		ln -sf ../var/etc/$$i $(flashprefix)/root/etc ; done
+	ln -sf ../var/etc/smb.conf $(flashprefix)/root/etc
+	ln -sf ../var/etc/ppp/resolv.conf $(flashprefix)/root/etc
+	@echo "none		/proc/bus/usb	usbdevfs	defaults	0 0" >> $(flashprefix)/root/etc/fstab
+endif
 	@touch $@
 
 flash-lcars: $(flashprefix)/.part_lcars
