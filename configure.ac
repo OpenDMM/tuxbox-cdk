@@ -198,7 +198,7 @@ AC_SUBST(bootdir)
 AC_SUBST(driverdir)
 AC_SUBST(hostappsdir)
 
-if test "$targetruleset" = "flash"; then
+if test "$TARGETRULESET" = "flash"; then
 	AC_PATH_PROG(PYTHON,python,no)
 	if test "$PYTHON" = "no"; then
 		AC_MSG_WARN(can't build lib dir)
@@ -237,9 +237,9 @@ AC_SUBST(CLEANUP)
 #
 # core
 #
-KERNELVERSION=`${srcdir}/rules-make.pl ${srcdir}/rules-make${MAKERULESETFILE} linux version`
 AC_SUBST(KERNELVERSION)
 TUXBOX_RULES_MAKE(linux)
+KERNELVERSION=$VERSION_linux
 TUXBOX_RULES_MAKE_EXDIR(binutils)
 TUXBOX_RULES_MAKE_EXDIR(bootstrap_gcc)
 TUXBOX_RULES_MAKE_EXDIR(glibc)
@@ -304,16 +304,9 @@ TUXBOX_RULES_MAKE(xrc)
 TUXBOX_RULES_MAKE(thttpd)
 
 #
-# msttf
-#
-TUXBOX_RULES_MAKE(cabextract)
-TUXBOX_RULES_MAKE(msttf)
-
-#
 # additional
 #
 TUXBOX_RULES_MAKE(gdb)
-TUXBOX_RULES_MAKE(ksymoops)
 TUXBOX_RULES_MAKE(ltrace)
 TUXBOX_RULES_MAKE(strace)
 TUXBOX_RULES_MAKE(nano)

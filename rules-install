@@ -76,12 +76,6 @@ xrc;make:install
 thttpd;make:install
 
 #
-# msttf
-#
-cabextract;make:install
-msttf
-
-#
 # development tools
 #
 gdb;make:install-gdb:prefix=TARGET
@@ -111,4 +105,4 @@ dvbtext;install:-m755:dvbtext:TARGET/bin
 dvbtune;install:-m755:dvbtune:TARGET/bin
 vls;make:install:DESTDIR=TARGET
 
->>>;rules-install-local
+>>?;rules-install-local
