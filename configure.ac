@@ -234,7 +234,7 @@ if test "$TARGETRULESET" = "flash"; then
 		AC_MSG_WARN(can't build images with uid 0 as non-root)
 		FAKEROOT=
 	fi
-	AC_PATH_PROG(MKCRAMFS,mkcramfs,no)
+	AC_PATH_PROG(MKCRAMFS,mkcramfs,no,"$PATH:/usr/sbin")
 	if test "$MKCRAMFS" = "no"; then
 		AC_MSG_WARN(can't build cramfs)
 		MKCRAMFS=/bin/false
