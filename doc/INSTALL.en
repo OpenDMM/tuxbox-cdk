@@ -54,7 +54,7 @@ Prerequistes:
  - CVS will ask for a password. Press <enter> to send an empty password.
    Then enter the following command:
 
-   cvs -d:pserver:anonymous@cvs.berlios.de:/cvsroot/tuxbox -z3 co .
+   cvs -d:pserver:anonymous@cvs.berlios.de:/cvsroot/tuxbox -z3 co -r rel_1_0_0 .
 
 2. Generating the Makefiles:
 ----------------------------
