@@ -499,6 +499,10 @@ libs_optional: \
 			--disable-rpath \
 			--without-cxx-binding \
 			--with-fallbacks='linux vt100 xterm' && \
+		$(MAKE) libs \
+			HOSTCC=$(CC) \
+			HOSTCCFLAGS="$(CFLAGS) -DHAVE_CONFIG_H -I../ncurses -DNDEBUG -D_GNU_SOURCE -I../include" \
+			HOSTLDFLAGS="$(LDFLAGS)" && \
 		@INSTALL_libncurses@
 	@CLEANUP_libncurses@
 	touch .libncurses
