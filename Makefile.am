@@ -1654,7 +1654,7 @@ $(flashprefix)/.part_etherwake: $(flashprefix)/.flash .etherwake
 flash-dreamfiles: $(flashprefix)/.part_dreamfiles
 $(flashprefix)/.part_dreamfiles: $(flashprefix)/.flash .dreamfiles
 	cp -R $(flashprefix)/dreamfiles/* $(flashprefix)/root
-	if [ -f $(flashprefix)/dreamfiles/.version ] ; then \
+	@if [ -f $(flashprefix)/dreamfiles/.version ] ; then \
 		cp $(flashprefix)/dreamfiles/.version $(flashprefix)/root; \
 	fi
 if BOXTYPE_DM7000
@@ -1906,13 +1906,15 @@ $(flashprefix)/.part_plugin_yahtzee: $(flashprefix)/.flash flash-plugin_libfx2
 flash-plugin_ngrabstartstop: $(flashprefix)/.part_plugin_ngrabstartstop
 $(flashprefix)/.part_plugin_ngrabstartstop: $(flashprefix)/.flash .plugins flash-enigma
 	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
-# copy enigma plugins after mklibs.. (mklibs.py do not detect enigma as a shared lib)
+	@for i in so cfg; do \
+		cp $(targetprefix)/lib/tuxbox/plugins/ngrab*.$$i $(flashprefix)/root/lib/tuxbox/plugins/ ; done;
 	@touch $@
 
 flash-plugin_dslstartstop: $(flashprefix)/.part_plugin_ngrabtools
 $(flashprefix)/.part_plugin_dslstartstop: $(flashprefix)/.flash .plugins flash-enigma
 	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
-# copy enigma plugins after mklibs.. (mklibs.py do not detect enigma as a shared lib)
+	@for i in so cfg; do \
+		cp $(targetprefix)/lib/tuxbox/plugins/dsl*con*.$$i $(flashprefix)/root/lib/tuxbox/plugins/ ; done;
 	@touch $@
 
 ############################# UNTESTED!!! ##################################
@@ -1956,6 +1958,8 @@ $(flashprefix)/.lib: $(flashprefix)/.flash $(shell ls -r -1 $(flashprefix)/.part
 	@find $(flashprefix)/root/lib -maxdepth 1 -type f -o -type l | xargs rm -f
 	@cp -a $(targetprefix)/lib/libnss_dns-?.*.so $(flashprefix)/root/lib
 	@cp -a $(targetprefix)/lib/libnss_files-?.*.so $(flashprefix)/root/lib
+	@for i in `find $(flashprefix)/root/lib/tuxbox/plugins -name "*.so"`; do \
+		mv $$i $${i%%.so}.bla; done
 	@$(PYTHON) $(flashprefix)/mklibs.py --target $(target) --ldlib ld.so.1 --libc-extras-dir $(targetprefix)/lib/libc_pic \
 		-d $(flashprefix)/root/lib \
 		-D -L $(targetprefix)/lib \
@@ -1964,20 +1968,17 @@ $(flashprefix)/.lib: $(flashprefix)/.flash $(shell ls -r -1 $(flashprefix)/.part
 		`find $(flashprefix)/root/lib/ -name "libnss_*"` \
 		`find $(flashprefix)/root/lib/tuxbox/ -name "*.so" -type f` \
 		`find $(flashprefix)/root/sbin/ -path "*sbin/?*"`
-	@if [ -f $(flashprefix)/.part_plugin_ngrabstartstop ] ; then \
-		cp $(targetprefix)/lib/tuxbox/plugins/ngrab*.so $(flashprefix)/root/lib/tuxbox/plugins/ ; \
-		cp $(targetprefix)/lib/tuxbox/plugins/ngrab*.cfg $(flashprefix)/root/lib/tuxbox/plugins/ ; \
-	fi
-	@if [ -f $(flashprefix)/.part_plugin_dslstartstop ] ; then \
-		cp $(targetprefix)/lib/tuxbox/plugins/dsl*con*.so $(flashprefix)/root/lib/tuxbox/plugins/ ; \
-		cp $(targetprefix)/lib/tuxbox/plugins/dsl*con*.cfg $(flashprefix)/root/lib/tuxbox/plugins/ ; \
-	fi
 	cd $(flashprefix)/root/lib && ln -sf libgcc_s_nof.so.1 libgcc_s.so.1
-	$(target)-strip --remove-section=.comment --remove-section=.note --strip-unneeded \
+	@for i in `find $(flashprefix)/root/lib/tuxbox/plugins -name "*.bla"`; do \
+		mv $$i $${i%%.bla}.so; done
+	@if [ -x ./customize-flash ] ; then \
+		./customize-flash ; \
+	fi
+	@$(target)-strip --remove-section=.comment --remove-section=.note --strip-unneeded \
 		`find $(flashprefix)/root/ -path "*bin/?*"` 2>/dev/null || /bin/true
-	$(target)-strip --remove-section=.comment --remove-section=.note --strip-unneeded \
+	@$(target)-strip --remove-section=.comment --remove-section=.note --strip-unneeded \
 		`find $(flashprefix)/root/lib -name "*.so*"` 2>/dev/null || /bin/true
-	rm `find $(flashprefix)/root/lib/ -name "*.la"` 2>/dev/null || /bin/true
+	@rm `find $(flashprefix)/root/lib/ -name "*.la"` 2>/dev/null || /bin/true
 	@if [ -e $(flashprefix)/.part_plugin_links ] ; then \
 		mv $(flashprefix)/root/lib/tuxbox/plugins/links.* $(flashprefix); \
 	fi
@@ -2001,9 +2002,21 @@ if BOXTYPE_DM500
 	$(flashprefix)/mkcramfs-e -eb $(flashprefix)/boot $(flashprefix)/boot-cramfs.img
 	mv ./bild $(flashprefix)/boot/root/platform/kernel
 endif
+	@if [ `find $(flashprefix)/boot-cramfs.img -printf "%s"` -gt 1179648 ]; then \
+		echo "ERROR: CramFS part is too big for image (max. allowed 1179648 bytes)"; \
+		rm -f $(flashprefix)/boot-cramfs.img.too-big 2> /dev/null || /bin/true; \
+		mv $(flashprefix)/boot-cramfs.img $(flashprefix)/boot-cramfs.img.too-big; \
+		exit 1; \
+	fi
 
 $(flashprefix)/root-squashfs.img:
 	$(flashprefix)/mksquashfs $(flashprefix)/root $(flashprefix)/root-squashfs.img -be -all-root
+	@if [ `find $(flashprefix)/root-squashfs.img -printf "%s"` -gt 5111808 ]; then \
+		echo "ERROR: SquashFS part is too big for image (max. allowed 5111808 bytes)"; \
+		rm -f $(flashprefix)/root-squashfs.img.too-big 2> /dev/null || /bin/true; \
+		mv $(flashprefix)/root-squashfs.img $(flashprefix)/root-squashfs.img.too-big; \
+		exit 1; \
+	fi
 
 $(flashprefix)/complete.img: $(flashprefix)/boot-cramfs.img $(flashprefix)/root-squashfs.img
 	cp $(flashprefix)/boot-cramfs.img $(flashprefix)/complete.img; \
