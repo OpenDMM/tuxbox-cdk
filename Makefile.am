@@ -1168,7 +1168,7 @@ $(driverdir)/directfb/Makefile: .bootstrap .libdirectfb
 #   own applications
 #
 
-apps: .dvbsnoop .enigma .lcars .lcd .neutrino .plugins .dvb_tools
+apps: lcd .neutrino .plugins .dvb_tools
 
 CONFIGURE_OPTS = \
 	--build=$(build) \
