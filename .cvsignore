@@ -31,6 +31,7 @@ linux-2.4.20
 .libsdl
 .libsigc
 .libtuxbox
+.libvorbisidec
 .libz
 .linuxdir
 .linuxkernel
