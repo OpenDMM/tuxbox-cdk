@@ -9,7 +9,7 @@ diff -Naur libpng-1.2.5/Makefile libpng-1.2.5new/Makefile
 +
 +LIBNAME = libpng12
 +PNGMAJ = 0
-+PNGMIN = 1.2.6
++PNGMIN = 1.2.8
 +PNGVER = $(PNGMAJ).$(PNGMIN)
 +
 +CC=powerpc-tuxbox-linux-gnu-gcc
@@ -35,7 +35,7 @@ diff -Naur libpng-1.2.5/Makefile libpng-1.2.5new/Makefile
 +
 +# for pgcc version 2.95.1, -O3 is buggy; don't use it.
 +
-+CFLAGS=-I$(ZLIBINC) -Wall -O3 -funroll-loops \
++CFLAGS=-I$(ZLIBINC) -Wall -Os -funroll-loops \
 +	$(ALIGN) # $(WARNMORE) -g -DPNG_DEBUG=5
 +
 +LDFLAGS=-L. -Wl,-rpath,. -L$(ZLIBLIB) -Wl,-rpath,$(ZLIBLIB) -lpng12 -lz -lm
