@@ -1974,8 +1974,6 @@ $(flashprefix)/.lib: $(flashprefix)/.flash $(shell ls -r -1 $(flashprefix)/.part
 	@find $(flashprefix)/root/lib -maxdepth 1 -type f -o -type l | xargs rm -f
 	@cp -a $(targetprefix)/lib/libnss_dns-?.*.so $(flashprefix)/root/lib
 	@cp -a $(targetprefix)/lib/libnss_files-?.*.so $(flashprefix)/root/lib
-	@for i in `find $(flashprefix)/root/lib/tuxbox/plugins -name "*.so"`; do \
-		mv $$i $${i%%.so}.bla; done
 	@$(PYTHON) $(flashprefix)/mklibs.py --target $(target) --ldlib ld.so.1 --libc-extras-dir $(targetprefix)/lib/libc_pic \
 		-d $(flashprefix)/root/lib \
 		-D -L $(targetprefix)/lib \
@@ -1985,8 +1983,6 @@ $(flashprefix)/.lib: $(flashprefix)/.flash $(shell ls -r -1 $(flashprefix)/.part
 		`find $(flashprefix)/root/lib/tuxbox/ -name "*.so" -type f` \
 		`find $(flashprefix)/root/sbin/ -path "*sbin/?*"`
 	cd $(flashprefix)/root/lib && ln -sf libgcc_s_nof.so.1 libgcc_s.so.1
-	@for i in `find $(flashprefix)/root/lib/tuxbox/plugins -name "*.bla"`; do \
-		mv $$i $${i%%.bla}.so; done
 	@if [ -x ./customize-flash ] ; then \
 		./customize-flash ; \
 	fi
