@@ -1209,8 +1209,6 @@ dvb_apps: .dvbdate .dvbstream .dvbtext .dvbtune .vls
 
 boot: .ppcboot .linuxkernel .driver
 
-KERNELGCC = `if [ -f $(hostprefix)/bin/$(target)-gcc-2.95 ]; then echo $(target)-gcc-2.95; else echo $(target)-gcc; fi`
-
 .ppcboot: .bootstrap $(bootdir)/ppcboot/Makefile
 if HOSTRULESET_CYGWIN
 	$(MAKE) -C $(bootdir)/ppcboot dbox2_config CYGWIN=1
@@ -1234,7 +1232,7 @@ endif
 	fi
 	$(MAKE) -C @DIR_linux@ zImage modules \
 		ARCH=ppc \
-		CROSS_COMPILE=$(target)- CC=$(KERNELGCC)
+		CROSS_COMPILE=$(target)-
 	$(MAKE) -C @DIR_linux@ modules_install \
 		ARCH=ppc \
 		CROSS_COMPILE=$(target)- \
@@ -1260,21 +1258,23 @@ endif
 	$(INSTALL) -d $(targetprefix)/lib/modules/$(KERNELVERSION)/misc
 	$(MAKE) -C $(driverdir) \
 		KERNEL_LOCATION=$(buildprefix)/linux \
-		CROSS_COMPILE=$(target)- CC=$(KERNELGCC) \
-		INSTALL_MOD_PATH=$(targetprefix)
-	$(MAKE) -C $(driverdir) install \
+		CROSS_COMPILE=$(target)- \
+		HARDWARE=$(HARDWARERULESET)
+	$(MAKE) -C $(driverdir) \
 		KERNEL_LOCATION=$(buildprefix)/linux \
 		BIN_DEST=$(targetprefix)/bin \
-		INSTALL_MOD_PATH=$(targetprefix)
+		INSTALL_MOD_PATH=$(targetprefix) \
+		HARDWARE=$(HARDWARERULESET) \
+		install
 if MAINTAINER_MODE
 else
-	$(MAKE) -C $(driverdir) clean \
+	$(MAKE) -C $(driverdir) distclean \
 		KERNEL_LOCATION=$(buildprefix)/linux
 endif
 	touch .driver
 
 driver-clean:
-	$(MAKE) -C $(driverdir) clean \
+	$(MAKE) -C $(driverdir) distclean \
 		KERNEL_LOCATION=$(buildprefix)/linux
 	rm .driver
 
