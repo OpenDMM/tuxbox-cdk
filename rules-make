@@ -83,7 +83,7 @@ gdb;6.1.1;gdb-6.1.1;gdb-6.1.1.tar.bz2:gdb.diff;extract:gdb-6.1.1.tar.bz2;patch:g
 insight;6.1;insight-6.1;insight-6.1.tar.bz2;extract:insight-6.1.tar.bz2
 ltrace;0.3.26;ltrace-0.3.26;ltrace_0.3.26.tar.gz;extract:ltrace_0.3.26.tar.gz;patch:ltrace.diff
 strace;4.4;strace-4.4;strace_4.4-1.tar.gz:strace.diff;extract:strace_4.4-1.tar.gz;patch:strace.diff
-nano;1.0.7;nano-1.0.7;nano-1.0.7.tar.gz:nano.diff;extract:nano-1.0.7.tar.gz;patch:nano.diff
+nano;1.2.4;nano-1.2.4;nano-1.2.4.tar.gz:nano.diff;extract:nano-1.2.4.tar.gz;patch:nano.diff
 ksymoops;2.4.9;ksymoops-2.4.9;ksymoops-2.4.9.tar.bz2;extract:ksymoops-2.4.9.tar.bz2
 
 #

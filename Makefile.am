@@ -1022,7 +1022,10 @@ devel_optional: .gdb-remote .insight .ksymoops
 	cd @DIR_nano@ && \
 		$(BUILDENV) \
 		./configure \
-			--prefix=$(targetprefix) && \
+			--build=$(build) \
+			--host=$(target) \
+			--prefix=  \
+			--includedir=$(targetprefix)/include && \
 		$(MAKE) all && \
 		@INSTALL_nano@
 	@CLEANUP_nano@

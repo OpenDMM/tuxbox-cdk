@@ -85,7 +85,7 @@ insight-6.1.tar.bz2;ftp://sources.redhat.com/pub/gdb/releases
 ltrace_0.3.26.tar.gz;ftp://ftp.debian.org/debian/pool/main/l/ltrace
 strace_4.4-1.tar.gz;http://switch.dl.sourceforge.net/sourceforge/strace
 ksymoops-2.4.9.tar.bz2;ftp://ftp.de.kernel.org/pub/linux/utils/kernel/ksymoops/v2.4
-nano-1.0.7.tar.gz;ftp://$(gnuserver)/nano
+nano-1.2.4.tar.gz;http://www.nano-editor.org/dist/v1.2
 
 #
 # java
