@@ -1,17 +1,14 @@
 #
 # $Id$
 #
-# Urheber:
-# --------
-# (C) 2002 by Andreas Oberritter <obi@tuxbox.org>
+# Copyright (c) 2002-2003 Andreas Oberritter <obi@tuxbox.org>
 #
-# Lizenz:
-# -------
-# Dieses Dokument darf weder verkauft werden noch darf es auf
-# kostenpflichtigen Datentraegern weiterverbreitet werden.
+# Permission is granted to copy, distribute and/or modify this document
+# under the terms of the GNU Free Documentation License, Version 1.2
+# or any later version published by the Free Software Foundation;
+# with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
+# A copy of the license is included in cdk/common-licenses/FDL-1.2
 #
-# Inhalt:
-# -------
 # Inhalt dieses Dokuments sind die noetigen Schritte zur installation einer
 # Entwicklungsumgebung fuer Embedded PowerPC / Linux auf einem GNU System.
 #
