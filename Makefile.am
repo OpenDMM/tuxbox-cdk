@@ -291,7 +291,7 @@ libs: \
 	.libmad .libid3tag .libncurses .libpng .libreadline .libsdl .libsigc .libz
 
 libs_optional: \
-	.libcommoncplusplus .libdb2 .libnet .libnids .libpcap .libpopt \
+	.libcommoncplusplus .libdb2 .libnet .libnids .libpcap .libpopt .libungif \
 	.libxml2 .libxmlparse .libxmlwrapp
 
 .libboost: .bootstrap @DEPENDS_libboost@
@@ -433,8 +433,10 @@ libs_optional: \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
-			--prefix= && \
-		$(MAKE) libjpeg.so.6 && \
+			--prefix= \
+			--enable-static \
+			--enable-shared && \
+		$(MAKE) libjpeg.la && \
 		@INSTALL_libjpeg@
 	@CLEANUP_libjpeg@
 	touch $@
@@ -650,6 +652,20 @@ endif
 		$(MAKE) all && \
 		@INSTALL_libsigc@
 	@CLEANUP_libsigc@
+	touch $@
+
+.libungif: .bootstrap @DEPENDS_libungif@
+	@PREPARE_libungif@
+	cd @DIR_libungif@ && \
+		$(BUILDENV) \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--prefix= \
+			--without-x && \
+		$(MAKE) && \
+		@INSTALL_libungif@
+	@CLEANUP_libungif@
 	touch $@
 
 .libxml2: .bootstrap @DEPENDS_libxml2@
@@ -1619,7 +1635,7 @@ distclean-local:
 	-rm .etc .busybox .ftpd .modutils .procps .watchdog
 	-rm .libboost .libcommoncplusplus .libcrypto .libcurl .libdb2 .libdvbpsi .libffi .libfreetype
 	-rm .libncurses .libfribidi .libjpeg .libmad .libid3tag .libnet .libnids .libpcap .libpng .libpopt
-	-rm .libreadline .libsdl .libsigc .libxml2 .libxmlwrapp .libz
+	-rm .libreadline .libsdl .libsigc .libungif .libxml2 .libxmlwrapp .libz
 	-rm .cabextract
 	-rm .gdb .ksymoops .ltrace .strace .nano
 	-rm .kaffeh .kaffe
