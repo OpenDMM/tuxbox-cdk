@@ -24,8 +24,8 @@ fi
 @TARGETRULESET_FLASH_TRUE@test -f /var/lib/modules/`uname -r`/modules.dep || \
 depmod -ae
 
-modprobe i2c-8xx
-modprobe info
+insmod i2c-8xx
+insmod info
 
 if [ -e /tmp/dbox.sh ]; then
         rm -f /tmp/dbox.sh
@@ -43,24 +43,54 @@ echo "DEMOD: $DEMOD"
 
 test -x /bin/loadkeys && loadkeys /share/keymaps/i386/qwertz/de-latin1.kmap.gz
 
-modprobe saa7126
-modprobe avs
-modprobe input
-modprobe keybdev
-modprobe mousedev
-modprobe joydev
-modprobe evdev
-modprobe dvb_frontend
-modprobe dvb
-modprobe tuner
-modprobe avia_gt
-modprobe avia_gt_fb
-modprobe avia_gt_oss
-modprobe avia_gt_napi
-modprobe dvb_net
-modprobe lcd
+insmod event
+insmod saa7126
+insmod avs
+insmod input
+insmod keybdev
+insmod mousedev
+insmod joydev
+insmod evdev
+insmod dvb_frontend
+insmod dvb_filter
+insmod dmxdev
+insmod dvb_demux
+insmod fp
+
+
+insmod avia_av firmware=/var/tuxbox/ucodes &
+insmod dvbdev
+
+insmod avia_gt ucode=/var/tuxbox/ucodes/ucode.bin hw_sections=1 
+insmod avia_gt_oss
+insmod avia_gt_dvr
+insmod avia_gt_fb console_transparent=0 
+insmod cam firmware=/var/tuxbox/ucodes/cam-alpha.bin 
+
+
+insmod dvb
+
+if [ $DEMOD = "AT76C651" ];then
+	alias tuner='insmod at76c651'
+elif [ $DEMOD = "TDA8044H" ] ;then
+	alias tuner='insmod tda8044h'
+elif [ $DEMOD = "VES1820" ] ;then
+	alias tuner='insmod ves1820'
+elif [ $DEMOD = "VES1893" ] ;then
+	alias tuner='insmod ves1893'
+elif [ $DEMOD = "VES1993" ] ;then
+	alias tuner='insmod ves1993'
+fi
+
+tuner
+
+
+insmod avia_gt_napi 
+insmod dvb_net
+insmod lcd
 
 mkdir /dev/ost
 for i in audio ca demux dvr frontend net sec video; do ln -sf ../dvb/card0/${i}0 /dev/ost/${i}; ln -sf ../dvb/card0/${i}0 /dev/ost/${i}0; done
 for i in demux dvr; do ln -sf ${i}0 /dev/dvb/card0/${i}1; ln -sf ../dvb/card0/${i}1 /dev/ost/${i}1; done
+
 

@@ -2,7 +2,7 @@ EXTRA_DIST = \
 	rcS.in start start_lcars start_neutrino start_sshd.in
 
 FILES = \
-	rcS start start_lcars start_neutrino start_sshd
+	rcS start start_lcars start_neutrino start_sshd start_enigma
 
 all-local: $(FILES)
 
