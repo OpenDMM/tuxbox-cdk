@@ -20,6 +20,7 @@ core: .directories .binutils .linuxdir .glibc .gcc
 
 .directories:
 	$(INSTALL) -d $(targetprefix)/bin
+	$(INSTALL) -d $(targetprefix)/boot
 	$(INSTALL) -d $(targetprefix)/dev
 	$(INSTALL) -d $(targetprefix)/etc
 	$(INSTALL) -d $(targetprefix)/include
@@ -49,7 +50,7 @@ endif
 		$(MAKE) .directories; \
 	fi
 	@PREPARE_linux@
-	cat Patches/linux-dbox2-$(KERNELVERSION).config > @DIR_linux@/.config
+	cat Patches/linux-dbox2.config > @DIR_linux@/.config
 	$(MAKE) -C @DIR_linux@ oldconfig \
 		ARCH=ppc
 	$(MAKE) -C @DIR_linux@ include/linux/version.h \
@@ -1226,10 +1227,7 @@ else
 endif
 	touch .ppcboot
 
-.linuxkernel: .bootstrap .linuxdir
-	@if [ ! -f $(hostprefix)/bin/mkimage ]; then \
-		$(MAKE) .ppcboot; \
-	fi
+.linuxkernel: .bootstrap .linuxdir .ppcboot
 	$(MAKE) -C @DIR_linux@ zImage modules \
 		ARCH=ppc \
 		CROSS_COMPILE=$(target)-
@@ -1241,12 +1239,12 @@ endif
 	$(hostprefix)/bin/mkimage \
 		-n 'dbox2' -A ppc -O linux -T kernel -C gzip \
 		-a 00000000 -e 00000000 \
-		-d `if [ -f @DIR_linux@/arch/ppc/coffboot/vmlinux.gz ]; then echo @DIR_linux@/arch/ppc/coffboot/vmlinux.gz; else echo @DIR_linux@/arch/ppc/boot/images/vmlinux.gz; fi` \
+		-d @DIR_linux@/arch/ppc/boot/images/vmlinux.gz \
 		$(bootprefix)/kernel-cdk;
 
-	$(INSTALL) -d $(targetprefix)/boot
 	$(INSTALL) -m644 @DIR_linux@/vmlinux $(targetprefix)/boot/vmlinux-$(KERNELVERSION)
 	$(INSTALL) -m644 @DIR_linux@/System.map $(targetprefix)/boot/System.map-$(KERNELVERSION)
+
 if MAINTAINER_MODE
 else
 	$(MAKE) -C @DIR_linux@ clean
@@ -1254,8 +1252,6 @@ endif
 	touch .linuxkernel
 
 .driver: .bootstrap .linuxkernel
-	$(INSTALL) -d $(targetprefix)/bin
-	$(INSTALL) -d $(targetprefix)/lib/modules/$(KERNELVERSION)/misc
 	$(MAKE) -C $(driverdir) \
 		KERNEL_LOCATION=$(buildprefix)/linux \
 		CROSS_COMPILE=$(target)- \
@@ -1266,6 +1262,7 @@ endif
 		INSTALL_MOD_PATH=$(targetprefix) \
 		HARDWARE=$(HARDWARERULESET) \
 		install
+
 if MAINTAINER_MODE
 else
 	$(MAKE) -C $(driverdir) distclean \
