@@ -103,7 +103,7 @@ bootstrap_gcc: @DEPENDS_bootstrap_gcc@
 			--host=$(build) \
 			--target=$(target) \
 			--prefix=$(hostprefix) \
-			--with-cpu=823 \
+			--with-cpu=$(CPU_MODEL) \
 			--enable-target-optspace \
 			--enable-languages="c" \
 			--disable-shared \
@@ -172,7 +172,7 @@ bootstrap_gcc: @DEPENDS_bootstrap_gcc@
 			--host=$(build) \
 			--target=$(target) \
 			--prefix=$(hostprefix) \
-			--with-cpu=823 \
+			--with-cpu=$(CPU_MODEL) \
 			--enable-target-optspace \
 			--enable-languages="c,c++" \
 			--enable-shared \
@@ -191,17 +191,21 @@ bootstrap_gcc: @DEPENDS_bootstrap_gcc@
 #
 
 root: \
-	.etc .busybox .ftpd .ifupdown .inetd .modutils \
-	.netkit_telnet .procps .tinylogin .watchdog
+	.etc .busybox .ftpd .modutils \
+	.procps .watchdog
 
 root_optional: \
 	.portmap
 
 .busybox: .bootstrap .etc @DEPENDS_busybox@
 	@PREPARE_busybox@
+if TARGETRULESET_FLASH
+	cat Patches/busybox-flash.config > @DIR_busybox@/.config
+else
+	cat Patches/busybox.config > @DIR_busybox@/.config
+endif
 	cd @DIR_busybox@ && \
-		CFLAGS="" \
-		$(MAKE) \
+		$(MAKE) dep all \
 			CROSS=$(target)- \
 			CFLAGS_EXTRA="$(TARGET_CFLAGS)" && \
 		@INSTALL_busybox@
@@ -212,42 +216,21 @@ root_optional: \
 	$(MAKE) -C etc install
 	touch $@
 
-.ftpd: .bootstrap .inetd @DEPENDS_ftpd@
+.ftpd: .bootstrap @DEPENDS_ftpd@
 	@PREPARE_ftpd@
 	cd @DIR_ftpd@ && \
 		CC=$(target)-gcc \
-		CFLAGS="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)" \
+		CFLAGS="$(TARGET_CFLAGS)" \
+		LDFLAGS="$(TARGET_LDFLAGS)" \
 		$(MAKE) && \
 		@INSTALL_ftpd@
 	@CLEANUP_ftpd@
 	touch $@
 
-.ifupdown: .bootstrap @DEPENDS_ifupdown@
-	@PREPARE_ifupdown@
-	cd @DIR_ifupdown@ && \
-		$(MAKE) all \
-		CC=$(target)-gcc \
-		CFLAGS="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)" && \
-		@INSTALL_ifupdown@
-	@CLEANUP_ifupdown@
-	touch $@
-
-.inetd: .bootstrap @DEPENDS_inetd@
-	@PREPARE_inetd@
-	touch @DIR_inetd@/MCONFIG
-	cd @DIR_inetd@/inetd && \
-		CC=$(target)-gcc \
-		CFLAGS="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)" \
-		$(MAKE) all && \
-		@INSTALL_inetd@
-	@CLEANUP_inetd@
-	touch $@
-
 .modutils: .bootstrap @DEPENDS_modutils@
 	@PREPARE_modutils@
 	cd @DIR_modutils@ && \
-		CC=$(target)-gcc CXX=$(target)-g++ \
-		CFLAGS="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)" \
+		$(BUILDENV) \
 		BUILDCC=$(CC) BUILDCFLAGS="-O2" \
 		./configure \
 			--build=$(build) \
@@ -260,27 +243,10 @@ root_optional: \
 	@CLEANUP_modutils@
 	touch $@
 
-.netkit_telnet: .bootstrap .inetd .tinylogin .libncurses @DEPENDS_netkit_telnet@
-	@PREPARE_netkit_telnet@
-	touch @DIR_netkit_telnet@/MCONFIG
-	cd @DIR_netkit_telnet@ && \
-		CXX=$(target)-g++ \
-		CXXFLAGS="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)" \
-		LIBS="-lncurses" \
-		$(MAKE) -C telnet && \
-		CC=$(target)-gcc \
-		CFLAGS="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)" \
-		LIBS="-lutil" \
-		$(MAKE) -C telnetd && \
-		@INSTALL_netkit_telnet@
-	@CLEANUP_netkit_telnet@
-	touch $@
-
 .portmap: .bootstrap @DEPENDS_portmap@
 	@PREPARE_portmap@
 	cd @DIR_portmap@ && \
-		CC=$(target)-gcc \
-		CFLAGS="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)" \
+		$(BUILDENV) \
 		$(MAKE) && \
 		@INSTALL_portmap@
 	@CLEANUP_portmap@
@@ -289,30 +255,16 @@ root_optional: \
 .procps: .bootstrap .libncurses @DEPENDS_procps@
 	@PREPARE_procps@
 	cd @DIR_procps@ && \
-		CC=$(target)-gcc \
-		CFLAGS="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)" \
+		$(BUILDENV) \
 		$(MAKE) top ps && \
 		@INSTALL_procps@
 	@CLEANUP_procps@
 	touch $@
 
-.tinylogin: .bootstrap .busybox @DEPENDS_tinylogin@
-	@PREPARE_tinylogin@
-	cd @DIR_tinylogin@ && \
-		CFLAGS="" \
-		$(MAKE) \
-			CROSS=$(target)- \
-			CFLAGS_EXTRA="$(TARGET_CFLAGS)" && \
-		@INSTALL_tinylogin@
-	@CLEANUP_tinylogin@
-	touch $@
-
 .watchdog: .bootstrap @DEPENDS_watchdog@
 	@PREPARE_watchdog@
 	cd @DIR_watchdog@ && \
-		CC=$(target)-gcc \
-		CFLAGS="$(TARGET_CFLAGS)" \
-		LDFLAGS="$(TARGET_LDFLAGS)" \
+		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
@@ -329,8 +281,12 @@ root_optional: \
 #   contrib libs
 #
 
+if WITH_LIBCRYPTO
+OPTIONAL_LIBCRYPTO = .libcrypto
+endif
+
 libs: \
-	.libcrypto .libcurl .libdvbpsi .libffi .libfreetype .libjpeg \
+	$(OPTIONAL_LIBCRYPTO) .libcurl .libdvbpsi .libffi .libfreetype .libjpeg \
 	.libmad .libncurses .libpng .libreadline .libsdl .libsigc .libz
 
 libs_optional: \
@@ -373,9 +329,12 @@ libs_optional: \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
-			--prefix=$(targetprefix) \
+			--prefix= \
 			--with-random && \
 		$(MAKE) all && \
+		rm -f $(hostprefix)/bin/curl-config && \
+		sed -e "s,^prefix=,prefix=$(targetprefix)," < curl-config > $(hostprefix)/bin/curl-config && \
+		chmod 755 $(hostprefix)/bin/curl-config && \
 		@INSTALL_libcurl@
 	@CLEANUP_libcurl@
 	touch $@
@@ -471,6 +430,7 @@ libs_optional: \
 	cd @DIR_libjpeg@ && \
 		$(BUILDENV) \
 		./configure \
+			--build=$(build) \
 			--host=$(target) \
 			--prefix= && \
 		$(MAKE) libjpeg.so.6 && \
@@ -592,13 +552,14 @@ libs_optional: \
 
 .libreadline: .bootstrap @DEPENDS_libreadline@
 	@PREPARE_libreadline@
-	cd @DIR_libreadline@ && autoconf &&\
+	cd @DIR_libreadline@ && \
+		autoconf && \
 		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
 			--prefix= && \
-		$(MAKE) shared && \
+		$(MAKE) all && \
 		@INSTALL_libreadline@
 	@CLEANUP_libreadline@
 	touch $@
@@ -707,9 +668,9 @@ libs_optional: \
 	cd @DIR_libz@ && \
 		$(BUILDENV) \
 		./configure \
-			--prefix=$(targetprefix) \
+			--prefix= \
 			--shared && \
-		$(MAKE) libz.so.1.1.4 && \
+		$(MAKE) all && \
 		@INSTALL_libz@
 	@CLEANUP_libz@
 	touch $@
@@ -740,9 +701,7 @@ contrib_apps_optional: .dsniff .pump .thttpd
 .console_tools: .bootstrap .console_data @DEPENDS_console_tools@
 	@PREPARE_console_tools@
 	cd @DIR_console_tools@ && \
-		CC=$(target)-gcc \
-		CFLAGS="$(TARGET_CFLAGS)" \
-		LDFLAGS="$(TARGET_LDFLAGS)" \
+		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
@@ -773,9 +732,7 @@ contrib_apps_optional: .dsniff .pump .thttpd
 	@PREPARE_fbset@
 	cd @DIR_fbset@ && \
 		$(MAKE) \
-			CC=$(target)-gcc \
-			CFLAGS="$(TARGET_CFLAGS)" \
-			LDFLAGS="$(TARGET_LDFLAGS)" && \
+			$(BUILDENV) && \
 		@INSTALL_fbset@
 	@CLEANUP_fbset@
 	touch $@
@@ -850,8 +807,7 @@ contrib_apps_optional: .dsniff .pump .thttpd
 .tcpdump: .bootstrap .libpcap @DEPENDS_tcpdump@
 	@PREPARE_tcpdump@
 	cd @DIR_tcpdump@ && \
-		CC=$(target)-gcc \
-		CFLAGS="$(TARGET_CFLAGS) -I$(targetprefix)/include -L$(targetprefix)/lib" LDFLAGS="$(TARGET_LDFLAGS) -L$(targetprefix)/lib"  \
+		$(BUILDENV) \
 		./configure \
 			--host=$(target) \
 			--prefix=$(targetprefix) \
@@ -947,8 +903,7 @@ devel_optional: .gdb-remote .ksymoops
 .ltrace: .bootstrap @DEPENDS_ltrace@
 	@PREPARE_ltrace@
 	cd @DIR_ltrace@ && \
-		CC=$(target)-gcc \
-		CFLAGS="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)" \
+		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
@@ -962,8 +917,7 @@ devel_optional: .gdb-remote .ksymoops
 .strace: .bootstrap @DEPENDS_strace@
 	@PREPARE_strace@
 	cd @DIR_strace@ && \
-		CC=$(target)-gcc \
-		CFLAGS="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)" \
+		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
@@ -977,8 +931,7 @@ devel_optional: .gdb-remote .ksymoops
 .nano: .bootstrap .libncurses @DEPENDS_nano@
 	@PREPARE_nano@
 	cd @DIR_nano@ && \
-		CC=$(target)-gcc \
-		CFLAGS="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)" \
+		$(BUILDENV) \
 		./configure \
 			--prefix=$(targetprefix) && \
 		$(MAKE) all && \
@@ -1271,7 +1224,7 @@ $(appsdir)/dvb/zapit/Makefile: .bootstrap .misc_libs
 $(appsdir)/dvb/tools/Makefile: .bootstrap .misc_libs
 	cd $(appsdir)/dvb/tools && $(CONFIGURE)
 
-.stream: $(appsdir)/dvb/tools/Makefile .inetd
+.stream: $(appsdir)/dvb/tools/Makefile .busybox
 	$(MAKE) -C $(appsdir)/dvb/tools/stream all install
 	touch $@
 
@@ -1364,7 +1317,7 @@ $(appsdir)/tuxbox/tools/Makefile: .bootstrap .libtuxbox
 if TARGETRULESET_FLASH
 rebuild-flash:
 	-rm -rf $(flashprefix)/root
-	-rm -rf $(flashprefix)/.flash
+	-rm -f $(flashprefix)/.flash
 	$(MAKE) flash-lib
 
 $(flashprefix)/.flash: .busybox .driver .modutils
@@ -1384,10 +1337,14 @@ $(flashprefix)/.flash: .busybox .driver .modutils
 	$(INSTALL) $(targetprefix)/bin/busybox $(flashprefix)/root/bin
 	for i in `find $(targetprefix)/bin/ -lname "*busybox"` ; do cp -a $$i $(flashprefix)/root/bin/ ; done
 	for i in `find $(targetprefix)/sbin/ -lname "*busybox"` ; do cp -a $$i $(flashprefix)/root/sbin/ ; done
+	for i in insmod lsmod rmmod ; do ln -sf ../bin/busybox $(flashprefix)/root/sbin/$$i ; done
+	ln -sf telnetd $(flashprefix)/root/sbin/in.telnetd
 
+if WITH_FLASHMODUTILS
 	$(INSTALL) $(targetprefix)/sbin/insmod $(flashprefix)/root/sbin
 	$(INSTALL) $(targetprefix)/sbin/depmod $(flashprefix)/root/sbin
-	for i in `find $(targetprefix)/sbin/ -lname "*insmod"` ; do cp -a $$i $(flashprefix)/root/sbin/ ; done
+	for i in `find $(targetprefix)/sbin/ -lname "*insmod"` ; do cp -pa $$i $(flashprefix)/root/sbin/ ; done
+endif
 
 	$(INSTALL) -d $(flashprefix)/root/lib/modules/$(KERNELVERSION)
 	cp -a $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel $(targetprefix)/lib/modules/$(KERNELVERSION)/misc \
@@ -1395,39 +1352,17 @@ $(flashprefix)/.flash: .busybox .driver .modutils
 	cp -a $(bootprefix)/kernel-cdk $(flashprefix)/root/vmlinuz
 	@touch $@
 
-$(flashprefix)/.part_network: $(flashprefix)/.flash .ifupdown
-	$(INSTALL) -d $(flashprefix)/root/etc/network
-	cp -a $(targetprefix)/etc/network/* $(flashprefix)/root/etc/network
-	$(INSTALL) $(targetprefix)/sbin/ifup $(targetprefix)/sbin/ifdown \
-		$(flashprefix)/root/sbin
-	@touch $@
-
 flash-ftpd: $(flashprefix)/.part_ftpd
 
-$(flashprefix)/.part_ftpd: $(flashprefix)/.flash $(flashprefix)/.part_inetd .ftpd
+$(flashprefix)/.part_ftpd: $(flashprefix)/.flash .ftpd
 	$(INSTALL) -m644 $(targetprefix)/etc/vsftpd.conf $(flashprefix)/root/etc
 	$(INSTALL) $(targetprefix)/sbin/in.ftpd $(flashprefix)/root/sbin
 	$(INSTALL) -d $(flashprefix)/root/share/empty
 	@touch $@
 
-$(flashprefix)/.part_inetd: $(flashprefix)/.flash $(flashprefix)/.part_network .inetd
-	$(INSTALL) $(targetprefix)/sbin/inetd $(flashprefix)/root/sbin
-	@touch $@
-
-flash-telnetd: $(flashprefix)/.part_telnetd
-
-$(flashprefix)/.part_telnetd: $(flashprefix)/.flash $(flashprefix)/.part_inetd $(flashprefix)/.part_tinylogin .netkit_telnet
-	$(INSTALL) $(targetprefix)/sbin/in.telnetd $(flashprefix)/root/sbin
-	@touch $(flashprefix)/.part_telnetd
-
-$(flashprefix)/.part_tinylogin: $(flashprefix)/.flash .tinylogin
-	$(INSTALL) $(targetprefix)/bin/tinylogin $(flashprefix)/root/bin
-	for i in `find $(targetprefix)/sbin/ -lname "*tinylogin"` ; do cp -a $$i $(flashprefix)/root/bin/ ; done
-	@touch $@
-
 flash-ssh: $(flashprefix)/.part_ssh
 
-$(flashprefix)/.part_ssh: $(flashprefix)/.flash $(flashprefix)/.part_network .ssh
+$(flashprefix)/.part_ssh: $(flashprefix)/.flash .ssh
 	$(INSTALL) -d $(flashprefix)/root/etc/ssh
 	cp -ap $(targetprefix)/etc/ssh/ssh_config $(flashprefix)/root/etc/ssh
 	$(INSTALL) $(targetprefix)/bin/ssh $(targetprefix)/bin/scp \
@@ -1436,7 +1371,7 @@ $(flashprefix)/.part_ssh: $(flashprefix)/.flash $(flashprefix)/.part_network .ss
 
 flash-sshd: $(flashprefix)/.part_sshd
 
-$(flashprefix)/.part_sshd: $(flashprefix)/.flash $(flashprefix)/.part_network .ssh
+$(flashprefix)/.part_sshd: $(flashprefix)/.flash .ssh
 	$(INSTALL) -d $(flashprefix)/root/etc/ssh
 	$(INSTALL) -d $(flashprefix)/root/libexec
 	$(INSTALL) -d $(flashprefix)/root/share/empty
@@ -1479,10 +1414,20 @@ flash-enigma: $(flashprefix)/.part_enigma
 $(flashprefix)/.part_enigma: $(flashprefix)/.flash .enigma
 	$(INSTALL) $(targetprefix)/bin/enigma $(flashprefix)/root/bin
 	cp -pa $(targetprefix)/share/tuxbox/enigma $(flashprefix)/root/share/tuxbox
+
 	$(INSTALL) -d $(flashprefix)/root/share/fonts
 	cp -pa $(targetprefix)/share/fonts/blue*.ttf $(targetprefix)/share/fonts/md_khmurabi_10.ttf \
 		$(targetprefix)/share/fonts/pakenham.ttf $(targetprefix)/share/fonts/unmrs.pfa \
 		$(flashprefix)/root/share/fonts
+
+	$(INSTALL) -d $(flashprefix)/root/share/locale
+	for i in `find $(targetprefix)/share/locale -name "tuxbox-enigma.mo"` ; \
+		do cp -ra $${i%%/LC_MESSAGES/*} $(flashprefix)/root/share/locale ; done
+	rm -rf $(flashprefix)/root/share/locale/LC_MESSAGES
+	find $(flashprefix)/root/share/locale -name libc.mo -o -name nano.mo | xargs rm -f
+
+	for i in fonts resources pictures skins ; \
+		do $(INSTALL) -d $(flashprefix)/root/var/tuxbox/config/enigma ; done
 	@touch $@
 
 flash-lcars: $(flashprefix)/.part_lcars
@@ -1602,7 +1547,7 @@ distclean-local:
 	-rm Makefile-archive
 	-rm .bootstrap
 	-rm .directories .linuxdir .binutils .glibc .gcc .rpcgen
-	-rm .etc .busybox .ftpd .ifupdown .inetd .modutils .netkit_telnet .procps .tinylogin .watchdog
+	-rm .etc .busybox .ftpd .modutils .procps .watchdog
 	-rm .libboost .libcommoncplusplus .libcrypto .libcurl .libdb2 .libdvbpsi .libffi .libfreetype
 	-rm .libncurses .libfribidi .libjpeg .libmad .libnet .libnids .libpcap .libpng .libpopt
 	-rm .libreadline .libsdl .libsigc .libxml2 .libxmlwrapp .libz

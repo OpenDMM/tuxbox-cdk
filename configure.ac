@@ -13,67 +13,75 @@ fi
 AC_CANONICAL_TARGET
 AC_SUBST(target)
 
-AC_ARG_WITH(hardwareruleset,
-	[  --with-hardwareruleset=NAME  hardware ruleset [[dbox2,dreambox]]],
-	[hardwareruleset="$withval"],[hardwareruleset="dbox2"])
+AC_ARG_ENABLE(libcrypto,
+	AC_HELP_STRING([--disable-libcrypto], [.libcrypto will not be build by 'make all' (reduces the size of some other libs]),
+	,[enable_libcrypto=yes])
 
-if test "$hardwareruleset" = "dbox2"; then
-	HARDWARERULESET=dbox2
-elif test "$hardwareruleset" = "dreambox"; then
-	HARDWARERULESET=dreambox
-else
-	AC_MSG_ERROR([invalid hardwareruleset "$hardwareruleset", choose on from dbox2 or dreambox]);
-fi
+AM_CONDITIONAL(WITH_LIBCRYPTO,test "$enable_libcrypto" = "yes")
 
-AC_SUBST(HARDWARERULESET)
-AM_CONDITIONAL(HARDWARERULESET_DBOX2,test "$hardwareruleset" = "dbox2")
-AM_CONDITIONAL(HARDWARERULESET_DREAMBOX,test "$hardwareruleset" = "dreambox")
+AC_ARG_ENABLE(flashmodutils,
+	AC_HELP_STRING([--disable-flashmodutils], [disable installation of modutils when targetruleset=flash (insmod lsmod rmmod are covered by busybox]),
+	,[enable_flashmodutils=yes])
+
+AM_CONDITIONAL(WITH_FLASHMODUTILS,test "$enable_flashmodutils" = "yes")
+
+AC_ARG_WITH(cpu,
+	[  --with-cpu=MODEL        cpu model [[823,405]]],
+	[CPU_MODEL="$withval"],[CPU_MODEL="823"])
+
+AC_SUBST(CPU_MODEL)
 
 AC_ARG_WITH(hostruleset,
 	[  --with-hostruleset=NAME host ruleset [[standard,cygwin]]],
-	[hostruleset="$withval"],[hostruleset="standard"])
+	[HOSTRULESET="$withval"],[HOSTRULESET="NULL"])
 
-if test "$host_os" = "cygwin" -a "$hostruleset" = "standard"; then
-	AC_MSG_WARN([overriding standard ruleset])
-	hostruleset="cygwin"
+if test "$HOSTRULESET" = "NULL"; then
+	if test "$host_os" = "cygwin"; then
+		HOSTRULESET="cygwin"
+	else
+		HOSTRULESET="standard"
+	fi
 fi
 
-if test "$hostruleset" = "standard"; then
+if test "$HOSTRULESET" = "standard"; then
 	MAKERULESETFILE=""
-elif test "$hostruleset" = "cygwin"; then
+elif test "$HOSTRULESET" = "cygwin"; then
 	MAKERULESETFILE="-cygwin"
 else
-	AC_MSG_ERROR([invalid hostruleset "$hostruleset", choose on from standard or cygwin]);
+	AC_MSG_ERROR([invalid hostruleset "$HOSTRULESET", choose on from standard or cygwin]);
 fi
 
-AM_CONDITIONAL(HOSTRULESET_STANDARD,test "$hostruleset" = "standard")
-AM_CONDITIONAL(HOSTRULESET_CYGWIN,test "$hostruleset" = "cygwin")
+AC_SUBST(HOSTRULESET)
+AM_CONDITIONAL(HOSTRULESET_STANDARD,test "$HOSTRULESET" = "standard")
+AM_CONDITIONAL(HOSTRULESET_CYGWIN,test "$HOSTRULESET" = "cygwin")
 
 AC_ARG_WITH(targetruleset,
 	[  --with-targetruleset=NAME target ruleset [[standard,flash]]],
-	[targetruleset="$withval"],[targetruleset="standard"])
+	[TARGETRULESET="$withval"],[TARGETRULESET="standard"])
 
-if test "$targetruleset" = "standard"; then
+if test "$TARGETRULESET" = "standard"; then
 	INSTALLRULESETFILE=""
-elif test "$targetruleset" = "flash"; then
+elif test "$TARGETRULESET" = "flash"; then
 	INSTALLRULESETFILE="-flash"
 else
-	AC_MSG_ERROR([invalid targetruleset "$targetruleset", choose on from standard or flash]);
+	AC_MSG_ERROR([invalid targetruleset "$TARGETRULESET", choose on from standard or flash]);
 fi
 
-AM_CONDITIONAL(TARGETRULESET_STANDARD,test "$targetruleset" = "standard")
-AM_CONDITIONAL(TARGETRULESET_FLASH,test "$targetruleset" = "flash")
+AC_SUBST(TARGETRULESET)
+AM_CONDITIONAL(TARGETRULESET_STANDARD,test "$TARGETRULESET" = "standard")
+AM_CONDITIONAL(TARGETRULESET_FLASH,test "$TARGETRULESET" = "flash")
 
 if test -z "$CFLAGS" ; then
 	CFLAGS="-O2"
 fi
 
 if test -z "$TARGET_CFLAGS" -o -z "$TARGET_CXXFLAGS"; then
-	if test "$targetruleset" = "standard"; then
-		TARGET_CFLAGS="-O2 -mcpu=823 -msoft-float -mmultiple -mstring -g -ggdb3 -pipe"
+	TARGET_CFLAGS="-mcpu=$CPU_MODEL -mmultiple -mstring -meabi -pipe"
+	if test "$TARGETRULESET" = "standard"; then
+		TARGET_CFLAGS="$TARGET_CFLAGS -O2 -g3 -gdwarf-2"
 		TARGET_LDFLAGS=""
-	elif test "$targetruleset" = "flash"; then
-		TARGET_CFLAGS="-Os -mcpu=823 -msoft-float -mmultiple -mstring -pipe"
+	elif test "$TARGETRULESET" = "flash"; then
+		TARGET_CFLAGS="$TARGET_CFLAGS -Os"
 		TARGET_LDFLAGS="-s"
 	fi
 	TARGET_CXXFLAGS="$TARGET_CFLAGS"
@@ -112,6 +120,10 @@ AC_SUBST(hostprefix)
 AC_SUBST(buildprefix)
 AC_SUBST(bootprefix)
 AC_SUBST(flashprefix)
+flashprefix_ro=${flashprefix}/ro
+AC_SUBST(flashprefix_ro)
+flashprefix_rw=${flashprefix}/rw
+AC_SUBST(flashprefix_rw)
 
 AC_ARG_WITH(cvsdir,
 	[  --with-cvsdir=DIR       where to find the cvs],
@@ -132,6 +144,10 @@ AC_ARG_WITH(driverdir,
 AC_ARG_WITH(hostapsdir,
 	[  --with-hostappsdir=DIR  hostapps dir from cvs [[[CVS/]hostapps]]],
 	[hostappsdir="$with_driverdir"],[hostappsdir="NONE"])
+
+AC_ARG_WITH(gnuserver,
+	[  --with-gnuserver=ADDRESS   the gnu server for gnu-stuff (without ftp://)],
+	[gnuserver="$with_gnuserver"],[gnuserver="NONE"])
 
 if test "$cvsdir" = "NONE"; then
 	if test "$appsdir" = "NONE"; then
@@ -161,6 +177,10 @@ else
 	fi
 fi
 
+if test "$gnuserver" = "NONE"; then
+	gnuserver="ftp.gwdg.de/pub/misc/gnu"
+fi
+
 AC_MSG_CHECKING([for apps directory])
 if test ! -f "$appsdir/dvb/zapit/configure.ac" ; then
 	appsdir=no
@@ -180,7 +200,7 @@ fi
 AC_MSG_CHECKING([for driver directory])
 if test ! -f "$driverdir/Makefile" ; then
 	driverdir=no
-	AC_MSG_ERROR([no])
+	AC_MSG_RESULT([no])
 else
 	AC_MSG_RESULT([yes])
 fi
@@ -197,6 +217,7 @@ AC_SUBST(appsdir)
 AC_SUBST(bootdir)
 AC_SUBST(driverdir)
 AC_SUBST(hostappsdir)
+AC_SUBST(gnuserver)
 
 if test "$TARGETRULESET" = "flash"; then
 	AC_PATH_PROG(PYTHON,python,no)
@@ -251,13 +272,9 @@ TUXBOX_RULES_MAKE(uclibc)
 #
 TUXBOX_RULES_MAKE(busybox)
 TUXBOX_RULES_MAKE(ftpd)
-TUXBOX_RULES_MAKE(ifupdown)
-TUXBOX_RULES_MAKE(inetd)
 TUXBOX_RULES_MAKE(modutils)
-TUXBOX_RULES_MAKE(netkit_telnet)
 TUXBOX_RULES_MAKE(portmap)
 TUXBOX_RULES_MAKE(procps)
-TUXBOX_RULES_MAKE(tinylogin)
 TUXBOX_RULES_MAKE(watchdog)
 
 #
@@ -348,18 +365,20 @@ ${srcdir}/rules-archive.pl ${srcdir}/rules-archive > Makefile-archive
 # summary
 #
 AC_MSG_RESULT([
-Summary:
-Hardwareruleset:	$hardwareruleset
-Hostruleset:		$hostruleset
-Targetruleset:		$targetruleset
-Targetprefix:		$targetprefix
-Hostprefix:		$hostprefix
-Bootprefix:		$bootprefix
-Buildprefix:		$buildprefix
-Appsdir:		$appsdir
-Bootdir:		$bootdir
-Driverdir:		$driverdir
-Hostappsdir:		$hostappsdir
+summary:
+----------------------------------------
+target cpu:		$CPU_MODEL
+host rule set:		$HOSTRULESET
+target rule set:	$TARGETRULESET
+target prefix:		$targetprefix
+host prefix:		$hostprefix
+boot prefix:		$bootprefix
+build prefix:		$buildprefix
+target apps directory:	$appsdir
+boot directory:		$bootdir
+driver directory:	$driverdir
+host apps directory:	$hostappsdir
+GNU server:		$gnuserver
 ])
 
 AC_OUTPUT([
