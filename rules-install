@@ -43,6 +43,7 @@ libdb2;make:install:DESTDIR=TARGET
 libdvbpsi;make:install:DESTDIR=TARGET
 libffi;make:install
 libfreetype;make:install;link:TARGET/bin/freetype-config:HOST/bin/freetype-config
+libfribidi;rewrite-pkgconfig:fribidi.pc;make:install:DESTDIR=TARGET
 libjpeg;make:install-lib:install-headers
 libmad;make:install
 libncurses;make:install.libs:install.includes:DESTDIR=TARGET
@@ -51,14 +52,14 @@ libnids;make:install
 libpcap;make:install
 libpopt;make:install
 libpng;make:install-static:install-shared:install-config:prefix=TARGET;link:TARGET/bin/libpng-config:HOST/bin/libpng-config
-libqt;install:src/moc/moc:HOST/bin
-libreadline;make:install
-libsdl;make:install;link:TARGET/bin/sdl-config:HOST/bin/sdl-config
-libsigc;make:install
-libxml2;make:install;link:TARGET/bin/xml2-config:HOST/bin/xml2-config
+libreadline;make:install:DESTDIR=TARGET
+libsdl;make:install:DESTDIR=TARGET
+libsigc;rewrite-pkgconfig:sigc++-1.2.pc;make:install:DESTDIR=TARGET
+libvorbisidec;make:install:DESTDIR=TARGET
 libxmlparse;make:install
 libxmlwrapp;make:install;link:TARGET/bin/xmlwrapp-config:HOST/bin/xmlwrapp-config
-libz;make:install
+libxml2;rewrite-pkgconfig:libxml-2.0.pc;make:install:DESTDIR=TARGET
+libz;make:install:prefix=TARGET
 
 #
 # contrib apps
