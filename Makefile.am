@@ -2002,7 +2002,7 @@ if BOXTYPE_DM500
 	$(flashprefix)/mkcramfs-e -eb $(flashprefix)/boot $(flashprefix)/boot-cramfs.img
 	mv ./bild $(flashprefix)/boot/root/platform/kernel
 endif
-	@if [ `find $(flashprefix)/boot-cramfs.img -printf "%s"` -gt 1179648 ]; then \
+	@if [ `stat -c %s $(flashprefix)/boot-cramfs.img` -gt 1179648 ]; then \
 		echo "ERROR: CramFS part is too big for image (max. allowed 1179648 bytes)"; \
 		rm -f $(flashprefix)/boot-cramfs.img.too-big 2> /dev/null || /bin/true; \
 		mv $(flashprefix)/boot-cramfs.img $(flashprefix)/boot-cramfs.img.too-big; \
@@ -2011,7 +2011,7 @@ endif
 
 $(flashprefix)/root-squashfs.img:
 	$(flashprefix)/mksquashfs $(flashprefix)/root $(flashprefix)/root-squashfs.img -be -all-root
-	@if [ `find $(flashprefix)/root-squashfs.img -printf "%s"` -gt 5111808 ]; then \
+	@if [ `stat -c %s $(flashprefix)/root-squashfs.img` -gt 5111808 ]; then \
 		echo "ERROR: SquashFS part is too big for image (max. allowed 5111808 bytes)"; \
 		rm -f $(flashprefix)/root-squashfs.img.too-big 2> /dev/null || /bin/true; \
 		mv $(flashprefix)/root-squashfs.img $(flashprefix)/root-squashfs.img.too-big; \
