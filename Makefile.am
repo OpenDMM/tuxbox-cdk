@@ -83,7 +83,7 @@ bootstrap_gcc: @DEPENDS_bootstrap_gcc@
 	fi
 	@PREPARE_bootstrap_gcc@
 	$(INSTALL) -d $(hostprefix)/$(target)/sys-include
-	ln -sf $(buildprefix)/@DIR_linux@/include/asm $(hostprefix)/$(target)/sys-include/
+	ln -sf $(buildprefix)/linux/include/asm $(hostprefix)/$(target)/sys-include/
 	cd @DIR_bootstrap_gcc@ && \
 		CC=$(CC) CFLAGS="$(CFLAGS)" \
 		@CONFIGURE_bootstrap_gcc@ \
@@ -103,39 +103,6 @@ bootstrap_gcc: @DEPENDS_bootstrap_gcc@
 	rm -rf $(hostprefix)/$(target)/sys-include
 	@CLEANUP_bootstrap_gcc@
 
-#
-# gcc first stage without glibc (2.95)
-#
-bootstrap_gcc_2_95: @DEPENDS_bootstrap_gcc_2_95@
-	@if [ ! -d $(hostprefix)/$(target)/bin/as ]; then \
-		$(MAKE) .binutils; \
-	fi
-	@PREPARE_bootstrap_gcc_2_95@
-	$(INSTALL) -d $(hostprefix)/$(target)/sys-include
-	ln -sf $(buildprefix)/@DIR_linux@/include/asm $(hostprefix)/$(target)/sys-include/
-	cd @DIR_bootstrap_gcc_2_95@ && \
-		CC=$(CC) CFLAGS="$(CFLAGS)" \
-		@CONFIGURE_bootstrap_gcc_2_95@ \
-			--build=$(build) \
-			--host=$(build) \
-			--target=$(target) \
-			--prefix=$(hostprefix) \
-			--with-newlib \
-			--with-cpu=823 \
-			--enable-target-optspace \
-			--enable-languages="c" \
-			--disable-shared \
-			--disable-nls \
-			--nfp && \
-		$(MAKE) all && \
-		@INSTALL_bootstrap_gcc_2_95@
-	rm -rf $(hostprefix)/$(target)/sys-include
-	@CLEANUP_bootstrap_gcc_2_95@
-
-.rpcgen: .bootstrap
-	$(RPCGEN) -h -o $(targetprefix)/include/rpcsvc/yppasswd.h $(targetprefix)/include/rpcsvc/yppasswd.x
-	touch .rpcgen
-
 .glibc: @DEPENDS_glibc@
 	@if [ ! -f $(hostprefix)/$(target)/lib/libc.so -a ! -f $(hostprefix)/bin/$(target)-gcc ]; then \
 		$(MAKE) bootstrap_gcc; \
@@ -153,7 +120,7 @@ bootstrap_gcc_2_95: @DEPENDS_bootstrap_gcc_2_95@
 			--build=$(build) \
 			--host=$(target) \
 			--prefix= \
-			--with-headers=$(buildprefix)/@DIR_linux@/include \
+			--with-headers=$(buildprefix)/linux/include \
 			--enable-kernel=$(KERNELVERSION) \
 			--disable-profile \
 			--enable-shared \
@@ -1418,7 +1385,7 @@ $(appsdir)/tuxbox/neutrino/Makefile: .bootstrap .libcurl .libfreetype .misc_libs
 
 # tuxbox/plugins
 
-$(appsdir)/tuxbox/plugins/Makefile: .bootstrap
+$(appsdir)/tuxbox/plugins/Makefile: .bootstrap .libcurl
 	cd $(appsdir)/tuxbox/plugins && $(CONFIGURE)
 
 .plugins: $(appsdir)/tuxbox/plugins/Makefile
