@@ -33,7 +33,7 @@ Prerequistes:
  - gcc 2.95 or >= 3.0
  - g++ 2.95 or >= 3.0
  - yacc
- - flex
+ - flex (flex-old if you are using debian sarge or newer)
  - bison
  - pkg-config
 
