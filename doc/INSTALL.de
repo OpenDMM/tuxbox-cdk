@@ -88,7 +88,7 @@ make boot
  - ... und anschliessend
 
 make .neutrino
-make .edvb
+make .enigma
 make .lcars
 make .lcdmenu
 make .stream
