@@ -1280,7 +1280,7 @@ CONFIGURE = \
 # dvb/svbsnoop
 
 $(appsdir)/dvb/dvbsnoop/Makefile: .bootstrap
-	cd $(appsdir)/dvb/dvbsnoop && $(CONFIGURE)
+	cd $(appsdir)/dvb/dvbsnoop && $(CONFIGURE) CPPFLAGS="$(CPPFLAGS) -I$(driverdir)/include"
 
 .dvbsnoop: $(appsdir)/dvb/dvbsnoop/Makefile
 	$(MAKE) -C $(appsdir)/dvb/dvbsnoop all install

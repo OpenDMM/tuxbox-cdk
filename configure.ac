@@ -81,7 +81,7 @@ fi
 if test -z "$TARGET_CFLAGS" -o -z "$TARGET_CXXFLAGS"; then
 	TARGET_CFLAGS="-mcpu=$CPU_MODEL -mmultiple -mstring -meabi -pipe"
 	if test "$TARGETRULESET" = "standard"; then
-		TARGET_CFLAGS="$TARGET_CFLAGS -O2 -g3 -gdwarf-2"
+		TARGET_CFLAGS="$TARGET_CFLAGS -O2 -ggdb3"
 		TARGET_LDFLAGS=""
 	elif test "$TARGETRULESET" = "flash"; then
 		TARGET_CFLAGS="$TARGET_CFLAGS -Os"

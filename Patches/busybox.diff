@@ -1,26 +1,7 @@
-diff -urN busybox-1.00-pre3.orig/init/init.c busybox-1.00-pre3/init/init.c
---- busybox-1.00-pre3.orig/init/init.c	2003-09-11 10:51:32.000000000 +0200
-+++ busybox-1.00-pre3/init/init.c	2003-09-19 20:32:59.000000000 +0200
-@@ -236,6 +236,10 @@
- 	msg[l] = 0;
- #else
- 
-+#ifdef CONFIG_NOLOG
-+	log_fd = -2;
-+	device = CONSOLE;
-+#else
- 	msg[l++] = '\n';
- 	msg[l] = 0;
- 	/* Take full control of the log tty, and never close it.
-@@ -253,6 +257,7 @@
- 		bb_full_write(log_fd, msg, l);
- 	}
- #endif
-+#endif
- 
- 	if (device & CONSOLE) {
- 		int fd = device_open(_PATH_CONSOLE,
-@@ -376,7 +381,7 @@
+diff -Naur busybox-1.00-pre7/init/init.c busybox-1.00-pre7-dbox2/init/init.c
+--- busybox-1.00-pre7/init/init.c	2003-09-26 12:45:55.000000000 +0200
++++ busybox-1.00-pre7-dbox2/init/init.c	2004-02-22 16:13:00.000000000 +0100
+@@ -376,7 +376,7 @@
  	while ((fd = open(console, O_RDONLY | O_NONBLOCK)) < 0 && tried < 2) {
  		/* Can't open selected console -- try
  			logical system console and VT_MASTER */
@@ -29,9 +10,29 @@ diff -urN busybox-1.00-pre3.orig/init/init.c busybox-1.00-pre3/init/init.c
  							sizeof(console));
  		tried++;
  	}
-diff -urN busybox-1.00-pre3.orig/libbb/messages.c busybox-1.00-pre3/libbb/messages.c
---- busybox-1.00-pre3.orig/libbb/messages.c	2003-09-02 04:36:11.000000000 +0200
-+++ busybox-1.00-pre3/libbb/messages.c	2003-09-19 20:32:03.000000000 +0200
+@@ -629,15 +629,12 @@
+ 
+ 	pid = run(a);
+ 	while (1) {
+-		wpid = waitpid(pid,&status,0);
++		wpid = wait(&status);
++		if (wpid > 0 && wpid != pid) {
++			continue;
++		}
+ 		if (wpid == pid)
+ 			break;
+-		if (wpid == -1 && errno == ECHILD) {
+-			/* we missed its termination */
+-			break;
+-		}
+-		/* FIXME other errors should maybe trigger an error, but allow
+-		 * the program to continue */
+ 	}
+ 	return wpid;
+ }
+diff -Naur busybox-1.00-pre7/libbb/messages.c busybox-1.00-pre7-dbox2/libbb/messages.c
+--- busybox-1.00-pre7/libbb/messages.c	2003-09-02 04:36:11.000000000 +0200
++++ busybox-1.00-pre7-dbox2/libbb/messages.c	2004-02-22 16:11:11.000000000 +0100
 @@ -56,27 +56,47 @@
  #endif
  
@@ -85,39 +86,39 @@ diff -urN busybox-1.00-pre3.orig/libbb/messages.c busybox-1.00-pre3/libbb/messag
  const char * const bb_path_nologin_file = NOLOGIN_FILE;
  #endif
  
-diff -urN busybox-1.00-pre3.orig/networking/ifupdown.c busybox-1.00-pre3/networking/ifupdown.c
---- busybox-1.00-pre3.orig/networking/ifupdown.c	2003-09-12 10:42:16.000000000 +0200
-+++ busybox-1.00-pre3/networking/ifupdown.c	2003-10-27 09:22:35.000000000 +0100
-@@ -1047,9 +1047,9 @@
- 	int result;
- 	if (!iface->method->up(iface,check)) return -1;
- 	set_environ(iface, "start");
--	result = execute_all(iface, doit, "pre-up");
--	result += iface->method->up(iface, doit);
--	result += execute_all(iface, doit, "up");
-+//	result = execute_all(iface, doit, "pre-up");
-+	result = iface->method->up(iface, doit);
-+//	result += execute_all(iface, doit, "up");
- 	return(result);
- }
+diff -Naur busybox-1.00-pre7/networking/ifupdown.c busybox-1.00-pre7-dbox2/networking/ifupdown.c
+--- busybox-1.00-pre7/networking/ifupdown.c	2003-12-19 11:46:00.000000000 +0100
++++ busybox-1.00-pre7-dbox2/networking/ifupdown.c	2004-02-22 16:11:11.000000000 +0100
+@@ -1022,7 +1022,7 @@
  
-@@ -1058,9 +1058,9 @@
- 	int result;
- 	if (!iface->method->down(iface,check)) return -1;
- 	set_environ(iface, "stop");
--	result = execute_all(iface, doit, "down");
--	result += iface->method->down(iface, doit);
--	result += execute_all(iface, doit, "post-down");
-+//	result = execute_all(iface, doit, "down");
-+	result = iface->method->down(iface, doit);
-+//	result += execute_all(iface, doit, "post-down");
- 	return(result);
- }
+ static int execute_all(struct interface_defn_t *ifd, execfn *exec, const char *opt)
+ {
+-	int i;
++	int i, fd;
+ 	char *buf;
+ 	for (i = 0; i < ifd->n_options; i++) {
+ 		if (strcmp(ifd->option[i].name, opt) == 0) {
+@@ -1031,9 +1031,13 @@
+ 			}
+ 		}
+ 	}
+-	
+-	bb_xasprintf(&buf, "run-parts /etc/network/if-%s.d", opt);
+-	(*exec)(buf);
++
++	bb_xasprintf(&buf, "/etc/network/if-%s.d", opt);
++	if ((fd = open(buf, O_RDONLY)) >= 0) {
++		close(fd);
++		bb_xasprintf(&buf, "run-parts /etc/network/if-%s.d", opt);
++		(*exec)(buf);
++	}
  
-diff -urN busybox-1.00-pre3.orig/sysdeps/linux/Config.in busybox-1.00-pre3/sysdeps/linux/Config.in
---- busybox-1.00-pre3.orig/sysdeps/linux/Config.in	2003-08-05 04:18:20.000000000 +0200
-+++ busybox-1.00-pre3/sysdeps/linux/Config.in	2003-09-19 20:32:03.000000000 +0200
-@@ -187,6 +187,14 @@
+ 	return (1);
+ }
+diff -Naur busybox-1.00-pre7/sysdeps/linux/Config.in busybox-1.00-pre7-dbox2/sysdeps/linux/Config.in
+--- busybox-1.00-pre7/sysdeps/linux/Config.in	2003-10-22 11:58:50.000000000 +0200
++++ busybox-1.00-pre7-dbox2/sysdeps/linux/Config.in	2004-02-22 16:11:11.000000000 +0100
+@@ -195,6 +195,14 @@
  	  if you want to add some simple compiler switches (like -march=i686),
  	  or check for warnings using -Werror, just those options here.
  
@@ -132,21 +133,3 @@ diff -urN busybox-1.00-pre3.orig/sysdeps/linux/Config.in busybox-1.00-pre3/sysde
  endmenu
  
  menu 'Installation Options'
-diff -urN busybox-1.00-pre3.orig/sysklogd/Config.in busybox-1.00-pre3/sysklogd/Config.in
---- busybox-1.00-pre3.orig/sysklogd/Config.in	2003-07-26 10:20:46.000000000 +0200
-+++ busybox-1.00-pre3/sysklogd/Config.in	2003-09-19 20:32:19.000000000 +0200
-@@ -78,5 +78,14 @@
- 	    they can be logged.  This is generally used to help locate
- 	    problems that occur within programs and scripts.
- 
-+config CONFIG_NOLOG
-+	bool "Disable log on any tty"
-+	default n
-+	help
-+	    This only make sense if CONFIG_SYSLOGD is disabled.
-+	    Normally log will be written to tty and only fully disabled,
-+	    if write to it does not work. With this option it is every
-+	    time disabled.
-+
- endmenu
- 
