@@ -1509,8 +1509,10 @@ $(flashprefix)/.part_plugins: $(flashprefix)/.flash .plugins
 flash-lcdmenu: $(flashprefix)/.part_lcdmenu
 
 $(flashprefix)/.part_lcdmenu: $(flashprefix)/.flash .lcdmenu
+	$(INSTALL) -d $(flashprefix)/root/share/fonts
 	$(INSTALL) $(targetprefix)/bin/lcdmenu $(flashprefix)/root/bin
 	cp -pa $(targetprefix)/var/tuxbox/config/lcdmenu.conf $(flashprefix)/root/var/tuxbox/config
+	cp -pa $(targetprefix)/share/fonts/micron.ttf $(flashprefix)/root/share/fonts
 	@touch $@
 
 flash-lib: $(flashprefix)/.lib
