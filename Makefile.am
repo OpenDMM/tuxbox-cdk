@@ -1491,43 +1491,48 @@ flash-enigma: $(flashprefix)/.part_enigma
 $(flashprefix)/.part_enigma: $(flashprefix)/.flash .enigma
 	$(INSTALL) $(targetprefix)/bin/enigma $(flashprefix)/root/bin
 
-	$(INSTALL) -d $(flashprefix)/root/share/tuxbox
-	ln -sf /etc/cables.xml $(flashprefix)/root/share/tuxbox
-	ln -sf /etc/satellites.xml $(flashprefix)/root/share/tuxbox
-	cp -pa $(targetprefix)/share/tuxbox/enigma $(flashprefix)/root/share/tuxbox
-
 	$(INSTALL) -d $(flashprefix)/root/share/fonts
-	cp -pa $(targetprefix)/share/fonts/blue*.ttf $(targetprefix)/share/fonts/md_khmurabi_10.ttf \
-		$(targetprefix)/share/fonts/pakenham.ttf $(targetprefix)/share/fonts/unmrs.pfa \
-		$(flashprefix)/root/share/fonts
+	for i in blue*.ttf md_khmurabi_10.ttf pakenham.ttf unmrs.pfa ; do \
+		$(INSTALL) -m644 $(targetprefix)/share/fonts/$$i $(flashprefix)/root/share/fonts ; done
 
 	$(INSTALL) -d $(flashprefix)/root/share/locale
 	for i in `find $(targetprefix)/share/locale -name "tuxbox-enigma.mo"` ; \
-		do cp -ra $${i%%/LC_MESSAGES/*} $(flashprefix)/root/share/locale ; done
+		do cp -pa $${i%%/LC_MESSAGES/*} $(flashprefix)/root/share/locale ; done
 	rm -rf $(flashprefix)/root/share/locale/LC_MESSAGES
 	find $(flashprefix)/root/share/locale -name libc.mo -o -name nano.mo | xargs rm -f
 
-	$(INSTALL) -d $(flashprefix)/root/var/tuxbox/plugins
-	cp -a $(targetprefix)/var/tuxbox/config/*.lirc $(flashprefix)/root/var/tuxbox/config
+	$(INSTALL) -d $(flashprefix)/root/share/tuxbox/enigma
+	cp -pa $(targetprefix)/share/tuxbox/enigma/* $(flashprefix)/root/share/tuxbox/enigma
+	for i in cables.xml satellites.xml ; do \
+		ln -sf /etc/$$i $(flashprefix)/root/share/tuxbox ; done
+	
+	$(INSTALL) -d $(flashprefix)/root/share/zoneinfo
+	$(INSTALL) -m644 $(targetprefix)/share/zoneinfo/* $(flashprefix)/root/share/zoneinfo
+	rm -f $(flashprefix)/root/share/zoneinfo/*tab
+
+	$(INSTALL) -d $(flashprefix)/root/var/tuxbox/config/enigma
 	for i in fonts resources pictures skins ; \
 		do $(INSTALL) -d $(flashprefix)/root/var/tuxbox/config/enigma/$$i ; done
 
-	cp -a $(targetprefix)/etc/timezone.xml $(flashprefix)/root/etc
+	$(INSTALL) -m644 $(targetprefix)/etc/timezone.xml $(flashprefix)/root/etc
+	ln -sf /var/etc/localtime $(flashprefix)/root/etc
 
+if CPU_MODEL_823
+	$(INSTALL) $(targetprefix)/var/tuxbox/config/*.lirc $(flashprefix)/root/var/tuxbox/config
+endif
 if CPU_MODEL_405
 	$(INSTALL) $(targetprefix)/sbin/hotplug $(flashprefix)/root/sbin
-	for i in hdd root/platform/kernel var/etc/ppp var/log var/mnt/nfs var/mnt/usb var/run ; do \
+	for i in hdd root/platform/kernel var/bin var/etc/ppp var/log var/mnt/nfs var/mnt/usb var/run ; do \
 		$(INSTALL) -d $(flashprefix)/root/$$i ; done
 	mv $(flashprefix)/root/etc/cables.xml $(flashprefix)/root/share/tuxbox
 	mv $(flashprefix)/root/etc/satellites.xml $(flashprefix)/root/share/tuxbox
 	ln -sf /var/mnt $(flashprefix)/root
 	ln -sf /tmp $(flashprefix)/root/var
-	touch $(flashprefix)/root/var/.init
 	for i in group hosts passwd ; do \
 		mv $(flashprefix)/root/etc/$$i $(flashprefix)/root/var/etc ; \
 		ln -sf ../var/etc/$$i $(flashprefix)/root/etc ; done
-	ln -sf ../var/etc/smb.conf $(flashprefix)/root/etc
-	ln -sf ../var/etc/ppp/resolv.conf $(flashprefix)/root/etc
+	ln -sf /var/etc/smb.conf $(flashprefix)/root/etc
+	ln -sf /var/etc/ppp/resolv.conf $(flashprefix)/root/etc
 	@echo "none		/proc/bus/usb	usbdevfs	defaults	0 0" >> $(flashprefix)/root/etc/fstab
 endif
 	@touch $@
@@ -1546,11 +1551,12 @@ flash-plugins: $(flashprefix)/.part_plugins
 
 $(flashprefix)/.part_plugins: $(flashprefix)/.flash .plugins
 	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/* $(flashprefix)/root/lib/tuxbox/plugins/
+	$(INSTALL) -d $(flashprefix)/root/share/fonts
+	$(INSTALL) -m644 $(targetprefix)/share/fonts/tuxtxt?.fon $(flashprefix)/root/share/fonts/
 	$(INSTALL) -d $(flashprefix)/root/var/tuxbox/config/tuxtxt
-	cp -pa $(targetprefix)/lib/tuxbox/plugins/* $(flashprefix)/root/lib/tuxbox/plugins/
-	cp -pa $(targetprefix)/share/fonts/tuxtxt?.fon $(flashprefix)/root/share/fonts/
-	cp -pa $(targetprefix)/var/tuxbox/config/games.cfg $(flashprefix)/root/var/tuxbox/config/
-	cp -pa $(targetprefix)/var/tuxbox/config/tuxtxt/tuxtxt.conf $(flashprefix)/root/var/tuxbox/config/tuxtxt/
+	$(INSTALL) $(targetprefix)/var/tuxbox/config/tuxtxt/tuxtxt.conf $(flashprefix)/root/var/tuxbox/config/tuxtxt/
+	$(INSTALL) $(targetprefix)/var/tuxbox/config/games.cfg $(flashprefix)/root/var/tuxbox/config/
 	@touch $@
 
 flash-lcdmenu: $(flashprefix)/.part_lcdmenu
