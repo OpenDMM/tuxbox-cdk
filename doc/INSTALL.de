@@ -18,6 +18,19 @@
 
 Prerequisiten:
 --------------
+(Kurze Anmerkung von TheDOC:
+Da das aktuelle CDK mal wieder nicht mit den aktuellen Versionen von
+dem automake/-conf etc. zusammenarbeitet, hier meine Versionen, mit
+denen es geht:
+
+autoconf: 2.52
+automake: 1.4-p4
+libtool: 1.4.2
+gettext: 0.10.40
+make: 3.79.1
+
+Viel Erfolg. Nun geht's weiter in der Anleitung von Herrn obi)
+
  - cvs
  - autoconf >= 2.50
  - automake >= 1.4p5
