@@ -1376,7 +1376,7 @@ $(flashprefix)/.flash: .busybox .driver .modutils
 	$(INSTALL) -d $(flashprefix)/root/share/tuxbox/image
 	$(INSTALL) -d $(flashprefix)/root/var/tuxbox/config
 if CPU_MODEL_823
- 	$(INSTALL) -d $(flashprefix)/root/var/tuxbox/ucodes
+	$(INSTALL) -d $(flashprefix)/root/var/tuxbox/ucodes
 endif
 	$(INSTALL) -d $(flashprefix)/root/tmp
 	$(MAKE) -C etc install targetprefix=$(flashprefix)/root
@@ -1537,6 +1537,7 @@ $(flashprefix)/.lib: $(flashprefix)/.flash $(shell ls -1 $(flashprefix)/.part_*)
 	@$(PYTHON) mklibs.py --target $(target) --ldlib ld.so.1 --libc-extras-dir $(targetprefix)/lib/libc_pic \
 		-d $(flashprefix)/root/lib \
 		-D -L $(targetprefix)/lib \
+		--root $(flashprefix)/root \
 		`find $(flashprefix)/root/bin/ -path "*bin/?*"` \
 		`find $(flashprefix)/root/lib/ -name "libnss_*"` \
 		`find $(flashprefix)/root/lib/tuxbox/ -name "*.so" -type f` \
