@@ -579,10 +579,20 @@ libs_optional: \
 	@CLEANUP_libpcap@
 	touch .libpcap
 
+#.libpng: .bootstrap .libz @DEPENDS_libpng@
+#	@PREPARE_libpng@
+#	cd @DIR_libpng@ && \
+#		$(MAKE) all CC=$(target)-gcc CFLAGS="$(TARGET_CFLAGS) -DPNG_DEBUG=0" && \
+#		@INSTALL_libpng@
+#	@CLEANUP_libpng@
+#	touch .libpng
+
 .libpng: .bootstrap .libz @DEPENDS_libpng@
 	@PREPARE_libpng@
 	cd @DIR_libpng@ && \
-		$(MAKE) all CC=$(target)-gcc CFLAGS="$(TARGET_CFLAGS) -DPNG_DEBUG=0" && \
+		$(MAKE) libpng.a libpng12.so libpng.pc libpng-config \
+			CPPFLAGS="-DPNG_DEBUG=0" \
+			prefix=$(targetprefix) && \
 		@INSTALL_libpng@
 	@CLEANUP_libpng@
 	touch .libpng

@@ -49,7 +49,7 @@ libnet;make:install;install:-m755:libnet-config:TARGET/bin/libnet-config;link:TA
 libnids;make:install
 libpcap;make:install
 libpopt;make:install
-libpng;make:install:prefix=TARGET
+libpng;make:install-static:install-shared:install-config:prefix=TARGET;link:TARGET/bin/libpng-config:HOST/bin/libpng-config
 libqt;install:src/moc/moc:HOST/bin
 libreadline;make:install
 libsdl;make:install;link:TARGET/bin/sdl-config:HOST/bin/sdl-config

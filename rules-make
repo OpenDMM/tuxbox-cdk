@@ -51,7 +51,7 @@ libncurses;5.2;ncurses-5.2;ncurses-5.2.tar.gz:ncurses.diff;extract:ncurses-5.2.t
 libnet;1.0.2a;Libnet-1.0.2a;libnet-1.0.2a.tar.gz:libnet.diff;extract:libnet-1.0.2a.tar.gz;patch:libnet.diff
 libnids;1.16;libnids-1.16;libnids-1.16.tar.gz;extract:libnids-1.16.tar.gz
 libpcap;0.7.1;libpcap-0.7.1;libpcap-0.7.1.tar.gz;extract:libpcap-0.7.1.tar.gz;patch:libpcap.diff
-libpng;1.0.14;libpng-1.0.14;libpng-1.0.14.tar.gz:libpng.diff;extract:libpng-1.0.14.tar.gz;patch:libpng.diff
+libpng;1.2.5;libpng-1.2.5;libpng-1.2.5.tar.gz:libpng.diff;extract:libpng-1.2.5.tar.gz;patch:libpng.diff
 libpopt;1.6.4;popt-1.6.4;popt-1.6.4.tar.gz;extract:popt-1.6.4.tar.gz
 libqt;2.3.0;qt-2.3.0;qt-embedded-2.3.0.tar.gz:qte.diff;extract:qt-embedded-2.3.0.tar.gz;patch:qte.diff
 libreadline;4.3;readline-4.3;readline-4.3.tar.gz:readline.diff;extract:readline-4.3.tar.gz;patch:readline.diff
