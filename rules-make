@@ -83,7 +83,7 @@ thttpd;2.23beta1;thttpd-2.23beta1;thttpd-2.23beta1.tar.gz;extract:thttpd-2.23bet
 gdb;5.3;gdb-5.3;gdb-5.3.tar.bz2;extract:gdb-5.3.tar.bz2
 ltrace;0.3.26;ltrace-0.3.26;ltrace_0.3.26.tar.gz;extract:ltrace_0.3.26.tar.gz;patch:ltrace.diff
 strace;4.4;strace-4.4;strace_4.4-1.tar.gz:strace.diff;extract:strace_4.4-1.tar.gz;patch:strace.diff
-nano;1.0.7;nano-1.0.7;nano-1.0.7.tar.gz;extract:nano-1.0.7.tar.gz
+nano;1.0.7;nano-1.0.7;nano-1.0.7.tar.gz:nano.diff;extract:nano-1.0.7.tar.gz;patch:nano.diff
 
 #
 # java
