@@ -1293,7 +1293,7 @@ $(appsdir)/misc/libs/Makefile: .bootstrap .libz
 
 # tuxbox/enigma
 
-$(appsdir)/tuxbox/enigma/Makefile: .bootstrap .libfreetype .libfribidi .libmad .libpng .libsigc .misc_libs .plugins
+$(appsdir)/tuxbox/enigma/Makefile: .bootstrap .libfreetype .libfribidi .libmad .libpng .libsigc .libtuxbox .misc_libs .plugins
 	cd $(appsdir)/tuxbox/enigma && $(CONFIGURE)
 
 .enigma: $(appsdir)/tuxbox/enigma/Makefile .tuxbox_tools
@@ -1327,9 +1327,18 @@ $(appsdir)/tuxbox/libs/Makefile: .bootstrap .libfreetype
 	$(MAKE) -C $(appsdir)/tuxbox/libs all install
 	touch .tuxbox_libs
 
+# tuxbox/libtuxbox
+
+$(appsdir)/tuxbox/libtuxbox/config.status: .bootstrap
+	cd $(appsdir)/tuxbox/libtuxbox && $(CONFIGURE)
+
+.libtuxbox: $(appsdir)/tuxbox/libtuxbox/config.status
+	$(MAKE) -C $(appsdir)/tuxbox/libtuxbox all install
+	touch $@
+
 # tuxbox/neutrino
 
-$(appsdir)/tuxbox/neutrino/Makefile: .bootstrap .libboost .libcurl .libfreetype .misc_libs .plugins .tuxbox_libs .zapit
+$(appsdir)/tuxbox/neutrino/Makefile: .bootstrap .libboost .libcurl .libfreetype .libtuxbox .misc_libs .plugins .tuxbox_libs .zapit
 	cd $(appsdir)/tuxbox/neutrino && $(CONFIGURE)
 
 .neutrino: $(appsdir)/tuxbox/neutrino/Makefile
@@ -1347,7 +1356,7 @@ $(appsdir)/tuxbox/plugins/Makefile: .bootstrap .libcurl .libpng
 
 # tuxbox/tools
 
-$(appsdir)/tuxbox/tools/Makefile: .bootstrap
+$(appsdir)/tuxbox/tools/Makefile: .bootstrap .libtuxbox
 	cd $(appsdir)/tuxbox/tools && $(CONFIGURE)
 
 .camd: $(appsdir)/tuxbox/tools/Makefile
@@ -1601,7 +1610,7 @@ distclean-local:
 	-rm .camd .dvbsnoop .enigma .lcars .lcdmenu .neutrino .stream .zapit
 	-rm .console_data .console_tools .dsniff .fbset .lirc .pump .ssh .tcpdump .xrc .thttpd
 	-rm .dvbdate .dvbstream .dvbtext .dvbtune .vls
-	-rm .misc_libs .plugins .tuxbox_libs .tuxbox_tools
+	-rm .misc_libs .misc_tools .plugins .libtuxbox .tuxbox_libs .tuxbox_tools
 	-rm -rf $(targetprefix)
 	-rm -rf $(hostprefix)
 if TARGETRULESET_FLASH
