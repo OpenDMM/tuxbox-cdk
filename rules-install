@@ -92,6 +92,7 @@ insight;make:install-gdb:prefix=TARGET
 ltrace;make:install:DESTDIR=TARGET
 strace;make:install
 nano;make:install:DESTDIR=TARGET
+joe;make:install:prefix=TARGET
 
 #
 # java

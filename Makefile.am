@@ -1072,7 +1072,7 @@ contrib_apps_optional: .dsniff .pump .thttpd
 #   development tools
 #
 
-devel: .gdb .ltrace .strace .nano
+devel: .gdb .ltrace .strace .nano .joe
 devel_optional: .gdb-remote .insight .ksymoops
 
 .gdb: .bootstrap .libncurses @DEPENDS_gdb@
@@ -1169,7 +1169,20 @@ devel_optional: .gdb-remote .insight .ksymoops
 		@INSTALL_nano@
 	@CLEANUP_nano@
 	touch $@
-
+.joe: .bootstrap .libncurses @DEPENDS_joe@ 
+	@PREPARE_joe@
+	cd @DIR_joe@ && \
+		$(BUILDENV) \
+		./configure \
+		--build=$(build) \
+		--host=$(target) \
+		--prefix=  \
+		--includedir=$(targetprefix)/include && \
+		$(MAKE) all && \
+		@INSTALL_joe@
+		@CLEANUP_joe@
+		touch $@
+																								
 #######################
 #
 # java stuff
@@ -1719,6 +1732,14 @@ endif
 
 	$(INSTALL) -m644 $(targetprefix)/etc/timezone.xml $(flashprefix)/root/etc
 	ln -sf /var/etc/localtime $(flashprefix)/root/etc
+	@touch $@
+
+flash-joe: $(flashprefix)/.part_joe
+$(flashprefix)/.part_joe: $(flashprefix)/.flash .joe
+	$(INSTALL) -d $(flashprefix)/root/etc/joe
+	cp -ap $(targetprefix)/etc/joe/* $(flashprefix)/root/etc/joe/
+	$(INSTALL) $(targetprefix)/bin/joe $(flashprefix)/root/bin
+	$(target)-strip --strip-all $(flashprefix)/root/bin/joe
 	@touch $@
 
 flash-ssh: $(flashprefix)/.part_ssh
