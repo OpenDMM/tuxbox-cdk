@@ -287,12 +287,12 @@ OPTIONAL_LIBCRYPTO = .libcrypto
 endif
 
 libs: \
-	$(OPTIONAL_LIBCRYPTO) .libcurl .libdvbpsi .libffi .libfreetype .libjpeg \
+	$(OPTIONAL_LIBCRYPTO) .libcurl .libdvbpsi .libffi .libfreetype .libjpeg .giflib \
 	.libmad .libid3tag .libncurses .libpng .libreadline .libsdl .libsigc .libz .libvorbisidec
 
 libs_optional: \
 	.libcommoncplusplus .libdb2 .libnet .libnids .libpcap .libpopt .libungif \
-	.libxml2 .libxmlparse .libxmlwrapp .libgif
+	.libxml2 .libxmlparse .libxmlwrapp
 
 .libboost: .bootstrap @DEPENDS_libboost@
 	@PREPARE_libboost@
@@ -1346,7 +1346,7 @@ $(appsdir)/misc/libs/Makefile: .bootstrap .libz
 
 # tuxbox/enigma
 
-$(appsdir)/tuxbox/enigma/Makefile: .bootstrap .libfreetype .libfribidi .libmad .libid3tag .libpng .libsigc .libtuxbox .misc_libs .plugins .libvorbisidec
+$(appsdir)/tuxbox/enigma/Makefile: .bootstrap .libfreetype .libfribidi .libmad .libid3tag .libpng .libsigc .libtuxbox .misc_libs .plugins .libvorbisidec .libjpeg .giflib
 	cd $(appsdir)/tuxbox/enigma && $(CONFIGURE)
 
 .enigma: $(appsdir)/tuxbox/enigma/Makefile .tuxbox_tools
@@ -1695,7 +1695,7 @@ distclean-local:
 	-rm .directories .linuxdir .binutils .glibc .gcc .rpcgen
 	-rm .etc .busybox .ftpd .modutils .procps .watchdog
 	-rm .libboost .libcommoncplusplus .libcrypto .libcurl .libdb2 .libdvbpsi .libffi .libfreetype
-	-rm .libncurses .libfribidi .libjpeg .libmad .libid3tag .libnet .libnids .libpcap .libpng .libpopt
+	-rm .libncurses .libfribidi .libjpeg .giflib .libmad .libid3tag .libnet .libnids .libpcap .libpng .libpopt
 	-rm .libreadline .libsdl .libsigc .libungif .libxml2 .libxmlwrapp .libz .libvorbisidec
 	-rm .cabextract
 	-rm .gdb .gdb-remote .insight .ksymoops .ltrace .strace .nano
