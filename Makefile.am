@@ -288,7 +288,7 @@ endif
 
 libs: \
 	$(OPTIONAL_LIBCRYPTO) .libcurl .libdvbpsi .libffi .libfreetype .libjpeg \
-	.libmad .libid3tag .libncurses .libpng .libreadline .libsdl .libsigc .libz
+	.libmad .libid3tag .libncurses .libpng .libreadline .libsdl .libsigc .libz .libvorbisidec
 
 libs_optional: \
 	.libcommoncplusplus .libdb2 .libnet .libnids .libpcap .libpopt .libungif \
@@ -654,6 +654,19 @@ endif
 	@CLEANUP_libsigc@
 	touch $@
 
+.libvorbisidec: .bootstrap @DEPENDS_libvorbisidec@
+	@PREPARE_libvorbisidec@
+	cd @DIR_libvorbisidec@ && \
+		$(BUILDENV) \
+		./autogen.sh \
+			--build=$(build) \
+			--host=$(target) \
+			--prefix= && \
+		$(MAKE) && \
+		@INSTALL_libvorbisidec@
+	@CLEANUP_libvorbisidec@
+	touch $@
+
 .libungif: .bootstrap @DEPENDS_libungif@
 	@PREPARE_libungif@
 	cd @DIR_libungif@ && \
@@ -930,6 +943,8 @@ devel_optional: .gdb-remote .insight .ksymoops
 			--build=$(build) \
 			--host=$(target) \
 			--nfp \
+			--disable-tui \
+			--without-tui \
 			--disable-sim \
 			--without-sim \
 			--without-expect \
@@ -956,8 +971,8 @@ devel_optional: .gdb-remote .insight .ksymoops
 .ksymoops: .bootstrap @DEPENDS_ksymoops@
 	@PREPARE_ksymoops@
 	cd @DIR_ksymoops@ && \
-	$(MAKE) CC=$(target)-gcc DEF_MAP="\\\"/boot/System.map-*r\\\"" DEF_VMLINUX="\\\"/boot/vmlinux-*r\\\"" &&\
-	@INSTALL_ksymoops@
+		$(MAKE) CC=$(target)-gcc DEF_MAP="\\\"/boot/System.map-*r\\\"" DEF_VMLINUX="\\\"/boot/vmlinux-*r\\\"" &&\
+		@INSTALL_ksymoops@
 	@CLEANUP_ksymoops@
 	touch $@
 
@@ -1313,7 +1328,7 @@ $(appsdir)/misc/libs/Makefile: .bootstrap .libz
 
 # tuxbox/enigma
 
-$(appsdir)/tuxbox/enigma/Makefile: .bootstrap .libfreetype .libfribidi .libmad .libid3tag .libpng .libsigc .libtuxbox .misc_libs .plugins
+$(appsdir)/tuxbox/enigma/Makefile: .bootstrap .libfreetype .libfribidi .libmad .libid3tag .libpng .libsigc .libtuxbox .misc_libs .plugins .libvorbisidec
 	cd $(appsdir)/tuxbox/enigma && $(CONFIGURE)
 
 .enigma: $(appsdir)/tuxbox/enigma/Makefile .tuxbox_tools
@@ -1659,7 +1674,7 @@ distclean-local:
 	-rm .etc .busybox .ftpd .modutils .procps .watchdog
 	-rm .libboost .libcommoncplusplus .libcrypto .libcurl .libdb2 .libdvbpsi .libffi .libfreetype
 	-rm .libncurses .libfribidi .libjpeg .libmad .libid3tag .libnet .libnids .libpcap .libpng .libpopt
-	-rm .libreadline .libsdl .libsigc .libungif .libxml2 .libxmlwrapp .libz
+	-rm .libreadline .libsdl .libsigc .libungif .libxml2 .libxmlwrapp .libz .libvorbisidec
 	-rm .cabextract
 	-rm .gdb .gdb-remote .insight .ksymoops .ltrace .strace .nano
 	-rm .kaffeh .kaffe
