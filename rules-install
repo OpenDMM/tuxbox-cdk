@@ -79,6 +79,7 @@ thttpd;make:install
 # development tools
 #
 gdb;make:install-gdb:prefix=TARGET
+insight;make:install-gdb:prefix=TARGET
 ltrace;make:install:DESTDIR=TARGET
 strace;make:install
 nano;make:install

@@ -919,7 +919,7 @@ contrib_apps_optional: .dsniff .pump .thttpd
 #
 
 devel: .gdb .ltrace .strace .nano
-devel_optional: .gdb-remote .ksymoops
+devel_optional: .gdb-remote .insight .ksymoops
 
 .gdb: .bootstrap .libncurses @DEPENDS_gdb@
 	@PREPARE_gdb@
@@ -940,17 +940,16 @@ devel_optional: .gdb-remote .ksymoops
 	@CLEANUP_gdb@
 	touch $@
 
-.gdb-remote: .bootstrap @DEPENDS_gdb@
+.gdb-remote: @DEPENDS_gdb@
 	@PREPARE_gdb@
 	cd @DIR_gdb@ && \
-		LD_LIBRARY_PATH=$(libdir) \
 		./configure \
 			--build=$(build) \
 			--host=$(build) \
 			--target=$(target) \
 			--prefix=$(hostprefix) && \
-		$(MAKE) all && \
-		@INSTALL_gdb@
+		$(MAKE) all-gdb && \
+		$(MAKE) install-gdb
 	@CLEANUP_gdb@
 	touch $@
 
@@ -960,6 +959,19 @@ devel_optional: .gdb-remote .ksymoops
 	$(MAKE) CC=$(target)-gcc DEF_MAP="\\\"/boot/System.map-*r\\\"" DEF_VMLINUX="\\\"/boot/vmlinux-*r\\\"" &&\
 	@INSTALL_ksymoops@
 	@CLEANUP_ksymoops@
+	touch $@
+
+.insight: @DEPENDS_insight@
+	@PREPARE_insight@
+	cd @DIR_insight@ && \
+		./configure \
+			--build=$(build) \
+			--host=$(build) \
+			--target=$(target) \
+			--prefix=$(hostprefix) && \
+		$(MAKE) all-gdb && \
+		$(MAKE) install-gdb
+	@CLEANUP_insight@
 	touch $@
 
 .ltrace: .bootstrap @DEPENDS_ltrace@
@@ -1637,7 +1649,7 @@ distclean-local:
 	-rm .libncurses .libfribidi .libjpeg .libmad .libid3tag .libnet .libnids .libpcap .libpng .libpopt
 	-rm .libreadline .libsdl .libsigc .libungif .libxml2 .libxmlwrapp .libz
 	-rm .cabextract
-	-rm .gdb .ksymoops .ltrace .strace .nano
+	-rm .gdb .gdb-remote .insight .ksymoops .ltrace .strace .nano
 	-rm .kaffeh .kaffe
 	-rm .gnuboy .scummvm .sdldoom
 	-rm .ppcboot .linuxkernel .driver
