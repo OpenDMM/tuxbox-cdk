@@ -624,7 +624,7 @@ libs_optional: \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
-			--prefix=$(targetprefix) \
+			--prefix= \
 			--disable-checks && \
 		$(MAKE) all && \
 		@INSTALL_libsigc@
@@ -1334,7 +1334,7 @@ $(appsdir)/tuxbox/neutrino/Makefile: .bootstrap .libboost .libcurl .libfreetype 
 
 # tuxbox/plugins
 
-$(appsdir)/tuxbox/plugins/Makefile: .bootstrap .libcurl .libpng .libsigc
+$(appsdir)/tuxbox/plugins/Makefile: .bootstrap .libcurl .libpng
 	cd $(appsdir)/tuxbox/plugins && $(CONFIGURE)
 
 .plugins: $(appsdir)/tuxbox/plugins/Makefile
