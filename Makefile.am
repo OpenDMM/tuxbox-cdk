@@ -956,7 +956,7 @@ devel_optional: .gdb-remote .ksymoops
 	@CLEANUP_strace@
 	touch $@
 
-.nano: .bootstrap @DEPENDS_nano@
+.nano: .bootstrap .libncurses @DEPENDS_nano@
 	@PREPARE_nano@
 	cd @DIR_nano@ && \
 		CC=$(target)-gcc \
