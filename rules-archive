@@ -83,7 +83,7 @@ gdb-6.0.tar.bz2;ftp://sources.redhat.com/pub/gdb/releases
 insight-6.0.tar.bz2;ftp://sources.redhat.com/pub/gdb/releases
 ltrace_0.3.26.tar.gz;ftp://ftp.debian.org/debian/pool/main/l/ltrace
 strace_4.4-1.tar.gz;http://switch.dl.sourceforge.net/sourceforge/strace
-nano-1.0.7.tar.gz;http://www.nano-editor.org/dist/v1.0
+nano-1.0.7.tar.gz;ftp://$(gnuserver)/nano
 
 #
 # java
