@@ -1484,9 +1484,8 @@ $(flashprefix)/.part_enigma: $(flashprefix)/.flash .enigma
 
 if CPU_MODEL_405
 	$(INSTALL) $(targetprefix)/sbin/hotplug $(flashprefix)/root/sbin
-	for i in cables.xml satellites.xml ; do \
-		mv $(flashprefix)/root/etc/$$i $(flashprefix)/root/var/tuxbox/config ; \
-		ln -sf ../var/tuxbox/config/$$i $(flashprefix)/root/etc ; done
+	mv $(flashprefix)/root/etc/cables.xml $(flashprefix)/root/share/tuxbox
+	mv $(flashprefix)/root/etc/satellites.xml $(flashprefix)/root/share/tuxbox
 	for i in etc/ppp log mnt/nfs mnt/usb run tmp ; do \
 		$(INSTALL) -d $(flashprefix)/root/var/$$i ; done
 	touch $(flashprefix)/root/var/tmp/init
