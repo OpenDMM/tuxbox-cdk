@@ -1289,7 +1289,7 @@ $(appsdir)/misc/libs/Makefile: .bootstrap .libz
 
 # tuxbox/enigma
 
-$(appsdir)/tuxbox/enigma/Makefile: .bootstrap .libfreetype .libmad .libpng .libsigc .misc_libs .plugins
+$(appsdir)/tuxbox/enigma/Makefile: .bootstrap .libfreetype .libfribidi .libmad .libpng .libsigc .misc_libs .plugins
 	cd $(appsdir)/tuxbox/enigma && $(CONFIGURE)
 
 .enigma: $(appsdir)/tuxbox/enigma/Makefile .tuxbox_tools
