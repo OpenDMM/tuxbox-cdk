@@ -1,0 +1,67 @@
+COPYRIGHT: This kit, and all parts of it, can be used under the terms
+of the GPL, with the exception of derived files, for which additional
+conditions may apply.
+
+This document is written in English because its intended audience
+reads English ;-).
+
+This kit modifies the Tuxbox sources to make image building more easy,
+straightforward, and logical. For usage, see the file
+README-flash.barf. The following changes have been made:
+
+hostapps/mkflfs/mkflfs.c
+
+This program has been "civilized", in that it takes the names of the
+input and output files from the command line. For backward
+compatibility, if given only one argument (the flash chip type) the
+old behavior has been preserved.
+
+hostapps/flash/flashmanage.pl
+
+Adapted to the present flash partitioning (AlexW-compatible).
+
+cdk/Makefile.am
+cdk/configure.ac
+
+Implemented the two additional configuration options described in
+README-flash.barf. 
+
+boot/u-boot/include/configs/dbox2.h
+
+Using preprocessor symbols, allowing for building yadds, jffs2only,
+and mixed images.
+
+cdk/Patches/linux-drivers-mtd-maps-dbox2-flash-jffs2only.c.diff
+
+This patch file runtime-configures
+$CVSDIR/cdk/linux/drivers/mtd/maps/dbox2-flash.h in the case of
+jffs2only-images. 
+
+cdk/my-flashsetup-cramfs-root.sh
+cdk/my-flashsetup-jffs2-var.sh
+cdk/my-flashsetup-jffs2only.sh
+
+New files, see README-flash.barf. NOTE: These are provided as
+EXAMPLES, not as "barf-images" to be built. For this reason, they
+refer to files that are not included in this distribution; this is
+not considered a mistake.
+
+myfiles/...
+
+A small subset of files referred to from the my-flash-* scripts. Maybe
+rcS is of general interest, because the version in CVS is completely
+unsuitable for an image with root read-only (like a
+cramfs-image). (Credits to AlexW: I looked at his version of the script.)
+
+cdk/doc/README-flash.barf
+cdk/doc/README-imagekit
+
+Documentation.
+================================================================
+
+Comments and questions in the cdk forum at http://www.tuxbox.org/forum.
+
+
+Keep hacking,
+
+Barf

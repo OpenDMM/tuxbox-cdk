@@ -1,0 +1,78 @@
+COPYRIGHT: This kit, and all parts of it, can be used under the terms
+of the GPL, with the exception of derived files, for which additional
+conditions may apply.
+
+This document is written in English because its intended audience
+reads English ;-).
+
+The present patch introduces two more options for configure:
+
+--with-flashchips=TYPE one or two flashchips in dbox? [1x,2x]
+--with-imagetype=TYPE  cramfs + jffs or jffs2only? [mixed,jffs2only]
+
+For example, to build a mixed image (root in cramfs, /var in jffs2) for
+a dBox with two flashchips, configure with a command like
+
+./configure --prefix=/dbox2  --with-cvsdir=/tuxbox/head \
+--enable-maintainer-mode --with-targetruleset=flash \
+--with-flashchips=2x --with-imagetype=mixed
+
+To build a jffs2only image for a dBox with one flashchips, configure
+with a command like
+
+./configure --prefix=/dbox2  --with-cvsdir=/tuxbox/head \
+--enable-maintainer-mode --with-targetruleset=flash \
+--with-flashchips=1x --with-imagetype=jffs2only
+
+(For completeness: note that when building "yadd"s ("diskless" images
+which NFS-mount their root file system), "--with-targetruleset=flash"
+has to be left out, or replaced by --with-targetruleset=standard.)
+
+With this fix, the recipie for building images is now considerably
+simpler:
+
+1. Make sure your source tree is ok (cvs-update, apply patches,
+   whatever),
+
+2. Make sure that both the source tree (cvsdir), and the target tree
+   (prefix) is "sufficiently clean" not to interfere with the upcoming
+   build. This can be tricky; no-one wants to wait hours to compile
+   gcc just another time, but finding out why the build broke, or
+   produced garbage can be even more tedious. Better to be on the safe
+   side: "make distclean" is the sledge hammer. And a good coffe-break
+   generator :-).
+
+3. run autogen.sh
+
+4. Configure with, e.g., one of the commands above.
+
+5. If making a jffs2only image, create/adjust the script
+   my-flashsetup-jffs2only.sh. This user script modifies the
+   just-built root file system (in $PREFIX/cdkflash/root) so that it
+   will suit the needs and wishes of the user. It is invoked just
+   before the image is being made. Copying ucodes for exampel belongs
+   here. If instead making a mixed image, create/modify
+   my-flashsetup-cramfs-root.sh (which modifies the root file system)
+   and my-flashsetup-jffs2-var.sh (which modifies the /var file
+   system) instead.
+
+5. Build the desired components. "make flash-neutriono-all" is a good
+   starting point. For other targets, see the document README-flash.de
+   (but beware, this document contains many errors), or better, read
+   the Makefile or Makefile.am).
+
+6. After a loooong time, when the the build has finished, build the
+   image with the command "make image". Depending on the argument to
+   --with-image-type, this will be either
+   $PREFIX/cdkflash/jffs2only.img or
+   $PREFIX/cdkflash/cramfsjffs2.img. Check that its size is exactly
+   8257536 bytes; if it is larger you put to much in it; don't even
+   try to flash it.
+
+Now flash the just create image. How to do this is outside of the
+scope of the current document, just let me remark that I like using
+Homer's dboxflasher, and a Linux dhcp/tftp-server.
+
+Keep hacking,
+
+Barf
