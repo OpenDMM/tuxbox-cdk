@@ -1399,12 +1399,12 @@ $(flashprefix)/.flash: .busybox .driver .modutils
 	$(INSTALL) -d $(flashprefix)/root/bin
 	$(INSTALL) -d $(flashprefix)/root/dev
 	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox
-	$(INSTALL) -d $(flashprefix)/root/mnt
 	$(INSTALL) -d $(flashprefix)/root/proc
 	$(INSTALL) -d $(flashprefix)/root/sbin
-	$(INSTALL) -d $(flashprefix)/root/share/tuxbox/image
 	$(INSTALL) -d $(flashprefix)/root/var/tuxbox/config
 if CPU_MODEL_823
+	$(INSTALL) -d $(flashprefix)/root/mnt
+	$(INSTALL) -d $(flashprefix)/root/share/tuxbox/image
 	$(INSTALL) -d $(flashprefix)/root/var/tuxbox/ucodes
 endif
 	$(INSTALL) -d $(flashprefix)/root/tmp
