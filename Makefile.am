@@ -1376,7 +1376,7 @@ $(appsdir)/tuxbox/libs/Makefile: .bootstrap .libfreetype
 
 # tuxbox/neutrino
 
-$(appsdir)/tuxbox/neutrino/Makefile: .bootstrap .libcurl .libfreetype .misc_libs .tuxbox_libs .zapit .plugins
+$(appsdir)/tuxbox/neutrino/Makefile: .bootstrap .libcurl .libfreetype .misc_libs .plugins .tuxbox_libs .zapit
 	cd $(appsdir)/tuxbox/neutrino && $(CONFIGURE)
 
 .neutrino: $(appsdir)/tuxbox/neutrino/Makefile
@@ -1385,7 +1385,7 @@ $(appsdir)/tuxbox/neutrino/Makefile: .bootstrap .libcurl .libfreetype .misc_libs
 
 # tuxbox/plugins
 
-$(appsdir)/tuxbox/plugins/Makefile: .bootstrap .libcurl
+$(appsdir)/tuxbox/plugins/Makefile: .bootstrap .libcurl .libpng .libsigc
 	cd $(appsdir)/tuxbox/plugins && $(CONFIGURE)
 
 .plugins: $(appsdir)/tuxbox/plugins/Makefile
