@@ -160,6 +160,9 @@ bootstrap_gcc: @DEPENDS_bootstrap_gcc@
 			mv $(buildprefix)/linux-libc-headers/include/$$i $(hostprefix)/$(target)/include; \
 		fi; \
 	done;
+	for i in config.h autoconf.h; do \
+		ln -sf $(buildprefix)/linux/include/linux/$$i $(hostprefix)/$(target)/include/linux; \
+	done;
 	@CLEANUP_linux_libc_headers@
 	rm $(hostprefix)/$(target)/include/asm-generic 2> /dev/null || /bin/true;
 	rm $(buildprefix)/linux-libc-headers 2> /dev/null || /bin/true
@@ -470,7 +473,50 @@ if TARGETRULESET_FLASH
 endif
 	@CLEANUP_libjpeg@
 	touch $@
-
+.libdirectfb: .bootstrap .libfreetype .libjpeg .libpng .libz @DEPENDS_libdirectfb@
+	@PREPARE_libdirectfb@
+	cd @DIR_libdirectfb@ && \
+	$(BUILDENV) \
+	LDFLAGS=-L$(targetprefix)/lib \
+	CPPFLAGS="-I$(buildprefix)/linux/arch/ppc" \
+	CFLAGS="$(TARGET_CFLAGS) -I$(buildprefix)/linux/arch/ppc" \
+	./autogen.sh \
+	--build=$(build) \
+	--host=$(target) \
+	--prefix= \
+	--disable-debug \
+	--with-inputdrivers=linuxinput \
+	--disable-sdl \
+	--disable-multi \
+	--without-tools \
+	--with-gfxdrivers=none && \
+	$(MAKE) all && \
+	@INSTALL_libdirectfb@
+	@CLEANUP_libdirectfb@
+	mv $(targetprefix)/lib/libdirectfb.la $(targetprefix)/lib/libdirectfb.la.old
+	mv $(targetprefix)/lib/libfusion.la $(targetprefix)/lib/libfusion.la.old
+	sed -e "s, /lib, $(targetprefix)/lib,g" < $(targetprefix)/lib/libdirectfb.la.old >$(targetprefix)/lib/libdirectfb.la
+	sed -e "s, /lib, $(targetprefix)/lib,g" < $(targetprefix)/lib/libfusion.la.old >$(targetprefix)/lib/libfusion.la
+	rm -f $(targetprefix)/lib/libdirectfb.la.old
+	rm -f $(targetprefix)/lib/libfusion.la.old
+	touch $@
+	
+.libdirectfbpp: .bootstrap .libdirectfb @DEPENDS_libdirectfbpp@
+	@PREPARE_libdirectfbpp@
+	cd @DIR_libdirectfbpp@ && \
+	$(BUILDENV) \
+	./autogen.sh \
+	--build=$(build) \
+	--host=$(target) \
+	--prefix= && \
+	$(MAKE) all && \
+	@INSTALL_libdirectfbpp@
+	@CLEANUP_libdirectfbpp@
+	mv $(targetprefix)/lib/libdfb++.la $(targetprefix)/lib/libdfb++.la.old
+	sed -e "s, /lib, $(targetprefix)/lib,g" < $(targetprefix)/lib/libdfb++.la.old >$(targetprefix)/lib/libdfb++.la
+	rm -f $(targetprefix)/lib/libdfb++.la.old
+	touch $@
+																																	
 .libmad: .bootstrap .libz @DEPENDS_libmad@
 	@PREPARE_libmad@
 	cd @DIR_libmad@ && \

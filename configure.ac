@@ -285,6 +285,8 @@ TUXBOX_RULES_MAKE(watchdog)
 #
 # contrib libs
 #
+TUXBOX_RULES_MAKE(libdirectfb)
+TUXBOX_RULES_MAKE(libdirectfbpp)
 TUXBOX_RULES_MAKE(libboost)
 TUXBOX_RULES_MAKE(libcommoncplusplus)
 TUXBOX_RULES_MAKE(libcrypto)
