@@ -59,6 +59,7 @@ libnet-1.0.2a.tar.gz;http://www.packetfactory.net/libnet/dist/deprecated
 libnids-1.16.tar.gz;http://www.packetfactory.net/Projects/Libnids/dist
 db-2.7.7.tar.gz;http://www.sleepycat.com/update/snapshot
 boost_1_29_0.tar.gz;http://boost.sourceforge.net/release
+fribidi-0.10.4.tar.bz2;
 
 #
 # contrib apps
