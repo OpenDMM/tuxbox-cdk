@@ -4,7 +4,7 @@
 
 Hier ganz kurz die Kommandos zum bauen des cdk:
 
-Als normaler user:
+Als normaler user (beispielsweise "tuxuser"):
 
 # mkdir ~/tuxbox-cvs
 # cd ~/tuxbox-cvs
@@ -17,6 +17,7 @@ Als normaler user:
 Dann als root das Installationsverzeichnis anlegen (wie in prefix angegeben):
 
 # mkdir /dbox2
+# chown tuxuser /dbox2
 
 Und wieder als normaler user:
 
