@@ -339,6 +339,7 @@ TUXBOX_RULES_MAKE(dreamfiles)
 TUXBOX_RULES_MAKE(dreamdriver_dm7000)
 TUXBOX_RULES_MAKE(dreamdriver_dm56x0)
 TUXBOX_RULES_MAKE(dreamdriver_dm500)
+TUXBOX_RULES_MAKE(nfs_utils)
 
 #
 # additional

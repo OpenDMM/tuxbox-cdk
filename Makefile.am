@@ -274,7 +274,8 @@ root_optional: \
 	cd @DIR_portmap@ && \
 		$(BUILDENV) \
 		$(MAKE) && \
-		@INSTALL_portmap@
+		$(FAKEROOT) $(MAKE) BASEDIR=$(targetprefix) install && \
+		cd .. && \
 	@CLEANUP_portmap@
 	touch $@
 
@@ -901,6 +902,19 @@ contrib_apps_optional: .dsniff .pump .thttpd
 		$(MAKE) ARCH=ppc all && \
 		@INSTALL_utillinux@
 	@CLEANUP_utillinux@
+	touch $@
+
+.nfs_utils: .bootstrap @DEPENDS_nfs_utils@
+	@PREPARE_nfs_utils@
+	cd @DIR_nfs_utils@ && \
+		CC=$(target)-gcc \
+		CFLAGS="-Os -msoft-float" \
+		LDFLAGS="$(TARGET_LDFLAGS)" \
+		./configure && \
+		$(MAKE) ARCH=ppc all && \
+		$(FAKEROOT) $(MAKE) install_prefix=$(targetprefix) install && \
+		cd .. && \
+	@CLEANUP_nfs_utils@
 	touch $@
 
 .samba: .bootstrap @DEPENDS_samba@
@@ -1697,6 +1711,8 @@ $(flashprefix)/.part_enigma: $(flashprefix)/.flash .enigma
 	find $(flashprefix)/root/share/locale -name libc.mo -o -name nano.mo | xargs rm -f
 	$(INSTALL) $(appsdir)/tuxbox/enigma/po/locale.alias $(flashprefix)/root/share/locale
 	$(INSTALL) -d $(flashprefix)/root/share/tuxbox/enigma
+	$(INSTALL) -d $(flashprefix)/root/var_init/tuxbox/config/enigma
+	$(INSTALL) -m 0644 $(targetprefix)/var/tuxbox/config/enigma/encoding.conf $(flashprefix)/root/var_init/tuxbox/config/enigma
 
 	cp -pa $(targetprefix)/share/tuxbox/enigma/* $(flashprefix)/root/share/tuxbox/enigma
 	@for i in `find $(flashprefix)/root/share/tuxbox/enigma/htdocs` ; do \
