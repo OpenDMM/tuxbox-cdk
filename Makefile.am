@@ -1520,7 +1520,7 @@ if CPU_MODEL_405
 		$(INSTALL) -d $(flashprefix)/root/$$i ; done
 	mv $(flashprefix)/root/etc/cables.xml $(flashprefix)/root/share/tuxbox
 	mv $(flashprefix)/root/etc/satellites.xml $(flashprefix)/root/share/tuxbox
-	ln -sf var/mnt $(flashprefix)/root
+	ln -sf /var/mnt $(flashprefix)/root
 	ln -sf /tmp $(flashprefix)/root/var
 	touch $(flashprefix)/root/var/.init
 	for i in group hosts passwd ; do \
