@@ -119,6 +119,14 @@ AC_SUBST(flashprefix_ro)
 flashprefix_rw=${flashprefix}/rw
 AC_SUBST(flashprefix_rw)
 
+AC_ARG_WITH(flashchips,
+	[  --with-flashchips=TYPE  one or two flashchips in dbox? [[1x,2x]]],
+	[flashchips="$with_flashchips"],[flashchips="NONE"])
+
+AC_ARG_WITH(imagetype,
+	[  --with-imagetype=TYPE  cramfs + jffs or jffs2only? [[mixed,jffs2only]]],
+	[imagetype="$with_imagetype"],[imagetype="NONE"])
+
 AC_ARG_WITH(cvsdir,
 	[  --with-cvsdir=DIR       where to find the cvs],
 	[cvsdir="$with_cvsdir"],[cvsdir="NONE"])
@@ -207,6 +215,10 @@ else
 	AC_MSG_RESULT([yes])
 fi
 
+AC_SUBST(flashchips)
+AC_SUBST(imagetype)
+AM_CONDITIONAL(imagetype_jffs2only,test "$imagetype" = "jffs2only")
+AM_CONDITIONAL(imagetype_mixed,test "$imagetype" = "mixed")
 AC_SUBST(appsdir)
 AC_SUBST(bootdir)
 AC_SUBST(driverdir)

@@ -64,6 +64,9 @@ endif
 	@PREPARE_linux@
 if TARGETRULESET_FLASH
 	cat Patches/linux-2.4.22-dbox2-flash.config > @DIR_linux@/.config
+if imagetype_jffs2only
+	(cd $(buildprefix)/linux/drivers/mtd/maps; patch -b < $(buildprefix)/Patches/linux-drivers-mtd-maps-dbox2-flash-jffs2only.c.diff)
+endif
 else
 	cat Patches/linux-2.4.22-dbox2.config > @DIR_linux@/.config
 endif
@@ -503,7 +506,7 @@ libs_optional: \
 	cd @DIR_libmad@ && \
 		$(BUILDENV) \
 		./configure \
-       			--build=$(build) \
+			--build=$(build) \
 			--host=$(target) \
 			--prefix= \
 			--enable-shared=yes \
@@ -1078,10 +1081,17 @@ dvb_apps: .dvbdate .dvbstream .dvbtext .dvbtune .vls
 
 boot: .u-boot .linuxkernel .driver
 
+if TARGETRULESET_FLASH
+if imagetype_jffs2only
+uboot_cflags=-DJFFS2ROOT
+endif
+else
+uboot_cflags=-DNFSROOT
+endif
+
 .u-boot: .bootstrap $(bootdir)/u-boot/Makefile
 	$(MAKE) -C $(bootdir)/u-boot dbox2_config
-	$(MAKE) -C $(bootdir)/u-boot CROSS_COMPILE=$(target)- u-boot.stripped
-
+	$(MAKE) DBGFLAGS=$(uboot_cflags) -C $(bootdir)/u-boot CROSS_COMPILE=$(target)- u-boot.stripped
 	$(INSTALL) -m644 $(bootdir)/u-boot/u-boot.stripped $(bootprefix)/u-boot
 	$(INSTALL) $(bootdir)/u-boot/tools/mkimage $(hostprefix)/bin
 
@@ -1529,15 +1539,15 @@ $(flashprefix)/.lib: $(flashprefix)/.flash $(shell ls -1 $(flashprefix)/.part_* 
 	chmod u+rwX,go+rX -R $(flashprefix)/root/
 	@touch $@
 
+if imagetype_mixed
+image: flash-cramfsimage
+
 flash-cramfs: $(flashprefix)/root-cramfs.img
 
 flash-var-jffs2: $(flashprefix)/var-jffs2.img
 
-flash-root-jffs2: $(flashprefix)/root-jffs2.img
-
 flash-cramfsimage: $(flashprefix)/cramfsjffs2.img
 
-flash-jffs2image: $(flashprefix)/jffs2only.img
 
 $(flashprefix)/root-cramfs.img: $(flashprefix)/.lib
 	rm -fr $(flashprefix)/cramfs
@@ -1559,8 +1569,11 @@ $(flashprefix)/root-cramfs.img: $(flashprefix)/.lib
 		rm -fr $(flashprefix)/cramfs/etc/ssh ; \
 		ln -sf ../var/etc/ssh $(flashprefix)/cramfs/etc/ssh ; \
 	fi
+	if [ -x my-flashsetup-cramfs-root.sh ] ; then \
+	 ./my-flashsetup-cramfs-root.sh $(flashprefix) $(buildprefix); \
+	fi
 	$(FAKEROOT) $(MKCRAMFS) -p -n "0106`date +%Y%m%d%H%M`" $(flashprefix)/cramfs/ $(flashprefix)/root-cramfs.img
-	rm -fr $(flashprefix)/cramfs
+#	rm -fr $(flashprefix)/cramfs
 
 $(flashprefix)/var-jffs2.img: $(flashprefix)/.lib
 	rm -rf $(flashprefix)/jffs2
@@ -1578,23 +1591,50 @@ $(flashprefix)/var-jffs2.img: $(flashprefix)/.lib
 	if [ -d $(flashprefix)/root/etc/ssh ] ; then \
 		cp -pa $(flashprefix)/root/etc/ssh $(flashprefix)/jffs2/etc/ssh ; \
 	fi
-	$(FAKEROOT) $(MKJFFS2) -b -e 131072 -p -r $(flashprefix)/jffs2/ -o $(flashprefix)/var-jffs2.img
-	rm -rf $(flashprefix)/jffs2
+	cp $(flashprefix)/root/etc/modules.conf $(flashprefix)/jffs2/etc
+	if [ -x my-flashsetup-jffs2-var.sh ] ; then \
+	 ./my-flashsetup-jffs2-var.sh $(flashprefix) $(buildprefix); \
+	fi
+	$(FAKEROOT) $(MKJFFS2) -b -e 131072 --pad=0xe0000 -r $(flashprefix)/jffs2/ -o $(flashprefix)/var-jffs2.img
+#	rm -rf $(flashprefix)/jffs2
 
 $(flashprefix)/cramfsjffs2.img: $(flashprefix)/root-cramfs.img $(flashprefix)/var-jffs2.img $(flashprefix)/cramfs-flfs.img
+	rm -f $@
 	$(hostappsdir)/flash/flashmanage.pl -i $(flashprefix)/cramfsjffs2.img -o build \
 		--part ppcboot=$(flashprefix)/cramfs-flfs.img \
 		--part root=$(flashprefix)/root-cramfs.img \
 		--part var=$(flashprefix)/var-jffs2.img
+	@echo "Flash image $@ created"
+
+$(flashprefix)/cramfs-flfs.img: .u-boot
+	$(CC) -o ../hostapps/mkflfs/mkflfs ../hostapps/mkflfs/minilzo.c ../hostapps/mkflfs/mkflfs.c
+	../hostapps/mkflfs/mkflfs $(flashchips) -o $@ $(bootprefix)/u-boot >/dev/null
+
+endif
+
+if imagetype_jffs2only
+image: flash-jffs2image
+
+flash-root-jffs2: $(flashprefix)/root-jffs2.img
+
+flash-jffs2image: $(flashprefix)/jffs2only.img
 
 $(flashprefix)/root-jffs2.img: $(flashprefix)/.lib
+	if [ -x my-flashsetup-jffs2only.sh ] ; then \
+	 ./my-flashsetup-jffs2only.sh $(flashprefix) $(buildprefix); \
+	fi
 	$(FAKEROOT) $(MKJFFS2) -b -e 0x20000 --pad=0x7c0000 -r $(flashprefix)/root/ -o $(flashprefix)/root-jffs2.img
 
-$(flashprefix)/jffs2only.img: $(flashprefix)/.lib $(flashprefix)/jffs2-flfs.img
-	$(FAKEROOT) $(MKJFFS2) -b -e 0x20000 --pad=0x7c0000 -r $(flashprefix)/root/ -o $(flashprefix)/root-jffs2.tmp
-	cat $(flashprefix)/jffs2-flfs.img > $(flashprefix)/jffs2only.img
-	cat $(flashprefix)/root-jffs2.tmp >> $(flashprefix)/jffs2only.img
-	rm -f  $(flashprefix)/root-jffs2.tmp
+$(flashprefix)/jffs2only.img: $(flashprefix)/.lib $(flashprefix)/jffs2-flfs.img $(flashprefix)/root-jffs2.img
+	cp $(flashprefix)/jffs2-flfs.img $(flashprefix)/jffs2only.img
+	cat $(flashprefix)/root-jffs2.img >> $(flashprefix)/jffs2only.img
+	@echo "Flash image $@ created"
+
+$(flashprefix)/jffs2-flfs.img: .u-boot
+	$(CC) -o ../hostapps/mkflfs/mkflfs ../hostapps/mkflfs/minilzo.c ../hostapps/mkflfs/mkflfs.c
+	../hostapps/mkflfs/mkflfs $(flashchips) -o $@ $(bootprefix)/u-boot > /dev/null
+
+endif
 endif
 
 #######################
