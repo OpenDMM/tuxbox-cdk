@@ -478,7 +478,7 @@ else
 		$(MAKE) all && \
 		@INSTALL_libmad@
 	@CLEANUP_libmad@
-	touch $@								
+	touch $@
 endif
 
 .libid3tag: .bootstrap .libz @DEPENDS_libid3tag@
@@ -1490,6 +1490,10 @@ flash-enigma: $(flashprefix)/.part_enigma
 
 $(flashprefix)/.part_enigma: $(flashprefix)/.flash .enigma
 	$(INSTALL) $(targetprefix)/bin/enigma $(flashprefix)/root/bin
+
+	$(INSTALL) -d $(flashprefix)/root/share/tuxbox
+	ln -sf /etc/cables.xml $(flashprefix)/root/share/tuxbox
+	ln -sf /etc/satellites.xml $(flashprefix)/root/share/tuxbox
 	cp -pa $(targetprefix)/share/tuxbox/enigma $(flashprefix)/root/share/tuxbox
 
 	$(INSTALL) -d $(flashprefix)/root/share/fonts
@@ -1512,11 +1516,13 @@ $(flashprefix)/.part_enigma: $(flashprefix)/.flash .enigma
 
 if CPU_MODEL_405
 	$(INSTALL) $(targetprefix)/sbin/hotplug $(flashprefix)/root/sbin
+	for i in hdd root/platform/kernel var/etc/ppp var/log var/mnt/nfs var/mnt/usb var/run ; do \
+		$(INSTALL) -d $(flashprefix)/root/$$i ; done
 	mv $(flashprefix)/root/etc/cables.xml $(flashprefix)/root/share/tuxbox
 	mv $(flashprefix)/root/etc/satellites.xml $(flashprefix)/root/share/tuxbox
-	for i in etc/ppp log mnt/nfs mnt/usb run tmp ; do \
-		$(INSTALL) -d $(flashprefix)/root/var/$$i ; done
-	touch $(flashprefix)/root/var/tmp/init
+	ln -sf var/mnt $(flashprefix)/root
+	ln -sf /tmp $(flashprefix)/root/var
+	touch $(flashprefix)/root/var/.init
 	for i in group hosts passwd ; do \
 		mv $(flashprefix)/root/etc/$$i $(flashprefix)/root/var/etc ; \
 		ln -sf ../var/etc/$$i $(flashprefix)/root/etc ; done
