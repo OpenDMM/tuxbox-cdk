@@ -518,6 +518,22 @@ endif
 	rm -f $(targetprefix)/lib/libdfb++.la.old
 	touch $@
 																																	
+.libppdirectfb: .bootstrap .libdirectfb @DEPENDS_libppdirectfb@
+	@PREPARE_libppdirectfb@
+	cd @DIR_libppdirectfb@ && \
+	$(BUILDENV) \
+	./autogen.sh \
+	--build=$(build) \
+	--host=$(target) \
+	--prefix= && \
+	$(MAKE) all && \
+	@INSTALL_libppdirectfb@
+	@CLEANUP_libppdirectfb@
+	mv $(targetprefix)/lib/lib++dfb.la $(targetprefix)/lib/lib++dfb.la.old
+	sed -e "s, /lib, $(targetprefix)/lib,g" < $(targetprefix)/lib/lib++dfb.la.old >$(targetprefix)/lib/lib++dfb.la
+	rm -f $(targetprefix)/lib/lib++dfb.la.old
+	touch $@
+		
 .libmad: .bootstrap .libz @DEPENDS_libmad@
 	@PREPARE_libmad@
 	cd @DIR_libmad@ && \

@@ -39,8 +39,9 @@ vsftpd-1.1.0.tar.gz;ftp://vsftpd.beasts.org/users/cevans/
 #
 # contrib libs
 #
-DirectFB-0.9.21-cvs20041229.tar.gz;http://tuxbox.berlios.de/pub/tuxbox/cdk/src
-DFB++-0.9.21-cvs20041229.tar.gz;http://tuxbox.berlios.de/pub/tuxbox/cdk/src
+DirectFB-0.9.22-cvs20050216.tar.gz;http://tuxbox.berlios.de/pub/tuxbox/cdk/src
+DFB++-0.9.22-cvs20050216.tar.gz;http://tuxbox.berlios.de/pub/tuxbox/cdk/src
+++DFB-0.9.22-cvs20050216.tar.gz;http://tuxbox.berlios.de/pub/tuxbox/cdk/src
 openssl-0.9.7a.tar.gz;http://www.openssl.org/source
 curl-7.10.1.tar.bz2;http://curl.haxx.se/download
 freetype-2.0.9.tar.bz2;http://telia.dl.sourceforge.net/sourceforge/freetype
