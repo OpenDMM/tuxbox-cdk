@@ -1341,7 +1341,7 @@ $(flashprefix)/.flash: .busybox .driver .modutils
 	$(INSTALL) -d $(flashprefix)/root/share/tuxbox/image
 	$(INSTALL) -d $(flashprefix)/root/var/tuxbox/config
 if CPU_MODEL_823
- 	$(INSTALL) -d $(flashprefix)/root/var/tuxbox/ucodes
+	$(INSTALL) -d $(flashprefix)/root/var/tuxbox/ucodes
 endif
 	$(INSTALL) -d $(flashprefix)/root/tmp
 	$(MAKE) -C etc install targetprefix=$(flashprefix)/root
