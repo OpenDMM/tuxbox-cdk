@@ -1789,10 +1789,10 @@ $(flashprefix)/.part_plugin_solitair: $(flashprefix)/.flash flash-plugin_libfx2
 	@touch $@
 
 flash-plugin_sol: $(flashprefix)/.part_plugin_sol
-$(flashprefix)/.part_plugin_sol: $(flashprefix)/.flash flash-plugin-libfx2
+$(flashprefix)/.part_plugin_sol: $(flashprefix)/.flash flash-plugin_libfx2
 	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
 	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/sol.so $(flashprefix)/root/lib/tuxbox/plugins/
-	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/sol.cfs $(flashprefix)/root/lib/tuxbox/plugins/
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/sol.cfg $(flashprefix)/root/lib/tuxbox/plugins/
 	@touch $@
 
 flash-plugin_mastermind: $(flashprefix)/.part_plugin_mastermind
