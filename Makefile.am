@@ -1632,7 +1632,7 @@ $(flashprefix)/.part_ftpd: $(flashprefix)/.flash .ftpd
 
 flash-dvb-tools: $(flashprefix)/.part_dvb_tools
 $(flashprefix)/.part_dvb_tools: $(flashprefix)/.flash .stream
-	@for i in streampes streamsec streamts; do \
+	@for i in streampes streamsec streamts udpstreampes; do \
 		$(INSTALL) $(targetprefix)/sbin/$$i $(flashprefix)/root/sbin; done;
 	$(INSTALL) $(targetprefix)/bin/dvbnet $(flashprefix)/root/bin;
 	@touch $@
