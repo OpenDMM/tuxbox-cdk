@@ -287,7 +287,7 @@ endif
 
 libs: \
 	$(OPTIONAL_LIBCRYPTO) .libcurl .libdvbpsi .libffi .libfreetype .libjpeg \
-	.libmad .libncurses .libpng .libreadline .libsdl .libsigc .libz
+	.libmad .libid3tag .libncurses .libpng .libreadline .libsdl .libsigc .libz
 
 libs_optional: \
 	.libcommoncplusplus .libdb2 .libnet .libnids .libpcap .libpopt \
@@ -438,6 +438,7 @@ libs_optional: \
 	@CLEANUP_libjpeg@
 	touch $@
 
+if CPU_MODEL_405
 .libmad: .bootstrap .libz @DEPENDS_libmad@
 	@PREPARE_libmad@
 	cd @DIR_libmad@ && \
@@ -449,14 +450,48 @@ libs_optional: \
 			--enable-shared=yes \
 			--disable-nls \
 			--without-esd \
-			--enable-speed \
 			--enable-fpm=ppc \
-			--enable-sso && \
+			--enable-sso \
+			--enable-accuracy && \
 		$(MAKE) all && \
 		@INSTALL_libmad@
 	@CLEANUP_libmad@
 	touch $@
+else
+.libmad: .bootstrap .libz @DEPENDS_libmad@
+	@PREPARE_libmad@
+	cd @DIR_libmad@ && \
+		$(BUILDENV) \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--prefix= \
+			--enable-shared=yes \
+			--disable-nls \
+			--without-esd \
+			--enable-fpm=ppc \
+			--enable-sso \
+			--enable-speed && \
+		$(MAKE) all && \
+		@INSTALL_libmad@
+	@CLEANUP_libmad@
+	touch $@								
+endif
 
+.libid3tag: .bootstrap .libz @DEPENDS_libid3tag@
+	@PREPARE_libid3tag@
+	cd @DIR_libid3tag@ && \
+		$(BUILDENV) \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--prefix= \
+			--enable-shared=yes && \
+		$(MAKE) all && \
+		@INSTALL_libid3tag@
+	@CLEANUP_libid3tag@
+	touch $@
+	
 .libncurses: .bootstrap @DEPENDS_libncurses@
 	@PREPARE_libncurses@
 	cd @DIR_libncurses@ && \
@@ -1249,7 +1284,7 @@ $(appsdir)/misc/libs/Makefile: .bootstrap .libz
 
 # tuxbox/enigma
 
-$(appsdir)/tuxbox/enigma/Makefile: .bootstrap .libfreetype .libfribidi .libmad .libpng .libsigc .libtuxbox .misc_libs .plugins
+$(appsdir)/tuxbox/enigma/Makefile: .bootstrap .libfreetype .libfribidi .libmad .libid3tag .libpng .libsigc .libtuxbox .misc_libs .plugins
 	cd $(appsdir)/tuxbox/enigma && $(CONFIGURE)
 
 .enigma: $(appsdir)/tuxbox/enigma/Makefile .tuxbox_tools
@@ -1341,7 +1376,7 @@ $(flashprefix)/.flash: .busybox .driver .modutils
 	$(INSTALL) -d $(flashprefix)/root/share/tuxbox/image
 	$(INSTALL) -d $(flashprefix)/root/var/tuxbox/config
 if CPU_MODEL_823
-	$(INSTALL) -d $(flashprefix)/root/var/tuxbox/ucodes
+ 	$(INSTALL) -d $(flashprefix)/root/var/tuxbox/ucodes
 endif
 	$(INSTALL) -d $(flashprefix)/root/tmp
 	$(MAKE) -C etc install targetprefix=$(flashprefix)/root
@@ -1582,7 +1617,7 @@ distclean-local:
 	-rm .directories .linuxdir .binutils .glibc .gcc .rpcgen
 	-rm .etc .busybox .ftpd .modutils .procps .watchdog
 	-rm .libboost .libcommoncplusplus .libcrypto .libcurl .libdb2 .libdvbpsi .libffi .libfreetype
-	-rm .libncurses .libfribidi .libjpeg .libmad .libnet .libnids .libpcap .libpng .libpopt
+	-rm .libncurses .libfribidi .libjpeg .libmad .libid3tag .libnet .libnids .libpcap .libpng .libpopt
 	-rm .libreadline .libsdl .libsigc .libxml2 .libxmlwrapp .libz
 	-rm .cabextract
 	-rm .gdb .ksymoops .ltrace .strace .nano
