@@ -1868,13 +1868,25 @@ $(flashprefix)/.part_plugin_links: $(flashprefix)/.flash
 	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/links.cfg $(flashprefix)/root/lib/tuxbox/plugins/
 	$(INSTALL) -d $(flashprefix)/root/var_init/tuxbox/plugins
 	$(INSTALL) -d $(flashprefix)/root/var_init/etc
-	@echo "#!/bin/sh" >> $(flashprefix)/root/var_init/etc/init
-	@echo "#Wo ist links" >> $(flashprefix)/root/var_init/etc/init
-	@echo "if [ -d /hdd/links ] ; then LINKSHOME=/hdd/links ; fi" >> $(flashprefix)/root/var_init/etc/init
-	@echo "if [ -d /var/mnt/usb/links ] ; then LINKSHOME=/var/mnt/usb/links ; fi" >> $(flashprefix)/root/var_init/etc/init
-	@echo "ln -sf \$$LINKSHOME/links.so /var/tuxbox/plugins/links.so" >> $(flashprefix)/root/var_init/etc/init
-	@echo "ln -sf \$$LINKSHOME/links.cfg /var/tuxbox/plugins/links.cfg" >> $(flashprefix)/root/var_init/etc/init
-	@echo "export WWW_HOME="www.dream-multimedia-tv.de"" >> $(flashprefix)/root/var_init/etc/init
+	@echo "#!/bin/sh" >> install
+	@echo "#Wo ist links" >> install
+	@echo "LINKSHOME=/tmp" >> install
+	@echo "if [ -d /hdd/links ] ; then LINKSHOME=/hdd/links ; fi" >> install
+	@echo "if [ -d /mnt/usb/links ] ; then LINKSHOME=/mnt/usb/links ; fi" >> install
+	@echo "if [ ! -d /var/tuxbox/plugins ] ; then mkdir /var/tuxbox/plugins ; fi" >> install
+	@echo "ln -sf \$$LINKSHOME/links.so /var/tuxbox/plugins/links.so" >> install
+	@echo "ln -sf \$$LINKSHOME/links.cfg /var/tuxbox/plugins/links.cfg" >> install
+	@echo "/bin/chmod 744 \$$LINKSHOME/links.*" >> install
+	@echo "if [ ! -e /var/etc/init ] ; then" >> install
+	@echo "	echo \"#!/bin/sh\" >> /var/etc/init" >> install
+	@echo "fi" >> install
+	@echo "echo \"#Links Startpage\" >> /var/etc/init" >> install
+	@echo "echo \"export WWW_HOME=\\\"www.dream-multimedia-tv.de\\\"\" >> /var/etc/init" >> install
+	@echo "chmod +x /var/etc/init" >> install
+	@chmod +x install
+	@tar cf install.tar install
+	$(INSTALL) install.tar $(flashprefix)/root/var_init/etc
+	@rm install
 	@touch $@
 
 flash-plugin_lemmings: $(flashprefix)/.part_plugin_lemmings
