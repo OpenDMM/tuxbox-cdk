@@ -99,7 +99,7 @@ V. Building the CDK:
    make all
 
  - This step should always complete without errors. If it does not then please
-   report at https://tuxbox.berlios.de/forum/viewforum.php?f=7
+   report at https://tuxbox.org/forum/viewforum.php?f=7
 
  - If you want to try building additional programs which are usually not
    needed for using tuxbox applications, then enter
