@@ -1716,7 +1716,7 @@ $(flashprefix)/.part_enigma: $(flashprefix)/.flash .enigma
 	$(INSTALL) $(targetprefix)/bin/enigma $(flashprefix)/root/bin
 
 	$(INSTALL) -d $(flashprefix)/root/share/fonts
-	@for i in blue*.ttf md_khmurabi_10.ttf pakenham.ttf unmrs.pfa ; do \
+	@for i in blue*.ttf md_khmurabi_10.ttf pakenham.ttf micron.ttf micron_bold.ttf unmrs.pfa ; do \
 		$(INSTALL) -m644 $(targetprefix)/share/fonts/$$i $(flashprefix)/root/share/fonts; done
 
 	$(INSTALL) -d $(flashprefix)/root/share/locale
