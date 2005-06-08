@@ -1657,6 +1657,11 @@ $(flashprefix)/.part_fstools: $(flashprefix)/.flash .e2fsprogs .reiserfsprogs .u
 	    ln -sf e2fsck fsck.ext3 
 	@touch $@
 
+flash-mkreiserfs: $(flashprefix)/.part_mkreiserfs
+$(flashprefix)/.part_mkreiserfs: $(flashprefix)/.part_reiserfs
+	$(INSTALL) -m755 $(targetprefix)/sbin/mkreiserfs $(flashprefix)/root/sbin
+	@touch $@
+
 flash-sambaserver: $(flashprefix)/.part_sambaserver
 $(flashprefix)/.part_sambaserver: $(flashprefix)/.flash .samba
 	$(INSTALL) -d $(flashprefix)/root/bin
