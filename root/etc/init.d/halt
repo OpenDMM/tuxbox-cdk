@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# $Id$
+
+[ -e /tmp/tuxmaild.pid ] && kill $( cat /tmp/tuxmaild.pid )
+
+/bin/switch -fnc 0
