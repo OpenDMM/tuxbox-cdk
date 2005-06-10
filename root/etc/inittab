@@ -23,4 +23,4 @@ vc/6::askfirst:-/bin/sh
 
 ::restart:/sbin/init
 ::ctrlaltdel:/sbin/reboot
-::shutdown:/etc/init.d/halt
+::shutdown:/bin/switch -fnc 0
