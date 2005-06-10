@@ -1616,7 +1616,7 @@ if BOXTYPE_DM7000
 		rm -rf $(flashprefix)/root/lib/modules/$(KERNELVERSION)/kernel/fs/smbfs; \
 	fi
 #remove reiserfs module when no reiserfs is requested
-	@if [ ! -f $(flashprefix)/.part_reiserfs -a -d $(flashprefix)/root/lib/modules/$(KERNELVERSION)/kernel/fs/reiserfs ] ; then \
+	@if [ ! -f $(flashprefix)/.part_reiserfs -a ! -f $(flashprefix)/.part_mkreiserfs -a -d $(flashprefix)/root/lib/modules/$(KERNELVERSION)/kernel/fs/reiserfs ] ; then \
 		rm -rf $(flashprefix)/root/lib/modules/$(KERNELVERSION)/kernel/fs/reiserfs; \
 	fi
 endif
