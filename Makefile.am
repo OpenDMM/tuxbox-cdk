@@ -1528,7 +1528,7 @@ $(appsdir)/tuxbox/neutrino/Makefile: .bootstrap .libboost .libcurl .libfreetype 
 
 # tuxbox/plugins
 
-$(appsdir)/tuxbox/plugins/Makefile: .bootstrap .libcurl .libpng
+$(appsdir)/tuxbox/plugins/Makefile: .bootstrap .libcurl .libpng .tuxbox_libs
 	cd $(appsdir)/tuxbox/plugins && $(CONFIGURE)
 
 .plugins: $(appsdir)/tuxbox/plugins/Makefile
