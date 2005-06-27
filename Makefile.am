@@ -1702,7 +1702,7 @@ endif
 if BOXTYPE_DM56x0
 	@echo ""
 else
-	@for i in skins/small_red.esml skins/small_red.info pictures/small-red pictures/triaxlogo-fs8.png ; do \
+	@for i in skins/small_red*.esml skins/small_red*.info pictures/small-red pictures/triaxlogo-fs8.png ; do \
 		rm -R $(flashprefix)/root/share/tuxbox/enigma/$$i; done
 endif
 if BOXTYPE_DM500
@@ -1721,7 +1721,7 @@ $(flashprefix)/.part_enigma: $(flashprefix)/.flash .enigma
 	$(INSTALL) $(targetprefix)/bin/enigma $(flashprefix)/root/bin
 
 	$(INSTALL) -d $(flashprefix)/root/share/fonts
-	@for i in blue*.ttf md_khmurabi_10.ttf pakenham.ttf micron.ttf micron_bold.ttf unmrs.pfa ; do \
+	@for i in blue*.ttf md_khmurabi_10.ttf pakenham.ttf unmrs.pfa ; do \
 		$(INSTALL) -m644 $(targetprefix)/share/fonts/$$i $(flashprefix)/root/share/fonts; done
 
 	$(INSTALL) -d $(flashprefix)/root/share/locale
@@ -1736,13 +1736,19 @@ $(flashprefix)/.part_enigma: $(flashprefix)/.flash .enigma
 	$(INSTALL) -m 0644 $(targetprefix)/var/tuxbox/config/enigma/encoding.conf $(flashprefix)/root/var_init/tuxbox/config/enigma
 
 	cp -pa $(targetprefix)/share/tuxbox/enigma/* $(flashprefix)/root/share/tuxbox/enigma
+
 	@for i in `find $(flashprefix)/root/share/tuxbox/enigma/htdocs` ; do \
 		case $$i in \
-		*/rc_dbox2.jpg | */topbalk?.png | */topbalk?_small.png) \
+		*/rc_dbox2.jpg | */rc_dbox2_small.jpg | */topbalk?.png | */topbalk?_small.png) \
 			rm $$i;; \
 		esac; \
 	done;
 if BOXTYPE_DM7000
+	@for i in neutrino chk_v2 blueqt carbon ; do \
+	    rm -R $(flashprefix)/root/share/tuxbox/enigma/pictures/$$i; done
+	@for i in neutrino chk_blue2 blueqt carbon ; do \
+		rm -R $(flashprefix)/root/share/tuxbox/enigma/skins/$$i.*; done
+
 	@for i in `find $(flashprefix)/root/share/tuxbox/enigma/resources -type f` ; do \
 		case $$i in \
 		/*keymappings.xml | */rcdboxold.xml | \

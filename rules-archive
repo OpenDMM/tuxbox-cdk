@@ -12,11 +12,11 @@
 linux-libc-headers-2.6.9.1.tar.bz2;ftp://ftp.belnet.be/mirror/linuxfromscratch.org/ftp/lfs-packages/conglomeration/linux-libc-headers
 linux-2.6.9.tar.bz2;ftp://ftp.de.kernel.org/pub/linux/kernel/v2.6;ftp://ftp.kernel.org/pub/linux/kernel/v2.6
 linuxppc-2.6.9-r1.diff.bz2;http://sources.dreamboxupdate.com/download/kernel-patches
-linuxppc-2.6.9-dream-s5.diff.bz2;http://sources.dreamboxupdate.com/download/kernel-patches
+linuxppc-2.6.9-dream-s6.diff.bz2;http://sources.dreamboxupdate.com/download/kernel-patches
 squashfs2.0r2.diff.bz2;http://sources.dreamboxupdate.com/download/kernel-patches
 binutils-2.15.91.0.2.tar.bz2;ftp://ftp.de.kernel.org/pub/linux/devel/binutils;ftp://ftp.kernel.org/pub/linux/devel/binutils
-gcc-core-3.4.3.tar.bz2;ftp://$(gnuserver)/gcc/gcc-3.4.3
-gcc-g++-3.4.3.tar.bz2;ftp://$(gnuserver)/gcc/gcc-3.4.3
+gcc-core-3.4.4.tar.bz2;ftp://$(gnuserver)/gcc/gcc-3.4.4
+gcc-g++-3.4.4.tar.bz2;ftp://$(gnuserver)/gcc/gcc-3.4.4
 glibc-2.3.2.tar.bz2;ftp://$(gnuserver)/glibc
 glibc-2.3.2-r0.diff.bz2;http://sources.dreamboxupdate.com/download/patches
 nptl-0.60.tar.bz2;http://www.arte.unipi.it/Public/Linux
@@ -90,8 +90,8 @@ reiserfsprogs-3.6.14.tar.gz;http://ftp.roedu.net/pub/mirrors/ftp.namesys.com/pub
 util-linux-2.12i.tar.bz2;http://www.kernel.org/pub/linux/utils/util-linux/
 samba-1.9.18p8.tar.gz;http://mirrors.xmission.com/samba/ftp/stable/
 etherwake_1.08.orig.tar.gz;http://ftp.debian.org/debian/pool/main/e/etherwake/
-dreamfiles_20050314.tar.bz2;http://sources.dreamboxupdate.com/download/snapshots
-dreamdriver_dm7000_20050314.tar.bz2;http://sources.dreamboxupdate.com/download/snapshots
+dreamfiles_20050620.tar.bz2;http://sources.dreamboxupdate.com/download/snapshots
+dreamdriver_dm7000_20050620.tar.bz2;http://sources.dreamboxupdate.com/download/snapshots
 dreamdriver_dm56x0_20050130.tar.bz2;http://sources.dreamboxupdate.com/download/snapshots
 dreamdriver_dm500_20050130.tar.bz2;http://sources.dreamboxupdate.com/download/snapshots
 nfs-utils-1.0.6.tar.gz;http://belnet.dl.sourceforge.net/sourceforge/nfs
