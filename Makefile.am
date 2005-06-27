@@ -23,7 +23,8 @@ core: .directories .binutils .linuxdir .glibc .gcc
 
 checkout:
 	@for i in apps/tuxbox/enigma apps/dvb/dvbsnoop \
-		apps/dvb/tools/stream apps/tuxbox/plugins ; do \
+		apps/dvb/tools/stream apps/tuxbox/plugins \
+		apps/tuxbox/libs ; do \
 		CURRENT_PATH=`pwd`; \
 		cd ../$$i && cvs update -d -P -A; \
 		cd $$CURRENT_PATH; \
