@@ -189,6 +189,7 @@ bootstrap_gcc: @DEPENDS_bootstrap_gcc@
 	fi
 	@PREPARE_gcc@
 	$(INSTALL) -d $(hostprefix)/$(target)/sys-include
+	[ -s $(hostprefix)/$(target)/lib/nof ] && rm $(hostprefix)/$(target)/lib/nof
 	cp -p $(hostprefix)/$(target)/include/limits.h $(hostprefix)/$(target)/sys-include/
 	cd @DIR_gcc@ && \
 		CC=$(CC) CFLAGS="$(CFLAGS)" \
