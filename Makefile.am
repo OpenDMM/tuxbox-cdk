@@ -1803,6 +1803,7 @@ flash-plugin_tuxtxt: $(flashprefix)/.part_plugin_tuxtxt
 $(flashprefix)/.part_plugin_tuxtxt: $(flashprefix)/.flash .plugins
 	$(INSTALL) -d $(flashprefix)/root/share/fonts
 	$(INSTALL) -m644 $(targetprefix)/share/fonts/tuxtxt.ttf $(flashprefix)/root/share/fonts/
+	$(INSTALL) -m644 $(targetprefix)/share/fonts/tuxtxt.otb $(flashprefix)/root/share/fonts/
 	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
 	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/tuxtxt.so $(flashprefix)/root/lib/tuxbox/plugins/
 	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/tuxtxt.cfg $(flashprefix)/root/lib/tuxbox/plugins/
