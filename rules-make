@@ -87,7 +87,7 @@ etherwake;1.08;etherwake-1.08.orig;etherwake_1.08.orig.tar.gz;extract:etherwake_
 dreamfiles;20050620;dreamfiles_20050620;dreamfiles_20050620.tar.bz2;extract:dreamfiles_20050620.tar.bz2
 dreamdriver_dm7000;20050620;dreamdriver_dm7000_20050620;dreamdriver_dm7000_20050620.tar.bz2;extract:dreamdriver_dm7000_20050620.tar.bz2
 dreamdriver_dm56x0;20050130;dreamdriver_dm56x0_20050130;dreamdriver_dm56x0_20050130.tar.bz2;extract:dreamdriver_dm56x0_20050130.tar.bz2
-dreamdriver_dm500;20050130;dreamdriver_dm500_20050130;dreamdriver_dm500_20050130.tar.bz2;extract:dreamdriver_dm500_20050130.tar.bz2
+dreamdriver_dm500;20050620;dreamdriver_dm500_20050620;dreamdriver_dm500_20050620.tar.bz2;extract:dreamdriver_dm500_20050620.tar.bz2
 nfs_utils;1.0.6;nfs-utils-1.0.6;nfs-utils-1.0.6.tar.gz:nfs-utils.diff;extract:nfs-utils-1.0.6.tar.gz;patch:nfs-utils.diff
 
 #
