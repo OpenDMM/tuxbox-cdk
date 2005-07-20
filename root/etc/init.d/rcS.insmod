@@ -111,6 +111,7 @@ fi
   # Je nach Typ weitere Module laden
   if [ $VENDOR_ID -eq 1 ]; then
     #Nokia
+    $IM $MD/ves1820.o
     $IM $MD/ves1x93.o board_type=1
   elif [ $VENDOR_ID -eq 2 ]; then
     # Philips
