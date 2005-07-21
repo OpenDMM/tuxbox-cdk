@@ -29,6 +29,7 @@ ftpd;1.1.0;vsftpd-1.1.0;vsftpd-1.1.0.tar.gz:ftpd.diff;extract:vsftpd-1.1.0.tar.g
 modutils;2.4.21;modutils-2.4.21;modutils-2.4.21.tar.bz2;extract:modutils-2.4.21.tar.bz2
 portmap;5;portmap-5;portmap-5.tar.bz2:portmap_5-8.diff.gz:portmap.diff;extract:portmap-5.tar.bz2;patch:portmap_5-8.diff.gz;patch:portmap.diff
 procps;010114;procps-010114;procps-010114.tar.gz:procps.diff;extract:procps-010114.tar.gz;patch:procps.diff
+mrouted;3.9-beta3;mrouted-3.9-beta3.orig;mrouted_3.9-beta3.orig.tar.gz:mrouted_3.9-beta3-3.diff;extract:mrouted_3.9-beta3.orig.tar.gz;patch:mrouted_3.9-beta3-3.diff
 
 #
 # contrib libs

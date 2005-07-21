@@ -229,7 +229,7 @@ root: \
 	.procps .watchdog
 
 root_optional: \
-	.portmap
+	.portmap .mrouted
 
 .busybox: .bootstrap .etc @DEPENDS_busybox@
 	@PREPARE_busybox@
@@ -306,6 +306,16 @@ root_optional: \
 	@CLEANUP_watchdog@
 	touch $@
 
+.mrouted: .bootstrap @DEPENDS_mrouted@
+	@PREPARE_mrouted@
+	cd @DIR_mrouted@ && \
+		$(BUILDENV) \
+		$(MAKE) all && \
+		$(INSTALL) -m755 mrouted $(targetprefix)/bin/mrouted && \
+		$(INSTALL) -m755 map-mbone $(targetprefix)/bin/map-mbone && \
+		$(INSTALL) -m755 mrinfo $(targetprefix)/bin/mrinfo
+	@CLEANUP_mrouted@
+	touch $@
 
 #######################
 #
@@ -1807,6 +1817,16 @@ $(flashprefix)/.part_sshd: $(flashprefix)/.flash .ssh
 	cp -ap $(targetprefix)/etc/ssh/* $(flashprefix)/root/etc/ssh
 	$(INSTALL) $(targetprefix)/libexec/sftp-server $(flashprefix)/root/libexec
 	$(INSTALL) $(targetprefix)/sbin/sshd $(flashprefix)/root/sbin
+	@touch $@
+
+flash-plugin_dreamdata: $(flashprefix)/.part_plugin_dreamdata
+$(flashprefix)/.part_plugin_dreamdata: $(flashprefix)/.flash .mrouted .plugins
+	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
+	$(INSTALL) -d $(flashprefix)/root/var_init/tuxbox/config
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/dreamdata.so $(flashprefix)/root/lib/tuxbox/plugins/
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/dreamdata.cfg $(flashprefix)/root/lib/tuxbox/plugins/
+	$(INSTALL) $(targetprefix)/var/tuxbox/config/dreamdata.xml $(flashprefix)/root/var_init/tuxbox/config/
+	$(INSTALL) $(targetprefix)/bin/mrouted $(flashprefix)/root/bin
 	@touch $@
 
 flash-plugin_tuxtxt: $(flashprefix)/.part_plugin_tuxtxt
