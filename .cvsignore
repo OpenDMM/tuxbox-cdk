@@ -10,6 +10,7 @@ linux-2.6.9
 .dreamfiles
 .driver
 .dvbsnoop
+.e2fsprogs
 .enigma
 .etc
 .etherwake
@@ -21,6 +22,7 @@ linux-2.6.9
 .lcdmenu
 .libboost
 .libcurl
+.libcrypto
 .libdvbpsi
 .libffi
 .libfreetype
@@ -42,15 +44,18 @@ linux-2.6.9
 .ltrace
 .misc_libs
 .modutils
+.mrouted
 .nano
 .neutrino
 .plugins
 .ppcboot
 .procps
+.reiserfsprogs
 .samba
 .strace
 .stream
 .tuxbox_libs
 .tuxbox_tools
+.utillinux
 .watchdog
 .zapit
