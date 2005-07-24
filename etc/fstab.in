@@ -1,3 +1,0 @@
-none		/tmp	tmpfs	defaults	0 0
-proc		/proc	proc	defaults	0 0
-devpts		/dev/pts devpts	defaults	0 0
