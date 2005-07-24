@@ -1639,7 +1639,6 @@ endif
 
 flash-ftpd: $(flashprefix)/.part_ftpd
 $(flashprefix)/.part_ftpd: $(flashprefix)/.flash .ftpd
-	$(INSTALL) -m644 $(targetprefix)/etc/vsftpd.conf $(flashprefix)/root/etc
 	$(INSTALL) $(targetprefix)/sbin/in.ftpd $(flashprefix)/root/sbin
 	$(INSTALL) -d $(flashprefix)/root/share/empty
 	@touch $@
@@ -1706,22 +1705,16 @@ $(flashprefix)/.part_dreamfiles: $(flashprefix)/.flash .dreamfiles
 	@if [ -f $(flashprefix)/dreamfiles/.version ] ; then \
 		cp $(flashprefix)/dreamfiles/.version $(flashprefix)/root; \
 	fi
-if BOXTYPE_DM7000
-	@echo ""
-else
+if !BOXTYPE_DM7000
 	@echo "i:/ezap/osd/alpha=00000000" >> $(flashprefix)/root/var_init/tuxbox/config/enigma/config
 	@echo "i:/ezap/osd/brightness=00000073" >> $(flashprefix)/root/var_init/tuxbox/config/enigma/config
 	@echo "i:/ezap/osd/gamma=00000066" >> $(flashprefix)/root/var_init/tuxbox/config/enigma/config
 endif
-if BOXTYPE_DM56x0
-	@echo ""
-else
+if !BOXTYPE_DM56x0
 	@for i in skins/small_red*.esml skins/small_red*.info pictures/small-red pictures/triaxlogo-fs8.png ; do \
 		rm -R $(flashprefix)/root/share/tuxbox/enigma/$$i; done
 endif
-if BOXTYPE_DM500
-	@echo ""
-else
+if !BOXTYPE_DM500
 	@for i in cables.xml terrestrial.xml; do \
 		if [ -f $(flashprefix)/root/share/tuxbox/$$i ]; then \
 			rm $(flashprefix)/root/share/tuxbox/$$i; \
@@ -1787,7 +1780,6 @@ endif
 	$(INSTALL) -m644 $(targetprefix)/share/zoneinfo/* $(flashprefix)/root/share/zoneinfo
 	rm -f $(flashprefix)/root/share/zoneinfo/*tab
 
-	$(INSTALL) -m644 $(targetprefix)/etc/timezone.xml $(flashprefix)/root/etc
 	ln -sf /var/etc/localtime $(flashprefix)/root/etc
 	@touch $@
 
