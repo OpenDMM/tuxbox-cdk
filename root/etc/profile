@@ -3,12 +3,14 @@
 export PATH="/sbin:/bin"
 
 # get environment from info module
-if [ ! -e /tmp/dbox.sh ]; then
-	cp /proc/bus/dbox.sh /tmp/dbox.sh
-fi
-
-. /tmp/dbox.sh
+. /proc/bus/dbox.sh                                                             
 
 # timezone, only applicable for middle europe
-export TZ=CET-1CEST,M3.5.0/2,M10.5.0/3
+# export TZ=CET-1CEST,M3.5.0/2,M10.5.0/3
 
+export PS1='\w > '
+alias ll='ls -la'
+
+if [ -e /var/etc/profile ] ; then
+	. /var/etc/profile
+fi

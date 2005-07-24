@@ -1,0 +1,134 @@
+#!/bin/sh
+
+/bin/mount -n -t proc proc /proc
+/bin/mount -n -t devpts devpts /dev/pts
+export INSMOD="/sbin/insmod"
+export MODDIR="/lib/modules/"$(uname -r)
+#export TZ=CET-1CEST,M3.5.0/2,M10.5.0/3
+/etc/init.d/init1
+
+#set environment variables ( mID )
+. /proc/bus/dbox.sh
+
+# check if no DM500
+if [ $mID -ne 07 ] ; then
+	init=0
+	/bin/boot || init=1
+	if [ $init -eq 1 ] ; then
+		/bin/eraseall /dev/mtd/1
+	fi
+fi
+
+/bin/mount -t jffs2 /dev/mtdblock/1 /var
+/bin/mount -t ramfs none /tmp
+
+init=0
+
+# check if /var/.init exist .. then no flash erase is needed .. this is new !
+if [ ! -e /var/.init ]; then
+# new /var/.init not found.. check if old /var/tmp/init exist.. 
+# then not flash erase ist needed
+    if [ -e /var/tmp/init ]; then
+# ok old /var/tmp/init exist.. no create the new flash_erase detection file..
+	touch /var/.init
+# delete /var/tmp folder now.. 	
+	rm -rf /var/tmp
+# create link to /tmp <- this is mounted to RAM 
+	ln -sf /tmp /var/tmp
+    else
+# flash erase is needed ...     
+	init=1
+    fi
+fi
+
+if [ $init -eq 1 ] ; then 
+	cp -a /var_init/* /var
+	touch /var/.init
+	sync
+	umount /var
+	/bin/mount -t jffs2 /dev/mtdblock/1 /var
+fi
+
+ln -sf sound/dsp /dev/dsp
+ln -sf fb/0 /dev/fb0
+ln -s /dev/input/mice /dev/psaux 
+ln -s /dev/input/mice /dev/mouse 
+
+if [ ! -e /var/etc/hostname ] ; then
+	cp /var_init/etc/hostname /var/etc/hostname
+fi
+
+if [ ! -e /var/tuxbox/config/encoding.conf ] ; then
+	cp /var_init/tuxbox/config/enigma/enigma.conf /var/tuxbox/config/enigma
+fi
+
+/bin/hostname -F /var/etc/hostname
+
+/sbin/ifconfig lo 127.0.0.1 netmask 255.0.0.0 up
+
+/sbin/inetd &
+
+#change into folder in RAM ( ramfs )
+cd /tmp
+
+export LD_LIBRARY_PATH=/tmp:/var/lib:/lib:$LD_LIBRARY_PATH
+export PATH=/tmp:/var/bin:$PATH
+
+#check if DM7000
+if [ $mID -eq 05 ] ; then
+	# enable corefiles (for debugging)
+	echo "/hdd/%e-sig-%s.core" > /proc/sys/kernel/core_pattern
+	ulimit -c unlimited
+	# sleep after 10min
+	hdparm -S 120 /dev/ide/host0/bus0/target0/lun0/disc
+	# accustic management
+	hdparm -M 128 /dev/ide/host0/bus0/target0/lun0/disc
+	
+	mount -n -t usbfs usbfs /proc/bus/usb
+	mount /dev/ide/host0/bus0/target0/lun0/part1 /hdd
+	mount /dev/scsi/host0/bus0/target0/lun0/part1 /mnt/usb
+fi
+
+if [ -e /var/etc/install.tar ] ; then
+	/bin/tar xvf /var/etc/install.tar -C /tmp
+	/tmp/install
+	rm /var/etc/install.tar
+fi
+
+if [ -e /var/etc/init ] ; then
+	. /var/etc/init
+fi
+
+touch /tmp/.enigma
+while [ -e /tmp/.enigma ]
+do
+    dccamd
+    /bin/enigma
+    ret=$?
+    echo "enigma returned with "$ret
+    case $ret in
+        0)
+            echo "Shutdown"
+            rm /tmp/.enigma
+            /sbin/halt
+            ;;
+	3)	    
+	    echo "Reboot Flash"
+	    killall -9 dccamd
+	    rm /tmp/.enigma
+	    umount /var
+	    umount /hdd
+	    /bin/flashtool
+	    ;;
+        4)
+            echo "Reboot"
+	    rm /tmp/.enigma
+	    /sbin/reboot
+            ;;
+	*)  echo "Restart"
+	    ;;
+    esac
+    killall -9 dccamd
+done
+
+exit 0
