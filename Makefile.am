@@ -243,7 +243,7 @@ root_optional: \
 	touch $@
 
 .etc:
-	$(MAKE) -C etc install
+#	$(MAKE) -C etc install
 	touch $@
 
 .ftpd: .bootstrap @DEPENDS_ftpd@
