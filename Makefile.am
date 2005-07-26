@@ -1650,7 +1650,7 @@ $(flashprefix)/.part_dvb_tools: $(flashprefix)/.flash .stream
 	$(INSTALL) $(targetprefix)/bin/dvbnet $(flashprefix)/root/bin;
 	@touch $@
 
-flash-dvbsnoop: $(flashprefix)/.part_dvbsnoop
+flash-dvbsnoop: $(flashprefix)/.part_dvbsnoop .dvbsnoop
 $(flashprefix)/.part_dvbsnoop: $(flashprefix)/.flash
 	$(INSTALL) $(targetprefix)/bin/dvbsnoop $(flashprefix)/root/bin;
 	@touch $@
@@ -2119,7 +2119,7 @@ distclean-local:
 	-rm Makefile-archive
 	-rm .bootstrap
 	-rm .directories .linuxdir .binutils .glibc .gcc .rpcgen
-	-rm .etc .busybox .ftpd .modutils .procps .watchdog
+	-rm .etc .busybox .ftpd .modutils .procps .watchdog .mrouted
 	-rm .libboost .libcommoncplusplus .libcrypto .libcurl .libdb2 .libdvbpsi .libffi .libfreetype
 	-rm .libncurses .libfribidi .libjpeg .libmad .libid3tag .libnet .libnids .libpcap .libpng .libpopt
 	-rm .libreadline .libsdl .libsigc .libungif .libxml2 .libxmlwrapp .libz .libvorbisidec .libgmp
