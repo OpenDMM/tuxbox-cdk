@@ -1834,6 +1834,8 @@ $(flashprefix)/.part_plugin_tuxtxt: $(flashprefix)/.flash .plugins
 	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
 	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/tuxtxt.so $(flashprefix)/root/lib/tuxbox/plugins/
 	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/tuxtxt.cfg $(flashprefix)/root/lib/tuxbox/plugins/
+	$(INSTALL) -d $(flashprefix)/root/var_init/tuxbox/config/tuxtxt
+	$(INSTALL) -m644 $(targetprefix)/var/tuxbox/config/tuxtxt/tuxtxt.conf $(flashprefix)/root/var_init/tuxbox/config/tuxtxt
 	@touch $@
 
 flash-plugin_tuxcom: $(flashprefix)/.part_plugin_tuxcom
