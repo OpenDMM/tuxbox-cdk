@@ -1650,6 +1650,11 @@ $(flashprefix)/.part_dvb_tools: $(flashprefix)/.flash .stream
 	$(INSTALL) $(targetprefix)/bin/dvbnet $(flashprefix)/root/bin;
 	@touch $@
 
+flash-dvbsnoop: $(flashprefix)/.part_dvbsnoop
+$(flashprefix)/.part_dvbsnoop: $(flashprefix)/.flash
+	$(INSTALL) $(targetprefix)/bin/dvbsnoop $(flashprefix)/root/bin;
+	@touch $@
+
 flash-reiserfs: $(flashprefix)/.part_reiserfs
 $(flashprefix)/.part_reiserfs: $(flashprefix)/.flash .reiserfsprogs
 	@touch $@
