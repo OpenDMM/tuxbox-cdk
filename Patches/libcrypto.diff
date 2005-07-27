@@ -6,7 +6,7 @@ diff -Naur openssl-0.9.7a/Configure openssl-0.9.7a.patched/Configure
  "OS2-EMX", "gcc::::::::",
  
 +##### Tuxbox
-+"tuxbox",    "powerpc-tuxbox-linux-gnu-gcc:-DB_ENDIAN -DTERMIO -O3 -fomit-frame-pointer -Wall -mcpu=823 -mmultiple -mstring -meabi -msoft-float::-D_REENTRANT::-ldl:BN_LLONG RC4_CHAR RC4_CHUNK DES_RISC1 DES_UNROLL::::::::::dlfcn:linux-shared:-fPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
++"tuxbox",    "powerpc-tuxbox-linux-gnu-gcc:-DB_ENDIAN -DTERMIO -O3 -fomit-frame-pointer -Wall -mcpu=405 -mmultiple -mstring -meabi -msoft-float::-D_REENTRANT::-ldl:BN_LLONG RC4_CHAR RC4_CHUNK DES_RISC1 DES_UNROLL::::::::::dlfcn:linux-shared:-fPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
 +
  ##### VxWorks for various targets
  "vxworks-ppc405","ccppc:-g -msoft-float -mlongcall -DCPU=PPC405 -I\$(WIND_BASE)/target/h:::VXWORKS:-r:::::",
