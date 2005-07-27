@@ -26,7 +26,7 @@
 +xferlog_enable=NO
 +connect_from_port_20=YES
 +secure_chroot_dir=/share/empty
-+ftpd_banner=Willkomen auf Ihrer d-box 2.
++ftpd_banner=Willkomen auf Ihrer Dreambox.
 +
 --- vsftpd-1.1.0/Makefile.orig	2005-01-22 11:51:42.000000000 +0100
 +++ vsftpd-1.1.0/Makefile	2005-01-22 11:53:43.000000000 +0100
