@@ -40,11 +40,10 @@ saft		487/udp				# Simple Asynchronous File Transfer
 # Local services
 
 streamsec	31335/tcp
-streamavpes	31336/tcp
-streamps	31337/tcp
 streampes	31338/tcp
 streamts	31339/tcp
 udpstreampes	31340/tcp
 udpstreampes	31341/udp
-streames        31343/tcp
+streamtsfile	31342/tcp
+streames	31343/tcp
 
