@@ -5,16 +5,21 @@ FILES = \
 	nsswitch.conf profile protocols rpc services termcap timezone.xml \
 	vsftpd.conf
 
-EXTRA_DIST = $(FILES)
+VAR_ETC_LINKS = \
+	exports group hostname hosts localtime passwd resolv.conf smb.conf
 
-all-local: $(FILES)
+EXTRA_DIST = $(FILES) $(VAR_ETC_LINKS) mtab
+
+all-local: $(EXTRA_DIST)
 
 install-data-local: $(FILES)
 	install -d $(targetprefix)/etc
 	@for i in $(FILES) ; do \
 		install -m644 $$i $(targetprefix)/etc ; \
 	done
-
-distclean-local:
-	-rm -f fstab modules.conf
-
+	@for i in $(VAR_ETC_LINKS) ; do \
+		rm -f $(targetprefix)/$$i; \
+		$(LN_S) /var/etc/$$i $(targetprefix)/etc ; \
+	done
+	rm -f $(targetprefix)/mtab
+	$(LN_S) /proc/mtab $(targetprefix)/mtab

@@ -10,4 +10,3 @@ install-data-local: $(FILES)
 	@for i in $(FILES) ; do \
 		install -m755 $$i $(targetprefix)/share/tuxbox ; \
 	done
-

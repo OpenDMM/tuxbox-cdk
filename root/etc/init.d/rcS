@@ -74,6 +74,15 @@ cd /tmp
 export LD_LIBRARY_PATH=/tmp:/var/lib:/lib:$LD_LIBRARY_PATH
 export PATH=/tmp:/var/bin:$PATH
 
+if [ $mID -eq 07 ] ; then
+	if [ ! -d /var/tuxbox/config/enigma/terrestrial ]; then
+		mkdir /var/tuxbox/config/enigma/terrestrial
+	fi
+	if [ ! -d /var/tuxbox/config/enigma/cable ]; then
+		mkdir /var/tuxbox/config/enigma/cable
+	fi
+fi
+
 #check if DM7000
 if [ $mID -eq 05 ] ; then
 	# enable corefiles (for debugging)
