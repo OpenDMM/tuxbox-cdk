@@ -1769,7 +1769,7 @@ $(flashprefix)/.part_enigma: $(flashprefix)/.flash .enigma
 
 	$(INSTALL) -d $(flashprefix)/root/share/fonts
 if BOXTYPE_DM7000
-	@for i in blue*.ttf md_khmurabi_10.ttf pakenham.ttf unmrs.pfs; do \
+	@for i in blue*.ttf md_khmurabi_10.ttf pakenham.ttf unmrs.pfa; do \
 		$(INSTALL) -m644 $(targetprefix)/share/fonts/$$i $(flashprefix)/root/share/fonts; done
 else
 	@for i in blue*.ttf md_khmurabi_10.ttf pakenham.ttf unmrs.pfa micron.ttf micron_bold.ttf; do \
