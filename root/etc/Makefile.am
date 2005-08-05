@@ -10,7 +10,7 @@ VAR_ETC_LINKS = \
 
 EXTRA_DIST = $(FILES) $(VAR_ETC_LINKS) mtab
 
-all-local: $(EXTRA_DIST)
+all-local: $(FILES)
 
 install-data-local: $(FILES)
 	install -d $(targetprefix)/etc
@@ -19,7 +19,7 @@ install-data-local: $(FILES)
 	done
 	@for i in $(VAR_ETC_LINKS) ; do \
 		rm -f $(targetprefix)/$$i; \
-		$(LN_S) /var/etc/$$i $(targetprefix)/etc ; \
+		ln -sf /var/etc/$$i $(targetprefix)/etc ; \
 	done
-	rm -f $(targetprefix)/mtab
-	$(LN_S) /proc/mtab $(targetprefix)/mtab
+	rm -f $(targetprefix)/etc/mtab
+	ln -sf /proc/mounts $(targetprefix)/etc/mtab
