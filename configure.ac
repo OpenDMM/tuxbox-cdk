@@ -408,4 +408,15 @@ GNU server:		$gnuserver
 
 AC_OUTPUT([
 Makefile
+root/Makefile
+root/etc/Makefile
+root/etc/init.d/Makefile
+root/share/Makefile
+root/share/tuxbox/Makefile
+root/share/udhcpc/Makefile
+root/var_init/Makefile
+root/var_init/etc/Makefile
+root/var_init/tuxbox/Makefile
+root/var_init/tuxbox/config/Makefile
+root/var_init/tuxbox/config/enigma/Makefile
 ])

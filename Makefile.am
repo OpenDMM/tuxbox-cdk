@@ -225,13 +225,13 @@ bootstrap_gcc: @DEPENDS_bootstrap_gcc@
 #
 
 root: \
-	.etc .busybox .ftpd .modutils \
+	.root .busybox .ftpd .modutils \
 	.procps .watchdog
 
 root_optional: \
 	.portmap .mrouted
 
-.busybox: .bootstrap .etc @DEPENDS_busybox@
+.busybox: .bootstrap @DEPENDS_busybox@
 	@PREPARE_busybox@
 	cat Patches/busybox.config > @DIR_busybox@/.config
 	cd @DIR_busybox@ && \
@@ -242,8 +242,8 @@ root_optional: \
 	@CLEANUP_busybox@
 	touch $@
 
-.etc:
-#	$(MAKE) -C etc install
+.root:
+	$(MAKE) -C root install
 	touch $@
 
 .ftpd: .bootstrap @DEPENDS_ftpd@
@@ -1607,7 +1607,7 @@ rebuild-flash:
 	-rm -f $(flashprefix)/*.img
 	$(MAKE) flash-lib
 
-$(flashprefix)/.flash: .busybox
+$(flashprefix)/.flash: .busybox .root
 	-rm -rf $(flashprefix)/root
 	@for i in bin dev lib/tuxbox proc sbin var tmp etc; do \
 		$(INSTALL) -d $(flashprefix)/root/$$i ; done
@@ -1634,7 +1634,6 @@ if BOXTYPE_DM7000
 		rm -rf $(flashprefix)/root/lib/modules/$(KERNELVERSION)/kernel/fs/reiserfs; \
 	fi
 endif
-	ln -sf /var/mnt $(flashprefix)/root/mnt
 	@touch $@
 
 flash-ftpd: $(flashprefix)/.part_ftpd
@@ -1706,10 +1705,46 @@ $(flashprefix)/.part_etherwake: $(flashprefix)/.flash .etherwake
 
 flash-dreamfiles: $(flashprefix)/.part_dreamfiles
 $(flashprefix)/.part_dreamfiles: $(flashprefix)/.flash .dreamfiles
-	cp -R $(flashprefix)/dreamfiles/* $(flashprefix)/root
+	@cp -R $(flashprefix)/dreamfiles/* $(flashprefix)/root
 	@if [ -f $(flashprefix)/dreamfiles/.version ] ; then \
 		cp $(flashprefix)/dreamfiles/.version $(flashprefix)/root; \
 	fi
+# var_init
+	@cp -R $(targetprefix)/var_init $(flashprefix)/root
+	@for i in log mnt mnt/nfs mnt/usb run tuxbox/plugins tuxbox/config ; do \
+		$(INSTALL) -d $(flashprefix)/root/var_init/$$i; \
+	done;
+	@for i in tuxtxt enigma/cable enigma/fonts enigma/pictures enigma/resources enigma/skins enigma/terrestrial; do \
+		$(INSTALL) -d $(flashprefix)/root/var_init/tuxbox/config/$$i; \
+	done;
+	@ln -sf /tmp $(flashprefix)/root/var_init/tmp
+	@ln -sf /proc/mounts $(flashprefix)/root/var_init/etc/mtab
+# etc
+	@cp -R $(targetprefix)/etc $(flashprefix)/root
+# lib
+	@for i in ar_AE cs_CZ da_DK el_GR es_ES et_EE fi_FI fr_FR hr_HR \
+	hu_HU is_IS it_IT lt_LT nl_NL no_NO pl_PL pt_PT ro_RO ru_RU sk_SK \
+	sl_SI sr_YU sv_SE tr_TR ur_IN; do \
+		ln -sf de_DE $(flashprefix)/root/lib/locale/$$i; \
+	done;
+	@for i in ISO8859-1.so ISO8859-2.so ISO8859-7.so UNICODE.so; do \
+		cp $(targetprefix)/lib/gconv/$$i $(flashprefix)/root/lib/gconv; \
+	done;
+# share
+	@cp -R $(targetprefix)/share/udhcpc $(flashprefix)/root/share
+if BOXTYPE_DM500
+	@for i in cables.xml satellites.xml terrestrial.xml; do \
+		cp -R $(targetprefix)/share/tuxbox/$$i $(flashprefix)/root/share/tuxbox; \
+		ln -sf tuxbox/$$i $(flashprefix)/root/share; \
+	done;
+else
+	@cp $(targetprefix)/share/tuxbox/satellites.xml $(flashprefix)/root/share/tuxbox;
+	@ln -sf tuxbox/$$i $(flashprefix)/root/share;
+endif
+# misc
+	@ln -sf /var/mnt $(flashprefix)/root/mnt
+	@mkdir $(flashprefix)/root/hdd
+
 if !BOXTYPE_DM7000
 	@echo "i:/ezap/osd/alpha=00000000" >> $(flashprefix)/root/var_init/tuxbox/config/enigma/config
 	@echo "i:/ezap/osd/brightness=00000073" >> $(flashprefix)/root/var_init/tuxbox/config/enigma/config
@@ -1733,15 +1768,19 @@ $(flashprefix)/.part_enigma: $(flashprefix)/.flash .enigma
 	$(INSTALL) $(targetprefix)/bin/enigma $(flashprefix)/root/bin
 
 	$(INSTALL) -d $(flashprefix)/root/share/fonts
-	@for i in blue*.ttf md_khmurabi_10.ttf pakenham.ttf unmrs.pfa ; do \
+if BOXTYPE_DM7000
+	@for i in blue*.ttf md_khmurabi_10.ttf pakenham.ttf unmrs.pfs; do \
 		$(INSTALL) -m644 $(targetprefix)/share/fonts/$$i $(flashprefix)/root/share/fonts; done
-
+else
+	@for i in blue*.ttf md_khmurabi_10.ttf pakenham.ttf unmrs.pfa micron.ttf micron_bold.ttf; do \
+		$(INSTALL) -m644 $(targetprefix)/share/fonts/$$i $(flashprefix)/root/share/fonts; done
+endif		
 	$(INSTALL) -d $(flashprefix)/root/share/locale
 	@for i in `find $(targetprefix)/share/locale -name "tuxbox-enigma.mo"` ; \
 		do cp -pa $${i%%/LC_MESSAGES/tuxbox-enigma.mo} $(flashprefix)/root/share/locale; done
 	@for i in ar sr ur ; do rm -R $(flashprefix)/root/share/locale/$$i; done
-	rm -rf $(flashprefix)/root/share/locale/LC_MESSAGES
-	find $(flashprefix)/root/share/locale -name libc.mo -o -name nano.mo | xargs rm -f
+	@rm -rf $(flashprefix)/root/share/locale/LC_MESSAGES
+	@find $(flashprefix)/root/share/locale -name libc.mo -o -name nano.mo | xargs rm -f
 	$(INSTALL) $(appsdir)/tuxbox/enigma/po/locale.alias $(flashprefix)/root/share/locale
 	$(INSTALL) -d $(flashprefix)/root/share/tuxbox/enigma
 	$(INSTALL) -d $(flashprefix)/root/var_init/tuxbox/config/enigma
@@ -1822,7 +1861,7 @@ $(flashprefix)/.part_plugin_dreamdata: $(flashprefix)/.flash .mrouted .plugins
 	$(INSTALL) -d $(flashprefix)/root/var_init/tuxbox/config
 	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/dreamdata.so $(flashprefix)/root/lib/tuxbox/plugins/
 	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/dreamdata.cfg $(flashprefix)/root/lib/tuxbox/plugins/
-	$(INSTALL) $(targetprefix)/var/tuxbox/config/dreamdata.xml $(flashprefix)/root/var_init/tuxbox/config/
+	$(INSTALL) -m644 $(targetprefix)/var/tuxbox/config/dreamdata.xml $(flashprefix)/root/var_init/tuxbox/config/
 	$(INSTALL) $(targetprefix)/bin/mrouted $(flashprefix)/root/bin
 	@touch $@
 
@@ -2121,7 +2160,7 @@ distclean-local:
 	-rm Makefile-archive
 	-rm .bootstrap
 	-rm .directories .linuxdir .binutils .glibc .gcc .rpcgen
-	-rm .etc .busybox .ftpd .modutils .procps .watchdog .mrouted
+	-rm .root .busybox .ftpd .modutils .procps .watchdog .mrouted
 	-rm .libboost .libcommoncplusplus .libcrypto .libcurl .libdb2 .libdvbpsi .libffi .libfreetype
 	-rm .libncurses .libfribidi .libjpeg .libmad .libid3tag .libnet .libnids .libpcap .libpng .libpopt
 	-rm .libreadline .libsdl .libsigc .libungif .libxml2 .libxmlwrapp .libz .libvorbisidec .libgmp
