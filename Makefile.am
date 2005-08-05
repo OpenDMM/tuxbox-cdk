@@ -1739,7 +1739,7 @@ if BOXTYPE_DM500
 	done;
 else
 	@cp $(targetprefix)/share/tuxbox/satellites.xml $(flashprefix)/root/share/tuxbox;
-	@ln -sf tuxbox/$$i $(flashprefix)/root/share;
+	@ln -sf tuxbox/satellites.xml $(flashprefix)/root/share;
 endif
 # misc
 	@ln -sf /var/mnt $(flashprefix)/root/mnt
