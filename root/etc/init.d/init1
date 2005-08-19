@@ -1,9 +1,23 @@
 #!/bin/sh
 
+if [ -d /lib/modules/$(uname -r) ] ; then
+	$RMMOD $MODDIR/extra/head.ko
+fi
+
 $INSMOD $MODDIR/extra/head.ko
 
 #set environment variables (mID)
 . /proc/bus/dbox.sh
+
+if [ $mID -eq 05 ] ; then
+	if [ -d /lib/modules/$(uname -r) ] ; then
+		$RMMOD $MODDIR/kernel/fs/reiserfs/reiserfs.ko
+		$RMMOD $MODDIR/kernel/fs/isofs/isofs.ko
+		$RMMOD $MODDIR/kernel/fs/cifs/cifs.ko
+		$RMMOD $MODDIR/kernel/drivers/scsi/sg.ko
+		$RMMOD $MODDIR/kernel/drivers/usb/input/usbhid.ko
+	fi
+fi
 
 if [ $mID -eq 05 ] ; then
 	$INSMOD $MODDIR/kernel/fs/reiserfs/reiserfs.ko

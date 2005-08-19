@@ -3,6 +3,7 @@
 /bin/mount -n -t proc proc /proc
 /bin/mount -n -t devpts devpts /dev/pts
 export INSMOD="/sbin/insmod"
+export RMMOD="/sbin/rmmod"
 export MODDIR="/lib/modules/"$(uname -r)
 #export TZ=CET-1CEST,M3.5.0/2,M10.5.0/3
 /etc/init.d/init1
