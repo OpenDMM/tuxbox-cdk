@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [ -d /lib/modules/$(uname -r) ] ; then
+if [ -f /lib/modules/$(uname -r)/.reload_modules ] ; then
 	$RMMOD $MODDIR/extra/head.ko
 fi
 
@@ -10,7 +10,7 @@ $INSMOD $MODDIR/extra/head.ko
 . /proc/bus/dbox.sh
 
 if [ $mID -eq 05 ] ; then
-	if [ -d /lib/modules/$(uname -r) ] ; then
+	if [ -f /lib/modules/$(uname -r)/.reload_modules ] ; then
 		$RMMOD $MODDIR/kernel/fs/reiserfs/reiserfs.ko
 		$RMMOD $MODDIR/kernel/fs/isofs/isofs.ko
 		$RMMOD $MODDIR/kernel/fs/cifs/cifs.ko
