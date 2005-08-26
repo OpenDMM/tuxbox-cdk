@@ -14,3 +14,7 @@ i:/ezap/rc/repeatRate=0000003c
 i:/ezap/serviceselector/showButtons=00000001
 u:/elitedvb/video/vcr_switching=00000000
 u:/ezap/rc/TextInputField/nextCharTimeout=00000320
+i:/enigma/plugins/needoffsets/bottom=00000221
+i:/enigma/plugins/needoffsets/left=0000002c
+i:/enigma/plugins/needoffsets/right=000002a3
+i:/enigma/plugins/needoffsets/top=0000001d
