@@ -96,6 +96,10 @@ if [ $mID -eq 05 ] ; then
 	
 	mount -n -t usbfs usbfs /proc/bus/usb
 	mount /dev/ide/host0/bus0/target0/lun0/part1 /hdd
+	if [ $init -eq 1 ] ; then 
+		rm /hdd/epg.*
+	fi
+	
 	mount /dev/scsi/host0/bus0/target0/lun0/part1 /mnt/usb
 fi
 
