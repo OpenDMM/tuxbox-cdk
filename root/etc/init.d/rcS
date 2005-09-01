@@ -86,9 +86,11 @@ fi
 
 #check if DM7000
 if [ $mID -eq 05 ] ; then
-	# enable corefiles (for debugging)
-	echo "/hdd/%e-sig-%s.core" > /proc/sys/kernel/core_pattern
-	ulimit -c unlimited
+	if [ ! -e /var/etc/.no_corefiles ] ; then
+		# enable corefiles (for debugging)
+		echo "/hdd/%e-sig-%s.core" > /proc/sys/kernel/core_pattern
+		ulimit -c unlimited
+	fi
 	# sleep after 10min
 	hdparm -S 120 /dev/ide/host0/bus0/target0/lun0/disc
 	# accustic management
