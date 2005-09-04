@@ -1,7 +1,7 @@
 diff -Naur busybox-1.00/init/init.c busybox-1.00-patched/init/init.c
 --- busybox-1.00/init/init.c	2004-10-08 10:21:54.000000000 +0200
 +++ busybox-1.00-patched/init/init.c	2005-02-03 21:14:50.000000000 +0100
-@@ -374,7 +374,7 @@
+@@ -375,7 +375,7 @@
  	while ((fd = open(console, O_RDONLY | O_NONBLOCK)) < 0 && tried < 2) {
  		/* Can't open selected console -- try
  			logical system console and VT_MASTER */
@@ -10,7 +10,7 @@ diff -Naur busybox-1.00/init/init.c busybox-1.00-patched/init/init.c
  							sizeof(console));
  		tried++;
  	}
-@@ -629,15 +629,12 @@
+@@ -632,15 +632,12 @@
  
  	pid = run(a);
  	while (1) {
@@ -33,7 +33,7 @@ diff -Naur busybox-1.00/init/init.c busybox-1.00-patched/init/init.c
 diff -Naur busybox-1.00/libbb/messages.c busybox-1.00-patched/libbb/messages.c
 --- busybox-1.00/libbb/messages.c	2004-03-15 09:28:42.000000000 +0100
 +++ busybox-1.00-patched/libbb/messages.c	2005-02-03 21:14:50.000000000 +0100
-@@ -56,27 +56,47 @@
+@@ -59,27 +59,47 @@
  #endif
  
  #ifdef L_passwd_file
@@ -402,7 +402,7 @@ diff -Naur busybox-1.00/modutils/lsmod.c busybox-1.00-patched/modutils/lsmod.c
 diff -Naur busybox-1.00/sysdeps/linux/Config.in busybox-1.00-patched/sysdeps/linux/Config.in
 --- busybox-1.00/sysdeps/linux/Config.in	2004-05-25 13:30:22.000000000 +0200
 +++ busybox-1.00-patched/sysdeps/linux/Config.in	2005-02-03 21:14:50.000000000 +0100
-@@ -196,6 +196,14 @@
+@@ -203,6 +203,14 @@
  	  if you want to add some simple compiler switches (like -march=i686),
  	  or check for warnings using -Werror, just those options here.
  
