@@ -92,9 +92,9 @@ util-linux-2.12i.tar.bz2;http://www.kernel.org/pub/linux/utils/util-linux/
 samba-1.9.18p8.tar.gz;http://mirrors.xmission.com/samba/ftp/stable/
 etherwake_1.08.orig.tar.gz;http://ftp.debian.org/debian/pool/main/e/etherwake/
 dreamfiles_20050805.tar.bz2;http://sources.dreamboxupdate.com/download/snapshots
-dreamdriver_dm7000_20050621.tar.bz2;http://sources.dreamboxupdate.com/download/snapshots
-dreamdriver_dm56x0_20050130.tar.bz2;http://sources.dreamboxupdate.com/download/snapshots
-dreamdriver_dm500_20050807.tar.bz2;http://sources.dreamboxupdate.com/download/snapshots
+dreamdriver_dm7000_20050906.tar.bz2;http://sources.dreamboxupdate.com/download/snapshots
+dreamdriver_dm56x0_20050906.tar.bz2;http://sources.dreamboxupdate.com/download/snapshots
+dreamdriver_dm500_20050906.tar.bz2;http://sources.dreamboxupdate.com/download/snapshots
 nfs-utils-1.0.6.tar.gz;http://belnet.dl.sourceforge.net/sourceforge/nfs
 
 #
