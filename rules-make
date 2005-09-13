@@ -80,7 +80,7 @@ ssh;3.5p1;openssh-3.5p1;openssh-3.5p1.tar.gz:ssh.diff;extract:openssh-3.5p1.tar.
 tcpdump;3.7.1;tcpdump-3.7.1;tcpdump-3.7.1.tar.gz;extract:tcpdump-3.7.1.tar.gz;patch:tcpdump.diff
 xrc;0.6.3;xrc-0.6.3;xrc-0.6.3.tar.gz:xrc.diff;extract:xrc-0.6.3.tar.gz;patch:xrc.diff
 thttpd;2.23beta1;thttpd-2.23beta1;thttpd-2.23beta1.tar.gz;extract:thttpd-2.23beta1.tar.gz;patch:thttpd.diff
-e2fsprogs;1.35;e2fsprogs-1.35;e2fsprogs-1.35.tar.gz;extract:e2fsprogs-1.35.tar.gz
+e2fsprogs;1.35;e2fsprogs-1.35;e2fsprogs-1.35.tar.gz;extract:e2fsprogs-1.35.tar.gz;patch:e2fsprogs_gcc4_build_fix.diff
 reiserfsprogs;3.6.14;reiserfsprogs-3.6.14;reiserfsprogs-3.6.14.tar.gz;extract:reiserfsprogs-3.6.14.tar.gz;patch:reiserfsprogs_add_credits.diff
 utillinux;2.12i;util-linux-2.12i;util-linux-2.12i.tar.bz2;extract:util-linux-2.12i.tar.bz2;patch:util-linux.diff
 samba;1.9.18p8;samba-1.9.18p8;samba-1.9.18p8.tar.gz:samba_ppc.diff;extract:samba-1.9.18p8.tar.gz;patch:samba_ppc.diff
