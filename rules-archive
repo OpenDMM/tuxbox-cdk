@@ -9,12 +9,12 @@
 #
 # core
 #
-linux-libc-headers-2.6.9.1.tar.bz2;ftp://ftp.belnet.be/mirror/linuxfromscratch.org/ftp/lfs-packages/conglomeration/linux-libc-headers
+linux-libc-headers-2.6.9.1.tar.bz2;http://ep09.pld-linux.org/~mmazur/linux-libc-headers
 linux-2.6.9.tar.bz2;ftp://ftp.de.kernel.org/pub/linux/kernel/v2.6;ftp://ftp.kernel.org/pub/linux/kernel/v2.6
 linuxppc-2.6.9-r1.diff.bz2;http://sources.dreamboxupdate.com/download/kernel-patches
 linuxppc-2.6.9-dream-s6.diff.bz2;http://sources.dreamboxupdate.com/download/kernel-patches
 squashfs2.0r2.diff.bz2;http://sources.dreamboxupdate.com/download/kernel-patches
-binutils-2.15.91.0.2.tar.bz2;ftp://ftp.de.kernel.org/pub/linux/devel/binutils;ftp://ftp.kernel.org/pub/linux/devel/binutils
+binutils-2.15.91.0.2.tar.bz2;ftp://ftp.kernel.org/pub/linux/devel/binutils
 gcc-core-3.4.4.tar.bz2;ftp://$(gnuserver)/gcc/gcc-3.4.4
 gcc-g++-3.4.4.tar.bz2;ftp://$(gnuserver)/gcc/gcc-3.4.4
 glibc-2.3.2.tar.bz2;ftp://$(gnuserver)/glibc
