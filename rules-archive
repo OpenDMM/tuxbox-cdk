@@ -45,9 +45,9 @@ DFB++-0.9.22-cvs20050216.tar.gz;http://tuxbox.berlios.de/pub/tuxbox/cdk/src
 ++DFB-0.9.22-cvs20050601.tar.bz2;http://tuxbox.berlios.de/pub/tuxbox/cdk/src
 openssl-0.9.7a.tar.gz;http://www.openssl.org/source
 curl-7.10.1.tar.bz2;http://curl.haxx.se/download
-freetype-2.0.9.tar.bz2;http://mesh.dl.sourceforge.net/sourceforge/freetype
+freetype-2.0.9.tar.bz2;http://gd.tuwien.ac.at/graphics/libs/freetype/freetype2
 ncurses-5.3.tar.gz;ftp://$(gnuserver)/ncurses
-jpegsrc.v6b.tar.gz;http://www.xfig.org/jpeg
+jpegsrc.v6b.tar.gz;http://www.ijg.org/files
 libpng-1.2.8.tar.bz2;http://mesh.dl.sourceforge.net/sourceforge/libpng
 popt-1.6.4.tar.gz;ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.0.x
 libxml2-2.4.22.tar.bz2;ftp://ftp.gnome.org/pub/GNOME/sources/libxml2/2.4
@@ -117,8 +117,8 @@ kaffe-1.0.6.tar.gz;ftp://ftp.kaffe.org/pub/kaffe/v1.0.x-production
 # fun
 #
 gnuboy-1.0.3.tar.gz;http://gnuboy.unix-fu.org/src
-libmad-0.15.0b.tar.gz;http://telia.dl.sourceforge.net/sourceforge/mad
-libid3tag-0.15.0b.tar.gz;http://telia.dl.sourceforge.net/sourceforge/mad
+libmad-0.15.0b.tar.gz;http://mesh.dl.sourceforge.net/sourceforge/mad
+libid3tag-0.15.0b.tar.gz;http://mesh.dl.sourceforge.net/sourceforge/mad
 scummvm-0.6.1b.tar.bz2;http://heanet.dl.sourceforge.net/sourceforge/scummvm
 sdldoom-1.10.tar.gz;ftp://ftp2.3ddownloads.com/89958/doomworld/ports/sdldoom-1.10.tar.gz
 
