@@ -1542,7 +1542,7 @@ $(appsdir)/tuxbox/neutrino/Makefile: .bootstrap .libboost .libcurl .libfreetype 
 
 # tuxbox/plugins
 
-$(appsdir)/tuxbox/plugins/Makefile: .bootstrap .libcurl .libpng .tuxbox_libs
+$(appsdir)/tuxbox/plugins/Makefile: .bootstrap .libcurl .libjpeg .libpng .libungif .tuxbox_libs
 	cd $(appsdir)/tuxbox/plugins && $(CONFIGURE)
 
 .plugins: $(appsdir)/tuxbox/plugins/Makefile
@@ -1863,6 +1863,13 @@ $(flashprefix)/.part_plugin_dreamdata: $(flashprefix)/.flash .mrouted .plugins
 	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/dreamdata.cfg $(flashprefix)/root/lib/tuxbox/plugins/
 	$(INSTALL) -m644 $(targetprefix)/var/tuxbox/config/dreamdata.xml $(flashprefix)/root/var_init/tuxbox/config/
 	$(INSTALL) $(targetprefix)/bin/mrouted $(flashprefix)/root/bin
+	@touch $@
+
+flash-plugin_script: $(flashprefix)/.part_plugin_script
+$(flashprefix)/.part_plugin_script: $(flashprefix)/.flash .plugins
+	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/script.so $(flashprefix)/root/lib/tuxbox/plugins/
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/script.cfg $(flashprefix)/root/lib/tuxbox/plugins/
 	@touch $@
 
 flash-plugin_tuxtxt: $(flashprefix)/.part_plugin_tuxtxt
