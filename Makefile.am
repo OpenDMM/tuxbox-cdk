@@ -2021,6 +2021,17 @@ $(flashprefix)/.part_plugin_viergewinnt: $(flashprefix)/.flash flash-plugin_libf
 	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/vierg.cfg $(flashprefix)/root/lib/tuxbox/plugins/
 	@touch $@
 
+flash-plugin_weather: $(flashprefix)/.part_plugin_weather
+$(flashprefix)/.part_plugin_weather: $(flashprefix)/.flash .plugins flash-enigma
+	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
+	$(INSTALL) -d $(flashprefix)/root/share/tuxbox/weather
+	$(INSTALL) -d $(flashprefix)/root/var_init/tuxbox/config
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/weather.so $(flashprefix)/root/lib/tuxbox/plugins/
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/weather.cfg $(flashprefix)/root/lib/tuxbox/plugins/
+	$(INSTALL) -m644 $(targetprefix)/share/tuxbox/weather/*.png $(flashprefix)/root/share/tuxbox/weather/
+	$(INSTALL) -m644 $(targetprefix)/var/tuxbox/config/weather.xml $(flashprefix)/root/var_init/tuxbox/config/
+	@touch $@
+
 flash-plugin_yahtzee: $(flashprefix)/.part_plugin_yahtzee
 $(flashprefix)/.part_plugin_yahtzee: $(flashprefix)/.flash flash-plugin_libfx2
 	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
