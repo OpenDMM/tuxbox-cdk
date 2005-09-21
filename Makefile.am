@@ -1881,6 +1881,13 @@ $(flashprefix)/.part_plugin_script: $(flashprefix)/.flash .plugins
 	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/script.cfg $(flashprefix)/root/lib/tuxbox/plugins/
 	@touch $@
 
+flash-plugin_movieplayer: $(flashprefix)/.part_plugin_movieplayer
+$(flashprefix)/.part_plugin_movieplayer: $(flashprefix)/.flash .plugins
+	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/movieplayer.so $(flashprefix)/root/lib/tuxbox/plugins/
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/movieplayer.cfg $(flashprefix)/root/lib/tuxbox/plugins/
+	@touch $@
+
 flash-plugin_tuxtxt: $(flashprefix)/.part_plugin_tuxtxt
 $(flashprefix)/.part_plugin_tuxtxt: $(flashprefix)/.flash .plugins
 	$(INSTALL) -d $(flashprefix)/root/share/fonts
