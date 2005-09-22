@@ -1898,8 +1898,8 @@ $(flashprefix)/.part_plugin_dbswitch: $(flashprefix)/.flash .plugins
 flash-plugin_getset: $(flashprefix)/.part_plugin_getset
 $(flashprefix)/.part_plugin_getset: $(flashprefix)/.flash .plugins
 	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
-	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/getset.so $(flashprefix)/root/lib/tuxbox/plugins/
-	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/getset.cfg $(flashprefix)/root/lib/tuxbox/plugins/
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/enigma_getset.so $(flashprefix)/root/lib/tuxbox/plugins/
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/enigma_getset.cfg $(flashprefix)/root/lib/tuxbox/plugins/
 	@touch $@
 
 flash-plugin_tuxtxt: $(flashprefix)/.part_plugin_tuxtxt
