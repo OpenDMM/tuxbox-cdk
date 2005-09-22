@@ -1889,14 +1889,14 @@ $(flashprefix)/.part_plugin_movieplayer: $(flashprefix)/.flash .plugins
 	@touch $@
 
 flash-plugin_dbswitch: $(flashprefix)/.part_plugin_dbswitch
-$(flashprefix)/.part_plugin_movieplayer: $(flashprefix)/.flash .plugins
+$(flashprefix)/.part_plugin_dbswitch: $(flashprefix)/.flash .plugins
 	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
 	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/dbswitch.so $(flashprefix)/root/lib/tuxbox/plugins/
 	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/dbswitch.cfg $(flashprefix)/root/lib/tuxbox/plugins/
 	@touch $@
 
 flash-plugin_getset: $(flashprefix)/.part_plugin_getset
-$(flashprefix)/.part_plugin_movieplayer: $(flashprefix)/.flash .plugins
+$(flashprefix)/.part_plugin_getset: $(flashprefix)/.flash .plugins
 	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
 	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/getset.so $(flashprefix)/root/lib/tuxbox/plugins/
 	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/getset.cfg $(flashprefix)/root/lib/tuxbox/plugins/
