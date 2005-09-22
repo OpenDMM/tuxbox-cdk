@@ -1888,6 +1888,20 @@ $(flashprefix)/.part_plugin_movieplayer: $(flashprefix)/.flash .plugins
 	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/movieplayer.cfg $(flashprefix)/root/lib/tuxbox/plugins/
 	@touch $@
 
+flash-plugin_dbswitch: $(flashprefix)/.part_plugin_dbswitch
+$(flashprefix)/.part_plugin_movieplayer: $(flashprefix)/.flash .plugins
+	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/dbswitch.so $(flashprefix)/root/lib/tuxbox/plugins/
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/dbswitch.cfg $(flashprefix)/root/lib/tuxbox/plugins/
+	@touch $@
+
+flash-plugin_getset: $(flashprefix)/.part_plugin_getset
+$(flashprefix)/.part_plugin_movieplayer: $(flashprefix)/.flash .plugins
+	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/getset.so $(flashprefix)/root/lib/tuxbox/plugins/
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/getset.cfg $(flashprefix)/root/lib/tuxbox/plugins/
+	@touch $@
+
 flash-plugin_tuxtxt: $(flashprefix)/.part_plugin_tuxtxt
 $(flashprefix)/.part_plugin_tuxtxt: $(flashprefix)/.flash .plugins
 	$(INSTALL) -d $(flashprefix)/root/share/fonts
