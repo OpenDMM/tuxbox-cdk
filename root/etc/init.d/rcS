@@ -14,7 +14,7 @@ export MODDIR="/lib/modules/"$(uname -r)
 # if dm 7000
 if [ $mID -eq 05 ] ; then
 	if [ -e /root/platform/kernel/bild ] ; then
-		showlogo
+		/bin/showlogo
 	fi
 fi
 
