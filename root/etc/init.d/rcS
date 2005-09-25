@@ -8,15 +8,15 @@ export MODDIR="/lib/modules/"$(uname -r)
 #export TZ=CET-1CEST,M3.5.0/2,M10.5.0/3
 /etc/init.d/init1
 
+#set environment variables ( mID )
+. /proc/bus/dbox.sh
+
 # if dm 7000
 if [ $mID -eq 05 ] ; then
 	if [ -e /root/platform/kernel/bild ] ; then
 		showlogo
 	fi
 fi
-
-#set environment variables ( mID )
-. /proc/bus/dbox.sh
 
 # check if no DM500
 if [ $mID -ne 07 ] ; then
