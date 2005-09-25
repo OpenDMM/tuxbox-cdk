@@ -1807,6 +1807,8 @@ if BOXTYPE_DM7000
 		*) rm $$i;; \
 		esac; \
 	done;
+	
+	$(INSTALL) $(targetprefix)/bin/showlogo $(flashprefix)/root/bin
 else
 	CURRENT_PATH=`pwd` && \
 	cd $(flashprefix)/root/share/tuxbox/enigma/skins && \
