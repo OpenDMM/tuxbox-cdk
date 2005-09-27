@@ -27,7 +27,11 @@ if [ $mID -ne 07 ] ; then
 	fi
 fi
 
-/bin/mount -t jffs2 /dev/mtdblock/1 /var
+# do not mount jffs2 when not booting from flash
+if [ ! -e /root/platform/kernel/bild ] ; then
+	/bin/mount -t jffs2 /dev/mtdblock/1 /var
+fi
+
 /bin/mount -t ramfs none /tmp
 
 init=0
@@ -98,17 +102,20 @@ if [ $mID -eq 05 ] ; then
 		echo "/hdd/%e-sig-%s.core" > /proc/sys/kernel/core_pattern
 		ulimit -c unlimited
 	fi
-	# sleep after 10min
-	hdparm -S 120 /dev/ide/host0/bus0/target0/lun0/disc
-	# accustic management
-	hdparm -M 128 /dev/ide/host0/bus0/target0/lun0/disc
 	
-	mount -n -t usbfs usbfs /proc/bus/usb
-	mount /dev/ide/host0/bus0/target0/lun0/part1 /hdd
-	if [ $init -eq 1 ] ; then 
-		rm /hdd/epg.*
+	if [ ! -e /var/etc/.dont_mount_hdd ] ; then
+		# sleep after 10min
+		hdparm -S 120 /dev/ide/host0/bus0/target0/lun0/disc
+		# accustic management
+		hdparm -M 128 /dev/ide/host0/bus0/target0/lun0/disc
+	
+		mount /dev/ide/host0/bus0/target0/lun0/part1 /hdd
+		if [ $init -eq 1 ] ; then 
+			rm /hdd/epg.*
+		fi
 	fi
 	
+	mount -n -t usbfs usbfs /proc/bus/usb
 	mount /dev/scsi/host0/bus0/target0/lun0/part1 /mnt/usb
 fi
 
