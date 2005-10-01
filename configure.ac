@@ -88,7 +88,7 @@ if test -z "$CFLAGS" ; then
 fi
 
 TARGET_CFLAGS="-mcpu=$CPU_MODEL -msoft-float -mmultiple -mstring -meabi -pipe -Os -ggdb3 -DHAVE_DREAMBOX_HARDWARE"
-TARGET_LDFLAGS=""
+TARGET_LDFLAGS="-Wl,-01 -Wl,--as-needed"
 TARGET_CXXFLAGS="$TARGET_CFLAGS"
 
 AC_SUBST(CFLAGS)

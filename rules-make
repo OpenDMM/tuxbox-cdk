@@ -12,7 +12,7 @@
 #
 # core
 #
-linux;2.6.9;linux-2.6.9;linux-2.6.9.tar.bz2:linuxppc-2.6.9-r1.diff.bz2:linuxppc-2.6.9-dream-s6.diff.bz2:squashfs2.0r2.diff.bz2;remove:linux;extract:linux-2.6.9.tar.bz2;patch:linuxppc-2.6.9-r1.diff.bz2;patch:linuxppc-2.6.9-dream-s6.diff.bz2;patch:squashfs2.0r2.diff.bz2;link:linux-2.6.9:linux
+linux;2.6.9;linux-2.6.9;linux-2.6.9.tar.bz2:linuxppc-2.6.9-r1.diff.bz2:linuxppc-2.6.9-dream-s7.diff.bz2:squashfs2.2r2.diff.bz2:squashfs_lzma.diff.bz2;remove:linux;extract:linux-2.6.9.tar.bz2;patch:linuxppc-2.6.9-r1.diff.bz2;patch:linuxppc-2.6.9-dream-s7.diff.bz2;patch:squashfs2.2r2.diff.bz2;patch:squashfs_lzma.diff.bz2;link:linux-2.6.9:linux
 linux_libc_headers;2.6.9.1;linux-libc-headers-2.6.9.1;linux-libc-headers-2.6.9.1.tar.bz2:linux-libc-headers.diff;remove:linux-libc-headers;extract:linux-libc-headers-2.6.9.1.tar.bz2;link:linux-libc-headers-2.6.9.1:linux-libc-headers;patch:linux-libc-headers.diff
 binutils;2.15.91.0.2;binutils-2.15.91.0.2;binutils-2.15.91.0.2.tar.bz2;extract:binutils-2.15.91.0.2.tar.bz2
 bootstrap_gcc;3.4.4;gcc-3.4.4;gcc-core-3.4.4.tar.bz2;extract:gcc-core-3.4.4.tar.bz2;
@@ -85,7 +85,7 @@ reiserfsprogs;3.6.14;reiserfsprogs-3.6.14;reiserfsprogs-3.6.14.tar.gz;extract:re
 utillinux;2.12i;util-linux-2.12i;util-linux-2.12i.tar.bz2;extract:util-linux-2.12i.tar.bz2;patch:util-linux.diff
 samba;1.9.18p8;samba-1.9.18p8;samba-1.9.18p8.tar.gz:samba_ppc.diff;extract:samba-1.9.18p8.tar.gz;patch:samba_ppc.diff
 etherwake;1.08;etherwake-1.08.orig;etherwake_1.08.orig.tar.gz;extract:etherwake_1.08.orig.tar.gz;patch:etherwake.diff
-dreamfiles;20050805;dreamfiles_20050805;dreamfiles_20050805.tar.bz2;extract:dreamfiles_20050805.tar.bz2
+dreamfiles;20051001;dreamfiles_20051001;dreamfiles_20051001.tar.bz2;extract:dreamfiles_20051001.tar.bz2
 dreamdriver_dm7000;20050909;dreamdriver_dm7000_20050909;dreamdriver_dm7000_20050909.tar.bz2;extract:dreamdriver_dm7000_20050909.tar.bz2
 dreamdriver_dm56x0;20050906;dreamdriver_dm56x0_20050906;dreamdriver_dm56x0_20050906.tar.bz2;extract:dreamdriver_dm56x0_20050906.tar.bz2
 dreamdriver_dm500;20050906;dreamdriver_dm500_20050906;dreamdriver_dm500_20050906.tar.bz2;extract:dreamdriver_dm500_20050906.tar.bz2

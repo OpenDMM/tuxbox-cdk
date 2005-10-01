@@ -1580,7 +1580,7 @@ if BOXTYPE_DM500
 	@PREPARE_dreamfiles@
 	@PREPARE_dreamdriver_dm500@
 endif
-	@for i in dreamfiles boot mkcramfs-e mksquashfs mklibs.py ; do \
+	@for i in dreamfiles boot mkcramfs-e mksquashfs mklibs.py mksquashfs_lzma_patches.tar.bz2 ; do \
 		rm -R $(flashprefix)/$$i 2>/dev/null || /bin/true; \
 		mv $$i $(flashprefix) 2>/dev/null || /bin/true; \
 	done
@@ -1592,12 +1592,14 @@ dreamboximage_root: core .enigma .reiserfsprogs .e2fsprogs .samba \
 	flash-enigma flash-plugin_tetris flash-plugin_snake \
 	flash-plugin_pacman flash-plugin_tuxtxt flash-plugin_ngrabstartstop \
 	flash-ftpd flash-dvb-tools flash-reiserfs flash-fstools flash-sambaserver \
-	flash-etherwake flash-dreamfiles
+	flash-etherwake flash-dreamfiles flash-sambaclient flash-cifs flash-dvbsnoop \
+	flash-plugin_tuxcom
 else
 dreamboximage_root: core .enigma .etherwake .linuxkernel .dreamfiles \
 	flash-enigma flash-plugin_tetris flash-plugin_snake \
 	flash-plugin_pacman flash-plugin_tuxtxt flash-plugin_ngrabstartstop \
-	flash-ftpd flash-dvb-tools flash-etherwake flash-dreamfiles flash-sambaclient
+	flash-ftpd flash-dvb-tools flash-etherwake flash-dreamfiles flash-dvbsnoop \
+	flash-sambaclient
 endif
 
 rebuild-flash:
@@ -1743,7 +1745,7 @@ else
 endif
 # misc
 	@ln -sf /var/mnt $(flashprefix)/root/mnt
-	@mkdir $(flashprefix)/root/hdd
+	@if [ ! -d $(flashprefix)/root/hdd ]; then mkdir $(flashprefix)/root/hdd; fi
 
 if !BOXTYPE_DM7000
 	@echo "i:/ezap/osd/alpha=00000000" >> $(flashprefix)/root/var_init/tuxbox/config/enigma/config
@@ -1768,13 +1770,13 @@ $(flashprefix)/.part_enigma: $(flashprefix)/.flash .enigma
 	$(INSTALL) $(targetprefix)/bin/enigma $(flashprefix)/root/bin
 
 	$(INSTALL) -d $(flashprefix)/root/share/fonts
-if BOXTYPE_DM7000
-	@for i in blue*.ttf md_khmurabi_10.ttf pakenham.ttf unmrs.pfa; do \
-		$(INSTALL) -m644 $(targetprefix)/share/fonts/$$i $(flashprefix)/root/share/fonts; done
-else
+#if BOXTYPE_DM7000
+#	@for i in blue*.ttf md_khmurabi_10.ttf pakenham.ttf unmrs.pfa; do \
+#		$(INSTALL) -m644 $(targetprefix)/share/fonts/$$i $(flashprefix)/root/share/fonts; done
+#else
 	@for i in blue*.ttf md_khmurabi_10.ttf pakenham.ttf unmrs.pfa micron.ttf micron_bold.ttf; do \
 		$(INSTALL) -m644 $(targetprefix)/share/fonts/$$i $(flashprefix)/root/share/fonts; done
-endif		
+#endif		
 	$(INSTALL) -d $(flashprefix)/root/share/locale
 	@for i in `find $(targetprefix)/share/locale -name "tuxbox-enigma.mo"` ; \
 		do cp -pa $${i%%/LC_MESSAGES/tuxbox-enigma.mo} $(flashprefix)/root/share/locale; done
@@ -1795,10 +1797,10 @@ endif
 		esac; \
 	done;
 if BOXTYPE_DM7000
-	@for i in neutrino chk_v2 blueqt carbon ; do \
-	    rm -R $(flashprefix)/root/share/tuxbox/enigma/pictures/$$i; done
-	@for i in neutrino chk_blue2 blueqt carbon ; do \
-		rm -R $(flashprefix)/root/share/tuxbox/enigma/skins/$$i.*; done
+#	@for i in neutrino chk_v2 blueqt carbon ; do \
+#	    rm -R $(flashprefix)/root/share/tuxbox/enigma/pictures/$$i; done
+#	@for i in neutrino chk_blue2 blueqt carbon ; do \
+#		rm -R $(flashprefix)/root/share/tuxbox/enigma/skins/$$i.*; done
 
 	@for i in `find $(flashprefix)/root/share/tuxbox/enigma/resources -type f` ; do \
 		case $$i in \
@@ -2158,13 +2160,7 @@ $(flashprefix)/boot-cramfs.img: .linuxkernel $(flashprefix)/.part_dreamfiles
 	cp $(buildprefix)/linux/arch/ppc/boot/images/zImage.treeboot $(flashprefix)/boot/root/platform/kernel/os
 if BOXTYPE_DM7000
 	$(flashprefix)/mkcramfs-e -eb $(flashprefix)/boot $(flashprefix)/boot-cramfs.img
-endif
-if BOXTYPE_DM56x0
-	mv $(flashprefix)/boot/root/platform/kernel/bild .
-	$(flashprefix)/mkcramfs-e -eb $(flashprefix)/boot $(flashprefix)/boot-cramfs.img
-	mv ./bild $(flashprefix)/boot/root/platform/kernel
-endif
-if BOXTYPE_DM500
+else
 	mv $(flashprefix)/boot/root/platform/kernel/bild .
 	$(flashprefix)/mkcramfs-e -eb $(flashprefix)/boot $(flashprefix)/boot-cramfs.img
 	mv ./bild $(flashprefix)/boot/root/platform/kernel
