@@ -1588,14 +1588,14 @@ endif
 
 if BOXTYPE_DM7000
 dreamboximage_root: core .enigma .reiserfsprogs .e2fsprogs .samba \
-	.etherwake .utillinux .linuxkernel .dreamfiles \
+	.etherwake .utillinux .linuxkernel .dreamfiles .dvbsnoop \
 	flash-enigma flash-plugin_tetris flash-plugin_snake \
 	flash-plugin_pacman flash-plugin_tuxtxt flash-plugin_ngrabstartstop \
 	flash-ftpd flash-dvb-tools flash-reiserfs flash-fstools flash-sambaserver \
 	flash-etherwake flash-dreamfiles flash-sambaclient flash-cifs flash-dvbsnoop \
 	flash-plugin_tuxcom
 else
-dreamboximage_root: core .enigma .etherwake .linuxkernel .dreamfiles \
+dreamboximage_root: core .enigma .etherwake .linuxkernel .dreamfiles .dvbsnoop \
 	flash-enigma flash-plugin_tetris flash-plugin_snake \
 	flash-plugin_pacman flash-plugin_tuxtxt flash-plugin_ngrabstartstop \
 	flash-ftpd flash-dvb-tools flash-etherwake flash-dreamfiles flash-dvbsnoop \
