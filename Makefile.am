@@ -1811,6 +1811,7 @@ if BOXTYPE_DM7000
 	done;
 	
 	$(INSTALL) $(targetprefix)/bin/showlogo $(flashprefix)/root/bin
+	$(INSTALL) $(targetprefix)/bin/bootmenue $(flashprefix)/root/bin
 else
 	CURRENT_PATH=`pwd` && \
 	cd $(flashprefix)/root/share/tuxbox/enigma/skins && \
