@@ -1711,6 +1711,19 @@ $(DEPDIR)/hostapps_cross: $(hostappsdir)/config.status
 	$(MAKE) -C $(hostappsdir)
 	touch $@
 
+################################################################
+dboxflasher: $(bootprefix)/dboxflasher
+
+$(bootprefix)/dboxflasher:
+	@if [ -e $(bootdir)/u-boot-config/u-boot.config ]; then \
+	  rm $(bootdir)/u-boot-config/u-boot.config; \
+	fi 
+	ln -s $(bootdir)/u-boot-config/u-boot.flasher.dbox2.h $(bootdir)/u-boot-config/u-boot.config
+	rm -f $(DEPDIR)/u-boot
+	rm -f $(bootprefix)/u-boot
+	$(MAKE) $(DEPDIR)/u-boot 
+	cp $(bootprefix)/u-boot $@
+
 if TARGETRULESET_FLASH
 #######################
 #
