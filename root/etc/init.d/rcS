@@ -132,33 +132,35 @@ fi
 touch /tmp/.enigma
 while [ -e /tmp/.enigma ]
 do
-    dccamd
-    /bin/enigma
-    ret=$?
-    echo "enigma returned with "$ret
-    case $ret in
-        0)
-            echo "Shutdown"
-            rm /tmp/.enigma
-            /sbin/halt
-            ;;
+	if [ ! -e /var/etc/.dont_start_dccamd ] ; then
+		dccamd
+	fi
+	/bin/enigma
+	ret=$?
+	echo "enigma returned with "$ret
+	case $ret in
+	0)
+		echo "Shutdown"
+		rm /tmp/.enigma
+		/sbin/halt
+		;;
 	3)	    
-	    echo "Reboot Flash"
-	    killall -9 dccamd
-	    rm /tmp/.enigma
-	    umount /var
-	    umount /hdd
-	    /bin/flashtool
-	    ;;
-        4)
-            echo "Reboot"
-	    rm /tmp/.enigma
-	    /sbin/reboot
-            ;;
+		echo "Reboot Flash"
+		killall -9 dccamd
+		rm /tmp/.enigma
+		umount /var
+		umount /hdd
+		/bin/flashtool
+		;;
+	4)
+		echo "Reboot"
+		rm /tmp/.enigma
+		/sbin/reboot
+		;;
 	*)  echo "Restart"
-	    ;;
-    esac
-    killall -9 dccamd
+		;;
+	esac
+	killall -9 dccamd
 done
 
 exit 0
