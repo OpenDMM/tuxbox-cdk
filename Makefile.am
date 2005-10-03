@@ -11,8 +11,12 @@ BUILDENV := \
 	LDFLAGS="$(TARGET_LDFLAGS)" \
 	PKG_CONFIG_PATH=$(targetprefix)/lib/pkgconfig
 
+if TARGETRULESET_FLASH
+all: 	flash-all-all-all
+else
 all: core libs root boot apps devel
 extra: java contrib_apps fun dvb_apps
+endif
 
 # This rule script checks if all archives are present at the given address but
 # does NOT download them.
@@ -2394,6 +2398,33 @@ endif ## TARGETRULESET_FLASH
 #   internal
 #
 
+APPSCLEANUP:=rm -f $(DEPDIR)/neutrino $(DEPDIR)/enigma $(DEPDIR)/zapit $(DEPDIR)/plugins $(DEPDIR)/tuxbox_tools $(DEPDIR)/misc_tools $(DEPDIR)/misc_libs $(DEPDIR)/tuxbox_libs $(DEPDIR)/libtuxbox $(DEPDIR)/dvb_tools $(DEPDIR)/config $(DEPDIR)/lcars $(DEPDIR)/lcd $(DEPDIR)/dvbsnoop 
+
+depsclean:
+	$(DEPSCLEANUP)
+	$(APPSCLEANUP)
+	rm -f $(DEPDIR)/u-boot $(DEPDIR)/linuxkernel $(DEPDIR)/driver $(DEPDIR)/rootdirectories
+
+mostlyclean: depsclean
+	-$(MAKE) -C linux clean
+	-$(MAKE) -C $(driverdir) KERNEL_LOCATION=$(buildprefix)/linux \
+		BIN_DEST=$(targetprefix)/bin \
+		INSTALL_MOD_PATH=$(targetprefix) clean
+	$(MAKE) -C $(appsdir)/tuxbox/neutrino clean
+	$(MAKE) -C $(appsdir)/tuxbox/enigma clean
+	$(MAKE) -C $(appsdir)/tuxbox/lcars clean
+	$(MAKE) -C $(appsdir)/dvb/zapit clean
+	$(MAKE) -C $(appsdir)/tuxbox/plugins clean
+	$(MAKE) -C $(appsdir)/tuxbox/tools clean
+	$(MAKE) -C $(appsdir)/misc/tools clean
+	$(MAKE) -C $(appsdir)/misc/libs clean
+	$(MAKE) -C $(appsdir)/tuxbox/libs clean
+	$(MAKE) -C $(appsdir)/tuxbox/libtuxbox clean
+	$(MAKE) -C $(appsdir)/dvb/tools clean
+	$(MAKE) -C $(appsdir)/dvb/config distclean
+	$(MAKE) -C $(appsdir)/tuxbox/lcd clean
+	$(MAKE) -C $(appsdir)/dvb/dvbsnoop clean
+
 clean-local:
 	-$(MAKE) -C etc clean
 	-$(MAKE) -C $(appsdir) clean
@@ -2440,9 +2471,11 @@ Makefile-archive: $(top_srcdir)/rules-archive $(top_srcdir)/rules-archive.pl
 endif
 
 if TARGETRULESET_FLASH
-.PHONY: core libs root apps boot devel java copy lib compress
+.PHONY: core libs root apps boot devel java copy lib compress \
+	depsclean mostlyclean clean distclean \
+	flash-clean flash-semiclean flash-developerclean flash-mostlyclean
 else
-.PHONY: core libs root apps boot devel java
+.PHONY: core libs root apps boot devel java depsclean mostlyclean clean distclean
 endif
 
 EXTRA_DIST = \

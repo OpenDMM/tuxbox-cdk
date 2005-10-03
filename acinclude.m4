@@ -4,6 +4,7 @@ eval `${srcdir}/rules.pl make ${srcdir}/rules-make${MAKERULESETFILE} $1 cdkoutpu
 INSTALL_$1=`${srcdir}/rules.pl install ${srcdir}/rules-install${INSTALLRULESETFILE} $1`
 CLEANUP_$1="rm -rf $DIR_$1"
 CLEANUP="$CLEANUP $DIR_$1"
+DEPSCLEANUP="$DEPSCLEANUP .deps/$1"
 AC_SUBST(DEPENDS_$1)dnl
 AC_SUBST(DIR_$1)dnl
 AC_SUBST(PREPARE_$1)dnl
