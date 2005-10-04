@@ -12,19 +12,19 @@ $INSMOD $MODDIR/extra/head.ko
 if [ $mID -eq 05 ] ; then
 	if [ -f /lib/modules/$(uname -r)/.reload_modules ] ; then
 		$RMMOD $MODDIR/kernel/fs/reiserfs/reiserfs.ko
-		$RMMOD $MODDIR/kernel/fs/isofs/isofs.ko
 		$RMMOD $MODDIR/kernel/fs/cifs/cifs.ko
+		$RMMOD $MODDIR/kernel/fs/smbfs/smbfs.ko
 		$RMMOD $MODDIR/kernel/drivers/scsi/sg.ko
-		$RMMOD $MODDIR/kernel/drivers/usb/input/usbhid.ko
+		$RMMOD $MODDIR/kernel/drivers/usb/input/hid.ko
 	fi
 fi
 
 if [ $mID -eq 05 ] ; then
 	$INSMOD $MODDIR/kernel/fs/reiserfs/reiserfs.ko
-	$INSMOD $MODDIR/kernel/fs/isofs/isofs.ko
 	$INSMOD $MODDIR/kernel/fs/cifs/cifs.ko
+	$INSMOD $MODDIR/kernel/fs/smbfs/smbfs.ko
 	$INSMOD $MODDIR/kernel/drivers/scsi/sg.ko
-	$INSMOD $MODDIR/kernel/drivers/usb/input/usbhid.ko
+	$INSMOD $MODDIR/kernel/drivers/usb/input/hid.ko
 fi
 
 #create compatibility links for hardware with only one demux
