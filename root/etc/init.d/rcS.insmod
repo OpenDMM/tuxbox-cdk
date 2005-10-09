@@ -150,6 +150,10 @@ fi
 
 test -x /bin/loadkeys && loadkeys /share/keymaps/i386/qwertz/de-latin1.kmap.gz
 
+if [ ! -d /var/etc ] ; then
+    mkdir /var/etc
+fi
+
 if [ -e /var/etc/init.d/rcS.local ]; then
 	. /var/etc/init.d/rcS.local
 elif [ -e /etc/init.d/rcS.local ]; then
