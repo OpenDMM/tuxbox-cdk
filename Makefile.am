@@ -2088,6 +2088,13 @@ $(flashprefix)/.part_plugin_dslstartstop: $(flashprefix)/.flash .plugins flash-e
 		cp $(targetprefix)/lib/tuxbox/plugins/dsl*con*.$$i $(flashprefix)/root/lib/tuxbox/plugins/ ; done;
 	@touch $@
 
+flash-plugin_dreamflash: $(flashprefix)/.part_plugin_dreamflash
+$(flashprefix)/.part_plugin_dreamflash: $(flashprefix)/.flash .plugins
+	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/dreamflash.so $(flashprefix)/root/lib/tuxbox/plugins/
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/dreamflash.cfg $(flashprefix)/root/lib/tuxbox/plugins/
+	@touch $@
+
 ############################# UNTESTED!!! ##################################
 flash-neutrino: $(flashprefix)/.part_neutrino
 $(flashprefix)/.part_neutrino: $(flashprefix)/.flash .neutrino
