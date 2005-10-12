@@ -1,5 +1,5 @@
---- Archive/SDL-1.2.6.orig/src/video/fbcon/SDL_fbevents.c	2002-03-06 12:23:03.000000000 +0100
-+++ SDL-1.2.6/src/video/fbcon/SDL_fbevents.c	2002-08-26 01:26:16.000000000 +0200
+--- SDL-1.2.9org/src/video/fbcon/SDL_fbevents.c	2005-01-04 20:04:14.000000000 +0100
++++ SDL-1.2.9/src/video/fbcon/SDL_fbevents.c	2005-09-29 17:41:36.510000000 +0200
 @@ -69,6 +69,65 @@
  static Uint16 keymap_temp[128]; /* only used at startup */
  static SDL_keysym *TranslateKey(int scancode, SDL_keysym *keysym);
@@ -66,6 +66,15 @@
  /* Ugh, we have to duplicate the kernel's keysym mapping code...
     Oh, it's not so bad. :-)
  
+@@ -171,7 +230,7 @@
+ 				saved_vt = vtstate.v_active;
+ 			}
+ 			if ( ioctl(keyboard_fd, VT_ACTIVATE, current_vt) == 0 ) {
+-				ioctl(keyboard_fd, VT_WAITACTIVE, current_vt);
++				//ioctl(keyboard_fd, VT_WAITACTIVE, current_vt); //waits endless at dreambox
+ 			}
+ 		}
+ 
 @@ -240,11 +299,20 @@
  			close(keyboard_fd);
  		}
@@ -80,7 +89,7 @@
  {
 +	struct timezone tz;
 +	struct timeval tv;
-+	rc_fd = open("/dev/dbox/rc0", O_RDONLY);
++	rc_fd = open("/dev/dbox/rc0", O_RDONLY); //TODO DREAMBOX PATH!
 +	gettimeofday(&tv, &tz);
 +	keytimer = (tv.tv_sec * 1000) + (int)(tv.tv_usec / 1000) + 3600000;
 +	oldkey = -1;
@@ -290,9 +299,46 @@
  			if ( mouse_fd >= 0 ) {
  				if ( FD_ISSET(mouse_fd, &fdset) ) {
  					handle_mouse(this);
-diff -Naur Archive/SDL-1.2.6.orig/src/video/fbcon/SDL_fbvideo.h SDL-1.2.6/src/video/fbcon/SDL_fbvideo.h
---- Archive/SDL-1.2.6.orig/src/video/fbcon/SDL_fbvideo.h	2002-03-06 12:23:04.000000000 +0100
-+++ SDL-1.2.6/src/video/fbcon/SDL_fbvideo.h	2002-08-19 05:25:36.000000000 +0200
+diff -u -r SDL-1.2.9org/src/video/fbcon/SDL_fbvideo.c SDL-1.2.9/src/video/fbcon/SDL_fbvideo.c
+--- SDL-1.2.9org/src/video/fbcon/SDL_fbvideo.c	2005-02-12 19:03:54.000000000 +0100
++++ SDL-1.2.9/src/video/fbcon/SDL_fbvideo.c	2005-09-29 17:37:13.690000000 +0200
+@@ -97,6 +97,7 @@
+ #ifdef USE_VESA_TIMINGS	/* Only tested on Matrox Millenium I */
+ 	{  640,  400, 39771,  48, 16, 39,  8,  96, 2, 2, 0 },	/* 70 Hz */
+ 	{  640,  480, 39683,  48, 16, 33, 10,  96, 2, 0, 0 },	/* 60 Hz */
++	{  720,  576, 26101, 144, 16, 28,  6, 112, 4, 0, 0 },   /* BLA */
+ 	{  768,  576, 26101, 144, 16, 28,  6, 112, 4, 0, 0 },	/* 60 Hz */
+ 	{  800,  600, 24038, 144, 24, 28,  8, 112, 6, 0, 0 },	/* 60 Hz */
+ 	{  960,  720, 17686, 144, 24, 28,  8, 112, 4, 0, 0 },	/* 60 Hz */
+@@ -115,6 +116,7 @@
+ 	{  512,  384, 49603,  48, 16, 16,  1,  64, 3, 0, 0 },	/* 78 Hz */
+ 	{  640,  400, 31746,  96, 32, 41,  1,  64, 3, 2, 0 },	/* 85 Hz */
+ 	{  640,  480, 31746, 120, 16, 16,  1,  64, 3, 0, 0 },	/* 75 Hz */
++	{  720,  576, 26101, 144, 16, 18,  6, 112, 4, 0, 0 },
+ 	{  768,  576, 26101, 144, 16, 28,  6, 112, 4, 0, 0 },	/* 60 Hz */
+ 	{  800,  600, 20000,  64, 56, 23, 37, 120, 6, 3, 0 },	/* 72 Hz */
+ 	{  960,  720, 17686, 144, 24, 28,  8, 112, 4, 0, 0 },	/* 60 Hz */
+@@ -161,7 +163,7 @@
+ 
+ 	SDL_fbdev = getenv("SDL_FBDEV");
+ 	if ( SDL_fbdev == NULL ) {
+-		SDL_fbdev = "/dev/fb0";
++		SDL_fbdev = "/dev/fb/0";
+ 	}
+ 	console = open(SDL_fbdev, O_RDWR, 0);
+ 	if ( console >= 0 ) {
+@@ -336,7 +338,7 @@
+ 	/* Initialize the library */
+ 	SDL_fbdev = getenv("SDL_FBDEV");
+ 	if ( SDL_fbdev == NULL ) {
+-		SDL_fbdev = "/dev/fb0";
++		SDL_fbdev = "/dev/fb/0";
+ 	}
+ 	console_fd = open(SDL_fbdev, O_RDWR, 0);
+ 	if ( console_fd < 0 ) {
+diff -u -r SDL-1.2.9org/src/video/fbcon/SDL_fbvideo.h SDL-1.2.9/src/video/fbcon/SDL_fbvideo.h
+--- SDL-1.2.9org/src/video/fbcon/SDL_fbvideo.h	2004-01-04 17:49:25.000000000 +0100
++++ SDL-1.2.9/src/video/fbcon/SDL_fbvideo.h	2005-09-29 17:37:13.690000000 +0200
 @@ -61,6 +61,7 @@
  	int current_vt;
  	int saved_vt;
@@ -309,51 +355,3 @@ diff -Naur Archive/SDL-1.2.6.orig/src/video/fbcon/SDL_fbvideo.h SDL-1.2.6/src/vi
  #define saved_kbd_mode		(this->hidden->saved_kbd_mode)
  #define saved_kbd_termios	(this->hidden->saved_kbd_termios)
  #define mouse_fd		(this->hidden->mouse_fd)
-diff -Naur SDL-1.2.6/ltconfig SDL-1.2.6.patched/ltconfig
---- SDL-1.2.6/ltconfig	2003-08-30 21:13:00.000000000 +0200
-+++ SDL-1.2.6.patched/ltconfig	2004-11-20 18:18:14.000000000 +0100
-@@ -2107,7 +2107,6 @@
-   else
-     # Only the GNU ld.so supports shared libraries on MkLinux.
-     case "$host_cpu" in
--    powerpc*) dynamic_linker=no ;;
-     *) dynamic_linker='Linux ld.so' ;;
-     esac
-   fi
-diff -Naur SDL-1.2.6/src/video/fbcon/SDL_fbvideo.c SDL-1.2.6.patched/src/video/fbcon/SDL_fbvideo.c
---- SDL-1.2.6/src/video/fbcon/SDL_fbvideo.c	2003-08-30 21:13:09.000000000 +0200
-+++ SDL-1.2.6.patched/src/video/fbcon/SDL_fbvideo.c	2004-11-20 18:35:29.000000000 +0100
-@@ -97,6 +99,7 @@
- #ifdef USE_VESA_TIMINGS	/* Only tested on Matrox Millenium I */
- 	{  640,  400, 39771,  48, 16, 39,  8,  96, 2, 2, 0 },	/* 70 Hz */
- 	{  640,  480, 39683,  48, 16, 33, 10,  96, 2, 0, 0 },	/* 60 Hz */
-+	{  720,  576, 26101, 144, 16, 28,  6, 112, 4, 0, 0 },   /* BLA */
- 	{  768,  576, 26101, 144, 16, 28,  6, 112, 4, 0, 0 },	/* 60 Hz */
- 	{  800,  600, 24038, 144, 24, 28,  8, 112, 6, 0, 0 },	/* 60 Hz */
- 	{  960,  720, 17686, 144, 24, 28,  8, 112, 4, 0, 0 },	/* 60 Hz */
-@@ -115,6 +118,7 @@
- 	{  512,  384, 49603,  48, 16, 16,  1,  64, 3, 0, 0 },	/* 78 Hz */
- 	{  640,  400, 31746,  96, 32, 41,  1,  64, 3, 2, 0 },	/* 85 Hz */
- 	{  640,  480, 31746, 120, 16, 16,  1,  64, 3, 0, 0 },	/* 75 Hz */
-+	{  720,  576, 26101, 144, 16, 18,  6, 112, 4, 0, 0 },
- 	{  768,  576, 26101, 144, 16, 28,  6, 112, 4, 0, 0 },	/* 60 Hz */
- 	{  800,  600, 20000,  64, 56, 23, 37, 120, 6, 3, 0 },	/* 72 Hz */
- 	{  960,  720, 17686, 144, 24, 28,  8, 112, 4, 0, 0 },	/* 60 Hz */
-@@ -161,7 +165,7 @@
- 
- 	SDL_fbdev = getenv("SDL_FBDEV");
- 	if ( SDL_fbdev == NULL ) {
--		SDL_fbdev = "/dev/fb0";
-+		SDL_fbdev = "/dev/fb/0";
- 	}
- 	console = open(SDL_fbdev, O_RDWR, 0);
- 	if ( console >= 0 ) {
-@@ -336,7 +340,7 @@
- 	/* Initialize the library */
- 	SDL_fbdev = getenv("SDL_FBDEV");
- 	if ( SDL_fbdev == NULL ) {
--		SDL_fbdev = "/dev/fb0";
-+		SDL_fbdev = "/dev/fb/0";
- 	}
- 	console_fd = open(SDL_fbdev, O_RDWR, 0);
- 	if ( console_fd < 0 ) {

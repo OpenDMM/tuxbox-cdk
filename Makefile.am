@@ -702,7 +702,7 @@ endif
 			--disable-arts \
 			--disable-nas \
 			--disable-diskaudio \
-			--disable-nasm \
+			--enable-nasm \
 			--disable-nanox \
 			--disable-video-x11 \
 			--without-x \
@@ -717,13 +717,80 @@ endif
 			--disable-video-dummy \
 			--disable-video-opengl \
 			--disable-stdio-redirect \
+			--enable-joystick \
 			--disable-directx && \
 		$(MAKE) all && \
 		rm -f $(hostprefix)/bin/sdl-config && \
 		sed -e "s,^prefix=,prefix=$(targetprefix)," < sdl-config > $(hostprefix)/bin/sdl-config && \
 		chmod 755 $(hostprefix)/bin/sdl-config && \
 		@INSTALL_libsdl@
+if TARGETRULESET_FLASH
+		cd $(hostprefix)/$(target)/lib && \
+		ln -sf libSDL.a libSDL_pic.a
+endif
 	@CLEANUP_libsdl@
+	touch $@
+
+.libsdl_image: .bootstrap .libsdl @DEPENDS_libsdl_image@
+	@PREPARE_libsdl_image@
+	cd @DIR_libsdl_image@ && \
+		$(BUILDENV) \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--prefix= \
+			--disable-sdltest \
+			--with-sdl-prefix=$(hostprefix)/lib \
+			--with-sdl-exec-prefix=$(hostprefix) && \
+		$(MAKE) && \
+		@INSTALL_libsdl_image@
+if TARGETRULESET_FLASH
+		cd $(hostprefix)/$(target)/lib && \
+		ln -sf libSDL_image.a libSDL_image_pic.a
+endif
+	@CLEANUP_libsdl_image@
+	touch $@
+
+.libsdl_mixer: .bootstrap .libsdl @DEPENDS_libsdl_mixer@
+	@PREPARE_libsdl_mixer@
+	cd @DIR_libsdl_mixer@ && \
+		$(BUILDENV) \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--prefix= \
+			--disable-sdltest \
+			--with-sdl-prefix=$(hostprefix)/lib \
+			--with-sdl-exec-prefix=$(hostprefix) && \
+		$(MAKE) && \
+		@INSTALL_libsdl_mixer@
+if TARGETRULESET_FLASH
+		cd $(hostprefix)/$(target)/lib && \
+		ln -sf libSDL_mixer.a libSDL_mixer_pic.a
+endif
+	@CLEANUP_libsdl_mixer@
+	touch $@
+
+.libsdl_sound: .bootstrap .libsdl @DEPENDS_libsdl_sound@
+	@PREPARE_libsdl_sound@
+	cd @DIR_libsdl_sound@ && \
+		$(BUILDENV) \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--prefix= \
+			--disable-sdltest \
+			--with-sdl-prefix=$(hostprefix)/lib \
+			--with-sdl-exec-prefix=$(hostprefix) \
+			--disable-ogg \
+			--with-vorbis-prefix=$(hostprefix) && \
+		$(MAKE) && \
+		@INSTALL_libsdl_sound@
+if TARGETRULESET_FLASH
+		cd $(hostprefix)/$(target)/lib && \
+		ln -sf libSDL_sound.a libSDL_sound_pic.a
+endif
+	@CLEANUP_libsdl_sound@
 	touch $@
 
 .libsigc: .bootstrap @DEPENDS_libsigc@
@@ -1296,8 +1363,13 @@ fun: .gnuboy .scummvm .sdldoom
 .scummvm: .bootstrap .libreadline .libsdl @DEPENDS_scummvm@
 	@PREPARE_scummvm@
 	cd @DIR_scummvm@ && \
+		$(BUILDENV) \
 		./configure \
-		    --host=$(target) && \
+		    --host=$(target) \
+		    --disable-debug \
+		    --disable-zlib \
+		    --disable-mt32emu \
+		    --with-sdl-prefix=$(hostprefix)/bin && \
 		$(MAKE) \
 			AR="$(target)-ar cru" \
 			LD=$(target)-ld \

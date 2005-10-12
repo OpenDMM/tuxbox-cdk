@@ -1,31 +1,33 @@
-diff -Naur scummvm-0.6.0/backends/sdl/sdl.cpp scummvm-0.6.0-pached/backends/sdl/sdl.cpp
---- scummvm-0.6.0/backends/sdl/sdl.cpp	2004-02-28 14:01:43.000000000 +0100
-+++ scummvm-0.6.0/backends/sdl/sdl.cpp	2004-11-20 18:30:26.000000000 +0100
-@@ -127,9 +127,8 @@
+diff -Naur scummvm-0.7.1.org/backends/sdl/graphics.cpp scummvm-0.7.1/backends/sdl/graphics.cpp
+--- scummvm-0.7.1.org/backends/sdl/graphics.cpp	2005-09-25 22:16:36.030000000 +0200
++++ scummvm-0.7.1/backends/sdl/graphics.cpp	2005-09-25 22:19:20.370000000 +0200
+@@ -243,7 +243,8 @@
  	// Create the surface that contains the scaled graphics in 16 bit mode
  	//
  
--	_hwscreen = SDL_SetVideoMode(_screenWidth * _scaleFactor, (_adjustAspectRatio ? 240 : _screenHeight) * _scaleFactor, 16, 
--		_full_screen ? (SDL_FULLSCREEN|SDL_SWSURFACE) : SDL_SWSURFACE
--	);
-+	_hwscreen = SDL_SetVideoMode(720, 576, 16,
-+		_full_screen ? (SDL_FULLSCREEN|SDL_SWSURFACE) : SDL_SWSURFACE);
+-	_hwscreen = SDL_SetVideoMode(_screenWidth * _scaleFactor, effectiveScreenHeight(), 16, 
++//	_hwscreen = SDL_SetVideoMode(_screenWidth * _scaleFactor, effectiveScreenHeight(), 16, 
++	_hwscreen = SDL_SetVideoMode(640,480,16,
+ 		_fullscreen ? (SDL_FULLSCREEN|SDL_SWSURFACE) : SDL_SWSURFACE
+ 	);
  	if (_hwscreen == NULL) {
- 		// DON'T use error(), as this tries to bring up the debug
- 		// console, which WON'T WORK now that _hwscreen is hosed.
-diff -Naur scummvm-0.6.0/configure scummvm-0.6.0-pached/configure
---- scummvm-0.6.0/configure	2004-02-15 01:42:36.000000000 +0100
-+++ scummvm-0.6.0/configure	2004-11-20 17:29:01.000000000 +0100
-@@ -419,10 +419,10 @@
- if test -n "$_host"; then
-     # Cross-compiling mode - add your target here if needed
-     case "$_host" in
--	arm-linux)
-+	powerpc-tuxbox-linux-gnu)
- 	    echo "Cross-compiling to $_host, forcing endianness, alignment and type sizes"
- 	    DEFINES="$DEFINES -DUNIX"
--	    _def_endianess='#define SCUMM_LITTLE_ENDIAN'
-+	    _def_endianess='#define SCUMM_BIG_ENDIAN'
- 	    _def_align='#define SCUMM_NEED_ALIGNMENT'
- 	    type_1_byte='char'
+diff -Naur scummvm-0.7.1.org/configure scummvm-0.7.1/configure
+--- scummvm-0.7.1.org/configure	2005-09-25 22:16:36.100000000 +0200
++++ scummvm-0.7.1/configure	2005-09-25 22:25:18.310000000 +0200
+@@ -580,6 +580,16 @@
  	    type_2_byte='short'
+ 	    type_4_byte='int'
+ 	    ;;
++	powerpc-tuxbox-linux-gnu)
++	    echo "Cross-compiling to $_host, forcing endianness, alignment and type sizes"
++	    DEFINES="$DEFINES -DUNIX"
++	    _def_endianness='#define SCUMM_BIG_ENDIAN'
++	    _def_align='#define SCUMM_NEED_ALIGNMENT'
++	    _def_powerpc-tuxbox-linux-gnu="#define POWERPC-TUXBOX-LINUX-GNU"
++	    type_1_byte='char'
++	    type_2_byte='short'
++	    type_4_byte='int'
++	    ;;
+ 	*)
+ 	    echo "Cross-compiling to unknown target, please add your target to configure."
+ 	    exit 1
