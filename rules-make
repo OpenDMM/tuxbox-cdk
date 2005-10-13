@@ -61,6 +61,7 @@ libsdl;1.2.9;SDL-1.2.9;SDL-1.2.9.tar.gz:sdl.diff;extract:SDL-1.2.9.tar.gz;patch:
 libsdl_sound;1.0.1;SDL_sound-1.0.1;SDL_sound-1.0.1.tar.gz;extract:SDL_sound-1.0.1.tar.gz
 libsdl_mixer;1.2.6;SDL_mixer-1.2.6;SDL_mixer-1.2.6.tar.gz;extract:SDL_mixer-1.2.6.tar.gz
 libsdl_image;1.2.4;SDL_image-1.2.4;SDL_image-1.2.4.tar.gz;extract:SDL_image-1.2.4.tar.gz
+libsdl_net;1.2.5;SDL_net-1.2.5;SDL_net-1.2.5.tar.gz;extract:SDL_net-1.2.5.tar.gz
 libsigc;1.2.5;libsigc++-1.2.5;libsigc++-1.2.5.tar.gz;extract:libsigc++-1.2.5.tar.gz
 libvorbisidec;20040525;tremor-20040525;tremor-20040525.tar.bz2;extract:tremor-20040525.tar.bz2;patch:tremor.diff
 libungif;4.1.3;libungif-4.1.3;libungif-4.1.3.tar.bz2;extract:libungif-4.1.3.tar.bz2

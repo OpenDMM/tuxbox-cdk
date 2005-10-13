@@ -139,7 +139,7 @@
 +	}
 +	if (what == 1 || what == 2)
 +	{
-+		if (read_code == RC1_DBOX || read_code == RC2_DBOX) // dbox
++		if (read_code == RC1_HOME || read_code == RC2_HOME) // home
 +			keysym.sym = 27; // escape
 +		else if (read_code == RC1_OK || read_code == RC2_OK) // ok
 +                        keysym.sym = 13; // enter
@@ -185,7 +185,7 @@
 +                        keysym.sym = 61;
 +		else if (read_code == RC1_VOLMINUS || read_code == RC2_VOLMINUS)
 +                        keysym.sym = 45;
-+		else if (read_code == RC1_HOME || read_code == RC2_HOME)
++		else if (read_code == RC1_DBOX || read_code == RC2_DBOX)
 +                        keysym.sym = 'y';
 +		else
 +		{

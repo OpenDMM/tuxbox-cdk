@@ -60,6 +60,7 @@ libsdl;make:install:DESTDIR=TARGET
 libsdl_image;make:install:DESTDIR=TARGET
 libsdl_mixer;make:install:DESTDIR=TARGET
 libsdl_sound;make:install:DESTDIR=TARGET
+libsdl_net;make:install:DESTDIR=TARGET
 libsigc;rewrite-pkgconfig:sigc++-1.2.pc;make:install:DESTDIR=TARGET
 libungif;make:install:DESTDIR=TARGET
 libvorbisidec;make:install:DESTDIR=TARGET

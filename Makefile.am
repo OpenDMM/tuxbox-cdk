@@ -793,6 +793,26 @@ endif
 	@CLEANUP_libsdl_sound@
 	touch $@
 
+.libsdl_net: .bootstrap .libsdl @DEPENDS_libsdl_net@
+	@PREPARE_libsdl_net@
+	cd @DIR_libsdl_net@ && \
+		$(BUILDENV) \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--prefix= \
+			--disable-sdltest \
+			--with-sdl-prefix=$(hostprefix)/lib \
+			--with-sdl-exec-prefix=$(hostprefix) && \
+		$(MAKE) && \
+		@INSTALL_libsdl_net@
+if TARGETRULESET_FLASH
+		cd $(hostprefix)/$(target)/lib && \
+		ln -sf libSDL_net.a libSDL_net_pic.a
+endif
+	@CLEANUP_libsdl_net@
+	touch $@
+
 .libsigc: .bootstrap @DEPENDS_libsigc@
 	@PREPARE_libsigc@
 	cd @DIR_libsigc@ && \
