@@ -1802,6 +1802,14 @@ $(flashprefix)/.part_etherwake: $(flashprefix)/.flash .etherwake
 	$(INSTALL) $(targetprefix)/bin/etherwake $(flashprefix)/root/bin
 	@touch $@
 
+flash-enigma_boot: $(flashprefix)/.part_enigma_boot
+$(flashprefix)/.part_enigma_boot: .enigma
+	$(INSTALL) -d $(flashprefix)/root/bin
+	$(INSTALL) $(targetprefix)/bin/showlogo $(flashprefix)/root/bin
+	$(INSTALL) $(targetprefix)/bin/bootmenue $(flashprefix)/root/bin
+	$(INSTALL) $(targetprefix)/bin/chttpd $(flashprefix)/root/bin
+	@touch $@
+
 flash-dreamfiles: $(flashprefix)/.part_dreamfiles
 $(flashprefix)/.part_dreamfiles: $(flashprefix)/.flash .dreamfiles
 	@cp -R $(flashprefix)/dreamfiles/* $(flashprefix)/root
@@ -1906,9 +1914,6 @@ if BOXTYPE_DM7000
 		*) rm $$i;; \
 		esac; \
 	done;
-	
-	$(INSTALL) $(targetprefix)/bin/showlogo $(flashprefix)/root/bin
-	$(INSTALL) $(targetprefix)/bin/bootmenue $(flashprefix)/root/bin
 else
 	CURRENT_PATH=`pwd` && \
 	cd $(flashprefix)/root/share/tuxbox/enigma/skins && \
