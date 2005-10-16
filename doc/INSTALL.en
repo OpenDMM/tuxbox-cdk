@@ -23,7 +23,7 @@ I. Prerequistes:
 
  - cvs
  - autoconf >= 2.57a
- - automake >= 1.7
+ - automake >= 1.8
  - libtool >= 1.4.2
  - gettext >= 0.12.1
  - make >= 3.79
