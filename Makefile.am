@@ -1519,7 +1519,10 @@ CONFIGURE_OPTS = \
 	--with-dvbincludes=$(driverdir)/include \
 	--with-target=cdk \
 	--with-boxtype=$(BOXTYPE)\
-	--with-webif=$(WEBIF)
+	--with-webif=$(WEBIF)\
+	--with-epg=$(EPG)\
+	--with-flashtool=$(FLASHTOOL)\
+	--with-reiserfs=$(REISERFS)
 
 if MAINTAINER_MODE
 CONFIGURE_OPTS_MAINTAINER = \
@@ -1687,6 +1690,9 @@ dreamboximage_root: core .enigma .reiserfsprogs .e2fsprogs .samba \
 	flash-ftpd flash-dvb-tools flash-reiserfs flash-fstools flash-sambaserver \
 	flash-etherwake flash-dreamfiles flash-sambaclient flash-cifs flash-dvbsnoop \
 	flash-plugin_tuxcom
+if REISERFS_YES
+	$(MAKE) flash-mkreiserfs
+endif
 else
 dreamboximage_root: core .enigma .etherwake .linuxkernel .dreamfiles .dvbsnoop \
 	flash-enigma flash-plugin_tetris flash-plugin_snake \

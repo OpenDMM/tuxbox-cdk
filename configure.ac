@@ -75,6 +75,30 @@ AC_SUBST(WEBIF)
 AM_CONDITIONAL(WEBIF_STANDARD,test "$WEBIF" = "standard")
 AM_CONDITIONAL(WEBIF_EXPERT,test "$WEBIF" = "expert")
 
+AC_ARG_WITH(epg,
+	[  --with-epg=NAME dreambox epg [[standard,private]]],
+	[EPG="$withval"],[EPG="standard"])
+
+AC_SUBST(EPG)
+AM_CONDITIONAL(EPG_STANDARD,test "$EPG" = "standard")
+AM_CONDITIONAL(EPG_PRIVATE,test "$EPG" = "private")
+
+AC_ARG_WITH(flashtool,
+	[  --with-flashtool=NAME dreambox flashtool [[standard,expert]]],
+	[FLASHTOOL="$withval"],[FLASHTOOL="standard"])
+
+AC_SUBST(FLASHTOOL)
+AM_CONDITIONAL(FLASHTOOL_STANDARD,test "$FLASHTOOL" = "standard")
+AM_CONDITIONAL(FLASHTOOL_EXPERT,test "$FLASHTOOL" = "expert")
+
+AC_ARG_WITH(reiserfs,
+	[  --with-reiserfs=NAME dreambox reiserfs [[yes,no]]],
+	[REISERFS="$withval"],[REISERFS="no"])
+
+AC_SUBST(REISERFS)
+AM_CONDITIONAL(REISERFS_NO,test "$REISERFS" = "no")
+AM_CONDITIONAL(REISERFS_YES,test "$REISERFS" = "yes")
+
 AC_ARG_WITH(targetruleset,
 	[  --with-targetruleset=NAME target ruleset [[standard,flash]]],
 	[TARGETRULESET="$withval"],[TARGETRULESET="standard"])
@@ -406,6 +430,9 @@ summary:
 target cpu:		$CPU_MODEL
 target box:		$BOXTYPE
 webif type:		$WEBIF
+epg:			$EPG
+flashtool:		$FLASHTOOL
+reiserfs:		$REISERFS
 host rule set:		$HOSTRULESET
 target rule set:	$TARGETRULESET
 target prefix:		$targetprefix

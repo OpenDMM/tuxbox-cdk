@@ -14,4 +14,7 @@ fi
 	--with-cvsdir=$CURRENT_PATH \
 	--with-cpu=405 \
 	--enable-maintainer-mode \
-	--with-targetruleset=flash
+	--with-targetruleset=flash \
+	--with-epg=standard \
+	--with-flashtool=standard \
+	--with-reiserfs=no
