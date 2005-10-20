@@ -405,6 +405,7 @@ summary:
 ----------------------------------------
 target cpu:		$CPU_MODEL
 target box:		$BOXTYPE
+webif type:		$WEBIF
 host rule set:		$HOSTRULESET
 target rule set:	$TARGETRULESET
 target prefix:		$targetprefix

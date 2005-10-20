@@ -9,6 +9,7 @@ if test -z "$TYPE"; then
 fi
 ./configure \
 	--with-boxtype=$TYPE \
+	--with-webif=standard \
 	--prefix=$CURRENT_PATH/root \
 	--with-cvsdir=$CURRENT_PATH \
 	--with-cpu=405 \
