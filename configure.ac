@@ -67,6 +67,14 @@ AM_CONDITIONAL(BOXTYPE_DM7000,test "$BOXTYPE" = "dm7000")
 AM_CONDITIONAL(BOXTYPE_DM56x0,test "$BOXTYPE" = "dm56x0")
 AM_CONDITIONAL(BOXTYPE_DM500,test "$BOXTYPE" = "dm500")
 
+AC_ARG_WITH(webif,
+	[  --with-webif=NAME dreambox webif [[standard,expert]]],
+	[WEBIF="$withval"],[WEBIF="standard"])
+
+AC_SUBST(WEBIF)
+AM_CONDITIONAL(WEBIF_STANDARD,test "$WEBIF" = "standard")
+AM_CONDITIONAL(WEBIF_EXPERT,test "$WEBIF" = "expert")
+
 AC_ARG_WITH(targetruleset,
 	[  --with-targetruleset=NAME target ruleset [[standard,flash]]],
 	[TARGETRULESET="$withval"],[TARGETRULESET="standard"])
