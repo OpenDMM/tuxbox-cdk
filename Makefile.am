@@ -1518,7 +1518,8 @@ CONFIGURE_OPTS = \
 	--with-driver=$(driverdir) \
 	--with-dvbincludes=$(driverdir)/include \
 	--with-target=cdk \
-	--with-boxtype=$(BOXTYPE)
+	--with-boxtype=$(BOXTYPE)\
+	--with-webif=$(WEBIF)
 
 if MAINTAINER_MODE
 CONFIGURE_OPTS_MAINTAINER = \
