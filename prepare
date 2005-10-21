@@ -17,6 +17,6 @@ fi
 	--with-targetruleset=flash \
 	--with-epg=standard \
 	--with-flashtool=standard \
-	--with-reiserfs=no
+	--with-reiserfs=no \
 	--with-ext-flashtool=yes \
 	--with-enigma-debug=yes
