@@ -99,6 +99,22 @@ AC_SUBST(REISERFS)
 AM_CONDITIONAL(REISERFS_NO,test "$REISERFS" = "no")
 AM_CONDITIONAL(REISERFS_YES,test "$REISERFS" = "yes")
 
+AC_ARG_WITH(ext-flashtool,
+	[  --with-ext-flashtool=NAME dreambox ext-flashtool [[yes,no]]],
+	[EXTFLASHTOOL="$withval"],[EXTFLASHTOOL="yes"])
+
+AC_ARG_WITH(enigma-debug,
+	[  --with-enigma-debug=NAME dreambox enigma-debug [[yes,no]]],
+	[ENIGMA_DEBUG="$withval"],[ENIGMA_DEBUG="yes"])
+
+AC_SUBST(ENIGMA_DEBUG)
+AM_CONDITIONAL(ENIGMA_DEBUG_NO,test "$ENIGMA_DEBUG" = "no")
+AM_CONDITIONAL(ENIGMA_DEBUG_YES,test "$ENIGMA_DEBUG" = "yes")
+
+AC_SUBST(EXTFLASHTOOL)
+AM_CONDITIONAL(EXTFLASHTOOL_NO,test "$EXTFLASHTOOL" = "no")
+AM_CONDITIONAL(EXTFLASHTOOL_YES,test "$EXTFLASHTOOL" = "yes")
+
 AC_ARG_WITH(targetruleset,
 	[  --with-targetruleset=NAME target ruleset [[standard,flash]]],
 	[TARGETRULESET="$withval"],[TARGETRULESET="standard"])
@@ -432,7 +448,9 @@ target box:		$BOXTYPE
 webif type:		$WEBIF
 epg:			$EPG
 flashtool:		$FLASHTOOL
+external-flastool:	$EXTFLASHTOOL
 reiserfs:		$REISERFS
+enigma debug:		$ENIGMA_DEBUG
 host rule set:		$HOSTRULESET
 target rule set:	$TARGETRULESET
 target prefix:		$targetprefix

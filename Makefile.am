@@ -1522,7 +1522,9 @@ CONFIGURE_OPTS = \
 	--with-webif=$(WEBIF) \
 	--with-epg=$(EPG) \
 	--with-flashtool=$(FLASHTOOL) \
-	--with-reiserfs=$(REISERFS)
+	--with-reiserfs=$(REISERFS) \
+	--with-ext-flashtool=$(EXTFLASHTOOL) \
+	--with-enigma-debug=$(ENIGMA_DEBUG)
 
 if MAINTAINER_MODE
 CONFIGURE_OPTS_MAINTAINER = \
