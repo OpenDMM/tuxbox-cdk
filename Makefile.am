@@ -1518,10 +1518,10 @@ CONFIGURE_OPTS = \
 	--with-driver=$(driverdir) \
 	--with-dvbincludes=$(driverdir)/include \
 	--with-target=cdk \
-	--with-boxtype=$(BOXTYPE)\
-	--with-webif=$(WEBIF)\
-	--with-epg=$(EPG)\
-	--with-flashtool=$(FLASHTOOL)\
+	--with-boxtype=$(BOXTYPE) \
+	--with-webif=$(WEBIF) \
+	--with-epg=$(EPG) \
+	--with-flashtool=$(FLASHTOOL) \
 	--with-reiserfs=$(REISERFS)
 
 if MAINTAINER_MODE
@@ -1809,14 +1809,6 @@ $(flashprefix)/.part_etherwake: $(flashprefix)/.flash .etherwake
 	$(INSTALL) $(targetprefix)/bin/etherwake $(flashprefix)/root/bin
 	@touch $@
 
-flash-enigma_boot: $(flashprefix)/.part_enigma_boot
-$(flashprefix)/.part_enigma_boot: .enigma
-	$(INSTALL) -d $(flashprefix)/root/bin
-	$(INSTALL) $(targetprefix)/bin/showlogo $(flashprefix)/root/bin
-	$(INSTALL) $(targetprefix)/bin/bootmenue $(flashprefix)/root/bin
-	$(INSTALL) $(targetprefix)/bin/chttpd $(flashprefix)/root/bin
-	@touch $@
-
 flash-dreamfiles: $(flashprefix)/.part_dreamfiles
 $(flashprefix)/.part_dreamfiles: $(flashprefix)/.flash .dreamfiles
 	@cp -R $(flashprefix)/dreamfiles/* $(flashprefix)/root
@@ -1939,6 +1931,13 @@ endif
 	rm -f $(flashprefix)/root/share/zoneinfo/*tab
 
 	ln -sf /var/etc/localtime $(flashprefix)/root/etc
+
+if WEBIF_EXPERT
+	$(INSTALL) $(targetprefix)/bin/showlogo $(flashprefix)/root/bin
+	$(INSTALL) $(targetprefix)/bin/bootmenue $(flashprefix)/root/bin
+	$(INSTALL) $(targetprefix)/bin/chttpd $(flashprefix)/root/bin
+endif
+
 	@touch $@
 
 flash-joe: $(flashprefix)/.part_joe
