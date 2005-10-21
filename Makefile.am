@@ -1934,7 +1934,7 @@ endif
 
 if WEBIF_EXPERT
 	$(INSTALL) $(targetprefix)/bin/showlogo $(flashprefix)/root/bin
-if BOXTYPE_7000
+if BOXTYPE_DM7000
 	$(INSTALL) $(targetprefix)/bin/bootmenue $(flashprefix)/root/bin
 endif
 	$(INSTALL) $(targetprefix)/bin/chttpd $(flashprefix)/root/bin
