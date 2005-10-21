@@ -9,7 +9,7 @@ camd2
 zapit
 controld
 nhttpd
-neutrino
+neutrino -f -u
 
 [ -e /tmp/tuxmaild.pid ] && kill $( cat /tmp/tuxmaild.pid )
 pzapit -kill
