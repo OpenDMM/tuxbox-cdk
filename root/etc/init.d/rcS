@@ -117,6 +117,7 @@ if [ $mID -eq 05 ] ; then
 	
 	mount -n -t usbfs usbfs /proc/bus/usb
 	mount /dev/scsi/host0/bus0/target0/lun0/part1 /mnt/usb
+	mount /dev/scsi/host0/bus0/target0/lun0/disc /mnt/usb
 fi
 
 if [ -e /var/etc/install.tar ] ; then
