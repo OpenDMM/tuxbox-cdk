@@ -1695,6 +1695,9 @@ dreamboximage_root: core .enigma .reiserfsprogs .e2fsprogs .samba \
 if REISERFS_YES
 	$(MAKE) flash-mkreiserfs
 endif
+if WEBIF_EXPERT
+	$(MAKE) flash-plugin_dreamflash
+endif
 else
 dreamboximage_root: core .enigma .etherwake .linuxkernel .dreamfiles .dvbsnoop \
 	flash-enigma flash-plugin_tetris flash-plugin_snake \
