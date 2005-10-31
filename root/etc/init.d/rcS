@@ -134,10 +134,10 @@ rm /var/etc/.dont_restart_enigma
 touch /tmp/.enigma
 while [ -e /tmp/.enigma ]
 do
-	if [ ! -e /var/etc/.dont_start_dccamd ] ; then
-		dccamd
-	fi
 	if [ ! -e /var/etc/.dont_restart_enigma ] ; then
+		if [ ! -e /var/etc/.dont_start_dccamd ] ; then
+			dccamd
+		fi
 		/bin/enigma
 		ret=$?
 		echo "enigma returned with "$ret
