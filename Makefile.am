@@ -1524,7 +1524,8 @@ CONFIGURE_OPTS = \
 	--with-flashtool=$(FLASHTOOL) \
 	--with-reiserfs=$(REISERFS) \
 	--with-ext-flashtool=$(EXTFLASHTOOL) \
-	--with-enigma-debug=$(ENIGMA_DEBUG)
+	--with-enigma-debug=$(ENIGMA_DEBUG) \
+	--with-mhw-epg=$(MHW_EPG)
 
 if MAINTAINER_MODE
 CONFIGURE_OPTS_MAINTAINER = \

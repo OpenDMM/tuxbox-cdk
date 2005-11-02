@@ -83,6 +83,14 @@ AC_SUBST(EPG)
 AM_CONDITIONAL(EPG_STANDARD,test "$EPG" = "standard")
 AM_CONDITIONAL(EPG_PRIVATE,test "$EPG" = "private")
 
+AC_ARG_WITH(mhw-epg,
+	[  --with-mhw-epg          enable capture of mhw epg (default off)],
+	[MHW_EPG="$withval"],[MHW_EPG="no"])
+
+AC_SUBST(MHW_EPG)
+AM_CONDITIONAL(MHW_EPG_NO,test "$MHW_EPG" = "no")
+AM_CONDITIONAL(MHW_EPG_YES,test "$MHW_EPG" = "yes")
+
 AC_ARG_WITH(flashtool,
 	[  --with-flashtool=NAME dreambox flashtool [[standard,expert]]],
 	[FLASHTOOL="$withval"],[FLASHTOOL="standard"])
@@ -447,6 +455,7 @@ target cpu:		$CPU_MODEL
 target box:		$BOXTYPE
 webif type:		$WEBIF
 epg:			$EPG
+mhw-epg:		$MHW_EPG
 flashtool:		$FLASHTOOL
 external-flastool:	$EXTFLASHTOOL
 reiserfs:		$REISERFS
