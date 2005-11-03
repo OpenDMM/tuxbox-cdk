@@ -1,0 +1,103 @@
+Configuration options:
+
+--with-targetruleset=[standard|flash] has been replaced by
+  --[enable|disable]-flashrules. As opposed to previous files,
+  building yadds and buildung flash images do not exclude
+  oneanother. Using --enable-flashrules targets for creating flash
+  images are included in the generated Makefile, otherwise not. By
+  default they are disabled. If enabled, all compilation is done using
+  the flash-optimized compilation flags (no debugging info, stripped,
+  compiled with -Os (optimize for size). Other than that,
+  --enable-flashrules has no disadvantages, and can normally be left
+  on. (Will possibly become default in the future.) Using
+  --with-targetrulset now gives a fatal error (to force users to
+  think); in the future it should be completely eliminated.
+
+--[enable|disable]-libcrypto has been eliminated. libcrypto is not
+  built by default; no reason to treat it differently from other
+  optional libraries.
+
+--serversupport=DIR: New option. Build template files for
+  /etc/dhcpd.conf, /etc/fstab for a Linux server.
+--logosdir=DIR: New option. Picks logo files from this directory, if found.
+--ucodesdir=DIR: New option. Installs ucodes from this directory, if
+  found. (An image containing Betaresearch ucodes may not legally be
+  distributed.)
+
+--enable-maintainer-mode still exists, but does nothing. It did
+  nothing (sensible) previously either...
+
+FILENAMES: 
+
+Naming system: A file system image is generally named
+[root,var]-[neutrino,enigma].[cramfs,squashfs,jffs2]. Full images have
+names like [neutrino,enigma]-[cramfs,squashfs,jffs2].img[1x,2x]. The
+semantics is hopefully obvious.
+
+The previous version of this work used the notation "jff2fs". It has
+been replaced by "jffs2" ("journaled flash file system 2").
+
+Makefile[.am]: 
+Restructuring to make more target-driven (but still not
+perfect). No unnecessary recursive invocation instead of dependencies.
+
+Customization-hooks: Many rules calls customization script, if present.
+
+Now builds root/.version file that can be parsed by neutrino. 
+
+Installs only a few plugins per default.
+
+Built full images are checked by checkImage.
+
+The partitioning table file linux/drivers/mtd/maps/dbox2-flash.c is now
+generated from an m4-file, for all the different configurations.
+
+Changed targets:
+all: different semantics
+busybox: replaced by $(targetprefix)/bin/busybox (for yadd) and
+$(flashprefix)/root/bin/busybox (for flashing). For this, configurion
+files busybox.config and busybox-flash.config merged to
+busybox.config.m4.
+mostlyclean: deletes built "tuxbox code", but not
+unpack-build-install-delete code.
+
+
+New (public) targets (see doc):
+serversupport, everything, yadd-[all,none,neutrino,enigma,lcars], dboxflasher.
+
+
+POSSIBLE PROBLEMS: 
+-- rules-installed-flash is now ignored. Problems with this?
+-- Due to the new dependencies, sometimes rebuilds too much.
+-- Neutrino contains ($(appsdir)/tuxbox/neutrino/src/gui/update.cpp)
+   stuff like #ifdef SQUASHFS. This brain damage should be fixed in Neutrino.
+
+TODO: 
+-- Support kernel 2.6. Can this be done without building the kernel
+   version into the CDK environment? 
+-- Neutrino and Enigma should be installed (in flash) with something like
+   $(MAKE) -C $(appsdir)/tuxbox/neutrino install prefix=$(flashprefix)/root/...
+-- Plugin configuration.
+-- Possibly restructure Makefile.am, with non-essential stuff in
+   included files,...?
+-- Merge all the u-boot-*.dbox2.h files (or at least the ones we are
+   using) into an m4-file. (Like I did with the busybox.) Combine with
+   update to u-boot 1.1.3? 
+-- Ditto for rcS[.insmod],
+-- and possibly also for the kernel .config? (Probably best to get 2.6
+   running first.)
+-- Check dependencies carefully, to minimize unnecessary rebuilds.
+-- teach neutrino's flashfunction to recognize my file extensions
+
+NICE THINGS TO HAVE:
+-- download/build mkcramfs, mksquashfs, mkjffs2, mkfs.jffs2 (fakeroot?)
+-- Exactly when (if at all) is fakeroot needed?
+-- Really fix the "Kein System"-problem (that checkImage is scratching on).
+-- Some rules (e.g. %/lib/ld.so.1) still look awful.
+-- At least optionally, it should be possible to build an absolutely
+   minimal system.
+
+DISADVANTAGES in comparision to old version:
+-- Needs more space to build,
+-- May rebuild unnecessarily.
+-- No support for images with more than one GUIs.

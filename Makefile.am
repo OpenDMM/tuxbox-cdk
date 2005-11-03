@@ -1,3 +1,13 @@
+## Makefile for Tuxbox
+#
+# These variables are only used for generating template files in
+# $(serversupport). Therefore, if they are not right, just edit the
+# generated files.  It is not really worthwile to make them ./configure-able.
+DBOX_SUBNET = 192.168.1.0
+DBOX_SUBNETMASK = 255.255.255.0
+DBOX_IP = 192.168.1.5
+DBOX_MAC = 00:50:9c:xx:xx:x
+
 PATH := $(hostprefix)/bin:$(PATH)
 BUILDENV := \
 	AR=$(target)-ar \
@@ -11,11 +21,20 @@ BUILDENV := \
 	LDFLAGS="$(TARGET_LDFLAGS)" \
 	PKG_CONFIG_PATH=$(targetprefix)/lib/pkgconfig
 
+################################################################
+all:
+	@echo "You probably do not want to build all possible targets."
+	@echo "Sensible targets are, e.g. yadd-enigma or flash-neutrino-jffs2-2x."
+	@echo "If you REALLY want to build everything, then \"make everything\""
+extra: libs libs_optional java contrib_apps fun dvb_apps root_optional udev
+
+root_optional: mrouted
+#root_optional: mrouted portmap
+
 if TARGETRULESET_FLASH
-all: 	flash-all-all-all
+everything: yadd-all flash-all-all-all extra serversupport 
 else
-all: core libs root boot apps devel
-extra: java contrib_apps fun dvb_apps
+everything: yadd-all extra serversupport
 endif
 
 # This rule script checks if all archives are present at the given address but
@@ -38,17 +57,10 @@ DEPDIR = .deps
 
 VPATH = $(DEPDIR)
 
-DEP_FILES = $(DEPDIR)/dummy
-
 $(DEPDIR):
 	$(INSTALL) -d $(DEPDIR)
 
-$(DEPDIR)/bootstrap:
-	@if [ ! -f glibc ]; then \
-		$(MAKE) glibc gcc; \
-	elif [ ! -f $(hostprefix)/bin/$(target)-gcc ]; then \
-		$(MAKE) gcc; \
-	fi
+$(DEPDIR)/bootstrap: gcc
 	touch $@
 
 $(DEPDIR)/directories:
@@ -63,6 +75,9 @@ $(DEPDIR)/directories:
 	$(INSTALL) -d $(targetprefix)/proc
 	$(INSTALL) -d $(targetprefix)/root
 	$(INSTALL) -d $(targetprefix)/sbin
+if KERNEL26
+	$(INSTALL) -d $(targetprefix)/sys
+endif
 	$(INSTALL) -d $(targetprefix)/tmp
 	$(INSTALL) -d $(targetprefix)/var
 	$(INSTALL) -d $(targetprefix)/var/etc
@@ -70,45 +85,47 @@ $(DEPDIR)/directories:
 	$(INSTALL) -d $(targetprefix)$(UCODEDIR)
 	$(INSTALL) -d $(hostprefix)/$(target)
 	$(INSTALL) -d $(bootprefix)
-	-rm $(hostprefix)/$(target)/include
-	-rm $(hostprefix)/$(target)/lib
-	-ln -s $(targetprefix)/include $(hostprefix)/$(target)/include
-	-ln -s $(targetprefix)/lib $(hostprefix)/$(target)/lib
-	-ln -s $(buildprefix)/linux/include/asm $(hostprefix)/$(target)/include
-	-ln -s $(buildprefix)/linux/include/asm-generic $(hostprefix)/$(target)/include
-	-ln -s $(buildprefix)/linux/include/linux $(hostprefix)/$(target)/include
+	-rm -f $(hostprefix)/$(target)/include
+	-rm -f $(hostprefix)/$(target)/lib
+	-ln -sf $(targetprefix)/include $(hostprefix)/$(target)/include
+	-ln -sf $(targetprefix)/lib $(hostprefix)/$(target)/lib
+	-ln -sf $(buildprefix)/linux/include/asm $(hostprefix)/$(target)/include
+	-ln -sf $(buildprefix)/linux/include/asm-generic $(hostprefix)/$(target)/include
+	-ln -sf $(buildprefix)/linux/include/linux $(hostprefix)/$(target)/include
+	-ln -sf $(buildprefix)/linux/include/mtd $(hostprefix)/$(target)/include
 if TARGETRULESET_FLASH
 	$(INSTALL) -d $(flashprefix)
 endif
 	touch $@
 
-$(DEPDIR)/linuxdir: @DEPENDS_linux@
-	@if [ ! -d $(targetprefix)/bin ]; then \
-		$(MAKE) directories; \
-	fi
-	@PREPARE_linux@
-if TARGETRULESET_FLASH
-	cat Patches/linux-$(KERNELVERSION).config-flash > @DIR_linux@/.config
-	@if [ ! -d maps ]; then \
-		mkdir maps; \
-	fi
-	cp linux/drivers/mtd/maps/dbox2-flash.c maps
+
+if KERNEL26
+KERNEL_DEPENDS = @DEPENDS_linux@
+KERNEL_DIR = @DIR_linux@
+KERNEL_PREPARE = @PREPARE_linux@
+KERNEL_BUILD_FILENAME = @DIR_linux@/arch/ppc/boot/images/uImage
 else
-	cat Patches/linux-$(KERNELVERSION).config > @DIR_linux@/.config
+KERNEL_DEPENDS = @DEPENDS_linux24@
+KERNEL_DIR = @DIR_linux24@
+KERNEL_PREPARE = @PREPARE_linux24@
+KERNEL_BUILD_FILENAME = @DIR_linux24@/arch/ppc/boot/images/vmlinux.gz
 endif
-	$(MAKE) -C @DIR_linux@ oldconfig \
+
+$(DEPDIR)/linuxdir: $(KERNEL_DEPENDS) directories
+	$(KERNEL_PREPARE)
+	cp Patches/linux-$(KERNELVERSION).config $(KERNEL_DIR)/.config
+	$(MAKE) -C $(KERNEL_DIR) oldconfig \
 		ARCH=ppc
-	$(MAKE) -C @DIR_linux@ include/linux/version.h \
+if KERNEL26
+	$(MAKE) -C $(KERNEL_DIR) include/asm \
 		ARCH=ppc
-	@if [ -e $(buildprefix)/linux/include/mtd ]; then \
-	    ln -sf $(buildprefix)/linux/include/mtd $(hostprefix)/$(target)/include; \
-	fi
+endif
+	$(MAKE) -C $(KERNEL_DIR) include/linux/version.h \
+		ARCH=ppc
+	rm $(KERNEL_DIR)/.config
 	touch $@
 
-$(DEPDIR)/binutils: @DEPENDS_binutils@
-	@if [ ! -h linux ]; then \
-		$(MAKE) linuxdir; \
-	fi
+$(DEPDIR)/binutils: @DEPENDS_binutils@ directories
 	@PREPARE_binutils@
 	cd @DIR_binutils@ && \
 		CC=$(CC) \
@@ -117,7 +134,7 @@ $(DEPDIR)/binutils: @DEPENDS_binutils@
 			--target=$(target) \
 			--prefix=$(hostprefix) \
 			--disable-nls \
-			--nfp && \
+			--without-fp && \
 		$(MAKE) all all-gprof && \
 		@INSTALL_binutils@
 	@CLEANUP_binutils@
@@ -126,10 +143,7 @@ $(DEPDIR)/binutils: @DEPENDS_binutils@
 #
 # gcc first stage without glibc
 #
-bootstrap_gcc: @DEPENDS_bootstrap_gcc@
-	@if [ ! -d $(hostprefix)/$(target)/bin/as ]; then \
-		$(MAKE) binutils; \
-	fi
+$(DEPDIR)/bootstrap_gcc: @DEPENDS_bootstrap_gcc@ binutils linuxdir
 	@PREPARE_bootstrap_gcc@
 	$(INSTALL) -d $(hostprefix)/$(target)/sys-include
 	ln -sf $(buildprefix)/linux/include/{asm,linux} $(hostprefix)/$(target)/sys-include/
@@ -146,23 +160,22 @@ bootstrap_gcc: @DEPENDS_bootstrap_gcc@
 			--disable-shared \
 			--disable-threads \
 			--disable-nls \
-			--nfp && \
+			--without-fp && \
 		$(MAKE) all && \
 		@INSTALL_bootstrap_gcc@
 	rm -rf $(hostprefix)/$(target)/sys-include
 	@CLEANUP_bootstrap_gcc@
+	touch $@
 
-if TARGETRULESET_FLASH
-GLIBC_EXTRA_FLAGS="--enable-kernel=$(KERNELVERSION)"
-endif
-
-$(DEPDIR)/glibc: @DEPENDS_glibc@
-	@if [ ! -f $(hostprefix)/$(target)/lib/libc.so -a ! -f $(hostprefix)/bin/$(target)-gcc ]; then \
-		$(MAKE) bootstrap_gcc; \
-	elif [ ! -f $(hostprefix)/bin/$(target)-gcc ]; then \
-		$(MAKE) gcc; \
-	fi
+$(DEPDIR)/glibc: @DEPENDS_glibc@ bootstrap_gcc
 	@PREPARE_glibc@
+	touch @DIR_glibc@/config.cache
+	@if [ $(GLIBC_PTHREADS) = "nptl" ]; then \
+		cp @SOURCEDIR_glibc@/nptl/sysdeps/pthread/pthread.h @DIR_glibc@ && \
+		cp @SOURCEDIR_glibc@/nptl/sysdeps/unix/sysv/linux/powerpc/bits/pthreadtypes.h @DIR_glibc@ && \
+		echo "libc_cv_forced_unwind=yes" > @DIR_glibc@/config.cache && \
+		echo "libc_cv_c_cleanup=yes" >> @DIR_glibc@/config.cache; \
+	fi
 	cd @DIR_glibc@ && \
 		$(BUILDENV) \
 		@CONFIGURE_glibc@ \
@@ -171,13 +184,23 @@ $(DEPDIR)/glibc: @DEPENDS_glibc@
 			--prefix= \
 			--with-headers=$(buildprefix)/linux/include \
 			--disable-profile \
+			--disable-debug  \
 			--enable-shared \
-			--enable-add-ons=linuxthreads \
+			--without-gd \
+			--with-tls \
+			--with-__thread \
+			--enable-add-ons=$(GLIBC_PTHREADS) \
+			--enable-clocale=gnu \
 			--without-fp \
+			--cache-file=config.cache \
 			$(GLIBC_EXTRA_FLAGS) && \
 		$(MAKE) all && \
 		@INSTALL_glibc@
 	@CLEANUP_glibc@
+	sed -e's, /lib/, $(targetprefix)/lib/,g' < $(targetprefix)/lib/libc.so > $(targetprefix)/lib/libc.so.new
+	mv $(targetprefix)/lib/libc.so.new $(targetprefix)/lib/libc.so
+	sed -e's, /lib/, $(targetprefix)/lib/,g' < $(targetprefix)/lib/libpthread.so > $(targetprefix)/lib/libpthread.so.new
+	mv $(targetprefix)/lib/libpthread.so.new $(targetprefix)/lib/libpthread.so
 	touch $@
 
 #
@@ -193,11 +216,13 @@ $(DEPDIR)/uclibc: @DEPENDS_uclibc@
 	touch $@
 
 #
-# gcc second stage with glibc
+# gcc second stage
 #
-$(DEPDIR)/gcc: @DEPENDS_gcc@
-	@if [ ! -f $(hostprefix)/$(target)/lib/libc.so ]; then \
-		$(MAKE) glibc; \
+$(DEPDIR)/gcc: @DEPENDS_gcc@ glibc
+# if we have a symlink inside the libdir (in case gcc has already been built)
+# we remove it here
+	@if [ -h $(hostprefix)/$(target)/lib/nof ]; then \
+		rm -f $(hostprefix)/$(target)/lib/nof; \
 	fi
 	@PREPARE_gcc@
 	$(INSTALL) -d $(hostprefix)/$(target)/sys-include
@@ -215,51 +240,54 @@ $(DEPDIR)/gcc: @DEPENDS_gcc@
 			--enable-shared \
 			--enable-threads \
 			--disable-nls \
-			--nfp && \
+			--without-fp && \
 		$(MAKE) all && \
 		@INSTALL_gcc@
 	rm -rf $(hostprefix)/$(target)/sys-include
+	for i in `find $(hostprefix)/$(target)/lib/nof` ; do mv $$i $(hostprefix)/$(target)/lib; done
+	rm -rf $(hostprefix)/$(target)/lib/nof
+	ln -sf $(hostprefix)/$(target)/lib $(hostprefix)/$(target)/lib/nof
 	@CLEANUP_gcc@
 	touch $@
 
-#######################
+################################################################
+yadd-none: $(bootprefix)/u-boot $(bootprefix)/kernel-cdk driver rootdirectories $(targetprefix)/bin/busybox modutils tuxbox_tools procps $(targetprefix)/var/tuxbox/ucodes
+
+yadd-neutrino: yadd-none neutrino
+	@TUXBOX_YADD_CUSTOMIZE@
+
+yadd-enigma: yadd-none enigma
+	@TUXBOX_YADD_CUSTOMIZE@
+
+yadd-lcars: yadd-none lcars
+	@TUXBOX_YADD_CUSTOMIZE@
+
+yadd-all: yadd-none neutrino enigma lcars
+	@TUXBOX_YADD_CUSTOMIZE@
+
+#######################
 #
 #   root
 #
 
-if TARGETRULESET_FLASH
-root: \
-	rootdirectories busybox ftpd \
-	procps watchdog
-else
-root: \
-	rootdirectories busybox ftpd modutils \
-	procps watchdog
-endif
-
-root_optional: \
-	portmap mrouted
-
-$(DEPDIR)/busybox: bootstrap @DEPENDS_busybox@
+# yadd-only rule (now)
+$(targetprefix)/bin/busybox: bootstrap @DEPENDS_busybox@
 	@PREPARE_busybox@
-if TARGETRULESET_FLASH
-	cat Patches/busybox-flash.config > @DIR_busybox@/.config
-else
-	cat Patches/busybox.config > @DIR_busybox@/.config
-endif
+	m4 -Dyadd Patches/busybox.config.m4 > @DIR_busybox@/.config
 	cd @DIR_busybox@ && \
 		$(MAKE) dep all \
 			CROSS=$(target)- \
 			CFLAGS_EXTRA="$(TARGET_CFLAGS)" && \
 		@INSTALL_busybox@
 	@CLEANUP_busybox@
-	touch $@
+#	touch $@
 
 $(DEPDIR)/rootdirectories:
 	$(MAKE) -C root install
 	touch $@
 
 $(DEPDIR)/ftpd: bootstrap @DEPENDS_ftpd@
+	-rm -rf $(targetprefix)/share/empty
 	@PREPARE_ftpd@
 	cd @DIR_ftpd@ && \
 		CC=$(target)-gcc \
@@ -270,14 +298,14 @@ $(DEPDIR)/ftpd: bootstrap @DEPENDS_ftpd@
 	@CLEANUP_ftpd@
 	touch $@
 
-$(DEPDIR)/module_init_tools: bootstrap @DEPENDS_module_init_tools@
+$(DEPDIR)/module_init_tools: bootstrap       @DEPENDS_module_init_tools@
 	@PREPARE_module_init_tools@
 	cd @DIR_module_init_tools@ && \
 		$(BUILDENV) \
 		./configure \
-			--build=$(build) \
-			--host=$(target) \
-			--prefix= && \
+		      --build=$(build) \
+		      --host=$(target) \
+		      --prefix= && \
 		$(MAKE) && \
 		@INSTALL_module_init_tools@
 	@CLEANUP_module_init_tools@
@@ -320,11 +348,11 @@ $(DEPDIR)/procps: bootstrap libncurses @DEPENDS_procps@
 $(DEPDIR)/udev: bootstrap @DEPENDS_udev@
 	@PREPARE_udev@
 	cd @DIR_udev@ && \
-		$(BUILDENV) \
-		CROSS=$(target)- \
-		$(MAKE) && \
-		@INSTALL_udev@
-	@CLEANUP_udev@
+	       $(BUILDENV) \
+	       CROSS=$(target)- \
+	       $(MAKE) && \
+	       @INSTALL_udev@
+	       @CLEANUP_udev@
 	touch $@
 
 $(DEPDIR)/watchdog: bootstrap @DEPENDS_watchdog@
@@ -357,18 +385,14 @@ $(DEPDIR)/mrouted: bootstrap @DEPENDS_mrouted@
 #   contrib libs
 #
 
-if WITH_LIBCRYPTO
-OPTIONAL_LIBCRYPTO = libcrypto
-endif
-
 libs: \
-	$(OPTIONAL_LIBCRYPTO) libcurl libdirectfb libdirectfbpp libppdirectfb libdvbpsi \
+	libcurl libdirectfb libdirectfbpp libppdirectfb libdvbpsi \
 	libfreetype libjpeg libmad libid3tag libncurses libpng \
-	libreadline libsdl libsigc libz libdvb
+	libreadline libsdl libsigc libz libdvb 
 
 libs_optional: \
 	libcommoncplusplus libffi \
-	libpcap libxml2 libungif
+	libpcap libxml2 libungif libexpat libcrypto
 
 $(DEPDIR)/libboost: bootstrap @DEPENDS_libboost@
 	@PREPARE_libboost@
@@ -421,25 +445,6 @@ $(DEPDIR)/libcurl: bootstrap @DEPENDS_libcurl@
 		@INSTALL_libcurl@
 	@CLEANUP_libcurl@
 	touch $@
-
-# directfb needs working directfb-csource for building tools - but only creates it for the target
-#$(DEPDIR)/libdirectfb_hostdeps: bootstrap
-#	@PREPARE_libdirectfb@
-#	cd @DIR_libdirectfb@ && \
-#	    ./autogen.sh \
-#		--disable-fbdev \
-#		--disable-sysfs \
-#		--disable-video4linux \
-#		--prefix=$(hostprefix) && \
-#	    $(MAKE) -C tools directfb-csource && \
-#	    $(INSTALL) -m 755 tools/directfb-csource $(hostprefix)/bin && \
-#	    $(MAKE) -C tools clean
-#	touch $@
-#	
-#	@if [ ! -e $(buildprefix)/@DIR_libdirectfb@/configure ]; then \
-#	    @PREPARE_libdirectfb@ && \
-#	    cd @DIR_libdirectfb@ && ./autogen.sh ; \
-#	fi
 
 $(DEPDIR)/libdirectfb: bootstrap libfreetype libjpeg libpng libz @DEPENDS_libdirectfb@
 	@PREPARE_libdirectfb@
@@ -659,7 +664,7 @@ $(DEPDIR)/libncurses: bootstrap @DEPENDS_libncurses@
 			HOSTCC=$(CC) \
 			HOSTCCFLAGS="$(CFLAGS) -DHAVE_CONFIG_H -I../ncurses -DNDEBUG -D_GNU_SOURCE -I../include" \
 			HOSTLDFLAGS="$(LDFLAGS)" && \
-		@INSTALL_libncurses@
+			@INSTALL_libncurses@
 	@CLEANUP_libncurses@
 	touch $@
 
@@ -808,12 +813,13 @@ $(DEPDIR)/libz: bootstrap @DEPENDS_libz@
 
 $(DEPDIR)/libglib: bootstrap @DEPENDS_libglib@
 	@PREPARE_libglib@
+	echo "ac_cv_func_posix_getpwuid_r=yes" > @DIR_libglib@/config.cache
+	echo "glib_cv_stack_grows=no" >> @DIR_libglib@/config.cache
+	echo "glib_cv_uscore=no" >> @DIR_libglib@/config.cache
 	cd @DIR_libglib@ && \
 		$(BUILDENV) \
-		aclocal && \
-		libtoolize --force && \
-		autoconf && \
 		./configure \
+			--cache-file=config.cache \
 			--build=$(build) \
 			--host=$(target) \
 			--prefix=$(targetprefix) &&\
@@ -1271,7 +1277,7 @@ $(DEPDIR)/gnuboy: bootstrap @DEPENDS_gnuboy@
 	@CLEANUP_gnuboy@
 	touch $@
 
-$(DEPDIR)/scummvm: bootstrap libreadline libsdl @DEPENDS_scummvm@
+$(DEPDIR)/scummvm: bootstrap libreadline libsdl libmad @DEPENDS_scummvm@
 	@PREPARE_scummvm@
 	cd @DIR_scummvm@ && \
 		$(MAKE) \
@@ -1440,51 +1446,92 @@ $(DEPDIR)/bluez_utils: bootstrap bluez_libs @DEPENDS_bluez_utils@
 #   own kernel and driver
 #
 
-boot: u-boot linuxkernel driver
+# Bootloader: u-boot
+#
+# This target builds a u-boot, assuming that u-boot.config has been 
+# setup correctly.
+# Therefore, it depends on $(bootdir)/u-boot-config/u-boot.config, which the 
+# Makefile does not have as an explicit target.
+# This is deliberate, and makes the target sort-of "private".
 
-$(DEPDIR)/u-boot: bootstrap @DEPENDS_uboot@
+@DIR_uboot@/u-boot.stripped: bootstrap @DEPENDS_uboot@ $(bootdir)/u-boot-config/u-boot.config
 	@PREPARE_uboot@
-	@if [ ! -e $(bootdir)/u-boot-config/u-boot.config ]; then \
-		ln -s ./u-boot.cdk.dbox2.h $(bootdir)/u-boot-config/u-boot.config; \
-	fi
-
 	cp -pR $(bootdir)/u-boot-tuxbox/* @DIR_uboot@
 	cp -p $(bootdir)/u-boot-config/u-boot.config @DIR_uboot@/include/configs/dbox2.h
-
 	$(MAKE) -C @DIR_uboot@ dbox2_config
 	$(MAKE) -C @DIR_uboot@ CROSS_COMPILE=$(target)- u-boot.stripped
-
-	$(INSTALL) -m644 @DIR_uboot@/u-boot.stripped $(bootprefix)/u-boot
 	$(INSTALL) @DIR_uboot@/tools/mkimage $(hostprefix)/bin
+#	@CLEANUP_uboot@
+#	touch $@
 
+$(bootprefix)/u-boot \
+$(hostprefix)/bin/mkimage:
+	ln -sf ./u-boot.cdk.dbox2.h $(bootdir)/u-boot-config/u-boot.config
+	$(MAKE) @DIR_uboot@/u-boot.stripped
+	$(INSTALL) -d $(bootprefix)
+	$(INSTALL) -m644 @DIR_uboot@/u-boot.stripped $(bootprefix)/u-boot
 	@CLEANUP_uboot@
-	touch $@
+	rm $(bootdir)/u-boot-config/u-boot.config
 
-$(DEPDIR)/linuxkernel: bootstrap linuxdir u-boot
-	$(MAKE) -C @DIR_linux@ zImage modules \
+# Kernel
+#
+# Yes, this depends on $(KERNEL_DIR)/.config, which the Makefile does not have
+# as a target.
+# This is deliberate, and makes the target "private".
+
+#$(DEPDIR)/linuxkernel: bootstrap linuxdir $(KERNEL_DIR)/.config
+$(KERNEL_BUILD_FILENAME): bootstrap linuxdir $(KERNEL_DIR)/.config
+	$(MAKE) -C $(KERNEL_DIR) oldconfig ARCH=ppc
+	$(MAKE) -C $(KERNEL_DIR) include/linux/version.h ARCH=ppc
+if KERNEL26
+	$(MAKE) -C $(KERNEL_DIR) uImage modules \
 		ARCH=ppc \
 		CROSS_COMPILE=$(target)-
-	$(MAKE) -C @DIR_linux@ modules_install \
+else
+	$(MAKE) -C $(KERNEL_DIR) zImage modules \
+		ARCH=ppc \
+		CROSS_COMPILE=$(target)-
+endif
+	$(MAKE) -C $(KERNEL_DIR) modules_install \
 		ARCH=ppc \
 		CROSS_COMPILE=$(target)- \
 		DEPMOD=/bin/true \
 		INSTALL_MOD_PATH=$(targetprefix)
+# if KERNEL26
+# 	$(INSTALL) -m644 $(KERNEL_DIR)/arch/ppc/boot/images/uImage $(bootprefix)/kernel-cdk
+# else
+#	$(hostprefix)/bin/mkimage \
+#		-n 'dbox2' -A ppc -O linux -T kernel -C gzip \
+#		-a 00000000 -e 00000000 \
+#		-d $(KERNEL_DIR)/arch/ppc/boot/images/vmlinux.gz \
+#		$(bootprefix)/kernel-cdk
+# endif
+#	$(INSTALL) -m644 $(KERNEL_DIR)/vmlinux $(targetprefix)/boot/vmlinux-$(KERNELVERSION)
+#	$(INSTALL) -m644 $(KERNEL_DIR)/System.map $(targetprefix)/boot/System.map-$(KERNELVERSION)
+#	touch $@
+
+$(bootprefix)/kernel-cdk: linuxdir $(hostprefix)/bin/mkimage
+	cp Patches/linux-$(KERNELVERSION).config $(KERNEL_DIR)/.config
+	m4 Patches/dbox2-flash.c.m4 > linux/drivers/mtd/maps/dbox2-flash.c
+	$(MAKE) $(KERNEL_BUILD_FILENAME)
+if KERNEL26
+# TODO
+	error
+else
 	$(hostprefix)/bin/mkimage \
 		-n 'dbox2' -A ppc -O linux -T kernel -C gzip \
 		-a 00000000 -e 00000000 \
-		-d @DIR_linux@/arch/ppc/boot/images/vmlinux.gz \
-		$(bootprefix)/kernel-cdk
-	chmod 644 $(bootprefix)/kernel-cdk
-	$(INSTALL) -m644 @DIR_linux@/vmlinux $(targetprefix)/boot/vmlinux-$(KERNELVERSION)
-	$(INSTALL) -m644 @DIR_linux@/System.map $(targetprefix)/boot/System.map-$(KERNELVERSION)
+		-d $(KERNEL_BUILD_FILENAME) \
+		$@
+	chmod 644 $@
+	$(INSTALL) -m644 $(KERNEL_DIR)/vmlinux $(targetprefix)/boot/vmlinux-$(KERNELVERSION)
+	$(INSTALL) -m644 $(KERNEL_DIR)/System.map $(targetprefix)/boot/System.map-$(KERNELVERSION)
+	$(INSTALL) -d $(targetprefix)/tmp
+	$(INSTALL) -d $(targetprefix)/proc
+	$(INSTALL) -d $(targetprefix)/var/run
+endif
 
-#if MAINTAINER_MODE
-#else
-#	$(MAKE) -C @DIR_linux@ clean
-#endif
-	touch $@
-
-$(DEPDIR)/driver: bootstrap linuxkernel
+$(DEPDIR)/driver: $(KERNEL_BUILD_FILENAME)
 	$(MAKE) -C $(driverdir) \
 		KERNEL_LOCATION=$(buildprefix)/linux \
 		CROSS_COMPILE=$(target)-
@@ -1493,13 +1540,6 @@ $(DEPDIR)/driver: bootstrap linuxkernel
 		BIN_DEST=$(targetprefix)/bin \
 		INSTALL_MOD_PATH=$(targetprefix) \
 		install
-
-if MAINTAINER_MODE
-else
-	$(MAKE) -C $(driverdir) \
-		KERNEL_LOCATION=$(buildprefix)/linux \
-		distclean
-endif
 	touch $@
 
 driver-clean:
@@ -1716,17 +1756,78 @@ $(DEPDIR)/hostapps_cross: $(hostappsdir)/config.status
 	touch $@
 
 ################################################################
+$(targetprefix)/var/tuxbox/ucodes:
+	$(INSTALL) -d $@
+	if [ -d $(ucodesdir) ] ; then \
+		rm -f $(targetprefix)/var/tuxbox/ucodes/*; \
+		cp -p $(ucodesdir)/* $(targetprefix)/var/tuxbox/ucodes; \
+	fi || true
+################ Server Support ################
+
+serversupport: dboxflasher dhcp.conf exports tftp
+
+dhcp.conf: $(serversupport)/etc/dhcpd.conf
+
+$(serversupport)/etc:
+	$(INSTALL) -d $@
+
+$(serversupport)/etc/dhcpd.conf: $(serversupport)/etc Makefile
+	@echo "Creating dhcp.conf..."
+	@echo "# This is a template for dhcp.conf" 			> $@
+	@echo "# Copy to the appropriate location for your server,"	>> $@
+	@echo "# typically /etc/dhcp.conf." 				>> $@
+	@echo "# You may have to modify this file manually."		>> $@
+	@echo "# Please see the documention for your server and for dhcpd."	>> $@
+	@echo "" 							>> $@
+	@echo "ddns-update-style none;"					>> $@
+	@echo "subnet $(DBOX_SUBNET) netmask $(DBOX_SUBNETMASK) {"	>> $@
+	@echo "}"							>> $@
+	@echo ""							>> $@
+	@echo "host dbox {"						>> $@
+	@echo "	fixed-address $(DBOX_IP);"				>> $@
+	@echo "	hardware ethernet $(DBOX_MAC);"				>> $@
+	@echo "	allow bootp;"						>> $@
+	@echo "	server-name \"`uname -n`\";"				>> $@
+	@echo "	option root-path \"$(targetprefix)\";"			>> $@
+	@echo "	if exists vendor-class-identifier {"			>> $@
+	@echo "		filename \"kernel-cdk\";"			>> $@
+	@echo "	} else {"						>> $@
+	@echo "		filename \"u-boot\";"				>> $@
+	@echo "	}"							>> $@
+	@echo "}"							>> $@
+
+exports: $(serversupport)/etc/exports
+
+$(serversupport)/etc/exports: $(serversupport)/etc Makefile
+	@echo "Creating exports..."
+	@echo "# On a Linux system, this file may be appended to /etc/exports in order to"	> $@
+	@echo "# export the appropriate filesystem to the dbox,"	>> $@
+	@echo "# which is assumed to have the IP-name \`dbox'."		>> $@
+	@echo "$(targetprefix)	dbox(rw,sync,no_root_squash)"		>> $@
+
+tftp: $(serversupport)/etc/README.tftp
+
+$(serversupport)/etc/README.tftp: Makefile
+	@echo "Creating $@"
+	@echo "Make sure that you turn on the tftp-service, using "	> $@
+	@echo "$(bootprefix) as its root directory (this is most"	>> $@
+	@echo "likely not the default for your server)."		>> $@
+
 dboxflasher: $(bootprefix)/dboxflasher
 
 $(bootprefix)/dboxflasher:
-	@if [ -e $(bootdir)/u-boot-config/u-boot.config ]; then \
-	  rm $(bootdir)/u-boot-config/u-boot.config; \
-	fi 
-	ln -s $(bootdir)/u-boot-config/u-boot.flasher.dbox2.h $(bootdir)/u-boot-config/u-boot.config
-	rm -f $(DEPDIR)/u-boot
-	rm -f $(bootprefix)/u-boot
-	$(MAKE) $(DEPDIR)/u-boot 
-	cp $(bootprefix)/u-boot $@
+	ln -sf $(bootdir)/u-boot-config/u-boot.flasher.dbox2.h $(bootdir)/u-boot-config/u-boot.config
+	$(MAKE) @DIR_uboot@/u-boot.stripped
+	$(INSTALL) -d $(bootprefix)
+	$(INSTALL) -m644 @DIR_uboot@/u-boot.stripped $@
+	if [ -e $(logosdir)/dboxflasher-fb ] ; then \
+		$(INSTALL) -m644 $(logosdir)/dboxflasher-fb $(bootprefix); \
+	fi
+	if [ -e $(logosdir)/dboxflasher-lcd ] ; then \
+		$(INSTALL) -m644 $(logosdir)/dboxflasher-lcd $(bootprefix); \
+	fi
+	@CLEANUP_uboot@
+	rm $(bootdir)/u-boot-config/u-boot.config
 
 if TARGETRULESET_FLASH
 #######################
@@ -1744,7 +1845,7 @@ if TARGETRULESET_FLASH
 # $partition-$gui-$rootfilesystem.$type
 
 # where 
-# $type in { cramfs, squashfs, jffs2fs, img1x, 2ximg2x, flfs1x, flfs2x }
+# $type in { cramfs, squashfs, jffs2, img1x, img2x, flfs1x, flfs2x }
 # $partition in { root, var } (empty by full images)
 # $gui in { neutrino, enigma } 
 
@@ -1757,38 +1858,38 @@ flash-all-cramfs-all: flash-neutrino-cramfs-all flash-enigma-cramfs-all
 
 flash-all-squashfs-all: flash-neutrino-squashfs-all flash-enigma-squashfs-all
 
-flash-all-jffs2fs-all: flash-neutrino-jffs2fs-all flash-enigma-jffs2fs-all
+flash-all-jffs2-all: flash-neutrino-jffs2-all flash-enigma-jffs2-all
 
 
 flash-all-all-1x: flash-neutrino-all-1x flash-enigma-all-1x
 
 flash-all-all-2x: flash-neutrino-all-2x flash-enigma-all-2x
 
-flash-neutrino-all-1x: flash-neutrino-cramfs-1x flash-neutrino-squashfs-1x flash-neutrino-jffs2fs-1x
+flash-neutrino-all-1x: flash-neutrino-cramfs-1x flash-neutrino-squashfs-1x flash-neutrino-jffs2-1x
 
-flash-enigma-all-1x: flash-enigma-cramfs-1x flash-enigma-squashfs-1x flash-enigma-jffs2fs-1x
+flash-enigma-all-1x: flash-enigma-cramfs-1x flash-enigma-squashfs-1x flash-enigma-jffs2-1x
 
 flash-all-all-2x: flash-neutrino-all-2x flash-enigma-all-2x
 
-flash-neutrino-all-2x: flash-neutrino-cramfs-2x flash-neutrino-squashfs-2x flash-neutrino-jffs2fs-2x
+flash-neutrino-all-2x: flash-neutrino-cramfs-2x flash-neutrino-squashfs-2x flash-neutrino-jffs2-2x
 
-flash-enigma-all-2x: flash-enigma-cramfs-2x flash-enigma-squashfs-2x flash-enigma-jffs2fs-2x
+flash-enigma-all-2x: flash-enigma-cramfs-2x flash-enigma-squashfs-2x flash-enigma-jffs2-2x
 
-flash-neutrino-all-all: flash-neutrino-cramfs-all flash-neutrino-squashfs-all flash-neutrino-jffs2fs-all 
+flash-neutrino-all-all: flash-neutrino-cramfs-all flash-neutrino-squashfs-all flash-neutrino-jffs2-all 
 
 flash-neutrino-cramfs-all: flash-neutrino-cramfs-1x flash-neutrino-cramfs-2x
 
 flash-neutrino-squashfs-all: flash-neutrino-squashfs-1x flash-neutrino-squashfs-2x
 
-flash-neutrino-jffs2fs-all: flash-neutrino-jffs2fs-1x flash-neutrino-jffs2fs-2x
+flash-neutrino-jffs2-all: flash-neutrino-jffs2-1x flash-neutrino-jffs2-2x
 
-flash-enigma-all-all: flash-enigma-cramfs-all flash-enigma-squashfs-all flash-enigma-jffs2fs-all 
+flash-enigma-all-all: flash-enigma-cramfs-all flash-enigma-squashfs-all flash-enigma-jffs2-all 
 
 flash-enigma-cramfs-all: flash-enigma-cramfs-1x flash-enigma-cramfs-2x
 
 flash-enigma-squashfs-all: flash-enigma-squashfs-1x flash-enigma-squashfs-2x
 
-flash-enigma-jffs2fs-all: flash-enigma-jffs2fs-1x flash-enigma-jffs2fs-2x
+flash-enigma-jffs2-all: flash-enigma-jffs2-1x flash-enigma-jffs2-2x
 
 flash-all-cramfs-1x: flash-enigma-cramfs-1x flash-neutrino-cramfs-1x 
 
@@ -1798,9 +1899,9 @@ flash-all-squashfs-1x: flash-enigma-squashfs-1x flash-neutrino-squashfs-1x
 
 flash-all-squashfs-2x: flash-enigma-squashfs-2x flash-neutrino-squashfs-2x 
 
-flash-all-jffs2fs-1x: flash-enigma-jffs2fs-1x flash-neutrino-jffs2fs-1x 
+flash-all-jffs2-1x: flash-enigma-jffs2-1x flash-neutrino-jffs2-1x 
 
-flash-all-jffs2fs-2x: flash-enigma-jffs2fs-2x flash-neutrino-jffs2fs-2x 
+flash-all-jffs2-2x: flash-enigma-jffs2-2x flash-neutrino-jffs2-2x 
 
 ################################################################
 # Legacy combatibility:
@@ -1821,7 +1922,7 @@ flash-cramfsenigmaimages: flash-enigma-cramfs-all
 
 flash-squashfsenigmaimages: flash-enigma-squashfs-all
 
-flash-jffs2image: flash-neutrino-jffs2fs-all
+flash-jffs2image: flash-neutrino-jffs2-all
 
 flash-dvb-tools flash-ftpd flash-ftpfs flash-lcars flash-lcars-all \
 flash-lcdmenu flash-lib flash-plugins flash-ssh flash-sshd:
@@ -1835,60 +1936,57 @@ rebuild-flash:
 
 ################################################################
 
-flash-neutrino-cramfs-1x: $(flashprefix)/.neutrino-cramfs.img1x_checked
+flash-neutrino-cramfs-1x: $(flashprefix)/neutrino-cramfs.img1x
 
-flash-neutrino-cramfs-2x: $(flashprefix)/.neutrino-cramfs.img2x_checked
+flash-neutrino-cramfs-2x: $(flashprefix)/neutrino-cramfs.img2x
 
-flash-neutrino-squashfs-1x: $(flashprefix)/.neutrino-squashfs.img1x_checked
+flash-neutrino-squashfs-1x: $(flashprefix)/neutrino-squashfs.img1x
 
-flash-neutrino-squashfs-2x: $(flashprefix)/.neutrino-squashfs.img2x_checked
+flash-neutrino-squashfs-2x: $(flashprefix)/neutrino-squashfs.img2x
 
-flash-neutrino-jffs2fs-1x: $(flashprefix)/.neutrino-jffs2fs.img1x_checked
+flash-neutrino-jffs2-1x: $(flashprefix)/neutrino-jffs2.img1x
 
-flash-neutrino-jffs2fs-2x: $(flashprefix)/.neutrino-jffs2fs.img2x_checked
+flash-neutrino-jffs2-2x: $(flashprefix)/neutrino-jffs2.img2x
 
-flash-enigma-cramfs-1x: $(flashprefix)/.enigma-cramfs.img1x_checked
+flash-enigma-cramfs-1x: $(flashprefix)/enigma-cramfs.img1x
 
-flash-enigma-cramfs-2x: $(flashprefix)/.enigma-cramfs.img2x_checked
+flash-enigma-cramfs-2x: $(flashprefix)/enigma-cramfs.img2x
 
-flash-enigma-squashfs-1x: $(flashprefix)/.enigma-squashfs.img1x_checked
+flash-enigma-squashfs-1x: $(flashprefix)/enigma-squashfs.img1x
 
-flash-enigma-squashfs-2x: $(flashprefix)/.enigma-squashfs.img2x_checked
+flash-enigma-squashfs-2x: $(flashprefix)/enigma-squashfs.img2x
 
-flash-enigma-jffs2fs-1x: $(flashprefix)/.enigma-jffs2fs.img1x_checked
+flash-enigma-jffs2-1x: $(flashprefix)/enigma-jffs2.img1x
 
-flash-enigma-jffs2fs-2x: $(flashprefix)/.enigma-jffs2fs.img2x_checked
+flash-enigma-jffs2-2x: $(flashprefix)/enigma-jffs2.img2x
 
 ################################################################
-# Check generated images
-# For jffs2fs-images, we do not really care for the outcome
-# 
-$(flashprefix)/.%-jffs2fs.img1x_checked: $(flashprefix)/%-jffs2fs.img1x $(hostappsdir)/checkImage/checkImage
-	@echo jffs2fs-1x is cool
-	if $(hostappsdir)/checkImage/checkImage $<; then \
-		touch $@; \
-	else \
-		touch $@_bad; \
-	fi
+# # Check generated images
+# # For jffs2-images, we do not really care for the outcome
+# # 
+# $(flashprefix)/.%-jffs2.img1x_checked: $(flashprefix)/%-jffs2.img1x $(hostprefix)/bin/checkImage
+# 	if $(hostprefix)/bin/checkImage $<; then \
+# 		touch $@; \
+# 	else \
+# 		touch $@_bad; \
+# 	fi
 
-$(flashprefix)/.%-jffs2fs.img2x_checked: $(flashprefix)/%-jffs2fs.img2x $(hostappsdir)/checkImage/checkImage
-	@echo jffs2fs-2x is cool
-	if $(hostappsdir)/checkImage/checkImage $<; then \
-		touch $@; \
-	else \
-		touch $@_bad; \
-	fi
+# $(flashprefix)/.%-jffs2.img2x_checked: $(flashprefix)/%-jffs2.img2x $(hostprefix)/bin/checkImage
+# 	if $(hostprefix)/bin/checkImage $<; then \
+# 		touch $@; \
+# 	else \
+# 		touch $@_bad; \
+# 	fi
 
-$(flashprefix)/.%_checked: $(flashprefix)/% $(hostappsdir)/checkImage/checkImage
-	if $(hostappsdir)/checkImage/checkImage $<; then \
-		touch $@; \
-	else \
-		touch $@_bad; \
-		mv $< $<.bad; \
-	fi
+# $(flashprefix)/.%_checked: $(flashprefix)/% $(hostprefix)/bin/checkImage
+# 	if $(hostprefix)/bin/checkImage $<; then \
+# 		touch $@; \
+# 	else \
+# 		touch $@_bad; \
+# 	fi
 
-$(hostappsdir)/checkImage/checkImage:
-	make -C $(dir $@)
+$(hostprefix)/bin/checkImage:
+	make -C $(hostappsdir)/checkImage install INSTALLDIR=$(hostprefix)/bin
 
 ################################################################
 # Targets for building user images (*.img*x)
@@ -1902,51 +2000,63 @@ $(hostappsdir)/checkImage/checkImage:
 
 $(flashprefix)/neutrino-cramfs.img%: $(flashprefix)/cramfs.flfs% \
 		$(flashprefix)/root-neutrino.cramfs \
-		$(flashprefix)/var-neutrino.jffs2fs
+		$(flashprefix)/var-neutrino.jffs2 \
+		$(hostprefix)/bin/checkImage
 	$(hostappsdir)/flash/flashmanage.pl -i $@ -o build \
 		--part ppcboot=$< \
 		--part root=$(word 2,$+) \
 		--part var=$(word 3,$+)
+	@TUXBOX_CHECKIMAGE@
 
 $(flashprefix)/neutrino-squashfs.img%: $(flashprefix)/squashfs.flfs% \
 		$(flashprefix)/root-neutrino.squashfs \
-		$(flashprefix)/var-neutrino.jffs2fs
+		$(flashprefix)/var-neutrino.jffs2 \
+		$(hostprefix)/bin/checkImage
 	$(hostappsdir)/flash/flashmanage.pl -i $@ -o build \
 		--part ppcboot=$< \
 		--part root=$(word 2,$+) \
 		--part var=$(word 3,$+)
+	@TUXBOX_CHECKIMAGE@
 
-$(flashprefix)/neutrino-jffs2fs.img%: $(flashprefix)/jffs2fs.flfs% \
-		$(flashprefix)/root-neutrino.jffs2fs
+$(flashprefix)/neutrino-jffs2.img%: $(flashprefix)/jffs2.flfs% \
+		$(flashprefix)/root-neutrino.jffs2 \
+		$(hostprefix)/bin/checkImage
 	cat $< $(word 2,$+) > $@
+	@TUXBOX_CHECKIMAGE@
 
 $(flashprefix)/enigma-cramfs.img%: $(flashprefix)/cramfs.flfs% \
 		$(flashprefix)/root-enigma.cramfs \
-		$(flashprefix)/var-enigma.jffs2fs
+		$(flashprefix)/var-enigma.jffs2 \
+		$(hostprefix)/bin/checkImage
 	$(hostappsdir)/flash/flashmanage.pl -i $@ -o build \
 		--part ppcboot=$< \
 		--part root=$(word 2,$+) \
 		--part var=$(word 3,$+)
+	@TUXBOX_CHECKIMAGE@
 
 $(flashprefix)/enigma-squashfs.img%: $(flashprefix)/squashfs.flfs% \
 		$(flashprefix)/root-enigma.squashfs \
-		$(flashprefix)/var-enigma.jffs2fs
+		$(flashprefix)/var-enigma.jffs2 \
+		$(hostprefix)/bin/checkImage
 	$(hostappsdir)/flash/flashmanage.pl -i $@ -o build \
 		--part ppcboot=$< \
 		--part root=$(word 2,$+) \
 		--part var=$(word 3,$+)
+	@TUXBOX_CHECKIMAGE@
 
-$(flashprefix)/enigma-jffs2fs.img%: $(flashprefix)/jffs2fs.flfs% \
-		$(flashprefix)/root-enigma.jffs2fs
+$(flashprefix)/enigma-jffs2.img%: $(flashprefix)/jffs2.flfs% \
+		$(flashprefix)/root-enigma.jffs2 \
+		$(hostprefix)/bin/checkImage
 	cat $< $(word 2,$+) > $@
+	@TUXBOX_CHECKIMAGE@
 
 ################################################################
 #
 #### Targets for building $partition-$gui.$fstype
 # All depend on directory, defined in the subsequent section
 
-####### var-$gui.jffs2fs
-$(flashprefix)/var-%.jffs2fs: $(flashprefix)/var-%
+####### var-$gui.jffs2
+$(flashprefix)/var-%.jffs2: $(flashprefix)/var-%
 	$(FAKEROOT) $(MKJFFS2) -b -e 131072 -p -r $< -o $@
 
 ####### root-$gui.$fstype
@@ -1957,42 +2067,33 @@ $(flashprefix)/root-%.squashfs: $(flashprefix)/root-%-squashfs
 	rm -f $@
 	$(FAKEROOT) $(MKSQUASHFS) $< $@ -be
 
-$(flashprefix)/root-%.jffs2fs: $(flashprefix)/root-%-jffs2fs
+$(flashprefix)/root-%.jffs2: $(flashprefix)/root-%-jffs2
 	$(FAKEROOT) $(MKJFFS2)  -b -e 0x20000 --pad=0x7c0000 -r $< -o $@
 
 ################ $fs-to-boot.flfs*x
-$(flashprefix)/cramfs.flfs1x $(flashprefix)/cramfs.flfs2x: $(hostappsdir)/mkflfs/mkflfs
-	@if [ -e $(bootdir)/u-boot-config/u-boot.config ]; then \
-	    rm $(bootdir)/u-boot-config/u-boot.config; \
-	fi 
-	ln -s $(bootdir)/u-boot-config/u-boot.cramfs.dbox2.h $(bootdir)/u-boot-config/u-boot.config
-	rm -f $(DEPDIR)/u-boot
-	rm -f $(bootprefix)/u-boot
-	$(MAKE) $(DEPDIR)/u-boot 
-	$(hostappsdir)/mkflfs/mkflfs 1x -o $(flashprefix)/cramfs.flfs1x $(bootprefix)/u-boot
-	$(hostappsdir)/mkflfs/mkflfs 2x -o $(flashprefix)/cramfs.flfs2x $(bootprefix)/u-boot
+$(flashprefix)/cramfs.flfs1x $(flashprefix)/cramfs.flfs2x: $(hostprefix)/bin/mkflfs
+	ln -sf $(bootdir)/u-boot-config/u-boot.cramfs.dbox2.h $(bootdir)/u-boot-config/u-boot.config
+	$(MAKE) @DIR_uboot@/u-boot.stripped
+	$(hostappsdir)/mkflfs/mkflfs 1x -o $(flashprefix)/cramfs.flfs1x @DIR_uboot@/u-boot.stripped
+	$(hostappsdir)/mkflfs/mkflfs 2x -o $(flashprefix)/cramfs.flfs2x @DIR_uboot@/u-boot.stripped
+	@CLEANUP_uboot@
+	rm $(bootdir)/u-boot-config/u-boot.config
 
-$(flashprefix)/squashfs.flfs1x $(flashprefix)/squashfs.flfs2x: $(hostappsdir)/mkflfs/mkflfs
-	@if [ -e $(bootdir)/u-boot-config/u-boot.config ]; then \
-	    rm $(bootdir)/u-boot-config/u-boot.config; \
-	fi 
-	ln -s $(bootdir)/u-boot-config/u-boot.squashfs.dbox2.h $(bootdir)/u-boot-config/u-boot.config
-	rm -f $(DEPDIR)/u-boot
-	rm -f $(bootprefix)/u-boot
-	$(MAKE) $(DEPDIR)/u-boot 
-	$(hostappsdir)/mkflfs/mkflfs 1x -o $(flashprefix)/squashfs.flfs1x $(bootprefix)/u-boot
-	$(hostappsdir)/mkflfs/mkflfs 2x -o $(flashprefix)/squashfs.flfs2x $(bootprefix)/u-boot
+$(flashprefix)/squashfs.flfs1x $(flashprefix)/squashfs.flfs2x: $(hostprefix)/bin/mkflfs
+	ln -sf $(bootdir)/u-boot-config/u-boot.squashfs.dbox2.h $(bootdir)/u-boot-config/u-boot.config
+	$(MAKE) @DIR_uboot@/u-boot.stripped
+	$(hostappsdir)/mkflfs/mkflfs 1x -o $(flashprefix)/squashfs.flfs1x @DIR_uboot@/u-boot.stripped
+	$(hostappsdir)/mkflfs/mkflfs 2x -o $(flashprefix)/squashfs.flfs2x @DIR_uboot@/u-boot.stripped
+	@CLEANUP_uboot@
+	rm $(bootdir)/u-boot-config/u-boot.config
 
-$(flashprefix)/jffs2fs.flfs1x $(flashprefix)/jffs2fs.flfs2x: $(hostappsdir)/mkflfs/mkflfs
-	@if [ -e $(bootdir)/u-boot-config/u-boot.config ]; then \
-	    rm $(bootdir)/u-boot-config/u-boot.config; \
-	fi 
-	ln -s $(bootdir)/u-boot-config/u-boot.jffs2.dbox2.h $(bootdir)/u-boot-config/u-boot.config
-	rm -f $(DEPDIR)/u-boot
-	rm -f $(bootprefix)/u-boot
-	$(MAKE) $(DEPDIR)/u-boot 
-	$(hostappsdir)/mkflfs/mkflfs 1x -o $(flashprefix)/jffs2fs.flfs1x $(bootprefix)/u-boot
-	$(hostappsdir)/mkflfs/mkflfs 2x -o $(flashprefix)/jffs2fs.flfs2x $(bootprefix)/u-boot
+$(flashprefix)/jffs2.flfs1x $(flashprefix)/jffs2.flfs2x: $(hostappsdir)/mkflfs/mkflfs
+	ln -sf $(bootdir)/u-boot-config/u-boot.jffs2.dbox2.h $(bootdir)/u-boot-config/u-boot.config
+	$(MAKE) @DIR_uboot@/u-boot.stripped
+	$(hostappsdir)/mkflfs/mkflfs 1x -o $(flashprefix)/jffs2.flfs1x @DIR_uboot@/u-boot.stripped
+	$(hostappsdir)/mkflfs/mkflfs 2x -o $(flashprefix)/jffs2.flfs2x @DIR_uboot@/u-boot.stripped
+	@CLEANUP_uboot@
+	rm $(bootdir)/u-boot-config/u-boot.config
 
 ################################################################
 # This section builds directories that can be used to create filesystems
@@ -2005,8 +2106,8 @@ $(flashprefix)/var-neutrino: $(flashprefix)/root-neutrino-cramfs-p
 	if [ ! -d $@/tuxbox/boot ] ; then \
 		$(INSTALL) -d $@/tuxbox/boot ; \
 	fi
-	if [ -e $(buildprefix)/defaultlogos/logo-fb -a -e $(buildprefix)/defaultlogos/logo-lcd  ] ; then \
-		 cp $(buildprefix)/defaultlogos/logo-fb $(buildprefix)/defaultlogos/logo-lcd $@/tuxbox/boot ; \
+	if [ -e $(logosdir)/logo-fb -a -e $(logosdir)/logo-lcd  ] ; then \
+		 cp $(logosdir)/logo-fb $(logosdir)/logo-lcd $@/tuxbox/boot ; \
 	fi
 	$(INSTALL) -d $@/etc/init.d
 	for i in `find $</etc/init.d/ -name "start*"` ; do \
@@ -2035,8 +2136,8 @@ $(flashprefix)/var-enigma: $(flashprefix)/root-enigma-cramfs-p
 	if [ ! -d $@/tuxbox/boot ] ; then \
 		$(INSTALL) -d $@/tuxbox/boot ; \
 	fi
-	if [ -e $(buildprefix)/defaultlogos/logo-fb -a -e $(buildprefix)/defaultlogos/logo-lcd  ] ; then \
-		cp $(buildprefix)/defaultlogos/logo-fb $(buildprefix)/defaultlogos/logo-lcd $@/tuxbox/boot ; \
+	if [ -e $(logosdir)/logo-fb -a -e $(logosdir)/logo-lcd  ] ; then \
+		cp $(logosdir)/logo-fb $(logosdir)/logo-lcd $@/tuxbox/boot ; \
 	fi
 	$(INSTALL) -d $@/etc/init.d
 	for i in `find $</etc/init.d/ -name "start*"` ; do \
@@ -2060,7 +2161,7 @@ $(flashprefix)/var-enigma: $(flashprefix)/root-enigma-cramfs-p
 	fi
 	@TUXBOX_CUSTOMIZE@
 
-$(flashprefix)/root-%-jffs2fs: $(flashprefix)/root-%-jffs2fs-p $(flashprefix)/root-%-jffs2fs-p/lib/ld.so.1
+$(flashprefix)/root-%-jffs2: $(flashprefix)/root-%-jffs2-p $(flashprefix)/root-%-jffs2-p/lib/ld.so.1
 	rm -rf $@
 	cp -rd $< $@
 	@if [ -e $(buildprefix)/root/etc/init.d/rcS.insmod ]; then \
@@ -2070,8 +2171,8 @@ $(flashprefix)/root-%-jffs2fs: $(flashprefix)/root-%-jffs2fs-p $(flashprefix)/ro
 	@if [ ! -d $@/var/tuxbox/boot ] ; then \
 		mkdir $@/var/tuxbox/boot; \
 	fi
-	if [ -e $(buildprefix)/defaultlogos/logo-fb -a -e $(buildprefix)/defaultlogos/logo-lcd  ] ; then \
-		cp $(buildprefix)/defaultlogos/logo-fb $(buildprefix)/defaultlogos/logo-lcd $@/var/tuxbox/boot ; \
+	if [ -e $(logosdir)/logo-fb -a -e $(logosdir)/logo-lcd  ] ; then \
+		cp $(logosdir)/logo-fb $(logosdir)/logo-lcd $@/var/tuxbox/boot ; \
 	fi
 	@TUXBOX_CUSTOMIZE@
 
@@ -2205,11 +2306,54 @@ $(flashprefix)/root-enigma-%-p: $(flashprefix)/root-% enigma
 	@TUXBOX_CUSTOMIZE@
 
 ################################################################
-$(flashprefix)/root-%: $(flashprefix)/root $(flashprefix)/vmlinuz-% $(flashprefix)/root/sbin/in.ftpd $(flashprefix)/root/sbin/streampes $(flashprefix)/root/bin/lufsd $(flashprefix)/root/lib/tuxbox/plugins 
+$(flashprefix)/root-cramfs: $(flashprefix)/root $(flashprefix)/root/.version $(flashprefix)/root/bin/busybox $(flashprefix)/root/sbin/in.ftpd $(flashprefix)/root/sbin/streampes $(flashprefix)/root/bin/lufsd $(flashprefix)/root/lib/tuxbox/plugins $(myflashplugins) $(flashprefix)/root/var/tuxbox/ucodes
 	rm -rf $@
 	cp -rd $< $@
-	cp $(word 2,$+) $@/vmlinuz
+	m4 --define=rootfs=cramfs Patches/dbox2-flash.c.m4 > linux/drivers/mtd/maps/dbox2-flash.c
+	cp Patches/linux-$(KERNELVERSION).config-flash $(KERNEL_DIR)/.config
+	$(MAKE) $(KERNEL_BUILD_FILENAME) targetprefix=$@
+	$(hostprefix)/bin/mkimage \
+		-n 'dbox2' -A ppc -O linux -T kernel -C gzip \
+		-a 00000000 -e 00000000 -d $(KERNEL_BUILD_FILENAME) $@/vmlinuz
+	rm -f $(DEPDIR)/drivers
+	$(MAKE) driver targetprefix=$@
 	@TUXBOX_CUSTOMIZE@
+
+$(flashprefix)/root-jffs2: $(flashprefix)/root $(flashprefix)/root/.version $(flashprefix)/root/bin/busybox $(flashprefix)/root/sbin/in.ftpd $(flashprefix)/root/sbin/streampes $(flashprefix)/root/bin/lufsd $(flashprefix)/root/lib/tuxbox/plugins $(myflashplugins) $(flashprefix)/root/var/tuxbox/ucodes
+	rm -rf $@
+	cp -rd $< $@
+	m4 --define=rootfs=jffs2 Patches/dbox2-flash.c.m4 > linux/drivers/mtd/maps/dbox2-flash.c
+	cp Patches/linux-$(KERNELVERSION).config-flash $(KERNEL_DIR)/.config
+	$(MAKE) $(KERNEL_BUILD_FILENAME) targetprefix=$@
+	$(hostprefix)/bin/mkimage \
+		-n 'dbox2' -A ppc -O linux -T kernel -C gzip \
+		-a 00000000 -e 00000000 -d $(KERNEL_BUILD_FILENAME) $@/vmlinuz
+	rm -f $(DEPDIR)/drivers
+	$(MAKE) driver targetprefix=$@
+	@TUXBOX_CUSTOMIZE@
+
+$(flashprefix)/root-squashfs: $(flashprefix)/root $(flashprefix)/root/.version $(flashprefix)/root/bin/busybox $(flashprefix)/root/sbin/in.ftpd $(flashprefix)/root/sbin/streampes $(flashprefix)/root/bin/lufsd $(flashprefix)/root/lib/tuxbox/plugins $(myflashplugins) $(flashprefix)/root/var/tuxbox/ucodes
+	rm -rf $@
+	cp -rd $< $@
+	m4 --define=rootfs=squashfs Patches/dbox2-flash.c.m4 > linux/drivers/mtd/maps/dbox2-flash.c
+	cp Patches/linux-$(KERNELVERSION).config-flash $(KERNEL_DIR)/.config
+	$(MAKE) $(KERNEL_BUILD_FILENAME) targetprefix=$@
+	$(hostprefix)/bin/mkimage \
+		-n 'dbox2' -A ppc -O linux -T kernel -C gzip \
+		-a 00000000 -e 00000000 -d $(KERNEL_BUILD_FILENAME) $@/vmlinuz
+	rm -f $(DEPDIR)/drivers
+	$(MAKE) driver targetprefix=$@
+	@TUXBOX_CUSTOMIZE@
+
+myflashplugins := $(flashprefix)/root/bin/tuxmaild $(flashprefix)/root/share/fonts/tuxtxt.ttf
+
+############
+$(flashprefix)/root/var/tuxbox/ucodes:
+	$(INSTALL) -d $(flashprefix)/root/var/tuxbox/ucodes
+	if [ -d $(ucodesdir) ] ; then \
+		rm -f $(flashprefix)/root/var/tuxbox/ucodes/*; \
+		cp -p $(ucodesdir)/* $(flashprefix)/root/var/tuxbox/ucodes; \
+	fi || true
 
 ################################################################
 ## flash-ftpd
@@ -2233,20 +2377,65 @@ $(flashprefix)/root/bin/lufsd: $(flashprefix)/root $(DEPDIR)/lufs
 	$(INSTALL) $(targetprefix)/bin/lufsd $</bin
 	@TUXBOX_CUSTOMIZE@
 
+$(flashprefix)/root/bin/busybox: bootstrap $(flashprefix)/root
+	@PREPARE_busybox@
+	m4 -Dflash Patches/busybox.config.m4 > @DIR_busybox@/.config
+	cd @DIR_busybox@ && \
+		$(MAKE) dep all \
+			CROSS=$(target)- \
+			CFLAGS_EXTRA="$(TARGET_CFLAGS)" && \
+		$(MAKE) install PREFIX=$(flashprefix)/root
+	@CLEANUP_busybox@
+
+$(flashprefix)/root/.version: $(flashprefix)/root
+	echo "version=0200`date +%Y%m%d%H%M`" 	> $@
+	echo "creator=`id -un`" 		>> $@
+	echo "imagename=Myimage" 		>> $@
+	echo "homepage=http://www.tuxbox.org" 	>> $@
+
 ## flash-plugins
+flash-tuxtxt: | $(flashprefix)/root/share/fonts/tuxtxt.ttf
+
+$(flashprefix)/root/share/fonts/tuxtxt.ttf: | $(flashprefix)/root/lib/tuxbox/plugins
+	$(INSTALL) -d $(flashprefix)/root/var/tuxbox/config/tuxtxt
+	$(INSTALL) -d $(flashprefix)/root/share/fonts/
+	cp -rd $(targetprefix)/share/fonts/tuxtxt.ttf $(flashprefix)/root/share/fonts/
+	cp -rd $(targetprefix)/share/fonts/tuxtxt.otb $(flashprefix)/root/share/fonts/
+	cp -rd $(targetprefix)/var/tuxbox/config/tuxtxt/tuxtxt.conf $(flashprefix)/root/var/tuxbox/config/tuxtxt/
+	cp -rd $(targetprefix)/lib/tuxbox/plugins/tuxtxt.so $<
+	cp -rd $(targetprefix)/lib/tuxbox/plugins/tuxtxt.cfg $<
+
+flash-tuxmail: | $(flashprefix)/root/bin/tuxmaild
+
+$(flashprefix)/root/bin/tuxmaild: | $(flashprefix)/root/lib/tuxbox/plugins
+	$(INSTALL) $(targetprefix)/bin/tuxmaild $(flashprefix)/root/bin
+	cp -rd $(targetprefix)/lib/tuxbox/plugins/tuxmail.so $<
+	cp -rd $(targetprefix)/lib/tuxbox/plugins/tuxmail.cfg $<	
+
+flash-sokoban: $(flashprefix)/root/share/tuxbox/sokoban
+
+$(flashprefix)/root/share/tuxbox/sokoban: $(flashprefix)/root/lib/tuxbox/plugins
+	cp -rd $(targetprefix)/share/tuxbox/sokoban $(flashprefix)/root/share/tuxbox/
+	cp -rd $(targetprefix)/lib/tuxbox/plugins/soko.so $<
+	cp -rd $(targetprefix)/lib/tuxbox/plugins/soko.cfg $<	
+
+flash-games: | $(flashprefix)/root/lib/tuxbox/plugins
+	for i in `grep -l type=1 /tuxbox/cdkroot/lib/tuxbox/plugins/*.cfg` ; do cp $$i `echo $$i|sed -e 's/cfg$$/so/'` $(flashprefix)/root/lib/tuxbox/plugins; done
+	cp -rd $(targetprefix)/var/tuxbox/config/games.cfg $(flashprefix)/root/var/tuxbox/config/
+
+flash-util-plugins: $(flashprefix)/root/lib/tuxbox/plugins
+	for i in `grep -l type=2 /tuxbox/cdkroot/lib/tuxbox/plugins/*.cfg` ; do cp $$i `echo $$i|sed -e 's/cfg$$/so/'` $(flashprefix)/root/lib/tuxbox/plugins; done
+
+$(flashprefix)/root/lib/tuxbox/plugins/%.cfg: | $(flashprefix)/root/lib/tuxbox/plugins
+	cp $(targetprefix)/lib/tuxbox/plugins/$(notdir $@) $<
+	cp $(targetprefix)/lib/tuxbox/plugins/$(basename $(notdir $@)).so $<
+
 $(flashprefix)/root/lib/tuxbox/plugins: $(flashprefix)/root plugins
 	$(INSTALL) -d $</lib/tuxbox/plugins
-	$(INSTALL) -d $</var/tuxbox/config/tuxtxt
-	$(INSTALL) $(targetprefix)/bin/tuxmaild $</bin
-	cp -rd $(targetprefix)/lib/tuxbox/plugins/*.cfg $</lib/tuxbox/plugins/
-	cp -rd $(targetprefix)/lib/tuxbox/plugins/*.so $</lib/tuxbox/plugins/
-	cp -rd $(targetprefix)/share/fonts/tuxtxt.ttf $</share/fonts/
-	cp -rd $(targetprefix)/share/fonts/tuxtxt.otb $</share/fonts/
-	cp -rd $(targetprefix)/var/tuxbox/config/games.cfg $</var/tuxbox/config/
-	cp -rd $(targetprefix)/var/tuxbox/config/tuxtxt/tuxtxt.conf $</var/tuxbox/config/tuxtxt/
-	cp -rd $(targetprefix)/share/tuxbox/sokoban $</share/tuxbox/
+#	cp -rd $(targetprefix)/lib/tuxbox/plugins/*.cfg $</lib/tuxbox/plugins/
+#	cp -rd $(targetprefix)/lib/tuxbox/plugins/*.so $</lib/tuxbox/plugins/
 
-$(flashprefix)/root: procps busybox driver tuxbox_tools lirc $(DEPDIR)/rootdirectories
+$(flashprefix)/root: procps tuxbox_tools lirc rootdirectories | $(flashprefix)
 	rm -rf $@
 	$(INSTALL) -d $@/bin
 	$(INSTALL) -d $@/dev
@@ -2257,50 +2446,28 @@ $(flashprefix)/root: procps busybox driver tuxbox_tools lirc $(DEPDIR)/rootdirec
 	$(INSTALL) -d $@/share/tuxbox
 	$(INSTALL) -d $@/share/fonts
 	$(INSTALL) -d $@/var/tuxbox/config
-	$(INSTALL) -d $@/var/tuxbox/ucodes
 	$(INSTALL) -d $@/tmp
 	$(MAKE) -C root install targetprefix=$@
-	echo "version=0200`date +%Y%m%d%H%M`" > $@/.version
-	echo "creator=`id -un`" >> $@/.version
-	echo "imagename=Myimage" >> $@/.version
-	echo "homepage=http://www.tuxbox.org" >> $@/.version
-	$(INSTALL) $(targetprefix)/bin/busybox $@/bin
-	for i in `find $(targetprefix)/bin/ -lname "*busybox"` ; do cp -rd $$i $@/bin/ ; done
-	for i in `find $(targetprefix)/sbin/ -lname "*busybox"` ; do cp -rd $$i $@/sbin/ ; done
 	$(INSTALL) $(targetprefix)/bin/switch $@/bin
 	$(INSTALL) $(targetprefix)/bin/tuxinfo $@/bin
-	$(INSTALL) $(targetprefix)/sbin/lircd $@/sbin
+	if [ -e $(targetprefix)/sbin/lircd ] ; then \
+		$(INSTALL) $(targetprefix)/sbin/lircd $@/sbin ; \
+	fi
 	if [ -e $(targetprefix)/sbin/eraseall ] ; then \
 		$(INSTALL) $(targetprefix)/sbin/eraseall $@/sbin ; \
 	fi
 	rm -f $@/etc/init.d/start_*
-	$(INSTALL) -d $@/lib/modules/$(KERNELVERSION)
-	cp -rd $(targetprefix)/lib/modules/$(KERNELVERSION)/kernel $(targetprefix)/lib/modules/$(KERNELVERSION)/misc \
-		$@/lib/modules/$(KERNELVERSION)
 	ln -s /tmp $@/var/run
-	ln -s /var $@/root
 	@TUXBOX_CUSTOMIZE@
 
 ################################################################
-# Build different kernels for cramfs, squashfs, and jffs2fs
-$(flashprefix)/vmlinuz-cramfs: linuxdir
-	rm -f $(DEPDIR)/linuxkernel
-	cp maps/dbox2-flash.c linux/drivers/mtd/maps
-	$(MAKE) $(DEPDIR)/linuxkernel
-	cp $(bootprefix)/kernel-cdk $@
-
-$(flashprefix)/vmlinuz-%: linuxdir $(buildprefix)/Patches/linux-drivers-mtd-maps-dbox2-flash-%.c.diff
-	rm -f $(DEPDIR)/linuxkernel
-	cp maps/dbox2-flash.c linux/drivers/mtd/maps
-	(cd linux/drivers/mtd/maps; patch <  $(word 2,$+))
-	$(MAKE) $(DEPDIR)/linuxkernel
-	cp $(bootprefix)/kernel-cdk $@
-
-################################################################
-$(hostappsdir)/mkflfs/mkflfs:
+$(hostprefix)/bin/mkflfs:
 	cd $(hostappsdir)/mkflfs && \
-	gcc -o mkflfs mkflfs.c minilzo.c
+	gcc -o mkflfs mkflfs.c minilzo.c && \
+	$(INSTALL) -m755 mkflfs $(hostprefix)/bin
 
+$(flashprefix):
+	$(INSTALL) -d $@
 ################################################################
 # Targets, which are not executed by detault
 
@@ -2321,7 +2488,7 @@ $(flashprefix)/root/sbin/sshd: $(flashprefix)/root $(DEPDIR)/ssh
 	$(INSTALL) $(targetprefix)/libexec/sftp-server $(flashprefix)/root/libexec
 	$(INSTALL) $(targetprefix)/sbin/sshd $(flashprefix)/root/sbin
 
-# Dreamdata (not yet working in CVS)
+# Dreamdata
 $(flashprefix)/root/bin/mrouted: $(flashprefix)/root plugins mrouted
 	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
 	$(INSTALL) -d $(flashprefix)/root/var/tuxbox/config
@@ -2362,10 +2529,15 @@ $(flashprefix)/root/bin/lcdmenu: $(flashprefix)/root lcd
 .PRECIOUS: \
 $(flashprefix)/neutrino-cramfs.img% $(flashprefix)/enigma-cramfs.img% \
 $(flashprefix)/neutrino-squashfs.img% $(flashprefix)/enigma-squashfs.img% \
-$(flashprefix)/neutrino-jffs2fs.img% $(flashprefix)/enigma-jffs2fs.img% \
-$(flashprefix)/root-%-jffs2fs  $(flashprefix)/root-% \
+$(flashprefix)/neutrino-jffs2.img% $(flashprefix)/enigma-jffs2.img% \
+$(flashprefix)/root-%-jffs2  $(flashprefix)/root-% \
 $(flashprefix)/root-neutrino-%-p $(flashprefix)/root-enigma-%-p \
-$(flashprefix)/vmlinuz-%
+$(flashprefix)/vmlinuz-% \
+$(flashprefix)/var-%.jffs2 \
+$(flashprefix)/root-%.jffs2 \
+$(flashprefix)/root-%.cramfs $(flashprefix)/root-%.squashfs \
+%/lib/ld.so.1 \
+$(flashprefix)/root/lib/tuxbox/plugins/%.cfg
 ################################################################
 # flash-clean deletes everything created with the flash-* commands
 # flash-developerclean leaves the flfs-images and the vmlinuz-* files.
@@ -2378,7 +2550,7 @@ $(flashprefix)/vmlinuz-%
 
 flash-semiclean:
 	rm -f $(flashprefix)/*.cramfs $(flashprefix)/*.squashfs \
-	$(flashprefix)/*.jffs2fs $(flashprefix)/.*-flfs \
+	$(flashprefix)/*.jffs2 $(flashprefix)/.*-flfs \
 	$(flashprefix)/.*_checked* $(flashprefix)/.root-*
 	rm -rf $(flashprefix)/root* 
 	rm -rf $(flashprefix)/var*
@@ -2405,25 +2577,32 @@ depsclean:
 	$(APPSCLEANUP)
 	rm -f $(DEPDIR)/u-boot $(DEPDIR)/linuxkernel $(DEPDIR)/driver $(DEPDIR)/rootdirectories
 
-mostlyclean: depsclean
+if TARGETRULESET_FLASH
+mostlyclean-local: flash-clean cdk-clean
+else
+mostlyclean-local: cdk-clean
+endif
+
+cdk-clean:
+	$(APPSCLEANUP)
 	-$(MAKE) -C linux clean
 	-$(MAKE) -C $(driverdir) KERNEL_LOCATION=$(buildprefix)/linux \
 		BIN_DEST=$(targetprefix)/bin \
 		INSTALL_MOD_PATH=$(targetprefix) clean
-	$(MAKE) -C $(appsdir)/tuxbox/neutrino clean
-	$(MAKE) -C $(appsdir)/tuxbox/enigma clean
-	$(MAKE) -C $(appsdir)/tuxbox/lcars clean
-	$(MAKE) -C $(appsdir)/dvb/zapit clean
-	$(MAKE) -C $(appsdir)/tuxbox/plugins clean
-	$(MAKE) -C $(appsdir)/tuxbox/tools clean
-	$(MAKE) -C $(appsdir)/misc/tools clean
-	$(MAKE) -C $(appsdir)/misc/libs clean
-	$(MAKE) -C $(appsdir)/tuxbox/libs clean
-	$(MAKE) -C $(appsdir)/tuxbox/libtuxbox clean
-	$(MAKE) -C $(appsdir)/dvb/tools clean
-	$(MAKE) -C $(appsdir)/dvb/config distclean
-	$(MAKE) -C $(appsdir)/tuxbox/lcd clean
-	$(MAKE) -C $(appsdir)/dvb/dvbsnoop clean
+	-$(MAKE) -C $(appsdir)/tuxbox/neutrino clean
+	-$(MAKE) -C $(appsdir)/tuxbox/enigma clean
+	-$(MAKE) -C $(appsdir)/tuxbox/lcars clean
+	-$(MAKE) -C $(appsdir)/dvb/zapit clean
+	-$(MAKE) -C $(appsdir)/tuxbox/plugins clean
+	-$(MAKE) -C $(appsdir)/tuxbox/tools clean
+	-$(MAKE) -C $(appsdir)/misc/tools clean
+	-$(MAKE) -C $(appsdir)/misc/libs clean
+	-$(MAKE) -C $(appsdir)/tuxbox/libs clean
+	-$(MAKE) -C $(appsdir)/tuxbox/libtuxbox clean
+	-$(MAKE) -C $(appsdir)/dvb/tools clean
+	-$(MAKE) -C $(appsdir)/dvb/config distclean
+	-$(MAKE) -C $(appsdir)/dvb/dvbsnoop clean
+	-$(MAKE) -C $(appsdir)/tuxbox/lcd clean
 
 clean-local:
 	-$(MAKE) -C etc clean
@@ -2432,6 +2611,8 @@ clean-local:
 		KERNEL_LOCATION=$(buildprefix)/linux
 	-rm -f linux
 	-rm -rf build
+	-rm -f $(bootprefix)/u-boot
+	-rm -f $(bootprefix)/kernel-cdk
 	-@CLEANUP@
 
 distclean-local:
@@ -2459,6 +2640,7 @@ distclean-local:
 	-rm $(DEPDIR) -rf
 	-rm -rf $(targetprefix)
 	-rm -rf $(hostprefix)
+	-rm -rf $(serversupport)
 if TARGETRULESET_FLASH
 	-rm -rf $(flashprefix)
 endif

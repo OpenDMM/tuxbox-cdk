@@ -14,16 +14,33 @@ AM_MAINTAINER_MODE
 
 AC_PROG_CC
 
-AC_ARG_ENABLE(libcrypto,
-	AS_HELP_STRING(--disable-libcrypto,don't build libcrypto to reduce binary size),
-	,[enable_libcrypto=yes])
+AC_ARG_ENABLE(kernel26,
+	AS_HELP_STRING(--enable-kernel26,set up the CDK to use the 2.6 kernel (experimental)),
+	,[enable_kernel26=no])
+AM_CONDITIONAL(KERNEL26,test "$enable_kernel26" = "yes")
 
-AM_CONDITIONAL(WITH_LIBCRYPTO,test "$enable_libcrypto" = "yes")
+AC_ARG_ENABLE(nptl,
+	AS_HELP_STRING(--disable-nptl,do not use native posix threads for glibc (only meaningful for kernel 2.6.x, default for 2.4.x)),
+	,[
+		if test "$enable_kernel26" = "yes"; then 
+			enable_nptl=yes
+		else
+			enable_nptl=no
+		fi
+	])
+if test "$enable_nptl" = "yes"; then
+	if test "$enable_kernel26" != "yes"; then
+		AC_MSG_ERROR([Option --enable-nptl (native posix threads) is only supported for a 2.6.x kernel])
+	fi
+	GLIBC_PTHREADS="nptl"
+else
+	GLIBC_PTHREADS="linuxthreads"
+fi
+AC_SUBST(GLIBC_PTHREADS)
 
 AC_ARG_WITH(cpu,
 	[  --with-cpu=MODEL        cpu model [[823,405]]],
 	[CPU_MODEL="$withval"],[CPU_MODEL="823"])
-
 AC_SUBST(CPU_MODEL)
 
 AC_ARG_WITH(hostruleset,
@@ -51,20 +68,18 @@ AM_CONDITIONAL(HOSTRULESET_STANDARD,test "$HOSTRULESET" = "standard")
 AM_CONDITIONAL(HOSTRULESET_CYGWIN,test "$HOSTRULESET" = "cygwin")
 
 AC_ARG_WITH(targetruleset,
-	[  --with-targetruleset=NAME target ruleset [[standard,flash]]],
-	[TARGETRULESET="$withval"],[TARGETRULESET="standard"])
+	[  --with-targetruleset=NAME	OBSOLETE, use --[[enable|disable]]-flashrules instead],
+	[TARGETRULESET="$withval"],[TARGETRULESET="notset"])
 
-if test "$TARGETRULESET" = "standard"; then
-	INSTALLRULESETFILE=""
-elif test "$TARGETRULESET" = "flash"; then
-	INSTALLRULESETFILE="-flash"
-else
-	AC_MSG_ERROR([invalid targetruleset "$TARGETRULESET", choose on from standard or flash]);
+if test "$TARGETRULESET" != "notset"; then
+	AC_MSG_ERROR([--with-targetruleset is obsolete; use --[[enable|disable]]-flashrules instead]);
 fi
 
-AC_SUBST(TARGETRULESET)
-AM_CONDITIONAL(TARGETRULESET_STANDARD,test "$TARGETRULESET" = "standard")
-AM_CONDITIONAL(TARGETRULESET_FLASH,test "$TARGETRULESET" = "flash")
+AC_ARG_ENABLE(flashrules,
+	AS_HELP_STRING(--enable-flashrules,	enable rules for creating flash targets),
+	,[enable_flashrules=no])
+AM_CONDITIONAL(TARGETRULESET_FLASH,test "$enable_flashrules" = "yes")
+
 
 if test -z "$CFLAGS" ; then
 	CFLAGS="-O2"
@@ -72,10 +87,10 @@ fi
 
 if test -z "$TARGET_CFLAGS" -o -z "$TARGET_CXXFLAGS"; then
 	TARGET_CFLAGS="-mcpu=$CPU_MODEL -mmultiple -mstring -meabi -pipe"
-	if test "$TARGETRULESET" = "standard"; then
+	if test "enable_flashrules" != "yes"; then
 		TARGET_CFLAGS="$TARGET_CFLAGS -O2 -g3 -gdwarf-2"
 		TARGET_LDFLAGS=""
-	elif test "$TARGETRULESET" = "flash"; then
+	else
 		TARGET_CFLAGS="$TARGET_CFLAGS -Os"
 		TARGET_LDFLAGS="-s"
 	fi
@@ -109,12 +124,27 @@ AC_ARG_WITH(flashprefix,
 	[  --with-flashprefix=DIR  prefix for flash files [[PREFIX/cdkflash]] (only used for flash building)],
 	[flashprefix="$with_flashprefix"],[flashprefix="${prefix}/cdkflash"])
 
+AC_ARG_WITH(serversupport,
+	[  --with-serversupport=DIR  prefix for server file templates [[PREFIX/serversupport]]],
+	[serversupport="$with_serversupport"],[serversupport="${prefix}/serversupport"])
+
+AC_ARG_WITH(ucodesdir,
+	[  --with-ucodesdir=DIR  optional directory containing ucodes [[NONE]]],
+	[ucodesdir="$with_ucodesdir"],[ucodesdir="NONE"])
+
+AC_ARG_WITH(logosdir,
+	[  --with-logosdir=DIR  optional directory containing logos [[[CVS/]logos]]],
+	[logosdir="$with_logosdir"],[logosdir="`pwd`/logos"])
+
 buildprefix=`pwd`
 AC_SUBST(targetprefix)
 AC_SUBST(hostprefix)
 AC_SUBST(buildprefix)
 AC_SUBST(bootprefix)
 AC_SUBST(flashprefix)
+AC_SUBST(serversupport)
+AC_SUBST(ucodesdir)
+AC_SUBST(logosdir)
 flashprefix_ro=${flashprefix}/ro
 AC_SUBST(flashprefix_ro)
 flashprefix_rw=${flashprefix}/rw
@@ -136,7 +166,7 @@ AC_ARG_WITH(driverdir,
 	[  --with-driverdir=DIR    driver dir from cvs [[[CVS/]driver]]],
 	[driverdir="$with_driverdir"],[driverdir="NONE"])
 
-AC_ARG_WITH(hostapsdir,
+AC_ARG_WITH(hostappsdir,
 	[  --with-hostappsdir=DIR  hostapps dir from cvs [[[CVS/]hostapps]]],
 	[hostappsdir="$with_driverdir"],[hostappsdir="NONE"])
 
@@ -228,7 +258,7 @@ AC_SUBST(hostappsdir)
 AC_SUBST(gnuserver)
 AC_SUBST(defaultserver)
 
-if test "$TARGETRULESET" = "flash"; then
+if test "$enable_flashrules" = "yes"; then
 	AC_PATH_PROG(MKLIBS,mklibs,no)
 	if test "$MKLIBS" = "no"; then
 		AC_MSG_WARN(using tuxbox mklibs)
@@ -278,7 +308,13 @@ AC_SUBST(DEPSCLEANUP)
 AC_SUBST(KERNELVERSION)
 TUXBOX_RULES_MAKE(uboot)
 TUXBOX_RULES_MAKE(linux)
-KERNELVERSION=$VERSION_linux
+TUXBOX_RULES_MAKE(linux24)
+if test "$enable_kernel26" == "yes"; then
+	KERNELVERSION=$VERSION_linux
+else
+	KERNELVERSION=$VERSION_linux24
+fi
+
 TUXBOX_RULES_MAKE_EXDIR(binutils)
 TUXBOX_RULES_MAKE_EXDIR(bootstrap_gcc)
 TUXBOX_RULES_MAKE_EXDIR(glibc)
@@ -410,22 +446,34 @@ ${srcdir}/rules-archive.pl ${srcdir}/rules-archive > Makefile-archive
 #
 # summary
 #
+
+if test "$enable_kernel26" == "yes"; then
+	used_kernelversion="2.6.x"
+else
+	used_kernelversion="2.4.x"
+fi
+
 AC_MSG_RESULT([
 summary:
 ----------------------------------------
-target cpu:		$CPU_MODEL
-host rule set:		$HOSTRULESET
-target rule set:	$TARGETRULESET
-target prefix:		$targetprefix
-host prefix:		$hostprefix
-boot prefix:		$bootprefix
-build prefix:		$buildprefix
-target apps directory:	$appsdir
-boot directory:		$bootdir
-driver directory:	$driverdir
-host apps directory:	$hostappsdir
-GNU server:		$gnuserver
-default server:		$defaultserver
+target cpu:            $CPU_MODEL
+kernel:                $used_kernelversion
+glibc-pthreads:        $GLIBC_PTHREADS
+host rule set:         $HOSTRULESET
+flash rules:	       $enable_flashrules
+target prefix:         $targetprefix
+host prefix:           $hostprefix
+boot prefix:           $bootprefix
+build prefix:          $buildprefix
+serversupport:	       $serversupport
+target apps directory: $appsdir
+boot directory:        $bootdir
+driver directory:      $driverdir
+host apps directory:   $hostappsdir
+logo directors:	       $logosdir
+ucode directory:       $ucodesdir
+GNU server:            $gnuserver
+default server:        $defaultserver
 ])
 
 if test "$dircheck" = "fail"; then
@@ -442,6 +490,10 @@ fi
 
 TUXBOX_CUSTOMIZE='[[ -x $(notdir $@)-local.sh ] && sh $(notdir $@)-local.sh $(flashprefix) $(buildprefix) || true]'
 AC_SUBST(TUXBOX_CUSTOMIZE)
+TUXBOX_YADD_CUSTOMIZE='[[ -x $(notdir $@)-local.sh ] && sh $(notdir $@)-local.sh $(targetprefix) $(buildprefix) || true]'
+AC_SUBST(TUXBOX_YADD_CUSTOMIZE)
+TUXBOX_CHECKIMAGE='@rm -f $@_bad; if ! $(hostprefix)/bin/checkImage $@; then touch $@_bad; fi'
+AC_SUBST(TUXBOX_CHECKIMAGE)
 
 AC_CONFIG_FILES([
 Makefile
@@ -461,6 +513,6 @@ AC_OUTPUT
 # This is a kludge. Make will not know how to make flash-all-all-all in 
 # a virgin directory otherwise. Don't remove unless you have found a
 # solution to that problem.
-if test "$TARGETRULESET" = "flash"; then
-   ${mkdir_p} ${flashprefix}
+if test "enable_flashrules" = "yes"; then
+  ${mkdir_p} ${flashprefix}
 fi

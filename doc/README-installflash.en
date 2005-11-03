@@ -1,4 +1,4 @@
-# Author/Copyright: Barf 2005-07-20
+# Author/Copyright: Barf 2005-07-20, 2005-11-02
 # License: Gnu Free Documentation License 
 # http://www.gnu.org/licenses/licenses.html#FDL
 
@@ -39,27 +39,31 @@ ignored.
 3. "Configure" the source tree. Select a place to build the images,
    call it $PREFIX. cd to $CVSDIR/cdk.
 
-./configure --prefix=$PREFIX --with-cvsdir=$CVSDIR --disable-libcrypto --enable-maintainer-mode --with-targetruleset=flash
+Configure with a command like
+
+./configure --prefix=$PREFIX --with-cvsdir=$CVSDIR --enable-flashrules
+--with-logosdir=$LOGOSDIR --with-ucodesdir=$UCODESDIR
 
 Examine the output for warnings and errors. Missing fakeroot may me
 ok, missing mkcramfs (mksquashfs) is ok if you do not intend to build
-cramfs (squashfs)-images. Either mkjffs2 or mkfs.jffs2 is needed, not
-both. The warning about mklibs can be ignored. Other warnings should
-probably not be ignored.
+cramfs (squashfs)-images. Either mkjffs2 or mkfs.jffs2 is needed for
+images, but not both. The warning about mklibs can be ignored. Other
+warnings should probably not be ignored.
 
-(--with-toolset=flash is used to build images, instead of network
-installations (so-called yadds). --enable-maintainer-mode should "by
-definition" only be used by maintainers, however, it is always
-suggested, and no-one have ever tried without. --disable-libcrypto
-inhibits combilation a normally unneeded library.)
-
-4. (Optional) Create a directory $CVSDIR/cdk/defaultlogos and put
+4. (Optional) Create a directory $LOGOSDIR and put
    bootlogos logo-fb and logo-lcd there. The requirements for these
    are described elsewhere. To make things simple, just "steal"
    them. If they are missing, the image will still boot, but will look
-   more mundane.
+   more mundane. Likewise, if you want ucode to be included directly
+   in the image, put them in a directory $UCODESDIR. (Note that images
+   containing Betaresearch ucodes may not be legally distributed.)
 
-5. Build your desired image with a command like "make
+5a. Build your yadd with a command like make
+   yadd-[all,neutrino,enigma,lcars]. 
+
+-and/or-
+
+5b. Build your desired image with a command like "make
    flash-$gui-$filesystem-$chips" where $gui is neutrino or enigma,
    $filesystem is jffs2fs, cramfs, or squashfs, and $chips is 1x or
    2x, depending on the number of flash chips in your dBox. For
@@ -70,10 +74,31 @@ inhibits combilation a normally unneeded library.)
    system.
 
 6. Wait for the build to finish. On my Athlon XP 1800, make
-   flash-all-all-all takes around one and a half hour. Assuming that
-   the build suceeded (and the final check did not rename it it a
-   *.bad image) the just-built image can now be flashed as complete
-   image. How to do this is outside the scope of the current document.
+   flash-all-all-all takes around one and a half hour. 
+
+7a. Set up a server to allow the dBox to boot the just-compiled
+   yadd. For Windows, there are GUI tools available, like the
+   Flashassistant, described elsewere. Here we consider the case of a
+   Unix/Linux server. At a minimum, a DHCP-server, a TFTP-server and
+   an NFS-server has to be set up. Some background is given in
+   http://wiki.tuxbox.org/CDK_YADD_Boot_Procedure. The make target
+   "serversupport" creates a serversupport directory, containing a
+   template configuration file for DHCPD, to be appropriately modified
+   (changing the box' IP-address and MAC-address should often be
+   sufficient), an fragment /etc/exports (to be appended to an
+   existing exports file, or used as exports file if none presently
+   exists), as well a text file README.tftp, containing tips on how to
+   setup tftp. The details are different for different Linux
+   distributions (in the name of user friendlyness!).
+
+-and/or-
+
+7b. Assuming that the image build suceeded the just-built image can
+   now be flashed as complete image. How to do this is outside the
+   scope of the current document. However, the make target
+   "dboxflasher" creates a special u-boot (boot file) that can be used
+   to flash your image: Just put it in the TFTP-rootdirectory using
+   the name flashimage.img.
 
 Customization:
 
@@ -93,13 +118,15 @@ To make this possible (in a clean way), the Makefile calls
 user-written modification scripts (if existing and executable) in
 certain situations. (Exactle when MAY be described by a future,
 extended, version of this document. For now, look for
-@TUXBOX_CUSTOMIZE@ in Makefile.am) For example, to make modifications
+@TUXBOX_CUSTOMIZE@ and @TUXBOX_YADD_CUSTOMIZE@ in Makefile.am) For
+example, to make modifications 
 in the root partition of a neutrino-squashfs image, you can write a
 script called $CVSROOT/cdk/root-neutrino-squashfs-local.sh, and make
 it executable. This script is supposed to make the required
 modifications. The scripts are given two arguments, first one ($1 in
-the script) is $flashprefix (in the sense of the Makefile), and the
-second argument ($2 in the script) is buildprefix (in the sense of the
+the script) is $flashprefix (in the sense of the Makefile) in
+@TUXBOX_CUSTOMIZE@, and $targetprefix in @TUXBOX_YADD_CUSTOMIZE@, while the
+second argument ($2 in the script) is $buildprefix (in the sense of the
 Makefile). For example, here is a sensible var-neutrino-local.sh
 script that basically does what 2. above described:
 
