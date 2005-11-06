@@ -72,13 +72,18 @@ AC_ARG_WITH(targetruleset,
 	[TARGETRULESET="$withval"],[TARGETRULESET="notset"])
 
 if test "$TARGETRULESET" != "notset"; then
-	AC_MSG_ERROR([--with-targetruleset is obsolete; use --[[enable|disable]]-flashrules instead]);
+	AC_MSG_WARN([--with-targetruleset is obsolete; use --[[enable|disable]]-flashrules instead]);
 fi
 
 AC_ARG_ENABLE(flashrules,
 	AS_HELP_STRING(--enable-flashrules,	enable rules for creating flash targets),
-	,[enable_flashrules=no])
+	,[enable_flashrules=yes])
 AM_CONDITIONAL(TARGETRULESET_FLASH,test "$enable_flashrules" = "yes")
+
+AC_ARG_ENABLE(oldtargets,
+	AS_HELP_STRING(--enable-oldtargets,	enable some obsolete targets and targetnames),
+	,[enable_oldtargets=yes])
+AM_CONDITIONAL(ENABLE_OLDTARGETS,test "$enable_oldtargets" = "yes")
 
 
 if test -z "$CFLAGS" ; then
@@ -257,6 +262,11 @@ AC_SUBST(driverdir)
 AC_SUBST(hostappsdir)
 AC_SUBST(gnuserver)
 AC_SUBST(defaultserver)
+
+AC_PATH_PROG(M4,m4,no)
+if test "$M4" = "no"; then
+	AC_MSG_WARN(No m4 found)
+fi
 
 if test "$enable_flashrules" = "yes"; then
 	AC_PATH_PROG(MKLIBS,mklibs,no)
@@ -509,10 +519,3 @@ rules-downcheck.pl
 AC_CONFIG_COMMANDS([rules-downcheck-chmod],[chmod +x rules-downcheck.pl])
 
 AC_OUTPUT
-
-# This is a kludge. Make will not know how to make flash-all-all-all in 
-# a virgin directory otherwise. Don't remove unless you have found a
-# solution to that problem.
-if test "enable_flashrules" = "yes"; then
-  ${mkdir_p} ${flashprefix}
-fi

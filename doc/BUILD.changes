@@ -10,21 +10,25 @@ Configuration options:
   compiled with -Os (optimize for size). Other than that,
   --enable-flashrules has no disadvantages, and can normally be left
   on. (Will possibly become default in the future.) Using
-  --with-targetrulset now gives a fatal error (to force users to
-  think); in the future it should be completely eliminated.
+  --with-targetrulset now gives a warning error; in the future it
+  should be completely eliminated.
+
+--[enable|disable]-oldtargets can be used to include some target that
+  were present in the previous CVS Makefile. 
 
 --[enable|disable]-libcrypto has been eliminated. libcrypto is not
   built by default; no reason to treat it differently from other
   optional libraries.
 
 --serversupport=DIR: New option. Build template files for
-  /etc/dhcpd.conf, /etc/fstab for a Linux server.
+  /etc/dhcpd.conf, /etc/fstab, /etc/hosts, and /etc/xinetd.d/tftp for
+  a Linux server.
 --logosdir=DIR: New option. Picks logo files from this directory, if found.
 --ucodesdir=DIR: New option. Installs ucodes from this directory, if
   found. (An image containing Betaresearch ucodes may not legally be
   distributed.)
 
---enable-maintainer-mode still exists, but does nothing. It did
+--enable-maintainer-mode still exists, but does nothing explicit. It did
   nothing (sensible) previously either...
 
 FILENAMES: 
