@@ -1698,6 +1698,7 @@ if REISERFS_YES
 endif
 if WEBIF_EXPERT
 	$(MAKE) flash-plugin_dreamflash
+	$(MAKE) flash-plugin_movieplayer
 endif
 else
 dreamboximage_root: core .enigma .etherwake .linuxkernel .dreamfiles .dvbsnoop \
