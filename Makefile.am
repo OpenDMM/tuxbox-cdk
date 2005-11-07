@@ -2052,6 +2052,8 @@ $(flashprefix)/.part_plugin_tuxmail: $(flashprefix)/.flash .plugins
 	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/tuxmail.so $(flashprefix)/root/lib/tuxbox/plugins/
 	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/tuxmail.cfg $(flashprefix)/root/lib/tuxbox/plugins/
 	$(INSTALL) $(targetprefix)/bin/tuxmaild $(flashprefix)/root/bin/
+	$(INSTALL) -d $(flashprefix)/root/var_init/tuxbox/config/tuxmail
+	$(INSTALL) -m644 $(targetprefix)/var/tuxbox/config/tuxmail/tuxmail.conf $(flashprefix)/root/var_init/tuxbox/config/tuxmail/tuxmail.conf.default
 	@touch $@
 
 flash-plugin_libfx2: $(flashprefix)/.part_plugin_libfx2
