@@ -16,6 +16,7 @@ fi
 	--enable-maintainer-mode \
 	--with-targetruleset=flash \
 	--with-epg=standard \
+	--with-mhw-epg=no \
 	--with-flashtool=standard \
 	--with-reiserfs=no \
 	--with-ext-flashtool=yes \
