@@ -1590,7 +1590,11 @@ endif
 $(appsdir)/tuxbox/enigma/Makefile: .bootstrap .libfreetype .libfribidi .libmad .libid3tag .libpng .libsigc .libtuxbox .misc_libs .plugins .libvorbisidec
 	cd $(appsdir)/tuxbox/enigma && $(CONFIGURE)
 
-.enigma: $(appsdir)/tuxbox/enigma/Makefile .tuxbox_tools .libungif .libjpeg
+if WEBIF_EXPERT
+OPTIONAL_LIBCURL = .libcurl
+endif
+
+.enigma: $(appsdir)/tuxbox/enigma/Makefile .tuxbox_tools .libungif .libjpeg $(OPTIONAL_LIBCURL)
 	$(MAKE) -C $(appsdir)/tuxbox/enigma all install
 	touch $@
 
