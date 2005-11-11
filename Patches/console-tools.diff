@@ -55,3 +55,29 @@ diff -Naur console-tools-0.2.3.orig/vttools/screendump.c console-tools-0.2.3/vtt
        if((fd = open(consnam, 0)) < 0) 
  	{
  	  perror(consnam);
+diff -Naur console-tools-0.2.3.orig/kbdtools/showkey.c console-tools-0.2.3/kbdtools/showkey.c
+--- console-tools-0.2.3.orig/kbdtools/showkey.c	Fri Nov 11 00:11:15 2005
++++ console-tools-0.2.3/kbdtools/showkey.c	Fri Nov 11 15:22:16 2005
+@@ -267,6 +267,7 @@
+ 	case cmd_keymap:
+ 	  printf(")\n");
+ 	default:
++	  break;
+ 	}
+     }
+ 
+diff -Naur console-tools-0.2.3.orig/contrib/codepage.c console-tools-0.2.3/contrib/codepage.c
+--- console-tools-0.2.3.orig/contrib/codepage.c	Fri Nov 11 00:11:15 2005
++++ console-tools-0.2.3/contrib/codepage.c	Fri Nov 11 15:22:16 2005
+@@ -227,9 +227,8 @@
+ 	if (optc)
+ 	  return 0;
+ 
+-        fprintf(stderr, "\
+-Warning: CP format is a hack!\n
+-         The files produced may or may not be usable!\n");
++        fprintf(stderr, "Warning: CP format is a hack!\n"
++         "The files produced may or may not be usable!\n");
+ 
+ 	sprintf(outfile, "%d.cp", CPEntryHeader.codepage);
+ 	if ((out = fopen(outfile, "w")) == NULL) {
