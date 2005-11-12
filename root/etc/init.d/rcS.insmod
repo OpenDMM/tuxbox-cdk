@@ -76,6 +76,7 @@ fi
   ifup -a &
   test -x /sbin/inetd && inetd
   test -x /sbin/sshd &&/etc/init.d/start_sshd &
+  test -x /sbin/dropbear && /sbin/dropbear
 
 # Internetzeit holen
 if [ -e /var/etc/.rdate ]; then
