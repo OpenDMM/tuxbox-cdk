@@ -101,6 +101,8 @@ dreamdriver_dm7000_20050909.tar.bz2;http://sources.dreamboxupdate.com/download/s
 dreamdriver_dm56x0_20050906.tar.bz2;http://sources.dreamboxupdate.com/download/snapshots
 dreamdriver_dm500_20050906.tar.bz2;http://sources.dreamboxupdate.com/download/snapshots
 nfs-utils-1.0.6.tar.gz;http://belnet.dl.sourceforge.net/sourceforge/nfs
+diffutils-2.8.1.tar.gz;ftp://$(gnuserver)/diffutils
+less-381.tar.gz;http://www.greenwoodsoftware.com/less
 
 #
 # development tools

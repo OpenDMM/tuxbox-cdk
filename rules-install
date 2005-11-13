@@ -88,6 +88,8 @@ reiserfsprogs;make:install
 utillinux;make:install:SBINDIR=TARGET/sbin MAN8DIR=TARGET/man
 samba;make
 etherwake;make:install:INSTALL="$(INSTALL)" DESTDIR=$(targetprefix)
+diffutils;install:-m755:src/diff:TARGET/bin
+less;install:-m755:less:TARGET/bin
 
 #
 # development tools

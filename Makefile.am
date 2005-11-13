@@ -932,7 +932,7 @@ endif
 #   contrib apps
 #
 
-contrib_apps: .console_data .console_tools .fbset .lirc .lsof .ssh .tcpdump .xrc
+contrib_apps: .console_data .console_tools .fbset .lsof .ssh .diffutils .less .tcpdump .lirc .xrc
 contrib_apps_optional: .dsniff .pump .thttpd
 
 .console_data: .bootstrap @DEPENDS_console_data@
@@ -1195,6 +1195,36 @@ contrib_apps_optional: .dsniff .pump .thttpd
 			--without-x && \
 		@INSTALL_xrc@
 	@CLEANUP_xrc@
+	touch $@
+
+.less: .bootstrap .libncurses @DEPENDS_less@
+	@PREPARE_less@
+	cd @DIR_less@ && \
+		CC=$(target)-gcc \
+		CFLAGS="$(TARGET_CFLAGS)" \
+		LDFLAGS="$(TARGET_LDFLAGS)" \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--prefix=$(targetprefix) && \
+		$(MAKE) all && \
+		@INSTALL_less@
+	@CLEANUP_less@
+	touch $@
+
+.diffutils: .bootstrap @DEPENDS_diffutils@
+	@PREPARE_diffutils@
+	cd @DIR_diffutils@ && \
+		CC=$(target)-gcc \
+		CFLAGS="$(TARGET_CFLAGS)" \
+		LDFLAGS="$(TARGET_LDFLAGS)" \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--prefix=$(targetprefix) && \
+		$(MAKE) all && \
+		@INSTALL_diffutils@
+	@CLEANUP_diffutils@
 	touch $@
 
 
@@ -2217,6 +2247,16 @@ $(flashprefix)/.part_plugin_dreamflash: $(flashprefix)/.flash .plugins
 	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
 	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/dreamflash.so $(flashprefix)/root/lib/tuxbox/plugins/
 	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/dreamflash.cfg $(flashprefix)/root/lib/tuxbox/plugins/
+	@touch $@
+
+flash-less: $(flashprefix)/.part_less
+$(flashprefix)/.part_less: $(flashprefix)/.flash .less
+	$(INSTALL) $(targetprefix)/bin/less $(flashprefix)/root/bin
+	@touch $@
+
+flash-diffutils: $(flashprefix)/.part_diffutils
+$(flashprefix)/.part_diffutils: $(flashprefix)/.flash .diffutils
+	$(INSTALL) $(targetprefix)/bin/diff $(flashprefix)/root/bin
 	@touch $@
 
 ############################# UNTESTED!!! ##################################
