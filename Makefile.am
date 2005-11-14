@@ -2042,7 +2042,6 @@ $(flashprefix)/.part_plugin_movieplayer: $(flashprefix)/.flash .plugins
 	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
 	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/movieplayer.so $(flashprefix)/root/lib/tuxbox/plugins/
 	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/movieplayer.cfg $(flashprefix)/root/lib/tuxbox/plugins/
-	$(INSTALL) -m644 $(targetprefix)/var/tuxbox/config/movieplayer.xml $(flashprefix)/root/var_init/tuxbox/config/
 	@touch $@
 
 flash-plugin_dbswitch: $(flashprefix)/.part_plugin_dbswitch
