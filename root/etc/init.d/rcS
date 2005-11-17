@@ -104,12 +104,16 @@ if [ $mID -eq 05 ] ; then
 	fi
 	
 	if [ ! -e /var/etc/.dont_mount_hdd ] ; then
+		HDD_TARGET=0
+		if [ -e /var/etc/.hdd_is_slave ] ; then
+			HDD_TARGET=1
+		fi
 		# sleep after 10min
-		hdparm -S 120 /dev/ide/host0/bus0/target0/lun0/disc
+		hdparm -S 120 /dev/ide/host0/bus0/target$HDD_TARGET/lun0/disc
 		# accustic management
-		hdparm -M 128 /dev/ide/host0/bus0/target0/lun0/disc
+		hdparm -M 128 /dev/ide/host0/bus0/target$HDD_TARGET/lun0/disc
 	
-		mount /dev/ide/host0/bus0/target0/lun0/part1 /hdd
+		mount /dev/ide/host0/bus0/target$HDD_TARGET/lun0/part1 /hdd
 		if [ $init -eq 1 ] ; then 
 			rm /hdd/epg.*
 		fi
