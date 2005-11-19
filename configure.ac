@@ -140,7 +140,6 @@ AC_ARG_WITH(ucodesdir,
 AC_ARG_WITH(logosdir,
 	[  --with-logosdir=DIR  optional directory containing logos [[[CVS/]logos]]],
 	[logosdir="$with_logosdir"],[logosdir="`pwd`/logos"])
-
 buildprefix=`pwd`
 AC_SUBST(targetprefix)
 AC_SUBST(hostprefix)
@@ -154,6 +153,18 @@ flashprefix_ro=${flashprefix}/ro
 AC_SUBST(flashprefix_ro)
 flashprefix_rw=${flashprefix}/rw
 AC_SUBST(flashprefix_rw)
+
+AC_ARG_WITH(checkImage,
+	[  --with-checkImage=[[none,rename,warn]]	How/if to invoke checkImage [[none]]],
+	[CHECKIMAGE_BEHAVIOR="$withval"],[CHECKIMAGE_BEHAVIOR="true"])
+if [[ "$withval" = "rename" ]] ; then
+	TUXBOX_CHECKIMAGE='$(hostprefix)/bin/checkImage $@ || mv $@ $@_bad'
+elif [[ "$withval" = "warn" ]] ; then
+	TUXBOX_CHECKIMAGE='rm -f $@_bad; $(hostprefix)/bin/checkImage $@ || touch $@_bad'
+else
+	TUXBOX_CHECKIMAGE=@true
+fi
+AC_SUBST(TUXBOX_CHECKIMAGE)
 
 AC_ARG_WITH(cvsdir,
 	[  --with-cvsdir=DIR       where to find the cvs],
@@ -266,6 +277,21 @@ AC_SUBST(defaultserver)
 AC_PATH_PROG(M4,m4,no)
 if test "$M4" = "no"; then
 	AC_MSG_WARN(No m4 found)
+fi
+
+AC_PROG_CXX
+if test "$CXX" = "g++" -a "$GXX" != "yes"; then
+	AC_MSG_ERROR(No g++ found)
+fi
+
+AC_PROG_LEX
+if test "$LEX" != "flex"; then
+	AC_MSG_ERROR(No flex found)
+fi
+
+AC_PROG_YACC
+if test "$YACC" != "bison -y"; then
+	AC_MSG_ERROR(No bison found)
 fi
 
 if test "$enable_flashrules" = "yes"; then
@@ -476,6 +502,7 @@ host prefix:           $hostprefix
 boot prefix:           $bootprefix
 build prefix:          $buildprefix
 serversupport:	       $serversupport
+checkImage:	       $CHECKIMAGE_BEHAVIOR
 target apps directory: $appsdir
 boot directory:        $bootdir
 driver directory:      $driverdir
@@ -502,8 +529,6 @@ TUXBOX_CUSTOMIZE='[[ -x $(notdir $@)-local.sh ] && sh $(notdir $@)-local.sh $(fl
 AC_SUBST(TUXBOX_CUSTOMIZE)
 TUXBOX_YADD_CUSTOMIZE='[[ -x $(notdir $@)-local.sh ] && sh $(notdir $@)-local.sh $(targetprefix) $(buildprefix) || true]'
 AC_SUBST(TUXBOX_YADD_CUSTOMIZE)
-TUXBOX_CHECKIMAGE='@rm -f $@_bad; if ! $(hostprefix)/bin/checkImage $@; then touch $@_bad; fi'
-AC_SUBST(TUXBOX_CHECKIMAGE)
 
 AC_CONFIG_FILES([
 Makefile

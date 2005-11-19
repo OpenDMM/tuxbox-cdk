@@ -31,6 +31,13 @@ Configuration options:
 --enable-maintainer-mode still exists, but does nothing explicit. It did
   nothing (sensible) previously either...
 
+--with-checkImage=[none,rename,warn]  How/if to invoke checkImage. If
+  `none', do nothing. If `rename' created images are checked by by
+  checkImage, and if checkImage complains about the file (which may or
+  may not mean that the image will not run), it is renamed to
+  *_bad. If `warn', a zerosize *_bad-file ist created, to warn the
+  user. Requested by dietmarw.
+
 FILENAMES: 
 
 Naming system: A file system image is generally named
