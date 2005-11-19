@@ -55,93 +55,65 @@ echo "	Model: $MODEL $SUBMODEL"
 
 loadmodule(dvb-core, dvb_shutdown_timeout=0)
 
-if [ $MODEL_ID -eq 1 ]; then
-	# It's a dbox2 (not Dreambox)
-
-	# I2C core
-	loadmodule(dbox2_i2c)
-
-	# Frontprocessor
-	loadmodule(dbox2_fp)
-	ifmarkerfile({oldrc},
-		     {loadmodule(dbox2_fp_input, disable_new_rc=1)},
-		     {loadmodule(dbox2_fp_input)})
-
-	# Misc IO
-	loadmodule(avs)
-	loadmodule(saa7126)
-
-	# Frontends
-	if [ $VENDOR_ID -eq 1 ]; then
-		# Nokia
-		loadmodule(ves1820)
-		loadmodule(ves1x93, board_type=1)
-		loadmodule(cam, mio=0xC000000 firmware=/var/tuxbox/ucodes/cam-alpha.bin)
-	elif [ $VENDOR_ID -eq 2 ]; then
-		# Philips
-		ifmarkerfile({tda80xx.o},
-			{loadmodule(tda80xx)},
-			{loadmodule(tda8044h)})
-		loadmodule(cam, mio=0xC040000 firmware=/var/tuxbox/ucodes/cam-alpha.bin)
-	elif [ $VENDOR_ID -eq 3 ]; then
-		# Sagem
-		loadmodule(at76c651)
-		loadmodule(ves1x93, board_type=2)
-		loadmodule(cam, mio=0xC000000 firmware=/var/tuxbox/ucodes/cam-alpha.bin)
-	fi
-
-	loadmodule(dvb_i2c_bridge)
-	loadmodule(avia_napi)
-	loadmodule(cam_napi)
-	loadmodule(dbox2_fp_napi)
-	# Possibly turn off the watchdog on AVIA 500
-	ifmarkerfile({no_watchdog},
-		{loadmodule(avia_av, firmware=/var/tuxbox/ucodes no_watchdog=1)},
-		{loadmodule(avia_av, firmware=/var/tuxbox/ucodes)})
-
-	# Bei Avia_gt hw_sections und nowatchdog abfragen
-	GTOPTS=""
-	ifmarkerfile({hw_sections},{GTOPTS="hw_sections=0 "})
-	ifmarkerfile({no_enxwatchdog},{GTOPTS="${{GTOPTS}}no_watchdog=1 "})
-
-	loadmodule(avia_gt, {ucode=/var/tuxbox/ucodes/ucode.bin ${GTOPTS}})
-  
-	loadmodule(avia_gt_fb, console_transparent=0)
-	loadmodule(lcd)
-	loadmodule(avia_gt_lirc)
-	loadmodule(avia_gt_oss)
-	loadmodule(avia_gt_v4l2)
-
-elif [ $MODEL_ID -eq 2 ]; then
-	# Dreambox
-	ifdef({insmod},{# This case is not implemented
-	halt},{
-	# I2C core
-#	loadmodule(dvb_i2c_bridge)
-
-	# Frontprozessor
-	loadmodule(dreambox_fp)
-
-	# Frontends
-	loadmodule(alps_bsru6)
-#	loadmodule(alps_tdme7
-	loadmodule(philips_1216)
-	
-	# Misc IO
-	loadmodule(ir-hw)
-	loadmodule(dreambox_rc_input)
-	loadmodule(avs)
-	loadmodule(lcd)
-
-	# A/V
-	loadmodule(stb_td)
-	loadmodule(stb_fb)
-	loadmodule(stb_denc)
-	loadmodule(stb_aud)
-	loadmodule(stb_vg)
-	loadmodule(stb_clip)
-})
+if [ $MODEL_ID -eq 2 ]; then
+	# Dreambox, not supported
+	echo "For the Dreambox, please use another version"
+	exit 1
 fi
+
+# I2C core
+loadmodule(dbox2_i2c)
+
+# Frontprocessor
+loadmodule(dbox2_fp)
+ifmarkerfile({oldrc},
+	     {loadmodule(dbox2_fp_input, disable_new_rc=1)},
+	     {loadmodule(dbox2_fp_input)})
+
+# Misc IO
+loadmodule(avs)
+loadmodule(saa7126)
+
+# Frontends
+if [ $VENDOR_ID -eq 1 ]; then
+	# Nokia
+	loadmodule(ves1820)
+	loadmodule(ves1x93, board_type=1)
+	loadmodule(cam, mio=0xC000000 firmware=/var/tuxbox/ucodes/cam-alpha.bin)
+elif [ $VENDOR_ID -eq 2 ]; then
+	# Philips
+	ifmarkerfile({tda80xx.o},
+		{loadmodule(tda80xx)},
+		{loadmodule(tda8044h)})
+	loadmodule(cam, mio=0xC040000 firmware=/var/tuxbox/ucodes/cam-alpha.bin)
+elif [ $VENDOR_ID -eq 3 ]; then
+	# Sagem
+	loadmodule(at76c651)
+	loadmodule(ves1x93, board_type=2)
+	loadmodule(cam, mio=0xC000000 firmware=/var/tuxbox/ucodes/cam-alpha.bin)
+fi
+
+loadmodule(dvb_i2c_bridge)
+loadmodule(avia_napi)
+loadmodule(cam_napi)
+loadmodule(dbox2_fp_napi)
+# Possibly turn off the watchdog on AVIA 500
+ifmarkerfile({no_watchdog},
+	{loadmodule(avia_av, firmware=/var/tuxbox/ucodes no_watchdog=1)},
+	{loadmodule(avia_av, firmware=/var/tuxbox/ucodes)})
+
+# Bei Avia_gt hw_sections und nowatchdog abfragen
+GTOPTS=""
+ifmarkerfile({hw_sections},{GTOPTS="hw_sections=0 "})
+ifmarkerfile({no_enxwatchdog},{GTOPTS="${{GTOPTS}}no_watchdog=1 "})
+
+loadmodule(avia_gt, {ucode=/var/tuxbox/ucodes/ucode.bin ${GTOPTS}})
+  
+loadmodule(avia_gt_fb, console_transparent=0)
+loadmodule(lcd)
+loadmodule(avia_gt_lirc)
+loadmodule(avia_gt_oss)
+loadmodule(avia_gt_v4l2)
 
 loadmodule(avia_av_napi)
 ifmarkerfile({spts_mode},
