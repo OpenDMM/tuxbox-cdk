@@ -66,9 +66,13 @@ loadmodule(dbox2_i2c)
 
 # Frontprocessor
 loadmodule(dbox2_fp)
-ifmarkerfile({oldrc},
-	     {loadmodule(dbox2_fp_input, disable_new_rc=1)},
-	     {loadmodule(dbox2_fp_input)})
+if [ -e /var/etc/.oldrc ]; then
+        modprobe dbox2_fp_input disable_new_rc=1
+elif [ -e /var/etc/.newrc ]; then
+	modprobe dbox2_fp_input.o disable_old_rc=1
+else
+        modprobe dbox2_fp_input 
+fi
 
 # Misc IO
 loadmodule(avs)
