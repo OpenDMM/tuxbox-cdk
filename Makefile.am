@@ -1954,6 +1954,7 @@ if BOXTYPE_DM7000
 		*) rm $$i;; \
 		esac; \
 	done;
+	@if [ ! -d $(flashprefix)/root/root ]; then mkdir $(flashprefix)/root/root; fi
 else
 	CURRENT_PATH=`pwd` && \
 	cd $(flashprefix)/root/share/tuxbox/enigma/skins && \
