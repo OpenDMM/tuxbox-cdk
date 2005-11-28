@@ -11,13 +11,6 @@ export MODDIR="/lib/modules/"$(uname -r)
 #set environment variables ( mID )
 . /proc/bus/dbox.sh
 
-# if dm 7000
-if [ $mID -eq 05 ] ; then
-	if [ -e /root/platform/kernel/bild ] ; then
-		/bin/showlogo
-	fi
-fi
-
 # check if no DM500
 if [ $mID -ne 07 ] ; then
 	init=0
@@ -29,7 +22,15 @@ fi
 
 # do not mount jffs2 when not booting from flash
 if [ ! -e /root/platform/kernel/bild ] ; then
-	/bin/mount -t jffs2 /dev/mtdblock/1 /var
+	mount -t jffs2 /dev/mtdblock/1 /var
+fi
+
+# if dm 7000
+if [ $mID -eq 05 ] ; then
+	if [ ! -e /root/platform/kernel/bild ] ; then
+		mount -t cramfs /dev/mtdblock/6 /root
+	fi
+	/bin/showlogo
 fi
 
 /bin/mount -t ramfs none /tmp
