@@ -28,9 +28,13 @@ fi
 # if dm 7000
 if [ $mID -eq 05 ] ; then
 	if [ ! -e /root/platform/kernel/bild ] ; then
-		mount -t cramfs /dev/mtdblock/6 /root
+		mount -t cramfs /dev/mtdblock/6 /root -o loop
+		/bin/showlogo /root/root/platform/kernel/bild
+		umount /root
+	else
+		/bin/showlogo /root/platform/kernel/bild
 	fi
-	/bin/showlogo
+	
 fi
 
 /bin/mount -t ramfs none /tmp
