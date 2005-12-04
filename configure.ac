@@ -43,30 +43,6 @@ AC_ARG_WITH(cpu,
 	[CPU_MODEL="$withval"],[CPU_MODEL="823"])
 AC_SUBST(CPU_MODEL)
 
-AC_ARG_WITH(hostruleset,
-	[  --with-hostruleset=NAME host ruleset [[standard,cygwin]]],
-	[HOSTRULESET="$withval"],[HOSTRULESET="NULL"])
-
-if test "$HOSTRULESET" = "NULL"; then
-	if test "$host_os" = "cygwin"; then
-		HOSTRULESET="cygwin"
-	else
-		HOSTRULESET="standard"
-	fi
-fi
-
-if test "$HOSTRULESET" = "standard"; then
-	MAKERULESETFILE=""
-elif test "$HOSTRULESET" = "cygwin"; then
-	MAKERULESETFILE="-cygwin"
-else
-	AC_MSG_ERROR([invalid hostruleset "$HOSTRULESET", choose on from standard or cygwin]);
-fi
-
-AC_SUBST(HOSTRULESET)
-AM_CONDITIONAL(HOSTRULESET_STANDARD,test "$HOSTRULESET" = "standard")
-AM_CONDITIONAL(HOSTRULESET_CYGWIN,test "$HOSTRULESET" = "cygwin")
-
 AC_ARG_WITH(targetruleset,
 	[  --with-targetruleset=NAME	OBSOLETE, use --[[enable|disable]]-flashrules instead],
 	[TARGETRULESET="$withval"],[TARGETRULESET="notset"])
@@ -80,6 +56,12 @@ AC_ARG_ENABLE(flashrules,
 	,[enable_flashrules=yes])
 AM_CONDITIONAL(TARGETRULESET_FLASH,test "$enable_flashrules" = "yes")
 
+if test "$enable_flashrules" = "yes"; then
+        INSTALLRULESETFILE="-flash"
+else
+        INSTALLRULESETFILE=""
+fi
+
 AC_ARG_ENABLE(oldtargets,
 	AS_HELP_STRING(--enable-oldtargets,	enable some obsolete targets and targetnames),
 	,[enable_oldtargets=yes])
@@ -92,7 +74,7 @@ fi
 
 if test -z "$TARGET_CFLAGS" -o -z "$TARGET_CXXFLAGS"; then
 	TARGET_CFLAGS="-mcpu=$CPU_MODEL -mmultiple -mstring -meabi -pipe"
-	if test "enable_flashrules" != "yes"; then
+	if test "$enable_flashrules" != "yes"; then
 		TARGET_CFLAGS="$TARGET_CFLAGS -O2 -g3 -gdwarf-2"
 		TARGET_LDFLAGS=""
 	else
@@ -300,11 +282,6 @@ if test "$enable_flashrules" = "yes"; then
 		AC_MSG_WARN(using tuxbox mklibs)
 		MKLIBS="$hostappsdir/mklibs/mklibs.py"
 	fi
-	AC_PATH_PROG(FAKEROOT,fakeroot,no)
-	if test "$FAKEROOT" = "no"; then
-		AC_MSG_WARN(can't build images with uid 0 as non-root)
-		FAKEROOT=
-	fi
 	AC_PATH_PROG(MKCRAMFS,mkcramfs,no)
 	if test "$MKCRAMFS" = "no"; then
 		AC_MSG_WARN(can't build cramfs)
@@ -495,7 +472,6 @@ summary:
 target cpu:            $CPU_MODEL
 kernel:                $used_kernelversion
 glibc-pthreads:        $GLIBC_PTHREADS
-host rule set:         $HOSTRULESET
 flash rules:	       $enable_flashrules
 target prefix:         $targetprefix
 host prefix:           $hostprefix

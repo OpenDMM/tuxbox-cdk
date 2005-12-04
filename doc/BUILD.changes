@@ -1,16 +1,15 @@
 Configuration options:
 
 --with-targetruleset=[standard|flash] has been replaced by
-  --[enable|disable]-flashrules. As opposed to previous files,
+  --[enable|disable]-flashrules. As opposed to previous versions,
   building yadds and buildung flash images do not exclude
   oneanother. Using --enable-flashrules targets for creating flash
   images are included in the generated Makefile, otherwise not. By
-  default they are disabled. If enabled, all compilation is done using
+  default they are enabled. If enabled, all compilation is done using
   the flash-optimized compilation flags (no debugging info, stripped,
   compiled with -Os (optimize for size). Other than that,
   --enable-flashrules has no disadvantages, and can normally be left
-  on. (Will possibly become default in the future.) Using
-  --with-targetrulset now gives a warning error; in the future it
+  on. Using --with-targetrulset now gives a warning error; in the future it
   should be completely eliminated.
 
 --[enable|disable]-oldtargets can be used to include some target that
@@ -20,16 +19,18 @@ Configuration options:
   built by default; no reason to treat it differently from other
   optional libraries.
 
---serversupport=DIR: New option. Build template files for
+--with-serversupport=DIR: New option. Build template files for
   /etc/dhcpd.conf, /etc/fstab, /etc/hosts, and /etc/xinetd.d/tftp for
   a Linux server.
---logosdir=DIR: New option. Picks logo files from this directory, if found.
---ucodesdir=DIR: New option. Installs ucodes from this directory, if
+--with-logosdir=DIR: New option. Picks logo files from this directory,
+  if found.
+--with-ucodesdir=DIR: New option. Installs ucodes from this directory, if
   found. (An image containing Betaresearch ucodes may not legally be
   distributed.)
 
---enable-maintainer-mode still exists, but does nothing explicit. It did
-  nothing (sensible) previously either...
+--enable-maintainer-mode still exists, but does nothing explicit. (It
+  is passed on to invoked configure's, and enables automatic
+  reinvocation of configure if necessary, so it makes sense.)
 
 --with-checkImage=[none,rename,warn]  How/if to invoke checkImage. If
   `none', do nothing. If `rename' created images are checked by by
@@ -37,6 +38,15 @@ Configuration options:
   may not mean that the image will not run), it is renamed to
   *_bad. If `warn', a zerosize *_bad-file ist created, to warn the
   user. Requested by dietmarw.
+
+Removed configuration option:
+--with-hostruleset=[standard,cygwin]. This was not working, and is not
+  the right method. configure should take care of this. (Don't confuse
+  this "removing support for Cygwin"! Building with Cygwin should
+  preferrably be supported, but --with-hostruleset is not the way!)
+
+Removed program:
+  fakeroot has been eliminated.
 
 FILENAMES: 
 
@@ -52,13 +62,12 @@ Makefile[.am]:
 Restructuring to make more target-driven (but still not
 perfect). No unnecessary recursive invocation instead of dependencies.
 
-Customization-hooks: Many rules calls customization script, if present.
+Customization-hooks: Many rules calls customization script, if present. 
+TODO: Explain this understandably.
 
 Now builds root/.version file that can be parsed by neutrino. 
 
-Installs only a few plugins per default.
-
-Built full images are checked by checkImage.
+Presently installs only a few plugins per default.
 
 The partitioning table file linux/drivers/mtd/maps/dbox2-flash.c is now
 generated from an m4-file, for all the different configurations.
@@ -74,11 +83,11 @@ unpack-build-install-delete code.
 
 
 New (public) targets (see doc):
-serversupport, everything, yadd-[all,none,neutrino,enigma,lcars], dboxflasher.
+serversupport, everything, yadd-[all,none,neutrino,enigma,lcars],
+dboxflasher, bare-os.
 
 
 POSSIBLE PROBLEMS: 
--- rules-installed-flash is now ignored. Problems with this?
 -- Due to the new dependencies, sometimes rebuilds too much.
 -- Neutrino contains ($(appsdir)/tuxbox/neutrino/src/gui/update.cpp)
    stuff like #ifdef SQUASHFS. This brain damage should be fixed in Neutrino.
@@ -94,19 +103,20 @@ TODO:
 -- Merge all the u-boot-*.dbox2.h files (or at least the ones we are
    using) into an m4-file. (Like I did with the busybox.) Combine with
    update to u-boot 1.1.3? 
--- Ditto for rcS[.insmod],
+-- Ditto for rcS[.insmod] (DONE),
 -- and possibly also for the kernel .config? (Probably best to get 2.6
    running first.)
 -- Check dependencies carefully, to minimize unnecessary rebuilds.
--- teach neutrino's flashfunction to recognize my file extensions
+-- teach neutrino's flashfunction to recognize my file extensions 
+   (finished, not yet in CVS)
 
 NICE THINGS TO HAVE:
--- download/build mkcramfs, mksquashfs, mkjffs2, mkfs.jffs2 (fakeroot?)
--- Exactly when (if at all) is fakeroot needed?
+-- download/build mkcramfs, mksquashfs, mkjffs2, mkfs.jffs2
 -- Really fix the "Kein System"-problem (that checkImage is scratching on).
 -- Some rules (e.g. %/lib/ld.so.1) still look awful.
 -- At least optionally, it should be possible to build an absolutely
-   minimal system.
+   minimal system. (started, see target bare-os)
+-- Generate md5-checksums.
 
 DISADVANTAGES in comparision to old version:
 -- Needs more space to build,
