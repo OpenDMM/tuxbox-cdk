@@ -166,7 +166,7 @@ AC_ARG_WITH(driverdir,
 
 AC_ARG_WITH(hostappsdir,
 	[  --with-hostappsdir=DIR  hostapps dir from cvs [[[CVS/]hostapps]]],
-	[hostappsdir="$with_driverdir"],[hostappsdir="NONE"])
+	[hostappsdir="$with_hostappsdir"],[hostappsdir="NONE"])
 
 AC_ARG_WITH(gnuserver,
         [  --with-gnuserver=ADDRESS   the gnu server for gnu-stuff (without ftp://)],
@@ -320,6 +320,7 @@ AC_SUBST(DEPSCLEANUP)
 #
 AC_SUBST(KERNELVERSION)
 TUXBOX_RULES_MAKE(uboot)
+
 TUXBOX_RULES_MAKE(linux)
 TUXBOX_RULES_MAKE(linux24)
 if test "$enable_kernel26" == "yes"; then
@@ -379,6 +380,7 @@ TUXBOX_RULES_MAKE(libvorbisidec)
 TUXBOX_RULES_MAKE(libxml2)
 TUXBOX_RULES_MAKE(libz)
 TUXBOX_RULES_MAKE(libglib)
+TUXBOX_RULES_MAKE(libiconv)
 
 #
 # contrib apps
@@ -396,6 +398,7 @@ TUXBOX_RULES_MAKE(bonnie)
 TUXBOX_RULES_MAKE(vdr)
 TUXBOX_RULES_MAKE(lufs)
 TUXBOX_RULES_MAKE(dropbear)
+TUXBOX_RULES_MAKE(kermit)
 
 #
 # msttf

@@ -67,7 +67,8 @@ TODO: Explain this understandably.
 
 Now builds root/.version file that can be parsed by neutrino. 
 
-Presently installs only a few plugins per default.
+For neutrino, installs plugins tuxmail, tuxtext, tuxcom, vncviewer and
+fx2/*. For enigma, installs fx2/* and enigma/*.
 
 The partitioning table file linux/drivers/mtd/maps/dbox2-flash.c is now
 generated from an m4-file, for all the different configurations.
@@ -97,25 +98,24 @@ TODO:
    version into the CDK environment? 
 -- Neutrino and Enigma should be installed (in flash) with something like
    $(MAKE) -C $(appsdir)/tuxbox/neutrino install prefix=$(flashprefix)/root/...
--- Plugin configuration.
 -- Possibly restructure Makefile.am, with non-essential stuff in
    included files,...?
 -- Merge all the u-boot-*.dbox2.h files (or at least the ones we are
-   using) into an m4-file. (Like I did with the busybox.) Combine with
-   update to u-boot 1.1.3? 
+   using) into an m4-file. (Like I did with the busybox.)
 -- Ditto for rcS[.insmod] (DONE),
--- and possibly also for the kernel .config? (Probably best to get 2.6
-   running first.)
+-- and possibly also for the kernel .config? (Probably best only to
+   care for 2.6.)
 -- Check dependencies carefully, to minimize unnecessary rebuilds.
 -- teach neutrino's flashfunction to recognize my file extensions 
    (finished, not yet in CVS)
+-- Some rules (e.g. %/lib/ld.so.1) still look awful.
 
 NICE THINGS TO HAVE:
 -- download/build mkcramfs, mksquashfs, mkjffs2, mkfs.jffs2
--- Really fix the "Kein System"-problem (that checkImage is scratching on).
--- Some rules (e.g. %/lib/ld.so.1) still look awful.
+-- Really fix the "Kein System"-problem (that checkImage is scratching
+   on). (HARD)
 -- At least optionally, it should be possible to build an absolutely
-   minimal system. (started, see target bare-os)
+   minimal system. (sort-of done, see target bare-os and yadd-neutrino-micro)
 -- Generate md5-checksums.
 
 DISADVANTAGES in comparision to old version:

@@ -261,12 +261,15 @@ $(DEPDIR)/gcc: @DEPENDS_gcc@ glibc
 ################################################################
 bare-os: $(bootprefix)/u-boot $(bootprefix)/kernel-cdk driver $(targetprefix)/etc/init.d/rcS $(targetprefix)/bin/busybox modutils $(targetprefix)/bin/tuxinfo
 
-yadd-none: bare-os $(targetprefix)/share/tuxbox/cables.xml tuxbox_tools procps ftpd $(targetprefix)/var/tuxbox/ucodes
+yadd-none: bare-os $(targetprefix)/share/tuxbox/cables.xml tuxbox_tools procps $(targetprefix)/sbin/in.ftpd $(targetprefix)/var/tuxbox/ucodes
 
-yadd-neutrino: yadd-none plugins neutrino
+yadd-micro-neutrino: bare-os $(targetprefix)/share/tuxbox/cables.xml $(targetprefix)/var/tuxbox/ucodes $(targetprefix)/bin/camd2 $(targetprefix)/bin/switch neutrino
 	@TUXBOX_YADD_CUSTOMIZE@
 
-yadd-enigma: yadd-none plugins enigma
+yadd-neutrino: yadd-none neutrino-plugins fx2-plugins neutrino
+	@TUXBOX_YADD_CUSTOMIZE@
+
+yadd-enigma: yadd-none enigma-plugins fx2-plugins enigma
 	@TUXBOX_YADD_CUSTOMIZE@
 
 yadd-lcars: yadd-none lcars
@@ -295,7 +298,7 @@ $(targetprefix)/bin/busybox: bootstrap @DEPENDS_busybox@
 $(targetprefix)/etc/init.d/rcS:
 	$(MAKE) -C root install
 
-$(DEPDIR)/ftpd: bootstrap @DEPENDS_ftpd@
+$(targetprefix)/sbin/in.ftpd: bootstrap @DEPENDS_ftpd@
 	-rm -rf $(targetprefix)/share/empty
 	@PREPARE_ftpd@
 	cd @DIR_ftpd@ && \
@@ -305,7 +308,7 @@ $(DEPDIR)/ftpd: bootstrap @DEPENDS_ftpd@
 		$(MAKE) && \
 		@INSTALL_ftpd@
 	@CLEANUP_ftpd@
-	touch $@
+#	touch $@
 
 $(DEPDIR)/module_init_tools: bootstrap       @DEPENDS_module_init_tools@
 	@PREPARE_module_init_tools@
@@ -851,6 +854,19 @@ $(DEPDIR)/libungif: bootstrap @DEPENDS_libungif@
 	@CLEANUP_libungif@
 	touch $@
 
+$(DEPDIR)/libiconv: bootstrap @DEPENDS_libiconv@
+	@PREPARE_libiconv@
+	cd @DIR_libiconv@ && \
+		$(BUILDENV) \
+		./configure \
+			--host=$(target) \
+			--build=$(build) \
+			--prefix= \
+		$(MAKE) && \
+		@INSTALL_libiconv@
+	@CLEANUP_libiconv@
+	touch $@
+
 #######################
 #
 #   contrib apps
@@ -1077,12 +1093,25 @@ $(DEPDIR)/lufs: bootstrap @DEPENDS_lufs@
 			--build=$(build) \
 			--host=$(target) \
 			--prefix=$(targetprefix) \
+			--exec_prefix=$(targetprefix) \
 			--disable-kernel-support && \
 		$(MAKE) all && \
 		@INSTALL_lufs@
 	@CLEANUP_lufs@
 	touch $@
 
+$(DEPDIR)/kermit: bootstrap @DEPENDS_kermit@ libcrypto
+	@echo "Kermit is licensed differently from other software (more restrictively),"
+	@echo "see http://www.columbia.edu/kermit/licensing.html"
+	@PREPARE_kermit@
+	cd @DIR_kermit@ && \
+		$(BUILDENV) \
+		$(MAKE) tuxbox && \
+		@INSTALL_kermit@
+	ln -sf ./kermit $(targetprefix)/bin/kermit-sshsub
+	[ -d $(targetprefix)/var/lock ] ||  mkdir $(targetprefix)/var/lock
+	@CLEANUP_kermit@
+	touch $@
 
 #######################
 #
@@ -1474,7 +1503,7 @@ $(DEPDIR)/bluez_utils: bootstrap bluez_libs @DEPENDS_bluez_utils@
 #	touch $@
 
 $(bootprefix)/u-boot \
-$(hostprefix)/bin/mkimage: $(bootdir)/u-boot-config/u-boot.cdk.dbox2.h
+$(hostprefix)/bin/mkimage: @DEPENDS_uboot@ $(bootdir)/u-boot-config/u-boot.cdk.dbox2.h
 	ln -sf ./u-boot.cdk.dbox2.h $(bootdir)/u-boot-config/u-boot.config
 	$(MAKE) @DIR_uboot@/u-boot.stripped
 	$(INSTALL) -d $(bootprefix)
@@ -1740,7 +1769,8 @@ libtuxbox: $(appsdir)/tuxbox/libtuxbox/config.status
 
 # tuxbox/neutrino
 
-$(appsdir)/tuxbox/neutrino/config.status: bootstrap libboost libcurl libfreetype libjpeg libmad libid3tag libvorbisidec libpng lufs | libtuxbox misc_libs plugins tuxbox_libs zapit misc_tools
+$(appsdir)/tuxbox/neutrino/config.status: | bootstrap libid3tag libmad libvorbisidec zapit libboost libjpeg libcurl libfreetype libpng tuxbox_libs $(targetprefix)/include/tuxbox/plugin.h
+# lufs | libtuxbox misc_libs misc_tools plugins
 	cd $(appsdir)/tuxbox/neutrino && $(CONFIGURE)
 
 #$(DEPDIR)/neutrino
@@ -1750,17 +1780,46 @@ neutrino: $(appsdir)/tuxbox/neutrino/config.status
 
 # tuxbox/plugins
 
-$(appsdir)/tuxbox/plugins/config.status: | bootstrap libcurl libfreetype libz misc_libs libsigc libpng libtuxbox tuxbox_libs
+$(appsdir)/tuxbox/plugins/config.status: | bootstrap libfreetype misc_libs tuxbox_libs libcurl libz libsigc libpng libtuxbox
 	cd $(appsdir)/tuxbox/plugins && $(CONFIGURE)
 
-$(DEPDIR)/plugins: $(appsdir)/tuxbox/plugins/config.status
-	$(MAKE) -C $(appsdir)/tuxbox/plugins all install
-	touch $@
+plugins: neutrino-plugins enigma-plugins fx2-plugins
+
+neutrino-plugins: \
+		$(targetprefix)/include/tuxbox/plugin.h \
+		tuxmail tuxtxt tuxcom vncviewer
+
+fx2-plugins: $(appsdir)/tuxbox/plugins/config.status
+	$(MAKE) -C $(appsdir)/tuxbox/plugins/fx2 all install
+
+enigma-plugins: $(appsdir)/tuxbox/plugins/config.status $(targetprefix)/include/tuxbox/plugin.h
+	$(MAKE) -C $(appsdir)/tuxbox/plugins/enigma all install
+
+$(targetprefix)/include/tuxbox/plugin.h \
+$(targetprefix)/lib/pkgconfig/tuxbox-plugins.pc: $(appsdir)/tuxbox/plugins/config.status
+	$(MAKE) -C $(appsdir)/tuxbox/plugins/include all install
+	cp $(appsdir)/tuxbox/plugins/tuxbox-plugins.pc $(targetprefix)/lib/pkgconfig/tuxbox-plugins.pc
+#	touch $@
+
+tuxmail: libfreetype $(appsdir)/tuxbox/plugins/config.status
+	$(MAKE) -C $(appsdir)/tuxbox/plugins/tuxmail all install
+
+tuxtxt: $(appsdir)/tuxbox/plugins/config.status
+	$(MAKE) -C $(appsdir)/tuxbox/plugins/tuxtxt all install
+
+tuxcom: $(appsdir)/tuxbox/plugins/config.status
+	$(MAKE) -C $(appsdir)/tuxbox/plugins/tuxcom all install
+
+vncviewer: $(appsdir)/tuxbox/plugins/config.status
+	$(MAKE) -C $(appsdir)/tuxbox/plugins/vncviewer all install
 
 # tuxbox/tools
 
-# TODO: Throw out pluginx, then no longer dependent of plugins
-$(appsdir)/tuxbox/tools/config.status: | bootstrap libtuxbox plugins
+# I have thrown out pluginx, then no longer dependent of plugins
+# Also camd (replaced by camd2) nuked.
+# TODO: reenable pluginx
+$(appsdir)/tuxbox/tools/config.status: | bootstrap libtuxbox
+# plugins
 	cd $(appsdir)/tuxbox/tools && $(CONFIGURE)
 
 #$(DEPDIR)/tuxbox_tools
@@ -1768,14 +1827,50 @@ tuxbox_tools: $(appsdir)/tuxbox/tools/config.status
 	$(MAKE) -C $(appsdir)/tuxbox/tools all install
 #	touch $@
 
-# This target is nice, but requires changes in $(appsdir)/tuxbox/tools.
-# For next version
-#$(targetprefix)/bin/tuxinfo: $(appsdir)/tuxbox/tools/config.status
-#	$(MAKE) -C $(appsdir)/tuxbox/tools/tuxinfo install
-#	touch $@
-#
-## ... Instead this sillyness (for now)
-$(targetprefix)/bin/tuxinfo: tuxbox_tools
+# These are really sub-targets of tuxbox_tools
+$(targetprefix)/bin/tuxinfo: $(appsdir)/tuxbox/tools/config.status
+	$(MAKE) -C $(appsdir)/tuxbox/tools/tuxinfo install
+	touch $@
+
+$(targetprefix)/bin/camd2: $(appsdir)/tuxbox/tools/config.status
+	$(MAKE) -C $(appsdir)/tuxbox/tools/camd install
+
+$(targetprefix)/bin/satfind: $(appsdir)/tuxbox/tools/config.status
+	$(MAKE) -C $(appsdir)/tuxbox/tools/satfind install
+
+# $(appsdir)/tuxbox/tools/test
+$(targetprefix)/bin/datarate \
+$(targetprefix)/bin/fp_reg \
+$(targetprefix)/bin/showfreq \
+$(targetprefix)/bin/showfreq_qpsk \
+$(targetprefix)/bin/test_event \
+$(targetprefix)/bin/test_lcd \
+$(targetprefix)/bin/wakeup: $(appsdir)/tuxbox/tools/config.status
+	$(MAKE) -C $(appsdir)/tuxbox/tools/test install
+
+# $(appsdir)/tuxbox/tools/graphics
+$(targetprefix)/bin/fbtest \
+$(targetprefix)/bin/vgrab \
+$(targetprefix)/bin/overlay \
+$(targetprefix)/bin/unsquasher \
+$(targetprefix)/bin/yuv2ppm: $(appsdir)/tuxbox/tools/config.status
+	$(MAKE) -C $(appsdir)/tuxbox/tools/graphics install
+
+if KERNEL26
+# this target does nothing presently
+$(targetprefix)/sbin/hotplug: $(appsdir)/tuxbox/tools/config.status
+	$(MAKE) -C $(appsdir)/tuxbox/tools/hotplug install
+endif
+
+$(targetprefix)/bin/aviafbtool \
+$(targetprefix)/bin/fbclear \
+$(targetprefix)/bin/lcddump \
+$(targetprefix)/bin/saa \
+$(targetprefix)/bin/switch \
+$(targetprefix)/bin/rcsim \
+$(targetprefix)/bin/aviaext \
+$(targetprefix)/bin/audioplay: $(appsdir)/tuxbox/tools/config.status
+	$(MAKE) -C $(appsdir)/tuxbox/tools/misc install
 
 $(hostappsdir)/config.status: bootstrap
 	cd $(hostappsdir) && \
@@ -1886,6 +1981,13 @@ $(bootprefix)/dboxflasher: $(bootdir)/u-boot-config/u-boot.flasher.dbox2.h
 	fi
 	@CLEANUP_uboot@
 	rm $(bootdir)/u-boot-config/u-boot.config
+
+$(appsdir)/tuxbox/tools/hotplug/config.status: bootstrap
+	cd $(appsdir)/tuxbox/tools/hotplug && $(CONFIGURE)
+
+$(DEPDIR)/tuxbox_hotplug: $(appsdir)/tuxbox/tools/hotplug/config.status
+	$(MAKE) -C $(appsdir)/tuxbox/tools/hotplug all install
+	touch $@
 
 if TARGETRULESET_FLASH
 #######################
@@ -2237,10 +2339,8 @@ $(flashprefix)/root-enigma-jffs2-p/lib/ld.so.1: \
 			ln -s liblufs-ftpfs.so.2.0.0 $</lib/liblufs-ftpfs.so.2 ; \
 			ln -s liblufs-ftpfs.so.2.0.0 $</lib/liblufs-ftpfs.so ; \
 		fi ; \
-		if [ -e $</lib/liblufs-ftpfs.la ]; then \
-			rm -f $</lib/liblufs-ftpfs.la ; \
-		fi ; \
 	fi
+	find $</lib -name *.la | xargs rm -f
 
 ################################################################
 ## TODO: replace most of this by $(MAKE) -C ...
@@ -2248,22 +2348,17 @@ $(flashprefix)/root-neutrino-cramfs-p \
 $(flashprefix)/root-neutrino-squashfs-p \
 $(flashprefix)/root-neutrino-jffs2-p: \
 $(flashprefix)/root-neutrino-%-p: \
-$(flashprefix)/root-% neutrino
+$(flashprefix)/root-% neutrino fx2-plugins
 	rm -rf $@
 	cp -rd $< $@
-	$(INSTALL) -d $@/share/fonts
-	$(INSTALL) -d $@/share/iso-codes
 	$(INSTALL) $(targetprefix)/bin/controld $(targetprefix)/bin/neutrino \
 		$(targetprefix)/bin/nhttpd $(targetprefix)/bin/timerd \
+		$(targetprefix)/bin/sectionsd \
 		$@/bin
 	cp -rd $(targetprefix)/share/tuxbox/neutrino $(targetprefix)/share/tuxbox/lcdd \
 		$@/share/tuxbox
-	$(INSTALL) $(targetprefix)/bin/camd2 $@/bin
-	$(INSTALL) $(targetprefix)/bin/sectionsd $@/bin
-	$(INSTALL) $(targetprefix)/bin/pzapit $@/bin
-	$(INSTALL) $(targetprefix)/bin/satfind $@/bin
-	$(INSTALL) $(targetprefix)/bin/zapit $@/bin
-#	cp $(buildprefix)/root/etc/init.d/start_neutrino $@/etc/init.d/start_neutrino
+	$(MAKE) -C $(appsdir)/tuxbox/tools/satfind install prefix=$@
+	$(MAKE) -C $(appsdir)/dvb/zapit install prefix=$@
 	cp -rd $(appsdir)/tuxbox/enigma/data/fonts/bluebold.ttf $@/share/fonts
 	cp -rd $(appsdir)/tuxbox/enigma/data/fonts/bluehigh.ttf $@/share/fonts
 	cp -rd $(appsdir)/tuxbox/enigma/data/fonts/md_khmurabi_10.ttf $@/share/fonts
@@ -2273,10 +2368,17 @@ $(flashprefix)/root-% neutrino
 	cp -rd $(targetprefix)/share/fonts/12.pcf.gz $@/share/fonts
 	cp -rd $(targetprefix)/share/fonts/14B.pcf.gz $@/share/fonts
 	cp -rd $(targetprefix)/share/fonts/15B.pcf.gz $@/share/fonts
+	$(INSTALL) -d $@/share/iso-codes
 	cp -rd $(targetprefix)/share/iso-codes/iso-639.tab $@/share/iso-codes
-	cp -rd $(targetprefix)/var/tuxbox/config/zapit $@/var/tuxbox/config
-#	cp $(targetprefix)/share/tuxbox/*.xml $@/share/tuxbox
-	cp $(appsdir)/tuxbox/neutrino/daemons/controld/scart.conf $@/var/tuxbox/config
+#	This is for Barf's new experimental controld
+	if [ -e $(appsdir)/tuxbox/neutrino/daemons/controld/io-config.xml ] ; then \
+		cp $(appsdir)/tuxbox/neutrino/daemons/controld/io-config.xml $@/var/tuxbox/config; \
+	fi || true
+	$(MAKE) -C $(appsdir)/tuxbox/plugins/tuxmail all install prefix=$@
+	$(MAKE) -C $(appsdir)/tuxbox/plugins/tuxtxt  all install prefix=$@
+	$(MAKE) -C $(appsdir)/tuxbox/plugins/tuxcom  all install prefix=$@
+	$(MAKE) -C $(appsdir)/tuxbox/plugins/vncviewer all install prefix=$@
+	$(MAKE) flash-fx2-plugins prefix=$@
 	@TUXBOX_CUSTOMIZE@
 
 ## TODO: replace by $(MAKE) -C ...
@@ -2284,32 +2386,34 @@ $(flashprefix)/root-enigma-cramfs-p \
 $(flashprefix)/root-enigma-squashfs-p \
 $(flashprefix)/root-enigma-jffs2-p: \
 $(flashprefix)/root-enigma-%-p: \
-$(flashprefix)/root-% enigma
+$(flashprefix)/root-% enigma fx2-plugins
 	rm -rf $@
 	cp -rd $< $@
 	$(INSTALL) $(targetprefix)/bin/enigma $@/bin
 	cp -rd $(targetprefix)/share/tuxbox/enigma $@/share/tuxbox
-	$(INSTALL) $(targetprefix)/bin/camd2 $@/bin
-	$(INSTALL) -d $@/hdd/movie
-	$(INSTALL) -d $@/share/fonts
 	cp -rd $(targetprefix)/share/fonts/* $@/share/fonts 
-#	cp -rd $(targetprefix)/etc/init.d/start_enigma $@/etc/init.d
-#	$(INSTALL) $(targetprefix)/etc/timezone.xml $@/etc
 	cp -rd $(targetprefix)/share/zoneinfo $@/share
-	$(INSTALL) -d $@/var/etc
 	ln -sf /var/etc/localtime $@/etc
 	$(INSTALL) -d $@/share/locale
 	cp -rd $(appsdir)/tuxbox/enigma/po/locale.alias.image $@/share/locale/locale.alias
 	cd $@/lib && tar xjf $(appsdir)/tuxbox/enigma/po/locale.image.tar.bz2
 	cp -rd $(targetprefix)/share/locale/de $@/share/locale/
 	cp -rd $(targetprefix)/share/locale/fr $@/share/locale/
-#	cp -rd $(targetprefix)/share/tuxbox/cables.xml $@/share/tuxbox
-#	cp -rd $(targetprefix)/share/tuxbox/satellites.xml $@/share/tuxbox
-	cp $(appsdir)/tuxbox/neutrino/daemons/controld/scart.conf $@/var/tuxbox/config
+	$(MAKE) -C $(appsdir)/tuxbox/plugins/enigma all install prefix=$@
+	$(MAKE) flash-fx2-plugins prefix=$@
 	@TUXBOX_CUSTOMIZE@
 
+# $(appsdir)/tuxbox/plugins/fx2/*/Makefile.am are silly and should be
+# rewritten.  In the meantime, use this kludge.
+flash-fx2-plugins:
+	$(INSTALL) -d $(prefix)/lib/tuxbox/plugins
+	$(INSTALL) -m 755 $(appsdir)/tuxbox/plugins/fx2/[c-z]*/.libs/*.so $(prefix)/lib/tuxbox/plugins
+	$(INSTALL) -m 644 $(appsdir)/tuxbox/plugins/fx2/[c-z]*/*.cfg $(prefix)/lib/tuxbox/plugins
+	$(INSTALL) -d $(prefix)/share/tuxbox/sokoban 
+	$(INSTALL) -m 0644 $(appsdir)/tuxbox/plugins/fx2/sokoban/*.xsb $(prefix)/share/tuxbox/sokoban
+
 ################################################################
-$(flashprefix)/root-cramfs: $(flashprefix)/root $(flashprefix)/root/.version $(flashprefix)/root/bin/busybox $(flashprefix)/root/sbin/in.ftpd $(flashprefix)/root/sbin/streampes $(flashprefix)/root/bin/lufsd $(flashprefix)/root/lib/tuxbox/plugins $(myflashplugins) $(flashprefix)/root/var/tuxbox/ucodes
+$(flashprefix)/root-cramfs: $(flashprefix)/root $(flashprefix)/root/.version $(flashprefix)/root/bin/busybox $(flashprefix)/root/sbin/in.ftpd $(flashprefix)/root/sbin/streampes $(flashprefix)/root/bin/lufsd $(flashprefix)/root/var/tuxbox/ucodes
 	rm -rf $@
 	cp -rd $< $@
 	m4 --define=rootfs=cramfs Patches/dbox2-flash.c.m4 > linux/drivers/mtd/maps/dbox2-flash.c
@@ -2322,7 +2426,7 @@ $(flashprefix)/root-cramfs: $(flashprefix)/root $(flashprefix)/root/.version $(f
 	$(MAKE) driver targetprefix=$@
 	@TUXBOX_CUSTOMIZE@
 
-$(flashprefix)/root-jffs2: $(flashprefix)/root $(flashprefix)/root/.version $(flashprefix)/root/bin/busybox $(flashprefix)/root/sbin/in.ftpd $(flashprefix)/root/sbin/streampes $(flashprefix)/root/bin/lufsd $(flashprefix)/root/lib/tuxbox/plugins $(myflashplugins) $(flashprefix)/root/var/tuxbox/ucodes
+$(flashprefix)/root-jffs2: $(flashprefix)/root $(flashprefix)/root/.version $(flashprefix)/root/bin/busybox $(flashprefix)/root/sbin/in.ftpd $(flashprefix)/root/sbin/streampes $(flashprefix)/root/bin/lufsd $(flashprefix)/root/var/tuxbox/ucodes
 	rm -rf $@
 	cp -rd $< $@
 	m4 --define=rootfs=jffs2 Patches/dbox2-flash.c.m4 > linux/drivers/mtd/maps/dbox2-flash.c
@@ -2335,7 +2439,7 @@ $(flashprefix)/root-jffs2: $(flashprefix)/root $(flashprefix)/root/.version $(fl
 	$(MAKE) driver targetprefix=$@
 	@TUXBOX_CUSTOMIZE@
 
-$(flashprefix)/root-squashfs: $(flashprefix)/root $(flashprefix)/root/.version $(flashprefix)/root/bin/busybox $(flashprefix)/root/sbin/in.ftpd $(flashprefix)/root/sbin/streampes $(flashprefix)/root/bin/lufsd $(flashprefix)/root/lib/tuxbox/plugins $(myflashplugins) $(flashprefix)/root/var/tuxbox/ucodes
+$(flashprefix)/root-squashfs: $(flashprefix)/root $(flashprefix)/root/.version $(flashprefix)/root/bin/busybox $(flashprefix)/root/sbin/in.ftpd $(flashprefix)/root/sbin/streampes $(flashprefix)/root/bin/lufsd $(flashprefix)/root/var/tuxbox/ucodes
 	rm -rf $@
 	cp -rd $< $@
 	m4 --define=rootfs=squashfs Patches/dbox2-flash.c.m4 > linux/drivers/mtd/maps/dbox2-flash.c
@@ -2347,8 +2451,6 @@ $(flashprefix)/root-squashfs: $(flashprefix)/root $(flashprefix)/root/.version $
 #	rm -f $(DEPDIR)/driver
 	$(MAKE) driver targetprefix=$@
 	@TUXBOX_CUSTOMIZE@
-
-myflashplugins := $(flashprefix)/root/bin/tuxmaild $(flashprefix)/root/share/fonts/tuxtxt.ttf
 
 ############
 $(flashprefix)/root/var/tuxbox/ucodes:
@@ -2412,52 +2514,8 @@ $(flashprefix)/root/.version: $(flashprefix)/root
 	echo "imagename=newmake-image" 		>> $@
 	echo "homepage=http://www.tuxbox.org" 	>> $@
 
-## flash-plugins
-## TODO: reorganize
-flash-tuxtxt: | $(flashprefix)/root/share/fonts/tuxtxt.ttf
-
-$(flashprefix)/root/share/fonts/tuxtxt.ttf: | $(flashprefix)/root/lib/tuxbox/plugins
-	$(INSTALL) -d $(flashprefix)/root/var/tuxbox/config/tuxtxt
-	$(INSTALL) -d $(flashprefix)/root/share/fonts/
-	cp -rd $(targetprefix)/share/fonts/tuxtxt.ttf $(flashprefix)/root/share/fonts/
-	cp -rd $(targetprefix)/share/fonts/tuxtxt.otb $(flashprefix)/root/share/fonts/
-	cp -rd $(targetprefix)/var/tuxbox/config/tuxtxt/tuxtxt.conf $(flashprefix)/root/var/tuxbox/config/tuxtxt/
-	cp -rd $(targetprefix)/lib/tuxbox/plugins/tuxtxt.so $<
-	cp -rd $(targetprefix)/lib/tuxbox/plugins/tuxtxt.cfg $<
-
-flash-tuxmail: | $(flashprefix)/root/bin/tuxmaild
-
-$(flashprefix)/root/bin/tuxmaild: | $(flashprefix)/root/lib/tuxbox/plugins
-	$(INSTALL) $(targetprefix)/bin/tuxmaild $(flashprefix)/root/bin
-	cp -rd $(targetprefix)/lib/tuxbox/plugins/tuxmail.so $<
-	cp -rd $(targetprefix)/lib/tuxbox/plugins/tuxmail.cfg $<	
-
-flash-sokoban: $(flashprefix)/root/share/tuxbox/sokoban
-
-$(flashprefix)/root/share/tuxbox/sokoban: $(flashprefix)/root/lib/tuxbox/plugins
-	cp -rd $(targetprefix)/share/tuxbox/sokoban $(flashprefix)/root/share/tuxbox/
-	cp -rd $(targetprefix)/lib/tuxbox/plugins/soko.so $<
-	cp -rd $(targetprefix)/lib/tuxbox/plugins/soko.cfg $<	
-
-flash-games: | $(flashprefix)/root/lib/tuxbox/plugins
-	for i in `grep -l type=1 /tuxbox/cdkroot/lib/tuxbox/plugins/*.cfg` ; do cp $$i `echo $$i|sed -e 's/cfg$$/so/'` $(flashprefix)/root/lib/tuxbox/plugins; done
-	cp -rd $(targetprefix)/var/tuxbox/config/games.cfg $(flashprefix)/root/var/tuxbox/config/
-
-flash-util-plugins: $(flashprefix)/root/lib/tuxbox/plugins
-	for i in `grep -l type=2 /tuxbox/cdkroot/lib/tuxbox/plugins/*.cfg` ; do cp $$i `echo $$i|sed -e 's/cfg$$/so/'` $(flashprefix)/root/lib/tuxbox/plugins; done
-
-$(flashprefix)/root/lib/tuxbox/plugins/%.cfg: | $(flashprefix)/root/lib/tuxbox/plugins
-	cp $(targetprefix)/lib/tuxbox/plugins/$(notdir $@) $<
-	cp $(targetprefix)/lib/tuxbox/plugins/$(basename $(notdir $@)).so $<
-
-$(flashprefix)/root/lib/tuxbox/plugins: $(flashprefix)/root plugins
-	$(INSTALL) -d $</lib/tuxbox/plugins
-#	cp -rd $(targetprefix)/lib/tuxbox/plugins/*.cfg $</lib/tuxbox/plugins/
-#	cp -rd $(targetprefix)/lib/tuxbox/plugins/*.so $</lib/tuxbox/plugins/
-
-#$(flashprefix)/root: procps tuxbox_tools $(appsdir)/dvb/config/config.status | $(flashprefix)
-# TODO: tuxbox_tools is only needed for switch. Solve this better.
-$(flashprefix)/root: bootstrap $(appsdir)/dvb/config/config.status $(appsdir)/tuxbox/tools/config.status | $(flashprefix) tuxbox_tools
+# tuxbox_tools is only needed for switch.
+$(flashprefix)/root: bootstrap $(appsdir)/dvb/config/config.status $(appsdir)/tuxbox/tools/config.status tuxbox_tools | $(flashprefix) 
 	rm -rf $@
 	$(INSTALL) -d $@/bin
 	$(INSTALL) -d $@/dev
@@ -2468,16 +2526,16 @@ $(flashprefix)/root: bootstrap $(appsdir)/dvb/config/config.status $(appsdir)/tu
 	$(INSTALL) -d $@/share/tuxbox
 	$(INSTALL) -d $@/share/fonts
 	$(INSTALL) -d $@/var/tuxbox/config
+	$(INSTALL) -d $@/var/etc
 	$(INSTALL) -d $@/tmp
 	$(INSTALL) -d $@/etc
 	$(INSTALL) -d $@/root
-#	$(INSTALL) $(targetprefix)/bin/tuxinfo $@/bin
-	$(MAKE) -C $(appsdir)/tuxbox/tools/tuxinfo install prefix=$(flashprefix)/root
-	$(INSTALL) $(targetprefix)/bin/switch $@/bin
-## TODO: install only a subset (that includes switch)
-#	$(MAKE) -C $(appsdir)/tuxbox/tools/misc install prefix=$(flashprefix)/root
 	ln -s /tmp $@/var/run
+	$(INSTALL) $(appsdir)/tuxbox/neutrino/daemons/controld/scart.conf $@/var/tuxbox/config
+	$(MAKE) -C $(appsdir)/tuxbox/tools/tuxinfo install prefix=$@
+	$(MAKE) -C $(appsdir)/tuxbox/tools/misc install prefix=$@
 	$(MAKE) -C $(appsdir)/dvb/config all install datadir=$@/share
+	$(MAKE) -C $(appsdir)/tuxbox/tools/camd install prefix=$@
 	@TUXBOX_CUSTOMIZE@
 
 ################################################################
@@ -2661,6 +2719,7 @@ distclean-local:
 	-$(MAKE) -C $(appsdir)/tuxbox/neutrino distclean
 	-$(MAKE) -C $(appsdir)/tuxbox/tools distclean
 	-$(MAKE) -C $(hostappsdir) distclean
+	-$(MAKE) -C $(appsdir)/tuxbox/tools/hotplug distclean
 	-$(MAKE) -C $(driverdir) distclean KERNEL_LOCATION=$(buildprefix)/linux
 	-rm Makefile-archive
 	-rm rules-downcheck.pl
