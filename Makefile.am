@@ -2348,7 +2348,7 @@ $(flashprefix)/root-neutrino-cramfs-p \
 $(flashprefix)/root-neutrino-squashfs-p \
 $(flashprefix)/root-neutrino-jffs2-p: \
 $(flashprefix)/root-neutrino-%-p: \
-$(flashprefix)/root-% neutrino fx2-plugins
+$(flashprefix)/root-% neutrino fx2-plugins tuxmail tuxtxt tuxcom vncviewer
 	rm -rf $@
 	cp -rd $< $@
 	$(INSTALL) $(targetprefix)/bin/controld $(targetprefix)/bin/neutrino \
@@ -2374,10 +2374,10 @@ $(flashprefix)/root-% neutrino fx2-plugins
 	if [ -e $(appsdir)/tuxbox/neutrino/daemons/controld/io-config.xml ] ; then \
 		cp $(appsdir)/tuxbox/neutrino/daemons/controld/io-config.xml $@/var/tuxbox/config; \
 	fi || true
-	$(MAKE) -C $(appsdir)/tuxbox/plugins/tuxmail all install prefix=$@
-	$(MAKE) -C $(appsdir)/tuxbox/plugins/tuxtxt  all install prefix=$@
-	$(MAKE) -C $(appsdir)/tuxbox/plugins/tuxcom  all install prefix=$@
-	$(MAKE) -C $(appsdir)/tuxbox/plugins/vncviewer all install prefix=$@
+	$(MAKE) -C $(appsdir)/tuxbox/plugins/tuxmail   install prefix=$@
+	$(MAKE) -C $(appsdir)/tuxbox/plugins/tuxtxt    install prefix=$@
+	$(MAKE) -C $(appsdir)/tuxbox/plugins/tuxcom    install prefix=$@
+	$(MAKE) -C $(appsdir)/tuxbox/plugins/vncviewer install prefix=$@
 	$(MAKE) flash-fx2-plugins prefix=$@
 	@TUXBOX_CUSTOMIZE@
 
