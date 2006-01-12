@@ -339,6 +339,7 @@ TUXBOX_RULES_MAKE(uclibc)
 # root
 #
 TUXBOX_RULES_MAKE(busybox)
+TUXBOX_RULES_MAKE(automount)
 TUXBOX_RULES_MAKE(ftpd)
 TUXBOX_RULES_MAKE(module_init_tools)
 TUXBOX_RULES_MAKE(modutils)

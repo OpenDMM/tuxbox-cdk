@@ -283,6 +283,18 @@ yadd-all: yadd-none plugins neutrino enigma lcars apps
 #   root
 #
 
+if KERNEL26
+else
+$(targetprefix)/sbin/automount: bootstrap @DEPENDS_automount@
+	@PREPARE_automount@
+	cd @DIR_automount@  && \
+		$(BUILDENV) STRIP=$(target)-strip \
+		$(MAKE) && \
+		$(MAKE) install INSTALLROOT=$(targetprefix)
+	rm -rf @DIR_automount@
+	$(INSTALL) $(buildprefix)/root/etc/init.d/start_automount $(targetprefix)/etc/init.d
+endif
+
 # yadd-only rule (now)
 $(targetprefix)/bin/busybox: bootstrap @DEPENDS_busybox@
 	@PREPARE_busybox@
