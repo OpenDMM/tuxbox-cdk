@@ -2348,7 +2348,7 @@ $(flashprefix)/root-neutrino-cramfs-p \
 $(flashprefix)/root-neutrino-squashfs-p \
 $(flashprefix)/root-neutrino-jffs2-p: \
 $(flashprefix)/root-neutrino-%-p: \
-$(flashprefix)/root-% neutrino fx2-plugins tuxmail tuxtxt tuxcom vncviewer
+$(flashprefix)/root-% neutrino fx2-plugins neutrino-plugins
 	rm -rf $@
 	cp -rd $< $@
 	$(INSTALL) $(targetprefix)/bin/controld $(targetprefix)/bin/neutrino \
