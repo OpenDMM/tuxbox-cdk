@@ -293,9 +293,10 @@ $(targetprefix)/sbin/automount: bootstrap @DEPENDS_automount@
 		$(MAKE) install INSTALLROOT=$(targetprefix)
 	rm -rf @DIR_automount@
 	$(INSTALL) $(buildprefix)/root/etc/init.d/start_automount $(targetprefix)/etc/init.d
+	ln -sf /proc/mounts $(targetprefix)/etc/mtab
 endif
 
-# yadd-only rule (now)
+# yadd-only rule
 $(targetprefix)/bin/busybox: bootstrap @DEPENDS_busybox@
 	@PREPARE_busybox@
 	m4 -Dyadd Patches/busybox.config.m4 > @DIR_busybox@/.config
@@ -2327,7 +2328,7 @@ $(flashprefix)/root-enigma-jffs2-p/lib/ld.so.1: \
 		--root $< \
 		`find $</bin/ -path "*bin/?*"` \
 		`find $</lib/ -name "libnss_*"` \
-		`find $</lib/tuxbox/ -name "*.so" -type f` \
+		`find $</lib/ -name "*.so" -type f` \
 		`find $</sbin/ -path "*sbin/?*"`
 	$(target)-strip --remove-section=.comment --remove-section=.note \
 		`find $</bin/ -path "*bin/?*"` \
@@ -2480,6 +2481,19 @@ $(flashprefix)/root/var/tuxbox/ucodes:
 #	$(INSTALL) $(targetprefix)/sbin/in.ftpd $</sbin
 #	@TUXBOX_CUSTOMIZE@
 
+if KERNEL26
+else
+$(flashprefix)/root/sbin/automount: @DEPENDS_automount@
+	@PREPARE_automount@
+	cd @DIR_automount@  && \
+		$(BUILDENV) STRIP=$(target)-strip \
+		$(MAKE) && \
+		$(MAKE) install SUBDIRS="lib daemon modules" INSTALLROOT=$(flashprefix)/root
+	rm -rf @DIR_automount@
+	$(INSTALL) $(buildprefix)/root/etc/init.d/start_automount $(flashprefix)/root/etc/init.d
+	ln -sf /proc/mounts $(flashprefix)/root/etc/mtab
+endif
+
 # Remark: the install target in the Makefile in in.ftpd is not GNU-conformant,
 # therefor the silly install command.
 $(flashprefix)/root/sbin/in.ftpd: $(flashprefix)/root
@@ -2540,7 +2554,7 @@ $(flashprefix)/root: bootstrap $(appsdir)/dvb/config/config.status $(appsdir)/tu
 	$(INSTALL) -d $@/var/tuxbox/config
 	$(INSTALL) -d $@/var/etc
 	$(INSTALL) -d $@/tmp
-	$(INSTALL) -d $@/etc
+	$(INSTALL) -d $@/etc/init.d
 	$(INSTALL) -d $@/root
 	ln -s /tmp $@/var/run
 	$(INSTALL) $(appsdir)/tuxbox/neutrino/daemons/controld/scart.conf $@/var/tuxbox/config
