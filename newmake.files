@@ -15,3 +15,4 @@ cdk/Patches/linux-2.4.32-dbox2.config-flash
 apps/tuxbox/plugins/configure.ac
 apps/tuxbox/tools/configure.ac
 apps/tuxbox/tools/misc/Makefile.am
+apps/tuxbox/plugins/fx2/tetris/Makefile.am
