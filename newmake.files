@@ -70,3 +70,4 @@ cdk/make/ucodes.mk
 cdk/make/upnp.mk
 cdk/make/version.mk
 cdk/make/zapit.mk
+cdk/autogen.sh
