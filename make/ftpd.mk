@@ -14,7 +14,7 @@ if TARGETRULESET_FLASH
 
 # Remark: the install target in the Makefile in in.ftpd is not GNU-conformant,
 # therefor the silly install command.
-flash-ftpd: | $(flashprefix)/root
+flash-ftpd: | $(flashprefix)/root @DEPENDS_ftpd@
 	-rm -rf $(flashprefix)/root/share/empty
 	@PREPARE_ftpd@
 	cd @DIR_ftpd@ && \
