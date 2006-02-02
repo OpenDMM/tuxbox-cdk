@@ -1,3 +1,14 @@
+# Old "summary" targets:
+
+# Not maintained presently.
+
+root_optional: mrouted
+#root_optional: mrouted portmap
+
+core: directories binutils linuxdir glibc gcc
+
+apps: dvbsnoop enigma lcars lcd neutrino plugins dvb_tools
+
 flash-all: flash-lcdmenu flash-plugins flash-ftpd flash-ssh flash-sshd flash-lib flash-all-all-all
 
 flash-ssl: flash-ssh flash-sshd flash-lib
@@ -14,7 +25,7 @@ rebuild-flash:
 
 $(flashprefix)/.flash: $(flashprefix)/root
 
-flash-ftpd $(flashprefix)/.part_ftpd: $(flashprefix)/root/sbin/in.ftpd
+# CONFLICT flash-ftpd $(flashprefix)/.part_ftpd: $(flashprefix)/root/sbin/in.ftpd
 
 flash-ssh $(flashprefix)/.part_ssh: $(flashprefix)/root/bin/ssh
 

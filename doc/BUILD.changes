@@ -13,7 +13,7 @@ Configuration options:
   should be completely eliminated.
 
 --[enable|disable]-oldtargets can be used to include some target that
-  were present in the previous CVS Makefile. 
+  were present in the previous CVS Makefile. [Presently disabled.]
 
 --[enable|disable]-libcrypto has been eliminated. libcrypto is not
   built by default; no reason to treat it differently from other
@@ -60,15 +60,14 @@ been replaced by "jffs2" ("journaled flash file system 2").
 
 Makefile[.am]: 
 Restructuring to make more target-driven (but still not
-perfect). No unnecessary recursive invocation instead of dependencies.
+perfect).
 
 Customization-hooks: Many rules calls customization script, if present. 
-TODO: Explain this understandably.
 
 Now builds root/.version file that can be parsed by neutrino. 
 
 For neutrino, installs plugins tuxmail, tuxtext, tuxcom, vncviewer and
-fx2/*. For enigma, installs fx2/* and enigma/*.
+fx2/*. For enigma, also installs enigma/*.
 
 The partitioning table file linux/drivers/mtd/maps/dbox2-flash.c is now
 generated from an m4-file, for all the different configurations.
@@ -89,7 +88,8 @@ dboxflasher, bare-os.
 
 
 POSSIBLE PROBLEMS: 
--- Due to the new dependencies, sometimes rebuilds too much.
+-- Due to the new dependencies, sometimes rebuilds too much. (Should
+   be fixed now) 
 -- Neutrino contains ($(appsdir)/tuxbox/neutrino/src/gui/update.cpp)
    stuff like #ifdef SQUASHFS. This brain damage should be fixed in Neutrino.
 
@@ -98,27 +98,29 @@ TODO:
    version into the CDK environment? 
 -- Neutrino and Enigma should be installed (in flash) with something like
    $(MAKE) -C $(appsdir)/tuxbox/neutrino install prefix=$(flashprefix)/root/...
+   (DONE)
 -- Possibly restructure Makefile.am, with non-essential stuff in
-   included files,...?
+   included files,...? (DONE)
 -- Merge all the u-boot-*.dbox2.h files (or at least the ones we are
-   using) into an m4-file. (Like I did with the busybox.)
+   using) into an m4-file. (Like I did with the busybox.) (Probably not...)
 -- Ditto for rcS[.insmod] (DONE),
--- and possibly also for the kernel .config? (Probably best only to
-   care for 2.6.)
--- Check dependencies carefully, to minimize unnecessary rebuilds.
+-- and possibly also for the kernel .config? (Only for 2.6.)
+-- Check dependencies carefully, to minimize unnecessary rebuilds. (DONE)
 -- teach neutrino's flashfunction to recognize my file extensions 
-   (finished, not yet in CVS)
--- Some rules (e.g. %/lib/ld.so.1) still look awful.
+   (DONE)
+-- Some rules (e.g. %/lib/ld.so.1) still look awful (DONE, basically.)
+-- Sensible clean-targets.
 
 NICE THINGS TO HAVE:
 -- download/build mkcramfs, mksquashfs, mkjffs2, mkfs.jffs2
 -- Really fix the "Kein System"-problem (that checkImage is scratching
    on). (HARD)
 -- At least optionally, it should be possible to build an absolutely
-   minimal system. (sort-of done, see target bare-os and yadd-neutrino-micro)
+   minimal system. (DONE, see target bare-os and yadd-neutrino-micro)
 -- Generate md5-checksums.
+-- configure should be picky on program versions
 
 DISADVANTAGES in comparision to old version:
 -- Needs more space to build,
--- May rebuild unnecessarily.
+-- May rebuild unnecessarily (FIXED?).
 -- No support for images with more than one GUIs.
