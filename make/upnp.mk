@@ -1,6 +1,6 @@
-$(DEPDIR)/fuse: bootstrap
-	( rm -rf fuse-2.5.1 || /bin/true ) && gunzip -cd Archive/fuse-2.5.1.tar.gz | TAPE=- tar -x && ( cd fuse-2.5.1; patch -p1 < ../Patches/fuse.diff )
-	cd fuse-2.5.1 && \
+$(DEPDIR)/fuse: bootstrap @DEPENDS_fuse@
+	@PREPARE_fuse@
+	cd @DIR_fuse@ && \
 	$(BUILDENV) \
 	CFLAGS="$(TARGET_CFLAGS) -I$(buildprefix)/linux/arch/ppc" \
 	./configure \
@@ -10,12 +10,12 @@ $(DEPDIR)/fuse: bootstrap
 	   --prefix= && \
 	$(MAKE) all && \
 	$(MAKE) install DESTDIR=$(targetprefix)
-	rm -rf fuse-2.5.1
+	@CLEANUP_fuse@
 	touch $@
 
-$(DEPDIR)/djmount: bootstrap
-	( rm -rf djmount-0.51 || /bin/true ) && gunzip -cd Archive/djmount-0.51.tar.gz | TAPE=- tar -x
-	cd djmount-0.51 && \
+$(DEPDIR)/djmount: bootstrap fuse @DEPENDS_djmount@
+	@PREPARE_djmount@
+	cd @DIR_djmount@ && \
 	$(BUILDENV) \
 	./configure \
 	   --build=$(build) \
@@ -23,16 +23,16 @@ $(DEPDIR)/djmount: bootstrap
 	   --prefix= && \
 	$(MAKE) all && \
 	$(MAKE) install DESTDIR=$(targetprefix)
-	rm -rf djmount-0.51
+	@CLEANUP_djmount@
 	touch $@
 
 if TARGETRULESET_FLASH
 
 flash-upnp: flash-fuse flash-djmount
 
-flash-fuse: bootstrap
-	( rm -rf fuse-2.5.1 || /bin/true ) && gunzip -cd Archive/fuse-2.5.1.tar.gz | TAPE=- tar -x && ( cd fuse-2.5.1; patch -p1 < ../Patches/fuse.diff )
-	cd fuse-2.5.1 && \
+flash-fuse: bootstrap @DEPENDS_fuse@
+	@PREPARE_fuse@
+	cd @DIR_fuse@ && \
 	$(BUILDENV) \
 	CFLAGS="$(TARGET_CFLAGS) -I$(buildprefix)/linux/arch/ppc" \
 	./configure \
@@ -42,11 +42,11 @@ flash-fuse: bootstrap
 	   --prefix= && \
 	$(MAKE) all && \
 	$(MAKE) install DESTDIR=$(flashprefix)/root
-	rm -rf fuse-2.5.1
+	@CLEANUP_fuse@
 
-flash-djmount: bootstrap flash-fuse
-	( rm -rf djmount-0.51 || /bin/true ) && gunzip -cd Archive/djmount-0.51.tar.gz | TAPE=- tar -x
-	cd djmount-0.51 && \
+flash-djmount: bootstrap flash-fuse @DEPENDS_djmount@
+	@PREPARE_djmount@
+	cd @DIR_djmount@ && \
 	$(BUILDENV) \
 	./configure \
 	   --build=$(build) \
@@ -54,6 +54,6 @@ flash-djmount: bootstrap flash-fuse
 	   --prefix= && \
 	$(MAKE) all && \
 	$(MAKE) install DESTDIR=$(flashprefix)/root
-	rm -rf djmount-0.51
+	@CLEANUP_djmount@
 
 endif

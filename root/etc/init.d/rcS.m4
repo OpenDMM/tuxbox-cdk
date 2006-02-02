@@ -153,6 +153,7 @@ runifexists({/sbin/inetd})
 runprogifexists({/sbin/sshd},{/etc/init.d/start_sshd},{&})
 runifexists({/sbin/dropbear})
 runprogifexists({/sbin/automount},{/etc/init.d/start_automount})
+runprogifexists({/bin/djmount},{/etc/init.d/start_upnp})
 
 ifmarkerfile({tuxmaild},{tuxmaild})
 ifmarkerfile({rdate},{rdate time.fu-berlin.de})

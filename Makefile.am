@@ -87,7 +87,7 @@ include make/dvb-apps.mk
 include make/bluetooth.mk
 
 # FUSE and djmount for uPnP support (non-essential)
-#include make/upnp.mk
+include make/upnp.mk
 
 # The u-boot boot loader
 include make/u-boot.mk
