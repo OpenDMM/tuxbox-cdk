@@ -1,3 +1,7 @@
+# Note: for the automounter, the kernel has to have the configuration
+# option CONFIG_AUTOFS4_FS enabled. At this time, this must be changed
+# manually.
+
 if KERNEL26
 else
 $(DEPDIR)/automount: bootstrap @DEPENDS_automount@
@@ -13,7 +17,7 @@ $(DEPDIR)/automount: bootstrap @DEPENDS_automount@
 
 if TARGETRULESET_FLASH
 
-flash-automount: @DEPENDS_automount@ | $(flashprefix)/root
+flash-automount: @DEPENDS_automount@ $(flashprefix)/root
 	@PREPARE_automount@
 	cd @DIR_automount@  && \
 		$(BUILDENV) STRIP=$(target)-strip \

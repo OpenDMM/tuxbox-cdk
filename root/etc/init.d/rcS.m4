@@ -13,6 +13,12 @@ fi})dnl
 define({runprogifexists},{if [ -e $1 ]; then
 	$2 $3
 fi})dnl
+define({runprogcreatedirifexists},{if [ -e $1 ]; then
+	if [ ! -d $2 ]; then
+		mkdir $2
+	fi
+	$3
+fi})dnl
 define({runifexists},{if [ -x $1 ]; then
 	$1 $2
 fi})dnl
@@ -139,12 +145,14 @@ if [ ! -d /var/etc ] ; then
     mkdir /var/etc
 fi
 
+runprogcreatedirifexists({/sbin/syslogd},{/var/log},{/sbin/syslogd})
 runprogifexists({/var/tuxbox/config/lirc/lircd.conf},{lircd},
 	{/var/tuxbox/config/lirc/lircd.conf})
 runifexists({/bin/loadkeys},{/share/keymaps/i386/qwertz/de-latin1.kmap.gz})
 runifexists({/sbin/inetd})
 runprogifexists({/sbin/sshd},{/etc/init.d/start_sshd},{&})
 runifexists({/sbin/dropbear})
+runprogifexists({/sbin/automount},{/etc/init.d/start_automount})
 
 ifmarkerfile({tuxmaild},{tuxmaild})
 ifmarkerfile({rdate},{rdate time.fu-berlin.de})

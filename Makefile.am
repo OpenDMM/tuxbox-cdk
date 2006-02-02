@@ -51,7 +51,7 @@ include make/buildenv.mk
 include make/bootstrap.mk
 
 # The automounter (optional)
-#include make/automount.mk
+include make/automount.mk
 
 # The busybox (implements most standard Unix commands, like ls,...)
 include make/busybox.mk
