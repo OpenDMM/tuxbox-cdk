@@ -284,13 +284,15 @@ if test "$enable_flashrules" = "yes"; then
 	fi
 	AC_PATH_PROG(MKCRAMFS,mkcramfs,no)
 	if test "$MKCRAMFS" = "no"; then
-		AC_MSG_WARN(can't build cramfs)
-		MKCRAMFS=/bin/false
+		AC_MSG_WARN(using tuxbox cramfs)
+		MKCRAMFS=$hostprefix/bin/mkcramfs
 	fi
 	AC_PATH_PROG(MKJFFS2,mkjffs2,no)
 	if test "$MKJFFS2" = "no"; then
 		AC_PATH_PROG(MKFSJFFS2,mkfs.jffs2,no)
 		if test "$MKFSJFFS2" = "no"; then
+#			AC_MSG_WARN(using tuxbox mkfs.jffs2)
+#			MKJFFS2="$hostprefix/bin/mkfs.jffs2"
 			AC_MSG_WARN(can't build jffs2)
 			MKJFFS2=/bin/false
 		else
@@ -299,8 +301,8 @@ if test "$enable_flashrules" = "yes"; then
 	fi
 	AC_PATH_PROG(MKSQUASHFS,mksquashfs,no)
 	if test "$MKSQUASHFS" = "no"; then
-		AC_MSG_WARN(can't build squashfs)
-		MKSQUASHFS=/bin/false
+		AC_MSG_WARN(using tuxbox squashfs)
+		MKSQUASHFS=$hostprefix/bin/mksquashfs
 	fi
 fi
 
@@ -340,6 +342,8 @@ TUXBOX_RULES_MAKE(uclibc)
 #
 TUXBOX_RULES_MAKE(busybox)
 TUXBOX_RULES_MAKE(automount)
+TUXBOX_RULES_MAKE(fuse)
+TUXBOX_RULES_MAKE(djmount)
 TUXBOX_RULES_MAKE(ftpd)
 TUXBOX_RULES_MAKE(module_init_tools)
 TUXBOX_RULES_MAKE(modutils)
@@ -349,6 +353,9 @@ TUXBOX_RULES_MAKE(procps)
 TUXBOX_RULES_MAKE(udev)
 TUXBOX_RULES_MAKE(watchdog)
 TUXBOX_RULES_MAKE(mrouted)
+
+TUXBOX_RULES_MAKE(cramfs)
+TUXBOX_RULES_MAKE(squashfs)
 
 #
 # contrib libs
