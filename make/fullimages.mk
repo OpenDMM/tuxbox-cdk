@@ -29,6 +29,7 @@ $(flashprefix)/neutrino-cramfs.img%: \
 		--part root=$(word 2,$+) \
 		--part var=$(word 3,$+)
 	@TUXBOX_CHECKIMAGE@
+	@TUXBOX_CUSTOMIZE@
 
 $(flashprefix)/neutrino-squashfs.img1x $(flashprefix)/neutrino-squashfs.img2x:\
 $(flashprefix)/neutrino-squashfs.img%: \
@@ -41,6 +42,7 @@ $(flashprefix)/neutrino-squashfs.img%: \
 		--part root=$(word 2,$+) \
 		--part var=$(word 3,$+)
 	@TUXBOX_CHECKIMAGE@
+	@TUXBOX_CUSTOMIZE@
 
 $(flashprefix)/neutrino-jffs2.img1x $(flashprefix)/neutrino-jffs2.img2x: \
 $(flashprefix)/neutrino-jffs2.img%: \
@@ -49,6 +51,7 @@ $(flashprefix)/neutrino-jffs2.img%: \
 		$(hostprefix)/bin/checkImage
 	cat $< $(word 2,$+) > $@
 	@TUXBOX_CHECKIMAGE@
+	@TUXBOX_CUSTOMIZE@
 
 $(flashprefix)/enigma-cramfs.img1x $(flashprefix)/enigma-cramfs.img2x: \
 $(flashprefix)/enigma-cramfs.img%: \
@@ -61,6 +64,7 @@ $(flashprefix)/enigma-cramfs.img%: \
 		--part root=$(word 2,$+) \
 		--part var=$(word 3,$+)
 	@TUXBOX_CHECKIMAGE@
+	@TUXBOX_CUSTOMIZE@
 
 $(flashprefix)/enigma-squashfs.img1x $(flashprefix)/enigma-squashfs.img2x: \
 $(flashprefix)/enigma-squashfs.img%: \
@@ -73,6 +77,7 @@ $(flashprefix)/enigma-squashfs.img%: \
 		--part root=$(word 2,$+) \
 		--part var=$(word 3,$+)
 	@TUXBOX_CHECKIMAGE@
+	@TUXBOX_CUSTOMIZE@
 
 $(flashprefix)/enigma-jffs2.img1x $(flashprefix)/enigma-jffs2.img2x: \
 $(flashprefix)/enigma-jffs2.img%: \
@@ -81,3 +86,4 @@ $(flashprefix)/enigma-jffs2.img%: \
 		$(hostprefix)/bin/checkImage
 	cat $< $(word 2,$+) > $@
 	@TUXBOX_CHECKIMAGE@
+	@TUXBOX_CUSTOMIZE@
