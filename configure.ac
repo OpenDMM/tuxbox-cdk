@@ -122,6 +122,12 @@ AC_ARG_WITH(ucodesdir,
 AC_ARG_WITH(logosdir,
 	[  --with-logosdir=DIR  optional directory containing logos [[[CVS/]logos]]],
 	[logosdir="$with_logosdir"],[logosdir="`pwd`/logos"])
+
+AC_ARG_WITH(updatehttpprefix,
+	[  --with-updatehttpprefix=URL  optional URL containing the URL of a directory with update images [[NONE]]],
+	[updatehttpprefix="$with_updatehttpprefix"],[updatehttpprefix=])
+
+
 buildprefix=`pwd`
 AC_SUBST(targetprefix)
 AC_SUBST(hostprefix)
@@ -131,6 +137,7 @@ AC_SUBST(flashprefix)
 AC_SUBST(serversupport)
 AC_SUBST(ucodesdir)
 AC_SUBST(logosdir)
+AC_SUBST(updatehttpprefix)
 flashprefix_ro=${flashprefix}/ro
 AC_SUBST(flashprefix_ro)
 flashprefix_rw=${flashprefix}/rw
@@ -499,6 +506,7 @@ logo directors:	       $logosdir
 ucode directory:       $ucodesdir
 GNU server:            $gnuserver
 default server:        $defaultserver
+update http prefix:    $updatehttpprefix
 ])
 
 if test "$dircheck" = "fail"; then
