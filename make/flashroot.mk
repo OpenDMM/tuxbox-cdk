@@ -1,7 +1,7 @@
 $(flashprefix):
 	$(INSTALL) -d $@
 
-$(flashprefix)/root: bootstrap | $(flashprefix)
+$(flashprefix)/root: bootstrap $(wildcard root-local.sh) | $(flashprefix)
 	rm -rf $@
 	$(INSTALL) -d $@/bin
 	$(INSTALL) -d $@/dev
@@ -35,4 +35,5 @@ $(flashprefix)/root: bootstrap | $(flashprefix)
 	$(MAKE) flash-ucodes
 	$(MAKE) flash-lcdip
 	$(MAKE) flash-version
+	@FLASHROOTDIR_MODIFIED@
 	@TUXBOX_CUSTOMIZE@

@@ -6,4 +6,5 @@ flash-streampes: $(flashprefix)/root $(appsdir)/dvb/tools/stream/streampes $(app
 	$(INSTALL) $(appsdir)/dvb/tools/stream/streamts $</sbin
 	$(INSTALL) $(appsdir)/dvb/tools/stream/streampes $</sbin
 	$(INSTALL) $(appsdir)/dvb/zapit/src/.libs/udpstreampes $</sbin
+	@FLASHROOTDIR_MODIFIED@
 	@TUXBOX_CUSTOMIZE@

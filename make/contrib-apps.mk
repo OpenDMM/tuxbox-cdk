@@ -87,6 +87,7 @@ flash-lircd: $(flashprefix)/root/sbin/lircd
 $(flashprefix)/root/sbin/lircd: lirc
 	$(INSTALL) $(targetprefix)/sbin/lircd $@
 	$(INSTALL) -d $(targetprefix)/var/tuxbox/config/lirc
+	@FLASHROOTDIR_MODIFIED@
 
 endif
 

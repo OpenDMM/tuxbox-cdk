@@ -94,4 +94,5 @@ $(flashprefix)/root/bin/mrouted: $(flashprefix)/root plugins mrouted $(flashpref
 	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/dreamdata.cfg $(flashprefix)/root/lib/tuxbox/plugins/
 	$(INSTALL) $(targetprefix)/var/tuxbox/config/dreamdata.xml $(flashprefix)/root/var/tuxbox/config/
 	$(INSTALL) $(targetprefix)/bin/mrouted $(flashprefix)/root/bin
+	@FLASHROOTDIR_MODIFIED@
 endif

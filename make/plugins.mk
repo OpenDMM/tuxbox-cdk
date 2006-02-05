@@ -21,26 +21,37 @@ $(targetprefix)/lib/pkgconfig/tuxbox-plugins.pc: $(appsdir)/tuxbox/plugins/confi
 tuxmail: libfreetype $(appsdir)/tuxbox/plugins/config.status
 	$(MAKE) -C $(appsdir)/tuxbox/plugins/tuxmail all install
 
+if TARGETRULESET_FLASH
 flash-tuxmail: libfreetype $(appsdir)/tuxbox/plugins/config.status | $(flashprefix)/root
 	$(MAKE) -C $(appsdir)/tuxbox/plugins/tuxmail all install prefix=$(flashprefix)/root
+	@FLASHROOTDIR_MODIFIED@
+endif
 
 tuxtxt: $(appsdir)/tuxbox/plugins/config.status $(targetprefix)/include/tuxbox/plugin.h
 	$(MAKE) -C $(appsdir)/tuxbox/plugins/tuxtxt all install
 
+if TARGETRULESET_FLASH
 flash-tuxtxt: $(appsdir)/tuxbox/plugins/config.status tuxtxt $(flashprefix)/root
 	$(MAKE) -C $(appsdir)/tuxbox/plugins/tuxtxt install  prefix=$(flashprefix)/root
+	@FLASHROOTDIR_MODIFIED@
+endif
 
 tuxcom: $(appsdir)/tuxbox/plugins/config.status
 	$(MAKE) -C $(appsdir)/tuxbox/plugins/tuxcom all install
 
+if TARGETRULESET_FLASH
 flash-tuxcom: $(appsdir)/tuxbox/plugins/config.status $(flashprefix)/root
 	$(MAKE) -C $(appsdir)/tuxbox/plugins/tuxcom all install prefix=$(flashprefix)/root
+	@FLASHROOTDIR_MODIFIED@
+endif
 
 vncviewer: $(appsdir)/tuxbox/plugins/config.status
 	$(MAKE) -C $(appsdir)/tuxbox/plugins/vncviewer all install
 
+if TARGETRULESET_FLASH
 flash-vncviewer: $(appsdir)/tuxbox/plugins/config.status
 	$(MAKE) -C $(appsdir)/tuxbox/plugins/vncviewer all install prefix=$(flashprefix)/root
+	@FLASHROOTDIR_MODIFIED@
 
 # $(appsdir)/tuxbox/plugins/fx2/*/Makefile.am are silly and should be
 # rewritten.  In the meantime, use this kludge.
@@ -56,3 +67,5 @@ flash-fx2-plugins: fx2-plugins $(flashprefix)/root
 			ln -s /lib/libfx2.so $(flashprefix)/root/lib/tuxbox/plugins/libfx2.so; \
 		fi ; \
 	fi
+	@FLASHROOTDIR_MODIFIED@
+endif

@@ -13,4 +13,5 @@ $(flashprefix)/root/etc/cramfs.urls:
 		echo $(updatehttpprefix)squashfs.list 	>> $@; \
 		echo $(updatehttpprefix)img.list 	>> $@; \
 	fi
+	@FLASHROOTDIR_MODIFIED@
 	@TUXBOX_CUSTOMIZE@

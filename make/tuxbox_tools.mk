@@ -2,7 +2,7 @@
 
 # I have thrown out pluginx, then no longer dependent of plugins
 # Also camd (replaced by camd2) nuked.
-# TODO: reenable pluginx
+# TODO: reenable pluginx (possibly somewhere else in the source tree)
 
 # tuxbox_tools installs a lot of different tools, most of which are
 # pretty special, some (like switch) absolutely essential. For this
@@ -30,12 +30,15 @@ if TARGETRULESET_FLASH
 
 flash-tuxinfo: $(appsdir)/tuxbox/tools/config.status
 	$(MAKE) -C $(appsdir)/tuxbox/tools/tuxinfo install prefix=$(flashprefix)/root
+	@FLASHROOTDIR_MODIFIED@
 
 flash-camd2: $(appsdir)/tuxbox/tools/config.status
 	$(MAKE) -C $(appsdir)/tuxbox/tools/camd install prefix=$(flashprefix)/root
+	@FLASHROOTDIR_MODIFIED@
 
 flash-satfind: $(appsdir)/tuxbox/tools/config.status
 	$(MAKE) -C $(appsdir)/tuxbox/tools/satfind install prefix=$(flashprefix)/root
+	@FLASHROOTDIR_MODIFIED@
 
 endif
 
@@ -49,6 +52,7 @@ tools_misc: $(appsdir)/tuxbox/tools/config.status
 if TARGETRULESET_FLASH
 flash-tools_misc: $(appsdir)/tuxbox/tools/config.status
 	$(MAKE) -C $(appsdir)/tuxbox/tools/misc install prefix=$(flashprefix)/root
+	@FLASHROOTDIR_MODIFIED@
 endif 
 
 ################################################################

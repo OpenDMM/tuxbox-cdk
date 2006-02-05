@@ -15,6 +15,7 @@ $(flashprefix)/root/.version: $(flashprefix)/root
 		echo "imagename=newmake-image" 		>> $@;	\
 		echo "homepage=http://www.tuxbox.org" 	>> $@;	\
 	fi
+	@FLASHROOTDIR_MODIFIED@
 
 $(targetprefix)/.version: $(targetprefix)
 	if [ -x version-local.sh ] ; then \

@@ -21,5 +21,6 @@ flash-busybox: bootstrap $(flashprefix)/root @DEPENDS_busybox@
 			CFLAGS_EXTRA="$(TARGET_CFLAGS)" && \
 		$(MAKE) install PREFIX=$(flashprefix)/root
 	@CLEANUP_busybox@
+	@FLASHROOTDIR_MODIFIED@
 
 endif

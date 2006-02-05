@@ -26,6 +26,7 @@ flash-automount: @DEPENDS_automount@ $(flashprefix)/root
 	rm -rf @DIR_automount@
 #	$(INSTALL) $(buildprefix)/root/etc/init.d/start_automount $(flashprefix)/root/etc/init.d
 	ln -sf /proc/mounts $(flashprefix)/root/etc/mtab
+	@FLASHROOTDIR_MODIFIED@
 endif
 
 endif

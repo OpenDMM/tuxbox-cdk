@@ -12,5 +12,6 @@ flash-ucodes:
 		rm -f $(flashprefix)/root/var/tuxbox/ucodes/*; \
 		cp -p $(ucodesdir)/* $(flashprefix)/root/var/tuxbox/ucodes; \
 	fi || true
+	@FLASHROOTDIR_MODIFIED@
 
 endif

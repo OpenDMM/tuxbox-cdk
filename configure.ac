@@ -525,6 +525,8 @@ TUXBOX_CUSTOMIZE='[[ -x $(notdir $@)-local.sh ] && sh $(notdir $@)-local.sh $(fl
 AC_SUBST(TUXBOX_CUSTOMIZE)
 TUXBOX_YADD_CUSTOMIZE='[[ -x $(notdir $@)-local.sh ] && sh $(notdir $@)-local.sh $(targetprefix) $(buildprefix) || true]'
 AC_SUBST(TUXBOX_YADD_CUSTOMIZE)
+FLASHROOTDIR_MODIFIED='touch $(flashprefix)/root'
+AC_SUBST(FLASHROOTDIR_MODIFIED)
 
 AC_CONFIG_FILES([
 Makefile

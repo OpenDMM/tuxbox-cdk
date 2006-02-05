@@ -12,5 +12,6 @@ if TARGETRULESET_FLASH
 
 flash-config: $(appsdir)/dvb/config/config.status $(flashprefix)/root
 	$(MAKE) -C $(appsdir)/dvb/config all install datadir=$(flashprefix)/root/share
+	@FLASHROOTDIR_MODIFIED@
 
 endif

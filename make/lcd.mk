@@ -10,8 +10,10 @@ if TARGETRULESET_FLASH
 flash-lcdmenu: lcd $(flashprefix)/root
 	$(INSTALL) $(targetprefix)/bin/lcdmenu $(flashprefix)/root/bin
 	cp -rd $(targetprefix)/var/tuxbox/config/lcdmenu.conf $(flashprefix)/root/var/tuxbox/config
+	@FLASHROOTDIR_MODIFIED@
 
 flash-lcdip: lcd $(flashprefix)/root
 	$(MAKE) -C $(appsdir)/tuxbox/lcd/lcdip install prefix=$(flashprefix)/root
+	@FLASHROOTDIR_MODIFIED@
 
 endif

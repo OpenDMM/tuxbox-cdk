@@ -12,5 +12,6 @@ flash-eraseall: $(flashprefix)/root/sbin/eraseall
 
 $(flashprefix)/root/sbin/eraseall: misc_tools | $(flashprefix)/root
 	$(INSTALL) $(targetprefix)/sbin/eraseall $@
+	@FLASHROOTDIR_MODIFIED@
 
 endif

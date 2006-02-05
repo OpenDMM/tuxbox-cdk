@@ -43,6 +43,7 @@ flash-fuse: bootstrap @DEPENDS_fuse@
 	$(MAKE) all && \
 	$(MAKE) install DESTDIR=$(flashprefix)/root
 	@CLEANUP_fuse@
+	@FLASHROOTDIR_MODIFIED@
 
 flash-djmount: bootstrap flash-fuse @DEPENDS_djmount@
 	@PREPARE_djmount@
@@ -55,5 +56,6 @@ flash-djmount: bootstrap flash-fuse @DEPENDS_djmount@
 	$(MAKE) all && \
 	$(MAKE) install DESTDIR=$(flashprefix)/root
 	@CLEANUP_djmount@
+	@FLASHROOTDIR_MODIFIED@
 
 endif

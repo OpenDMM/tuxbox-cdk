@@ -26,6 +26,7 @@ flash-ftpd: | $(flashprefix)/root @DEPENDS_ftpd@
 		$(INSTALL) -m644 vsftpd-dbox2.conf $(flashprefix)/root/etc/vsftpd.conf && \
 		$(INSTALL) -d $(flashprefix)/root/share/empty
 	@CLEANUP_ftpd@
+	@FLASHROOTDIR_MODIFIED@
 	@TUXBOX_CUSTOMIZE@
 
 endif

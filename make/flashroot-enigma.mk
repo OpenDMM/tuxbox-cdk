@@ -5,9 +5,10 @@ $(flashprefix)/root-enigma-cramfs-p \
 $(flashprefix)/root-enigma-squashfs-p \
 $(flashprefix)/root-enigma-jffs2-p: \
 $(flashprefix)/root-enigma-%-p: \
-$(flashprefix)/root-% $(appsdir)/tuxbox/enigma/config.status
+$(flashprefix)/root-% $(flashprefix)/root $(appsdir)/tuxbox/enigma/config.status
 	rm -rf $@
-	cp -rd $< $@
+	cp -rd $(flashprefix)/root $@
+	cp -rd $</* $@
 	$(MAKE) -C $(appsdir)/tuxbox/enigma all install prefix=$@
 	$(INSTALL) $(appsdir)/tuxbox/neutrino/daemons/controld/scart.conf $@/var/tuxbox/config
 	cp $(appsdir)/tuxbox/neutrino/data/fonts/*.pcf.gz $@/share/fonts

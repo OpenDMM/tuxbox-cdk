@@ -9,4 +9,5 @@ dvbsnoop: $(appsdir)/dvb/dvbsnoop/config.status
 if TARGETRULESET_FLASH
 flash-dvbsnoop: $(appsdir)/dvb/dvbsnoop/config.status $(flashprefix)/root
 	$(MAKE) -C $(appsdir)/dvb/dvbsnoop all install prefix=$(flashprefix)/root
+	@FLASHROOTDIR_MODIFIED@
 endif

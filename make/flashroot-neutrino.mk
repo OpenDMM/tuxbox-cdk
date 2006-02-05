@@ -6,9 +6,10 @@ $(flashprefix)/root-neutrino-cramfs-p \
 $(flashprefix)/root-neutrino-squashfs-p \
 $(flashprefix)/root-neutrino-jffs2-p: \
 $(flashprefix)/root-neutrino-%-p: \
-$(flashprefix)/root-% $(appsdir)/tuxbox/neutrino/config.status
+$(flashprefix)/root-% $(flashprefix)/root $(appsdir)/tuxbox/neutrino/config.status
 	rm -rf $@
-	cp -rd $< $@
+	cp -rd $(flashprefix)/root $@
+	cp -rd $</* $@
 	$(MAKE) -C $(appsdir)/tuxbox/neutrino all install
 	$(MAKE) -C $(appsdir)/tuxbox/neutrino install prefix=$@
 	$(MAKE) -C $(appsdir)/dvb/zapit install prefix=$@

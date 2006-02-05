@@ -93,13 +93,15 @@ flash-semiclean:
 	rm -f $(flashprefix)/*.cramfs $(flashprefix)/*.squashfs \
 	$(flashprefix)/*.jffs2 $(flashprefix)/.*-flfs \
 	$(flashprefix)/*.list
-	rm -rf $(flashprefix)/root* 
+	rm -rf $(flashprefix)/root
 	rm -rf $(flashprefix)/var*
 
 flash-developerclean: flash-semiclean
+	rm -rf $(flashprefix)/root-*
 	rm -f $(flashprefix)/*.img*
 
 flash-mostlyclean: flash-semiclean
+	rm -rf $(flashprefix)/root-*
 	rm -f $(flashprefix)/*.flfs*x
 
 flash-clean: flash-mostlyclean
