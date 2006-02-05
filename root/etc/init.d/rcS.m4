@@ -157,6 +157,7 @@ runprogifexists({/bin/djmount},{/etc/init.d/start_upnp})
 
 ifmarkerfile({tuxmaild},{tuxmaild})
 ifmarkerfile({rdate},{rdate time.fu-berlin.de})
+ifmarkerfile({initialize},{/etc/init.d/initialize && rm /var/etc/.initialize})
 
 if [ -e /var/etc/init.d/rcS.local ]; then
 	. /var/etc/init.d/rcS.local
