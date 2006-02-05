@@ -3,6 +3,10 @@
 ####### var-$gui.jffs2
 $(flashprefix)/var-neutrino.jffs2 $(flashprefix)/var-enigma.jffs2: \
 $(flashprefix)/var-%.jffs2: $(flashprefix)/var-% $(MKJFFS2)
+	@if [ "$(MKJFFS2)" = "/bin/false" ] ; then \
+		echo "FATAL ERROR: No mkjffs2 or mkfs.jffs2 available"; \
+		false; \
+	fi
 	$(MKJFFS2) -b -e 131072 -p -r $< -o $@
 
 ####### root-$gui.$fstype
@@ -18,6 +22,10 @@ $(flashprefix)/root-%.squashfs: $(flashprefix)/root-%-squashfs $(MKSQUASHFS)
 
 $(flashprefix)/root-neutrino.jffs2 $(flashprefix)/root-enigma.jffs2: \
 $(flashprefix)/root-%.jffs2: $(flashprefix)/root-%-jffs2 $(MKJFFS2)
+	@if [ "$(MKJFFS2)" = "/bin/false" ] ; then \
+		echo "FATAL ERROR: No mkjffs2 or mkfs.jffs2 available"; \
+		false; \
+	fi
 	$(MKJFFS2)  -b -e 0x20000 --pad=0x7c0000 -r $< -o $@
 
 ################ $fs-to-boot.flfs*x
