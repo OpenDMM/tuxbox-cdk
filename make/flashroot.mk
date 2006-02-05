@@ -17,7 +17,7 @@ $(flashprefix)/root: bootstrap | $(flashprefix)
 	$(INSTALL) -d $@/etc/init.d
 	$(INSTALL) -d $@/root
 	ln -s /tmp $@/var/run
-	$(MAKE) $(flashprefix)/etc/cramfs.urls
+	$(MAKE) $@/etc/cramfs.urls
 	$(MAKE) flash-tuxinfo
 	$(MAKE) flash-tools_misc
 	$(MAKE) flash-config
