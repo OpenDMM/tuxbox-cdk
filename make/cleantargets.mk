@@ -1,4 +1,3 @@
-
 APPSCLEANUP:=rm -f $(DEPDIR)/neutrino $(DEPDIR)/enigma $(DEPDIR)/zapit $(DEPDIR)/plugins $(DEPDIR)/tuxbox_tools $(DEPDIR)/misc_tools $(DEPDIR)/misc_libs $(DEPDIR)/tuxbox_libs $(DEPDIR)/libtuxbox $(DEPDIR)/dvb_tools $(DEPDIR)/driver $(DEPDIR)/lcars $(DEPDIR)/lcd $(DEPDIR)/dvbsnoop 
 
 depsclean:
@@ -11,8 +10,6 @@ mostlyclean-local: flash-clean cdk-clean
 else
 mostlyclean-local: cdk-clean
 endif
-
-
 
 cdk-clean:
 	$(APPSCLEANUP)
@@ -95,10 +92,9 @@ if TARGETRULESET_FLASH
 flash-semiclean:
 	rm -f $(flashprefix)/*.cramfs $(flashprefix)/*.squashfs \
 	$(flashprefix)/*.jffs2 $(flashprefix)/.*-flfs \
-	$(flashprefix)/.*_checked* $(flashprefix)/.root-*
+	$(flashprefix)/*.list
 	rm -rf $(flashprefix)/root* 
 	rm -rf $(flashprefix)/var*
-	rm -f $(DEPDIR)/flash-*
 
 flash-developerclean: flash-semiclean
 	rm -f $(flashprefix)/*.img*
