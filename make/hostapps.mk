@@ -15,8 +15,8 @@ $(hostprefix)/bin/mkflfs: $(hostappsdir)/config.status
 $(hostprefix)/bin/checkImage:
 	$(MAKE) -C $(hostappsdir)/checkImage install INSTALLDIR=$(hostprefix)/bin
 
-#$(hostprefix)/bin/mkfs.jffs2: $(hostappsdir)/config.status
-#	$(MAKE) -C $(hostappsdir)/mkfs.jffs2 install INSTALLDIR=$(hostprefix)/bin
+$(hostprefix)/bin/mkfs.jffs2: $(hostappsdir)/config.status
+	$(MAKE) -C $(hostappsdir)/mkfs.jffs2 install INSTALLDIR=$(hostprefix)/bin
 
 $(hostprefix)/bin/mkcramfs: @DEPENDS_cramfs@
 	@PREPARE_cramfs@

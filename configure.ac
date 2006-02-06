@@ -298,13 +298,10 @@ if test "$enable_flashrules" = "yes"; then
 	if test "$MKJFFS2" = "no"; then
 		AC_PATH_PROG(MKFSJFFS2,mkfs.jffs2,no)
 		if test "$MKFSJFFS2" = "no"; then
-#			AC_MSG_WARN(using tuxbox mkfs.jffs2)
-#			MKJFFS2="$hostprefix/bin/mkfs.jffs2"
-			AC_MSG_WARN(can't build jffs2)
-			MKJFFS2=/bin/false
-		else
-			MKJFFS2=$MKFSJFFS2
+			AC_MSG_WARN(using tuxbox mkfs.jffs2)
+			MKFSJFFS2="$hostprefix/bin/mkfs.jffs2"
 		fi
+		MKJFFS2="$MKFSJFFS2"
 	fi
 	AC_PATH_PROG(MKSQUASHFS,mksquashfs,no)
 	if test "$MKSQUASHFS" = "no"; then
