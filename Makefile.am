@@ -2097,7 +2097,7 @@ $(flashprefix)/.part_plugin_libfx2: $(flashprefix)/.flash .plugins
 	@touch $@
 
 flash-plugin_lcdcirc: $(flashprefix)/.part_plugin_lcdcirc
-$(flashprefix)/.part_plugin_lcdcirc: $(flashprefix)/.flash flash-libfx2
+$(flashprefix)/.part_plugin_lcdcirc: $(flashprefix)/.flash flash-plugin_libfx2
 	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
 	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/lcdcirc.so $(flashprefix)/root/lib/tuxbox/plugins/
 	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/lcdcirc.cfg $(flashprefix)/root/lib/tuxbox/plugins/
