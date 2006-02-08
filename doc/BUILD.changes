@@ -15,10 +15,6 @@ Configuration options:
 --[enable|disable]-oldtargets can be used to include some target that
   were present in the previous CVS Makefile. [Presently disabled.]
 
---[enable|disable]-libcrypto has been eliminated. libcrypto is not
-  built by default; no reason to treat it differently from other
-  optional libraries.
-
 --with-serversupport=DIR: New option. Build template files for
   /etc/dhcpd.conf, /etc/fstab, /etc/hosts, and /etc/xinetd.d/tftp for
   a Linux server.
@@ -39,11 +35,17 @@ Configuration options:
   *_bad. If `warn', a zerosize *_bad-file ist created, to warn the
   user. Requested by dietmarw.
 
+ --with-updatehttpprefix=URL  optional URL containing the URL of a directory with update images [NONE]
+
 Removed configuration option:
 --with-hostruleset=[standard,cygwin]. This was not working, and is not
   the right method. configure should take care of this. (Don't confuse
   this "removing support for Cygwin"! Building with Cygwin should
   preferrably be supported, but --with-hostruleset is not the way!)
+
+--[enable|disable]-libcrypto has been eliminated. libcrypto is not
+  built by default; no reason to treat it differently from other
+  optional libraries.
 
 Removed program:
   fakeroot has been eliminated.
@@ -112,13 +114,13 @@ TODO:
 -- Sensible clean-targets.
 
 NICE THINGS TO HAVE:
--- download/build mkcramfs, mksquashfs, mkjffs2, mkfs.jffs2
+-- download/build mkcramfs, mksquashfs, mkjffs2, mkfs.jffs2 (DONE)
 -- Really fix the "Kein System"-problem (that checkImage is scratching
    on). (HARD)
 -- At least optionally, it should be possible to build an absolutely
    minimal system. (DONE, see target bare-os and yadd-neutrino-micro)
--- Generate md5-checksums.
--- configure should be picky on program versions
+-- Generate md5-checksums (DONE)
+-- configure should be picky on program versions (DONE)
 
 DISADVANTAGES in comparision to old version:
 -- Needs more space to build,
