@@ -7,6 +7,10 @@
 #$(DEPDIR)/linuxkernel: bootstrap linuxdir $(KERNEL_DIR)/.config
 $(KERNEL_BUILD_FILENAME): bootstrap linuxdir $(KERNEL_DIR)/.config
 	$(MAKE) -C $(KERNEL_DIR) oldconfig ARCH=ppc
+if KERNEL26
+	$(MAKE) -C $(KERNEL_DIR) include/asm \
+		ARCH=ppc
+endif
 	$(MAKE) -C $(KERNEL_DIR) include/linux/version.h ARCH=ppc
 if KERNEL26
 	$(MAKE) -C $(KERNEL_DIR) uImage modules \
@@ -42,21 +46,21 @@ $(bootprefix)/kernel-cdk: linuxdir $(hostprefix)/bin/mkimage
 	m4 Patches/dbox2-flash.c.m4 > linux/drivers/mtd/maps/dbox2-flash.c
 	$(MAKE) $(KERNEL_BUILD_FILENAME)
 if KERNEL26
-# TODO
-	error
+# not tested
+	$(INSTALL) -m644 $(KERNEL_DIR)/arch/ppc/boot/images/uImage $@
 else
 	$(hostprefix)/bin/mkimage \
 		-n 'dbox2' -A ppc -O linux -T kernel -C gzip \
 		-a 00000000 -e 00000000 \
 		-d $(KERNEL_BUILD_FILENAME) \
 		$@
+endif
 	chmod 644 $@
 	$(INSTALL) -m644 $(KERNEL_DIR)/vmlinux $(targetprefix)/boot/vmlinux-$(KERNELVERSION)
 	$(INSTALL) -m644 $(KERNEL_DIR)/System.map $(targetprefix)/boot/System.map-$(KERNELVERSION)
 	$(INSTALL) -d $(targetprefix)/tmp
 	$(INSTALL) -d $(targetprefix)/proc
 	$(INSTALL) -d $(targetprefix)/var/run
-endif
 
 driver: $(KERNEL_BUILD_FILENAME)
 	$(MAKE) -C $(driverdir) \
