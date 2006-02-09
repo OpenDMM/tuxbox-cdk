@@ -174,12 +174,6 @@ include make/flashable-dirs.mk
 # Strip libraries of symbols not needed.
 include make/reduce-libs.mk
 
-# Create the root file system (read/write) for neutrino images
-include make/flashroot-neutrino.mk
-
-# Create the root file system (read/write) for enigma images
-include make/flashroot-enigma.mk
-
 # Create the root file systems for jffs2-only, cramfs, and squashfs
 # images (containing kernel but not GUI)
 include make/flashroot-fs.mk

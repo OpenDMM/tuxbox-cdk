@@ -36,9 +36,7 @@ cdk/make/etc.mk
 cdk/make/flash-expand-targets.mk
 cdk/make/flash-streampes.mk
 cdk/make/flashable-dirs.mk
-cdk/make/flashroot-enigma.mk
 cdk/make/flashroot-fs.mk
-cdk/make/flashroot-neutrino.mk
 cdk/make/flashroot.mk
 cdk/make/ftpd.mk
 cdk/make/fullimages.mk

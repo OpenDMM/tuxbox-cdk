@@ -1,9 +1,9 @@
-$(flashprefix)/root-neutrino-cramfs-p/lib/ld.so.1 \
-$(flashprefix)/root-neutrino-squashfs-p/lib/ld.so.1 \
-$(flashprefix)/root-neutrino-jffs2-p/lib/ld.so.1 \
-$(flashprefix)/root-enigma-cramfs-p/lib/ld.so.1 \
-$(flashprefix)/root-enigma-squashfs-p/lib/ld.so.1 \
-$(flashprefix)/root-enigma-jffs2-p/lib/ld.so.1: \
+$(flashprefix)/root-neutrino-cramfs/lib/ld.so.1 \
+$(flashprefix)/root-neutrino-squashfs/lib/ld.so.1 \
+$(flashprefix)/root-neutrino-jffs2/lib/ld.so.1 \
+$(flashprefix)/root-enigma-cramfs/lib/ld.so.1 \
+$(flashprefix)/root-enigma-squashfs/lib/ld.so.1 \
+$(flashprefix)/root-enigma-jffs2/lib/ld.so.1: \
 %/lib/ld.so.1: %
 	find $</lib -maxdepth 1 -type f -o -type l | xargs rm -f
 	cp -d $(targetprefix)/lib/libnss_dns-?.*.so $</lib
@@ -11,7 +11,7 @@ $(flashprefix)/root-enigma-jffs2-p/lib/ld.so.1: \
 	$(MKLIBS) --target $(target) --ldlib ld.so.1 --libc-extras-dir \
 		$(targetprefix)/lib/libc_pic \
 		-d $</lib \
-		-D -L $(targetprefix)/lib:$(targetprefix)/lib/tuxbox/plugins \
+		-D -L $(mklibs_librarypath) \
 		--root $< \
 		`find $</bin/ -path "*bin/?*"` \
 		`find $</lib/ -name "libnss_*"` \
