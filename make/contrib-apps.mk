@@ -175,6 +175,7 @@ $(flashprefix)/root/sbin/dropbear: dropbear dropbearkey | $(flashprefix)/root
 	ln -s ../bin/dropbearmulti $(flashprefix)/root/sbin/dbclient
 	ln -s ../bin/dropbearmulti $(flashprefix)/root/bin/scp
 	cp -rd $(targetprefix)/etc/dropbear/* $(flashprefix)/root/etc/dropbear
+	@FLASHROOTDIR_MODIFIED@
 
 endif
 
@@ -220,6 +221,7 @@ $(flashprefix)/root/sbin/sshd: $(DEPDIR)/ssh | $(flashprefix)/root
 #??#	cp -rd $(targetprefix)/etc/init.d/start_sshd $(flashprefix)/root/etc/init.d/
 	$(INSTALL) $(targetprefix)/libexec/sftp-server $(flashprefix)/root/libexec
 	$(INSTALL) $(targetprefix)/sbin/sshd $(flashprefix)/root/sbin
+	@FLASHROOTDIR_MODIFIED@
 endif
 
 $(DEPDIR)/tcpdump: bootstrap libpcap @DEPENDS_tcpdump@
@@ -285,16 +287,17 @@ if TARGETRULESET_FLASH
 ## flash-ftpfs 
 ## TODO: fix if possible
 flash-lufsd: | $(flashprefix)/root $(DEPDIR)/lufs
-	$(INSTALL) $(targetprefix)/bin/lufsmnt $</bin
-	$(INSTALL) $(targetprefix)/bin/lufsd $</bin
-	cp -rd $(targetprefix)/lib/liblufs-ftpfs* $</lib
-	if [ -e $</lib/liblufs-ftpfs.2.0.0 ]; then \
-		rm -f $</lib/liblufs-ftpfs ; \
-		rm -f $</lib/liblufs-ftpfs.2 ; \
-		mv $</lib/liblufs-ftpfs.2.0.0 $</lib/liblufs-ftpfs.so.2.0.0 ; \
-		ln -s liblufs-ftpfs.so.2.0.0 $</lib/liblufs-ftpfs.so.2 ; \
-		ln -s liblufs-ftpfs.so.2.0.0 $</lib/liblufs-ftpfs.so ; \
+	$(INSTALL) $(targetprefix)/bin/lufsmnt $(flashprefix)/root/bin
+	$(INSTALL) $(targetprefix)/bin/lufsd $(flashprefix)/root/bin
+	cp -rd $(targetprefix)/lib/liblufs-ftpfs* $(flashprefix)/root/lib
+	if [ -e $(flashprefix)/root/lib/liblufs-ftpfs.2.0.0 ]; then \
+		rm -f $(flashprefix)/root/lib/liblufs-ftpfs ; \
+		rm -f $(flashprefix)/root/lib/liblufs-ftpfs.2 ; \
+		mv $(flashprefix)/root/lib/liblufs-ftpfs.2.0.0 $(flashprefix)/root/lib/liblufs-ftpfs.so.2.0.0 ; \
+		ln -s liblufs-ftpfs.so.2.0.0 $(flashprefix)/root/lib/liblufs-ftpfs.so.2 ; \
+		ln -s liblufs-ftpfs.so.2.0.0 $(flashprefix)/root/lib/liblufs-ftpfs.so ; \
 	fi
+	@FLASHROOTDIR_MODIFIED@
 	@TUXBOX_CUSTOMIZE@
 endif
 
