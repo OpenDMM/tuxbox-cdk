@@ -5,7 +5,7 @@ $(appsdir)/tuxbox/plugins/config.status: bootstrap libfreetype libcurl libz libs
 
 plugins: neutrino-plugins enigma-plugins fx2-plugins
 
-neutrino-plugins: $(targetprefix)/include/tuxbox/plugin.h tuxmail tuxtxt tuxcom vncviewer
+neutrino-plugins: $(targetprefix)/include/tuxbox/plugin.h tuxmail tuxtxt tuxcom tuxcal vncviewer
 
 fx2-plugins: $(appsdir)/tuxbox/plugins/config.status
 	$(MAKE) -C $(appsdir)/tuxbox/plugins/fx2 all install
@@ -42,6 +42,15 @@ tuxcom: $(appsdir)/tuxbox/plugins/config.status
 if TARGETRULESET_FLASH
 flash-tuxcom: $(appsdir)/tuxbox/plugins/config.status $(flashprefix)/root
 	$(MAKE) -C $(appsdir)/tuxbox/plugins/tuxcom all install prefix=$(flashprefix)/root
+	@FLASHROOTDIR_MODIFIED@
+endif
+
+tuxcal: $(appsdir)/tuxbox/plugins/config.status
+	$(MAKE) -C $(appsdir)/tuxbox/plugins/tuxcal all install
+
+if TARGETRULESET_FLASH
+flash-tuxcal: $(appsdir)/tuxbox/plugins/config.status $(flashprefix)/root
+	$(MAKE) -C $(appsdir)/tuxbox/plugins/tuxcal all install prefix=$(flashprefix)/root
 	@FLASHROOTDIR_MODIFIED@
 endif
 
