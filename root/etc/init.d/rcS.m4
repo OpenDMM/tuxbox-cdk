@@ -148,7 +148,7 @@ fi
 runprogcreatedirifexists({/sbin/syslogd},{/var/log},{/sbin/syslogd})
 runprogifexists({/var/tuxbox/config/lirc/lircd.conf},{lircd},
 	{/var/tuxbox/config/lirc/lircd.conf})
-runifexists({/bin/loadkeys},{/share/keymaps/i386/qwertz/de-latin1.kmap.gz})
+runifexists({/bin/loadkeys},{/share/keymaps/i386/qwertz/de-latin1-nodeadkeys.kmap.gz})
 runifexists({/sbin/inetd})
 runprogifexists({/sbin/sshd},{/etc/init.d/start_sshd},{&})
 runifexists({/sbin/dropbear})
