@@ -38,7 +38,7 @@ yadd-lcars: yadd-none lcars
 yadd-all: yadd-none plugins neutrino enigma lcars apps
 	@TUXBOX_YADD_CUSTOMIZE@
 
-extra: libs libs_optional contrib_apps fun dvb_apps root_optional udev
+extra: libs libs_optional contrib_apps fun dvb_apps root_optional udev devel bash
 
 # Set up some default values (used only by serversetup).
 include make/defaultvalues.mk

@@ -3,7 +3,7 @@
 #   contrib apps
 #
 
-contrib_apps: bzip2 console_data console_tools fbset lirc lsof ssh tcpdump lufs bonnie kermit
+contrib_apps: bzip2 console_data console_tools fbset lirc lsof dropbear ssh tcpdump bonnie lufs kermit
 
 $(DEPDIR)/bzip2: bootstrap @DEPENDS_bzip2@
 	@PREPARE_bzip2@
