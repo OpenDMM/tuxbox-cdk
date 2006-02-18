@@ -3,7 +3,11 @@
 #  DVB apps
 #
 
-dvb_apps: dvbdate dvbstream dvbtext dvbtune vls
+# Used version of VLS does not build with make 3.81, temporarily excluded
+# from dvb_apps
+
+# dvb_apps: dvbdate dvbstream dvbtext dvbtune vls
+dvb_apps: dvbdate dvbstream dvbtext dvbtune
 
 $(DEPDIR)/dvbdate: bootstrap @DEPENDS_dvbdate@
 	@PREPARE_dvbdate@
