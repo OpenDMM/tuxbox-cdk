@@ -24,6 +24,8 @@ $(flashprefix)/squashfs.list: $(shell echo $(flashprefix)/*.squashfs)
 	done
 	@TUXBOX_CUSTOMIZE@
 
+img.list: $(flashprefix)/img.list
+
 $(flashprefix)/img.list: $(shell echo $(flashprefix)/*.img*x)
 	rm -f $@
 	cd $(flashprefix) && \
@@ -32,8 +34,8 @@ $(flashprefix)/img.list: $(shell echo $(flashprefix)/*.img*x)
 		`md5sum -b <$$f |sed -e s/\*-//` \
 		`grep version $(flashprefix)/root/.version |sed -e s/version=//` \
 		$$f >> $@; \
-	@TUXBOX_CUSTOMIZE@
 	done
+	@TUXBOX_CUSTOMIZE@
 
 allimages.list: $(flashprefix)/allimages.list
 
