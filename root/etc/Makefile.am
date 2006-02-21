@@ -5,7 +5,7 @@ FILES_FLASH_RO = \
 	protocols termcap timezone.xml
 
 FILES_FLASH_RW = \
-	group hostname hosts inetd.conf passwd profile resolv.conf services auto.stuff
+	group hostname hosts inetd.conf passwd profile resolv.conf services auto.net
 
 FILES = \
 	$(FILES_FLASH_RO) $(FILES_FLASH_RW) modules.conf
