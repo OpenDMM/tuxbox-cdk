@@ -21,6 +21,7 @@ $(flashprefix)/root: bootstrap $(wildcard root-local.sh) | $(flashprefix)
 	$(MAKE) $@/etc/cramfs.urls
 	$(MAKE) flash-tuxinfo
 	$(MAKE) flash-tools_misc
+	$(MAKE) flash-fcp
 	$(MAKE) flash-config
 	$(MAKE) flash-camd2
 	$(MAKE) flash-busybox
