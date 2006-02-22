@@ -284,19 +284,31 @@ $(DEPDIR)/lufs: bootstrap @DEPENDS_lufs@
 	touch $@
 
 if TARGETRULESET_FLASH
-## flash-ftpfs 
-## TODO: fix if possible
-flash-lufsd: | $(flashprefix)/root $(DEPDIR)/lufs
-	$(INSTALL) $(targetprefix)/bin/lufsmnt $(flashprefix)/root/bin
-	$(INSTALL) $(targetprefix)/bin/lufsd $(flashprefix)/root/bin
-	cp -rd $(targetprefix)/lib/liblufs-ftpfs* $(flashprefix)/root/lib
-	if [ -e $(flashprefix)/root/lib/liblufs-ftpfs.2.0.0 ]; then \
-		rm -f $(flashprefix)/root/lib/liblufs-ftpfs ; \
-		rm -f $(flashprefix)/root/lib/liblufs-ftpfs.2 ; \
-		mv $(flashprefix)/root/lib/liblufs-ftpfs.2.0.0 $(flashprefix)/root/lib/liblufs-ftpfs.so.2.0.0 ; \
-		ln -s liblufs-ftpfs.so.2.0.0 $(flashprefix)/root/lib/liblufs-ftpfs.so.2 ; \
-		ln -s liblufs-ftpfs.so.2.0.0 $(flashprefix)/root/lib/liblufs-ftpfs.so ; \
-	fi
+flash-lufsd: $(flashprefix)/root/bin/lufsd
+
+$(flashprefix)/root/bin/lufsd: bootstrap @DEPENDS_lufs@ | $(flashprefix)/root
+	@PREPARE_lufs@
+	cd @DIR_lufs@ && \
+		$(BUILDENV) \
+		aclocal && \
+		libtoolize --force && \
+		autoconf && \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--prefix=$(flashprefix)/root \
+			--exec_prefix=$(flashprefix)/root \
+			--disable-kernel-support && \
+		$(MAKE) all install
+	rm $(flashprefix)/root/bin/auto.ftpfs
+	rm $(flashprefix)/root/bin/auto.sshfs
+	rm $(flashprefix)/root/bin/lufsmount
+	rm $(flashprefix)/root/bin/lufsumount
+	rm $(flashprefix)/root/bin/lussh
+	rm $(flashprefix)/root/etc/auto.sshfs
+	rm $(flashprefix)/root/etc/auto.ftpfs
+	rm $(flashprefix)/root/lib/liblufs-sshfs.*
+	@CLEANUP_lufs@
 	@FLASHROOTDIR_MODIFIED@
 	@TUXBOX_CUSTOMIZE@
 endif
