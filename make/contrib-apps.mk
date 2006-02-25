@@ -279,7 +279,8 @@ $(DEPDIR)/lufs: bootstrap @DEPENDS_lufs@
 			--exec_prefix=$(targetprefix) \
 			--disable-kernel-support && \
 		$(MAKE) all && \
-		@INSTALL_lufs@
+		@INSTALL_lufs@ && \
+		ln -sf ../bin/lufsd $(targetprefix)/sbin/mount.lufs
 	@CLEANUP_lufs@
 	touch $@
 
@@ -308,6 +309,7 @@ $(flashprefix)/root/bin/lufsd: bootstrap @DEPENDS_lufs@ | $(flashprefix)/root
 	rm $(flashprefix)/root/etc/auto.sshfs
 	rm $(flashprefix)/root/etc/auto.ftpfs
 	rm $(flashprefix)/root/lib/liblufs-sshfs.*
+	ln -sf ../bin/lufsd $(flashprefix)/root/sbin/mount.lufs
 	@CLEANUP_lufs@
 	@FLASHROOTDIR_MODIFIED@
 	@TUXBOX_CUSTOMIZE@
