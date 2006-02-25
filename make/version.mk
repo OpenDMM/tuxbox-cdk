@@ -8,7 +8,7 @@ flash-version: $(flashprefix)/root/.version
 
 $(flashprefix)/root/.version: $(flashprefix)/root
 	if [ -x flash-version-local.sh ] ; then \
-		sh flash-version-local.sh $(flashprefix) $(buildprefix); \
+		./flash-version-local.sh $(flashprefix) $(buildprefix); \
 	else \
 		echo "version=0200`date +%Y%m%d%H%M`" 	>  $@;	\
 		echo "creator=`id -un`" 		>> $@;	\
@@ -19,7 +19,7 @@ $(flashprefix)/root/.version: $(flashprefix)/root
 
 $(targetprefix)/.version: $(targetprefix)
 	if [ -x version-local.sh ] ; then \
-		sh version-local.sh $(targetprefix) $(buildprefix); \
+		./version-local.sh $(targetprefix) $(buildprefix); \
 	else \
 		echo "version=0200`date +%Y%m%d%H%M`" 	 > $@;	\
 		echo "creator=`id -un`" 		>> $@;	\
