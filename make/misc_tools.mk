@@ -1,6 +1,6 @@
 # misc/tools
 
-$(appsdir)/misc/tools/config.status: bootstrap
+$(appsdir)/misc/tools/config.status: bootstrap libpng
 	cd $(appsdir)/misc/tools && $(CONFIGURE)
 
 misc_tools: $(appsdir)/misc/tools/config.status
