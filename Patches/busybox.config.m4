@@ -454,7 +454,7 @@ option(`CONFIG_FEATURE_MOUNT_FORCE',`n',`y')
 #
 # Common options for mount/umount
 #
-option(`CONFIG_FEATURE_MOUNT_LOOP', `n', `n')
+option(`CONFIG_FEATURE_MOUNT_LOOP', `y', `y')
 option(`CONFIG_FEATURE_MTAB_SUPPORT', `n', `n')
 
 #
