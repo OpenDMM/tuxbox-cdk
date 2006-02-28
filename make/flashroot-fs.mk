@@ -7,6 +7,7 @@ $(flashprefix)/root-cramfs: bootstrap
 		-n 'dbox2' -A ppc -O linux -T kernel -C gzip \
 		-a 00000000 -e 00000000 -d $(KERNEL_BUILD_FILENAME) $@/vmlinuz
 	$(MAKE) driver targetprefix=$@
+	rm -f $@/lib/modules/$(KERNELVERSION)/build
 	@TUXBOX_CUSTOMIZE@
 
 $(flashprefix)/root-jffs2: bootstrap
@@ -18,6 +19,7 @@ $(flashprefix)/root-jffs2: bootstrap
 		-n 'dbox2' -A ppc -O linux -T kernel -C gzip \
 		-a 00000000 -e 00000000 -d $(KERNEL_BUILD_FILENAME) $@/vmlinuz
 	$(MAKE) driver targetprefix=$@
+	rm -f $@/lib/modules/$(KERNELVERSION)/build
 	@TUXBOX_CUSTOMIZE@
 
 $(flashprefix)/root-squashfs: bootstrap
@@ -29,4 +31,5 @@ $(flashprefix)/root-squashfs: bootstrap
 		-n 'dbox2' -A ppc -O linux -T kernel -C gzip \
 		-a 00000000 -e 00000000 -d $(KERNEL_BUILD_FILENAME) $@/vmlinuz
 	$(MAKE) driver targetprefix=$@
+	rm -f $@/lib/modules/$(KERNELVERSION)/build
 	@TUXBOX_CUSTOMIZE@
