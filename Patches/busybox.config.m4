@@ -280,7 +280,7 @@ option(`CONFIG_MT', `n', `n')
 option(`CONFIG_RX', `n', `n')
 option(`CONFIG_STRINGS', `n', `n')
 option(`CONFIG_TIME', `n', `n')
-option(`CONFIG_WATCHDOG', `n', `n')
+option(`CONFIG_BBOX_WATCHDOG', `n', `n')
 
 #
 # Linux Module Utilities
@@ -375,7 +375,7 @@ option(`CONFIG_PS', `y', `y')
 option(`CONFIG_RENICE', `n', `n')
 option(`CONFIG_TOP', `n', `n')
 option(`CONFIG_UPTIME', `y', `y')
-option(`CONFIG_SYSCTL', `n', `n')
+option(`CONFIG_BBOX_SYSCTL', `n', `n')
 
 #
 # Another Bourne-like Shell
