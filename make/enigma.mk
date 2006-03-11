@@ -23,7 +23,19 @@ $(flashprefix)/root-enigma: $(appsdir)/tuxbox/enigma/config.status
 	cp -rd $(targetprefix)/share/locale/fr/LC_MESSAGES/libc.mo $@/share/locale/fr/LC_MESSAGES
 	rm -rf $@/share/locale/[a-c]* $@/share/locale/da $@/share/locale/e* $@/share/locale/fi $@/share/locale/[g-t]* $@/share/locale/[m-z]*
 	cp $(appsdir)/tuxbox/enigma/po/locale.alias.image $@/share/locale/locale.alias
-	$(MAKE) -C $(appsdir)/tuxbox/plugins/enigma all install prefix=$@
+	$(MAKE) -C $(appsdir)/tuxbox/plugins/enigma/dbswitch all install prefix=$@
+#	$(MAKE) -C $(appsdir)/tuxbox/plugins/enigma/demo all install prefix=$@
+	$(MAKE) -C $(appsdir)/tuxbox/plugins/enigma/dreamdata all install prefix=$@
+	$(MAKE) -C $(appsdir)/tuxbox/plugins/enigma/dreamflash all install prefix=$@
+#	$(MAKE) -C $(appsdir)/tuxbox/plugins/enigma/dslconnect all install prefix=$@
+#	$(MAKE) -C $(appsdir)/tuxbox/plugins/enigma/dsldisconnect all install prefix=$@
+#	$(MAKE) -C $(appsdir)/tuxbox/plugins/enigma/getset all install prefix=$@
+	$(MAKE) -C $(appsdir)/tuxbox/plugins/enigma/movieplayer all install prefix=$@
+	$(MAKE) -C $(appsdir)/tuxbox/plugins/enigma/ngrabstart all install prefix=$@
+	$(MAKE) -C $(appsdir)/tuxbox/plugins/enigma/ngrabstop all install prefix=$@
+	$(MAKE) -C $(appsdir)/tuxbox/plugins/enigma/rss all install prefix=$@
+	$(MAKE) -C $(appsdir)/tuxbox/plugins/enigma/script all install prefix=$@
+#	$(MAKE) -C $(appsdir)/tuxbox/plugins/enigma/weather all install prefix=$@
 	@TUXBOX_CUSTOMIZE@
 
 endif
