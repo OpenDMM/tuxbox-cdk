@@ -24,4 +24,10 @@ $(flashprefix)/root/sbin/fcp: misc_tools | $(flashprefix)/root
 	$(INSTALL) $(appsdir)/misc/tools/mtd/fcp $@
 	@FLASHROOTDIR_MODIFIED@
 
+flash-dboxshot: $(flashprefix)/root/bin/dboxshot
+
+$(flashprefix)/root/bin/dboxshot: $(appsdir)/misc/tools/config.status | $(flashprefix)/root
+	$(MAKE) -C $(appsdir)/misc/tools/dboxshot all install prefix=$(flashprefix)/root
+	@FLASHROOTDIR_MODIFIED@
+
 endif
