@@ -30,4 +30,10 @@ $(flashprefix)/root/bin/dboxshot: $(appsdir)/misc/tools/config.status | $(flashp
 	$(MAKE) -C $(appsdir)/misc/tools/dboxshot all install prefix=$(flashprefix)/root
 	@FLASHROOTDIR_MODIFIED@
 
+flash-etherwake: $(flashprefix)/root/bin/etherwake
+
+$(flashprefix)/root/bin/etherwake: $(appsdir)/misc/tools/config.status | $(flashprefix)/root
+	$(MAKE) -C $(appsdir)/misc/tools/etherwake all install prefix=$(flashprefix)/root
+	@FLASHROOTDIR_MODIFIED@
+
 endif

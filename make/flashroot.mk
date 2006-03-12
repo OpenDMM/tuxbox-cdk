@@ -29,6 +29,7 @@ $(flashprefix)/root: bootstrap $(wildcard root-local.sh) | $(flashprefix)
 	$(MAKE) flash-satfind
 	$(MAKE) flash-streampes
 	$(MAKE) flash-lufsd
+	$(MAKE) flash-etherwake
 	$(MAKE) flash-tuxmail
 	$(MAKE) flash-tuxtxt
 	$(MAKE) flash-tuxcom
