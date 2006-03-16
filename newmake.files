@@ -8,6 +8,7 @@ cdk/Patches/dbox2-flash.c.m4
 cdk/root/Makefile.inc
 cdk/root/etc/init.d/Makefile.am
 cdk/root/etc/init.d/rcS.m4
+cdk/root/etc/init.d/initialize
 cdk/root/share/udhcpc/Makefile.am
 cdk/root/etc/Makefile.am
 cdk/Patches/linux-2.4.32-dbox2.config-flash
@@ -24,8 +25,10 @@ cdk/make/busybox.mk
 cdk/make/cleantargets.mk
 cdk/make/contrib-apps.mk
 cdk/make/contrib-libs.mk
+cdk/make/cramfs.urls.mk
 cdk/make/defaultvalues.mk
 cdk/make/development-tools.mk
+cdk/make/distribution-lists.mk
 cdk/make/disttargets.mk
 cdk/make/dvb-apps.mk
 cdk/make/dvb-config.mk
