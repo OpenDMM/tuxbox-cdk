@@ -73,7 +73,7 @@ tremor-20040525.tar.bz2;http://tuxbox.berlios.de/pub/tuxbox/cdk/src
 boost_1_29_0.tar.gz;http://surfnet.dl.sourceforge.net/sourceforge/boost
 fribidi-0.10.4.tar.bz2;http://surfnet.dl.sourceforge.net/sourceforge/fribidi
 gmp-4.1.2.tar.gz;ftp://mirrors.kernel.org/gnu/gmp/
-libungif-4.1.3.tar.bz2;http://mesh.dl.sourceforge.net/sourceforge/libungif
+libungif-4.1.3.tar.bz2;http://surfnet.dl.sourceforge.net/sourceforge/libungif
 
 
 
@@ -91,8 +91,8 @@ tcpdump-3.7.1.tar.gz;http://www.tcpdump.org/release
 xrc-0.6.3.tar.gz;http://switch.dl.sourceforge.net/sourceforge/lirc
 thttpd-2.23beta1.tar.gz;http://www.acme.com/software/thttpd
 lsof_4.64_src.tar.bz2;
-e2fsprogs-1.35.tar.gz;http://mesh.dl.sourceforge.net/sourceforge/e2fsprogs/
-reiserfsprogs-3.6.14.tar.gz;http://ftp.roedu.net/pub/mirrors/ftp.namesys.com/pub/reiserfsprogs/
+e2fsprogs-1.35.tar.gz;http://surfnet.dl.sourceforge.net/sourceforge/e2fsprogs/
+reiserfsprogs-3.6.14.tar.gz;http://www.namesys.com/pub/reiserfsprogs/
 util-linux-2.12i.tar.bz2;http://www.kernel.org/pub/linux/utils/util-linux/
 samba-1.9.18p8.tar.gz;http://mirrors.xmission.com/samba/ftp/stable/
 etherwake_1.08.orig.tar.gz;http://ftp.debian.org/debian/pool/main/e/etherwake/
@@ -124,8 +124,8 @@ kaffe-1.0.6.tar.gz;ftp://ftp.kaffe.org/pub/kaffe/v1.0.x-production
 # fun
 #
 gnuboy-1.0.3.tar.gz;http://gnuboy.unix-fu.org/src
-libmad-0.15.0b.tar.gz;http://mesh.dl.sourceforge.net/sourceforge/mad
-libid3tag-0.15.0b.tar.gz;http://mesh.dl.sourceforge.net/sourceforge/mad
+libmad-0.15.0b.tar.gz;http://surfnet.dl.sourceforge.net/sourceforge/mad
+libid3tag-0.15.0b.tar.gz;http://surfnet.dl.sourceforge.net/sourceforge/mad
 scummvm-0.7.1.tar.bz2;http://heanet.dl.sourceforge.net/sourceforge/scummvm
 sdldoom-1.10.tar.gz;ftp://ftp2.3ddownloads.com/89958/doomworld/ports/sdldoom-1.10.tar.gz
 
