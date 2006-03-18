@@ -25,6 +25,7 @@ $(flashprefix)/neutrino-cramfs.img%: \
 		$(flashprefix)/var-neutrino.jffs2 \
 		$(hostprefix)/bin/checkImage
 	$(hostappsdir)/flash/flashmanage.pl -i $@ -o build \
+		--rootsize=$(ROOT_PARTITION_SIZE) \
 		--part ppcboot=$< \
 		--part root=$(word 2,$+) \
 		--part var=$(word 3,$+)
@@ -38,6 +39,7 @@ $(flashprefix)/neutrino-squashfs.img%: \
 		$(flashprefix)/var-neutrino.jffs2 \
 		$(hostprefix)/bin/checkImage
 	$(hostappsdir)/flash/flashmanage.pl -i $@ -o build \
+		--rootsize=$(ROOT_PARTITION_SIZE) \
 		--part ppcboot=$< \
 		--part root=$(word 2,$+) \
 		--part var=$(word 3,$+)
@@ -60,6 +62,7 @@ $(flashprefix)/enigma-cramfs.img%: \
 		$(flashprefix)/var-enigma.jffs2 \
 		$(hostprefix)/bin/checkImage
 	$(hostappsdir)/flash/flashmanage.pl -i $@ -o build \
+		--rootsize=$(ROOT_PARTITION_SIZE) \
 		--part ppcboot=$< \
 		--part root=$(word 2,$+) \
 		--part var=$(word 3,$+)
@@ -73,6 +76,7 @@ $(flashprefix)/enigma-squashfs.img%: \
 		$(flashprefix)/var-enigma.jffs2 \
 		$(hostprefix)/bin/checkImage
 	$(hostappsdir)/flash/flashmanage.pl -i $@ -o build \
+		--rootsize=$(ROOT_PARTITION_SIZE) \
 		--part ppcboot=$< \
 		--part root=$(word 2,$+) \
 		--part var=$(word 3,$+)

@@ -84,6 +84,11 @@ if test -z "$TARGET_CFLAGS" -o -z "$TARGET_CXXFLAGS"; then
 	TARGET_CXXFLAGS="$TARGET_CFLAGS"
 fi
 
+AC_ARG_WITH(rootpartitionsize,
+	[  --with-rootpartitionsize=SIZE	size of the root partition],
+	[ROOT_PARTITION_SIZE="$withval"],[ROOT_PARTITION_SIZE="0x660000"])
+AC_SUBST(ROOT_PARTITION_SIZE)
+
 AC_SUBST(CFLAGS)
 AC_SUBST(TARGET_CFLAGS)
 AC_SUBST(TARGET_CXXFLAGS)
@@ -493,6 +498,7 @@ target prefix:         $targetprefix
 host prefix:           $hostprefix
 boot prefix:           $bootprefix
 build prefix:          $buildprefix
+root partition size:   $ROOT_PARTITION_SIZE
 serversupport:	       $serversupport
 checkImage:	       $CHECKIMAGE_BEHAVIOR
 target apps directory: $appsdir

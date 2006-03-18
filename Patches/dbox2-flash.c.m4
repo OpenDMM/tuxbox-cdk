@@ -1,3 +1,4 @@
+ifdef(`rootsize',,`define(`rootsize',`0x660000')')dnl
 /*
  * $Id$
  *
@@ -21,48 +22,37 @@
 static struct mtd_partition partition_info[]= {
 	{
 	.name		= "BR bootloader",
-	.size		= 128 * 1024, 
+	.size		= 0x20000, 
 	.offset		= 0,                  
 	.mask_flags	= MTD_WRITEABLE
 	},
 	{
 	.name		= "FLFS (U-Boot)",
-	.size		= 128 * 1024, 
+	.size		= 0x20000, 
 	.offset		= MTDPART_OFS_APPEND, 
 	.mask_flags	= 0
 	},
-ifelse(rootfs,`squashfs',`	{
-	.name		= "root (Squashfs)",	
-	.size		= 6528 * 1024, 
-	.offset		= MTDPART_OFS_APPEND, 
-	.mask_flags	= 0
-	},
-	{
-	.name		= "var (jffs2)",
-	.size		= 1408 * 1024, 
-	.offset		= MTDPART_OFS_APPEND, 
-	.mask_flags	= 0
-	},',rootfs,`jffs2',`	{
+ifelse(rootfs,`jffs2',`	{
 	.name		= "root (jffs2)",	
-	.size		= 7936 * 1024, 
+	.size		= 0x7c0000, 
 	.offset		= MTDPART_OFS_APPEND, 
 	.mask_flags	= 0
 	},',`	{
-	.name		= "root (cramfs)",	
-	.size		= 6528 * 1024, 
+	.name		= "root (rootfs)",	
+	.size		= rootsize, 
 	.offset		= MTDPART_OFS_APPEND, 
 	.mask_flags	= 0
 	},
 	{
 	.name		= "var (jffs2)",
-	.size		= 1408 * 1024, 
+	.size		= 0x`'eval(0x800000 - 2*0x20000 - rootsize,16), 
 	.offset		= MTDPART_OFS_APPEND, 
 	.mask_flags	= 0
 	},')
 	{
 	.name		= "Flash without bootloader",	
 	.size		= MTDPART_SIZ_FULL, 
-	.offset		= 128 * 1024, 
+	.offset		= 0x20000,
 	.mask_flags	= 0
 	},
 	{
