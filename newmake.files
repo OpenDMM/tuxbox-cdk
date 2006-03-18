@@ -72,3 +72,4 @@ cdk/make/upnp.mk
 cdk/make/version.mk
 cdk/make/zapit.mk
 cdk/autogen.sh
+boot/u-boot-config/u-boot.dbox2.h.m4
