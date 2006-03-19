@@ -1,13 +1,9 @@
 ## Makefile for Tuxbox
 
-if ENABLE_OLDTARGETS
-all: yadd-all
-else
 all:
 	@echo "You probably do not want to build all possible targets."
 	@echo "Sensible targets are, e.g. yadd-enigma or flash-neutrino-jffs2-2x."
 	@echo "If you REALLY want to build everything, then \"make everything\""
-endif
 
 if TARGETRULESET_FLASH
 everything: yadd-all flash-all-all-all serversupport extra 
@@ -205,11 +201,6 @@ include make/cleantargets.mk
 
 # Target for building source distributions (hardly used these days of CVS :-)
 include make/disttargets.mk
-
-if ENABLE_OLDTARGETS
-# Enable some synonyms for backwards compatibility
-# include make/backwards_compat.mk
-endif
 
 # Give the user rope to hang himself :-).  (Note: read from the
 # generated Makefile during make run, automake or configure does not

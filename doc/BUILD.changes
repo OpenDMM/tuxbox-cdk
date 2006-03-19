@@ -19,9 +19,6 @@ Configuration options:
   0x660000 (as before). This number should be a multiple of the erase
   size, presently 0x20000. Ignored (while meaningless) by jffs2-images.
 
---[enable|disable]-oldtargets can be used to include some target that
-  were present in the previous CVS Makefile. [Presently disabled.]
-
 --with-serversupport=DIR: New option. Build template files for
   /etc/dhcpd.conf, /etc/fstab, /etc/hosts, and /etc/xinetd.d/tftp for
   a Linux server.

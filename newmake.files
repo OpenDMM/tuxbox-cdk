@@ -17,7 +17,6 @@ apps/tuxbox/tools/configure.ac
 apps/tuxbox/tools/misc/Makefile.am
 apps/tuxbox/plugins/fx2/tetris/Makefile.am
 cdk/make/automount.mk
-cdk/make/backwards_compat.mk
 cdk/make/bluetooth.mk
 cdk/make/bootstrap.mk
 cdk/make/buildenv.mk

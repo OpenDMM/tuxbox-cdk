@@ -62,12 +62,6 @@ else
         INSTALLRULESETFILE=""
 fi
 
-AC_ARG_ENABLE(oldtargets,
-	AS_HELP_STRING(--enable-oldtargets,	enable some obsolete targets and targetnames),
-	,[enable_oldtargets=yes])
-AM_CONDITIONAL(ENABLE_OLDTARGETS,test "$enable_oldtargets" = "yes")
-
-
 if test -z "$CFLAGS" ; then
 	CFLAGS="-O2"
 fi
