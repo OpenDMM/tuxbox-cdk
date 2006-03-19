@@ -1,7 +1,7 @@
 Configuration options:
 
---with-targetruleset=[standard|flash] has been replaced by
-  --[enable|disable]-flashrules. As opposed to previous versions,
+--[enable|disable]-flashrules (replaces
+  --with-targetruleset=[standard|flash]). As opposed to previous versions,
   building yadds and buildung flash images do not exclude
   oneanother. Using --enable-flashrules targets for creating flash
   images are included in the generated Makefile, otherwise not. By
@@ -12,14 +12,23 @@ Configuration options:
   on. Using --with-targetrulset now gives a warning error; in the future it
   should be completely eliminated.
 
+--with-rootpartitionsize=SIZE gives the possibility to build (cramfs-,
+  squashfs-) images with non-default root partition size. The size of
+  the var-partition is automatically computed to use all remaining
+  flash space, i.e. everything not used by the other partitions. Default is
+  0x660000 (as before). This number should be a multiple of the erase
+  size, presently 0x20000. Ignored (while meaningless) by jffs2-images.
+
 --[enable|disable]-oldtargets can be used to include some target that
   were present in the previous CVS Makefile. [Presently disabled.]
 
 --with-serversupport=DIR: New option. Build template files for
   /etc/dhcpd.conf, /etc/fstab, /etc/hosts, and /etc/xinetd.d/tftp for
   a Linux server.
+
 --with-logosdir=DIR: New option. Picks logo files from this directory,
   if found.
+
 --with-ucodesdir=DIR: New option. Installs ucodes from this directory, if
   found. (An image containing Betaresearch ucodes may not legally be
   distributed.)
@@ -35,12 +44,13 @@ Configuration options:
   *_bad. If `warn', a zerosize *_bad-file ist created, to warn the
   user. Requested by dietmarw.
 
- --with-updatehttpprefix=URL  optional URL containing the URL of a directory with update images [NONE]
+ --with-updatehttpprefix=URL  optional URL containing the URL of a
+   directory with update images.
 
 Removed configuration option:
 --with-hostruleset=[standard,cygwin]. This was not working, and is not
   the right method. configure should take care of this. (Don't confuse
-  this "removing support for Cygwin"! Building with Cygwin should
+  this with "removing support for Cygwin"! Building with Cygwin should
   preferrably be supported, but --with-hostruleset is not the way!)
 
 --[enable|disable]-libcrypto has been eliminated. libcrypto is not
@@ -121,6 +131,8 @@ NICE THINGS TO HAVE:
    minimal system. (DONE, see target bare-os and yadd-neutrino-micro)
 -- Generate md5-checksums (DONE)
 -- configure should be picky on program versions (DONE)
+-- yadd (!= cdk) targets.
+-- smarter font handling
 
 DISADVANTAGES in comparision to old version:
 -- Needs more space to build,
