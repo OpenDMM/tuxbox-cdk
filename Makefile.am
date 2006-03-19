@@ -31,7 +31,7 @@ yadd-enigma: yadd-none enigma-plugins fx2-plugins enigma
 yadd-lcars: yadd-none lcars
 	@TUXBOX_YADD_CUSTOMIZE@
 
-yadd-all: yadd-none plugins neutrino enigma lcars apps
+yadd-all: yadd-none plugins neutrino enigma lcars
 	@TUXBOX_YADD_CUSTOMIZE@
 
 extra: libs libs_optional contrib_apps fun dvb_apps root_optional udev devel bash
