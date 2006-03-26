@@ -13,12 +13,14 @@ $(flashprefix)/var-%.jffs2: $(flashprefix)/var-% $(MKJFFS2)
 $(flashprefix)/root-neutrino.cramfs $(flashprefix)/root-enigma.cramfs: \
 $(flashprefix)/root-%.cramfs: $(flashprefix)/root-%-cramfs $(MKCRAMFS)
 	$(MKCRAMFS) -p -n "0106`date +%Y%m%d%H%M`" $< $@
+	@TUXBOX_CUSTOMIZE@
 
 $(flashprefix)/root-neutrino.squashfs $(flashprefix)/root-enigma.squashfs: \
 $(flashprefix)/root-%.squashfs: $(flashprefix)/root-%-squashfs $(MKSQUASHFS)
 	rm -f $@
 	$(MKSQUASHFS) $< $@ -be
 	chmod 644 $@
+	@TUXBOX_CUSTOMIZE@
 
 $(flashprefix)/root-neutrino.jffs2 $(flashprefix)/root-enigma.jffs2: \
 $(flashprefix)/root-%.jffs2: $(flashprefix)/root-%-jffs2 $(MKJFFS2)
