@@ -16,8 +16,10 @@ endif
 # High-level yadd targets
 
 bare-os: yadd-u-boot kernel-cdk driver yadd-etc busybox modutils tuxinfo
+	@TUXBOX_YADD_CUSTOMIZE@
 
 yadd-none: bare-os config tuxbox_tools procps ftpd yadd-ucodes version
+	@TUXBOX_YADD_CUSTOMIZE@
 
 yadd-micro-neutrino: bare-os config yadd-ucodes camd2 switch neutrino
 	@TUXBOX_YADD_CUSTOMIZE@
