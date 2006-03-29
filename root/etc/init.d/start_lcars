@@ -1,2 +1,9 @@
 #!/bin/sh
+
+# $Id$
+
+# lcars doesn't need a camd, so we should shut it down here. That
+# isn't nice, I should think about a better solution asap.
+if pidof camd2 > /dev/null; then killall camd2
+
 lcars > /dev/null
