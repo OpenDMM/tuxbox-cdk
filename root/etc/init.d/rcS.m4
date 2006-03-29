@@ -13,6 +13,11 @@ fi})dnl
 define({runprogifexists},{if [ -e $1 ]; then
 	$2 $3
 fi})dnl
+define({runaltprogifexists},{if [ -e $1 ]; then
+	$2
+else
+	$3
+fi})dnl
 define({runprogcreatedirifexists},{if [ -e $1 ]; then
 	if [ ! -d $2 ]; then
 		mkdir $2
@@ -154,6 +159,7 @@ runprogifexists({/sbin/sshd},{/etc/init.d/start_sshd},{&})
 runifexists({/sbin/dropbear})
 runprogifexists({/sbin/automount},{/etc/init.d/start_automount})
 runprogifexists({/bin/djmount},{/etc/init.d/start_upnp})
+runaltprogifexists({/var/bin/camd2},{/var/bin/camd2},{/bin/camd2})
 
 ifmarkerfile({tuxmaild},{tuxmaild})
 ifmarkerfile({tuxcald},{tuxcald})
