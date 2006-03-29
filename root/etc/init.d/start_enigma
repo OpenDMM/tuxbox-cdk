@@ -2,7 +2,6 @@
 
 # $Id$
 
-camd2
 unset TZ
 touch /tmp/.enigma
 while [ -e /tmp/.enigma ]
@@ -12,6 +11,7 @@ do
 		0)
 			echo "Shutdown"
 			[ -e /tmp/tuxmaild.pid ] && kill $( cat /tmp/tuxmaild.pid )
+			[ -e /tmp/tuxcald.pid ] && kill $( cat /tmp/tuxcald.pid )
 			rm /tmp/.enigma
 			/sbin/halt
 			;;
@@ -20,6 +20,7 @@ do
 			;;
 		*)
 			[ -e /tmp/tuxmaild.pid ] && kill $( cat /tmp/tuxmaild.pid )
+			[ -e /tmp/tuxcald.pid ] && kill $( cat /tmp/tuxcald.pid )
 			rm /tmp/.enigma
 			/sbin/reboot
 			;;
