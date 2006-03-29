@@ -3,5 +3,6 @@
 # $Id$
 
 [ -e /tmp/tuxmaild.pid ] && kill $( cat /tmp/tuxmaild.pid )
+[ -e /tmp/tuxcald.pid ] && kill $( cat /tmp/tuxcald.pid )
 
 /bin/switch -fnc 0
