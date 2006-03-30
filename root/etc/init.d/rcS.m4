@@ -159,7 +159,6 @@ runprogifexists({/sbin/sshd},{/etc/init.d/start_sshd},{&})
 runifexists({/sbin/dropbear})
 runprogifexists({/sbin/automount},{/etc/init.d/start_automount})
 runprogifexists({/bin/djmount},{/etc/init.d/start_upnp})
-runaltprogifexists({/var/bin/camd2},{/var/bin/camd2},{/bin/camd2})
 
 ifmarkerfile({tuxmaild},{tuxmaild})
 ifmarkerfile({tuxcald},{tuxcald})
