@@ -122,6 +122,10 @@ AC_ARG_WITH(logosdir,
 	[  --with-logosdir=DIR  optional directory containing logos [[[CVS/]logos]]],
 	[logosdir="$with_logosdir"],[logosdir="`pwd`/logos"])
 
+AC_ARG_WITH(customizationsdir,
+	[  --with-customizationsdir=DIR  optional directory containing customization scripts [[[CVS]]]],
+	[customizationsdir="$with_customizationsdir"],[customizationsdir="`pwd`"])
+
 AC_ARG_WITH(updatehttpprefix,
 	[  --with-updatehttpprefix=URL  optional URL containing the URL of a directory with update images [[NONE]]],
 	[updatehttpprefix="$with_updatehttpprefix"],[updatehttpprefix=])
@@ -136,6 +140,7 @@ AC_SUBST(flashprefix)
 AC_SUBST(serversupport)
 AC_SUBST(ucodesdir)
 AC_SUBST(logosdir)
+AC_SUBST(customizationsdir)
 AC_SUBST(updatehttpprefix)
 flashprefix_ro=${flashprefix}/ro
 AC_SUBST(flashprefix_ro)
@@ -499,7 +504,8 @@ target apps directory: $appsdir
 boot directory:        $bootdir
 driver directory:      $driverdir
 host apps directory:   $hostappsdir
-logo directors:	       $logosdir
+logo directory:	       $logosdir
+customization directory: $customizationsdir
 ucode directory:       $ucodesdir
 GNU server:            $gnuserver
 default server:        $defaultserver
@@ -518,9 +524,9 @@ AC_MSG_RESULT([
 ])
 fi
 
-TUXBOX_CUSTOMIZE='[[ -x $(notdir $@)-local.sh ] && ./$(notdir $@)-local.sh $(flashprefix) $(buildprefix) || true]'
+TUXBOX_CUSTOMIZE='[[ -x $(customizationsdir)/$(notdir $@)-local.sh ] && $(customizationsdir)/$(notdir $@)-local.sh $(flashprefix) $(buildprefix) || true]'
 AC_SUBST(TUXBOX_CUSTOMIZE)
-TUXBOX_YADD_CUSTOMIZE='[[ -x $(notdir $@)-local.sh ] && ./$(notdir $@)-local.sh $(targetprefix) $(buildprefix) || true]'
+TUXBOX_YADD_CUSTOMIZE='[[ -x $(customizationsdir)/$(notdir $@)-local.sh ] && $(customizationsdir)/$(notdir $@)-local.sh $(targetprefix) $(buildprefix) || true]'
 AC_SUBST(TUXBOX_YADD_CUSTOMIZE)
 FLASHROOTDIR_MODIFIED='touch $(flashprefix)/root'
 AC_SUBST(FLASHROOTDIR_MODIFIED)
