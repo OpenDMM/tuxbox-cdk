@@ -2,6 +2,7 @@
 
 # $Id$
 
+camd2
 unset TZ
 touch /tmp/.enigma
 while [ -e /tmp/.enigma ]

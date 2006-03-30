@@ -5,6 +5,7 @@
 date -s 010101001970
 sectionsd
 timerd
+camd2
 zapit
 controld
 nhttpd
