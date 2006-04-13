@@ -2079,7 +2079,7 @@ $(flashprefix)/.part_plugin_tuxcom: $(flashprefix)/.flash .plugins
 	@touch $@
 
 flash-plugin_tuxcal: $(flashprefix)/.part_plugin_tuxcal
-$(flashprefix)/.part_plugin_yahtzee: $(flashprefix)/.flash .plugins
+$(flashprefix)/.part_plugin_tuxcal: $(flashprefix)/.flash .plugins
 	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
 	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/tuxcal.so $(flashprefix)/root/lib/tuxbox/plugins/
 	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/tuxcal.cfg $(flashprefix)/root/lib/tuxbox/plugins/
