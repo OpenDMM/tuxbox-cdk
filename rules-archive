@@ -110,7 +110,7 @@ less-381.tar.gz;http://www.greenwoodsoftware.com/less
 gdb-6.3.tar.bz2;ftp://sources.redhat.com/pub/gdb/releases
 insight-6.1.tar.bz2;ftp://sources.redhat.com/pub/gdb/releases
 ltrace_0.3.35.tar.gz;ftp://ftp.debian.org/debian/pool/main/l/ltrace
-strace_4.5.7.tar.gz;http://switch.dl.sourceforge.net/sourceforge/strace
+strace-4.5.7.tar.bz2;http://switch.dl.sourceforge.net/sourceforge/strace
 ksymoops-2.4.9.tar.bz2;ftp://ftp.de.kernel.org/pub/linux/utils/kernel/ksymoops/v2.4
 nano-1.2.4.tar.gz;http://www.nano-editor.org/dist/v1.2
 joe-3.1.tar.gz;http://heanet.dl.sourceforge.net/sourceforge/joe-editor

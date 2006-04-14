@@ -103,7 +103,7 @@ less;3.81;less-381;less-381.tar.gz;extract:less-381.tar.gz;
 gdb;6.3;gdb-6.3;gdb-6.3.tar.bz2:gdb.diff:gdb-6.3-5.diff;extract:gdb-6.3.tar.bz2;patch:gdb-6.3-5.diff;patch:gdb.diff
 insight;6.1;insight-6.1;insight-6.1.tar.bz2;extract:insight-6.1.tar.bz2
 ltrace;0.3.35;ltrace-0.3.35;ltrace_0.3.35.tar.gz;extract:ltrace_0.3.35.tar.gz;patch:ltrace.diff
-strace;4.5.7;strace-4.5.7;strace_4.5.7.tar.gz;extract:strace_4.5.7.tar.gz
+strace;4.5.7;strace-4.5.7;strace-4.5.7.tar.bz2;extract:strace-4.5.7.tar.bz2
 nano;1.2.4;nano-1.2.4;nano-1.2.4.tar.gz:nano.diff;extract:nano-1.2.4.tar.gz;patch:nano.diff
 ksymoops;2.4.9;ksymoops-2.4.9;ksymoops-2.4.9.tar.bz2;extract:ksymoops-2.4.9.tar.bz2
 joe;3.1;joe-3.1;joe-3.1.tar.gz;extract:joe-3.1.tar.gz
