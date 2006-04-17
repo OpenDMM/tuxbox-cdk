@@ -12,7 +12,7 @@ if TARGETRULESET_FLASH
 $(hostprefix)/bin/mkflfs: $(hostappsdir)/config.status
 	$(MAKE) -C $(hostappsdir)/mkflfs install
 
-$(hostprefix)/bin/checkImage:
+$(hostprefix)/bin/checkImage: $(hostappsdir)/config.status
 	$(MAKE) -C $(hostappsdir)/checkImage install INSTALLDIR=$(hostprefix)/bin
 
 $(hostprefix)/bin/mkfs.jffs2: $(hostappsdir)/config.status
