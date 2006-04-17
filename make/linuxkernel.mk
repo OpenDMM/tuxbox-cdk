@@ -76,7 +76,7 @@ driver-clean:
 	$(MAKE) -C $(driverdir) \
 		KERNEL_LOCATION=$(buildprefix)/linux \
 		distclean
-	-rm $(DEPDIR)/driver
+#	-rm $(DEPDIR)/driver
 
 $(driverdir)/directfb/Makefile: bootstrap libdirectfb
 	cd $(driverdir)/directfb && \
@@ -91,3 +91,5 @@ $(driverdir)/directfb/Makefile: bootstrap libdirectfb
 $(DEPDIR)/directfb_gtx: $(driverdir)/directfb/Makefile
 	$(MAKE) -C $(driverdir)/directfb all install DESTDIR=$(targetprefix)
 	touch $@
+
+.PHONY: driver-clean 

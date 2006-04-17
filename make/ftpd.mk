@@ -30,3 +30,5 @@ flash-ftpd: | $(flashprefix)/root @DEPENDS_ftpd@
 	@TUXBOX_CUSTOMIZE@
 
 endif
+
+.PHONY: flash-ftpd

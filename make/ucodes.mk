@@ -15,3 +15,5 @@ flash-ucodes:
 	@FLASHROOTDIR_MODIFIED@
 
 endif
+
+.PHONY: yadd-ucodes ucodes flash-ucodes

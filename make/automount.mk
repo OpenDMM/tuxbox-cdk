@@ -30,3 +30,5 @@ flash-automount: @DEPENDS_automount@ $(flashprefix)/root
 endif
 
 endif
+
+.PHONY: flash-automount

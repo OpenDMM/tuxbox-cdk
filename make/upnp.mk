@@ -59,3 +59,5 @@ flash-djmount: bootstrap flash-fuse @DEPENDS_djmount@
 	@FLASHROOTDIR_MODIFIED@
 
 endif
+
+.PHONY: flash-upnp flash-fuse flash-djmount

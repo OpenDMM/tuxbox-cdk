@@ -1,7 +1,5 @@
-if TARGETRULESET_FLASH
-.PHONY: core libs root boot devel java copy lib compress \
-	depsclean mostlyclean clean distclean \
-	flash-clean flash-semiclean flash-developerclean flash-mostlyclean
-else
-.PHONY: core libs root boot devel java depsclean mostlyclean clean distclean
-endif
+# Phony declaratons of targets in Makefile.am
+
+.PHONY: all everything yadd-all extra serversupport \
+	bare-os yadd-none yadd-micro-neutrino yadd-neutrino yadd-enigma \
+	yadd-lcars yadd-all extra 

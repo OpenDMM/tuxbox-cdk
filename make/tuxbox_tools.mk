@@ -89,3 +89,6 @@ $(targetprefix)/sbin/hotplug: $(appsdir)/tuxbox/tools/config.status
 	$(MAKE) -C $(appsdir)/tuxbox/tools/hotplug install
 
 endif
+
+.PHONY: tuxbox_tools tuxinfo camd2 satfind flash-tuxinfo flash-camd2 \
+	flash-satfind switch tools_misc flash-tools_misc

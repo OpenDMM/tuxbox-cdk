@@ -24,3 +24,5 @@ flash-busybox: bootstrap $(flashprefix)/root @DEPENDS_busybox@
 	@FLASHROOTDIR_MODIFIED@
 
 endif
+
+.PHONY: flash-busybox

@@ -9,3 +9,5 @@ $(appsdir)/tuxbox/libs/config.status: bootstrap libfreetype libpng
 
 tuxbox_libs: $(appsdir)/tuxbox/libs/config.status
 	$(MAKE) -C $(appsdir)/tuxbox/libs all install
+
+.PHONY: tuxbox_libs

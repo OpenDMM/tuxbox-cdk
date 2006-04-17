@@ -89,3 +89,5 @@ $(bootprefix)/dboxflasher: $(bootdir)/u-boot-config/u-boot.flasher.dbox2.h
 	fi
 	@CLEANUP_uboot@
 	rm $(bootdir)/u-boot-config/u-boot.config
+
+.PHONY: serversupport dboxflasher dhcp.conf exports tftp hosts

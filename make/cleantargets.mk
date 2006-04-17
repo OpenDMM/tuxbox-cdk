@@ -107,3 +107,6 @@ flash-mostlyclean: flash-semiclean
 flash-clean: flash-mostlyclean
 	rm -f $(flashprefix)/*.img*
 endif ## TARGETRULESET_FLASH
+
+.PHONY: depsclean mostlyclean-local cdk-clean distclean-local flash-semiclean \
+flash-developerclean flash-mostlyclean flash-clean

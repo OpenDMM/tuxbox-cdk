@@ -201,3 +201,5 @@ $(DEPDIR)/gcc: @DEPENDS_gcc@ glibc
 
 archivecheck:
 	@$(buildprefix)/rules-downcheck.pl
+
+.PHONY: archivecheck
