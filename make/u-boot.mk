@@ -18,9 +18,15 @@
 
 yadd-u-boot: $(bootprefix)/u-boot $(bootprefix)/u-boot-yadd
 
+if KERNEL26
+$(bootprefix)/u-boot \
+$(hostprefix)/bin/mkimage: @DEPENDS_uboot@ $(bootdir)/u-boot-config/u-boot.cdk.2_6.dbox2.h
+	ln -sf ./u-boot.cdk.2_6.dbox2.h $(bootdir)/u-boot-config/u-boot.config
+else 
 $(bootprefix)/u-boot \
 $(hostprefix)/bin/mkimage: @DEPENDS_uboot@ $(bootdir)/u-boot-config/u-boot.cdk.dbox2.h
 	ln -sf ./u-boot.cdk.dbox2.h $(bootdir)/u-boot-config/u-boot.config
+endif
 	$(MAKE) @DIR_uboot@/u-boot.stripped
 	$(INSTALL) -d $(bootprefix)
 	$(INSTALL) -m644 @DIR_uboot@/u-boot.stripped $(bootprefix)/u-boot

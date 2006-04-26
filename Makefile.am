@@ -15,7 +15,11 @@ endif
 ################################################################
 # High-level yadd targets
 
+if KERNEL26
+bare-os: yadd-u-boot kernel-cdk driver yadd-etc busybox module_init_tools tuxinfo misc_tools
+else
 bare-os: yadd-u-boot kernel-cdk driver yadd-etc busybox modutils tuxinfo
+endif
 	@TUXBOX_YADD_CUSTOMIZE@
 
 yadd-none: bare-os config tuxbox_tools procps ftpd yadd-ucodes version
