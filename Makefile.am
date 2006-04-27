@@ -1858,7 +1858,7 @@ $(flashprefix)/.part_dreamfiles: $(flashprefix)/.flash .dreamfiles
 	fi
 # var_init
 	@cp -R $(targetprefix)/var_init $(flashprefix)/root
-	@for i in log mnt mnt/nfs mnt/usb run tuxbox/plugins tuxbox/config ; do \
+	@for i in log mnt mnt/cf mnt/nfs mnt/usb run tuxbox/plugins tuxbox/config ; do \
 		$(INSTALL) -d $(flashprefix)/root/var_init/$$i; \
 	done;
 	@for i in tuxtxt enigma/cable enigma/fonts enigma/pictures enigma/resources enigma/skins enigma/terrestrial; do \
@@ -2149,6 +2149,7 @@ $(flashprefix)/.part_plugin_links: $(flashprefix)/.flash
 	@echo "#Wo ist links" >> install
 	@echo "LINKSHOME=/tmp" >> install
 	@echo "if [ -d /hdd/links ] ; then LINKSHOME=/hdd/links ; fi" >> install
+	@echo "if [ -d /mnt/cf/links ] ; then LINKSHOME=/mnt/cf/links ; fi" >> install
 	@echo "if [ -d /mnt/usb/links ] ; then LINKSHOME=/mnt/usb/links ; fi" >> install
 	@echo "if [ ! -d /var/tuxbox/plugins ] ; then mkdir /var/tuxbox/plugins ; fi" >> install
 	@echo "ln -sf \$$LINKSHOME/links.so /var/tuxbox/plugins/links.so" >> install
