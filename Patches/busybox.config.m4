@@ -1,10 +1,14 @@
-define(`dooption',`ifelse(`$2',`n', `# $1 is not set', `$1=y')')dnl
-ifdef(`yadd',`define(`option',`dooption($1,$2)')',`define(`option',`dooption($1,$3)')')dnl
-dnl
 #
 # Automatically generated make config: don't edit
 #
 HAVE_DOT_CONFIG=y
+
+define(`dooption',`ifelse(`$2',`n', `# $1 is not set', `$1=y')')dnl
+ifdef(`yadd',`define(`option',`dooption($1,$2)')',`define(`option',`dooption($1,$3)')')dnl
+dnl
+#
+# Busybox Settings
+#
 
 #
 # General Configuration
@@ -18,7 +22,7 @@ option(`CONFIG_LOCALE_SUPPORT', `n', `n')
 option(`CONFIG_FEATURE_DEVFS', `y', `y')
 option(`CONFIG_FEATURE_DEVPTS', `y', `y')
 option(`CONFIG_FEATURE_CLEAN_UP', `n', `n')
-option(`CONFIG_FEATURE_SUID', `n', `n')
+option(`CONFIG_FEATURE_SUID', `y', `n')
 option(`CONFIG_FEATURE_SUID_CONFIG', `n', `n')
 option(`CONFIG_FEATURE_SUID_CONFIG_QUIET', `n', `n')
 option(`CONFIG_SELINUX', `n', `n')
@@ -27,13 +31,25 @@ option(`CONFIG_SELINUX', `n', `n')
 # Build Options
 #
 option(`CONFIG_STATIC', `n', `n')
+option(`CONFIG_DISABLE_SHARED', `n', `n')
+option(`CONFIG_BUILD_LIBBUSYBOX', `n', `n')
+option(`CONFIG_FEATURE_FULL_LIBBUSYBOX', `n', `n')
+option(`CONFIG_FEATURE_SHARED_BUSYBOX', `n', `n')
 option(`CONFIG_LFS', `n', `y')
-# USING_CROSS_COMPILER is not set
+option(`USING_CROSS_COMPILER', `n', `n')
 CROSS_COMPILER_PREFIX=""
 EXTRA_CFLAGS_OPTIONS=""
-option(`CONFIG_FEATURE_SUSv2', `n', `n')
-option(`CONFIG_FEATURE_SUSv2_OBSOLETE', `n', `n')
+option(`CONFIG_BUILD_AT_ONCE', `n', `n')
 option(`CONFIG_AUTH_IN_VAR_ETC', `n', `y')
+
+#
+# Debugging Options
+#
+option(`CONFIG_DEBUG', `n', `n')
+option(`CONFIG_NO_DEBUG_LIB', `n', `n')
+option(`CONFIG_DMALLOC', `n', `n')
+option(`CONFIG_EFENCE', `n', `n')
+option(`CONFIG_DEBUG_YANK_SUSv2', `y', `y')
 
 #
 # Installation Options
@@ -45,11 +61,20 @@ option(`CONFIG_INSTALL_APPLET_DONT', `n', `n')
 PREFIX=""
 
 #
+# Busybox Library Tuning
+#
+CONFIG_MD5_SIZE_VS_SPEED=2
+
+#
+# Applets
+#
+
+#
 # Archival Utilities
 #
 option(`CONFIG_AR', `n', `n')
 option(`CONFIG_FEATURE_AR_LONG_FILENAMES', `n', `n')
-option(`CONFIG_BUNZIP2', `n', `n')
+option(`CONFIG_BUNZIP2', `y', `y')
 option(`CONFIG_CPIO', `n', `n')
 option(`CONFIG_DPKG', `n', `n')
 option(`CONFIG_DPKG_DEB', `n', `n')
@@ -61,7 +86,8 @@ option(`CONFIG_RPM2CPIO', `n', `n')
 option(`CONFIG_RPM', `n', `n')
 option(`CONFIG_TAR', `y', `y')
 option(`CONFIG_FEATURE_TAR_CREATE', `y', `y')
-option(`CONFIG_FEATURE_TAR_BZIP2', `n', `n')
+option(`CONFIG_FEATURE_TAR_BZIP2', `y', `y')
+option(`CONFIG_FEATURE_TAR_LZMA', `n', `n')
 option(`CONFIG_FEATURE_TAR_FROM', `n', `n')
 option(`CONFIG_FEATURE_TAR_GZIP', `y', `y')
 option(`CONFIG_FEATURE_TAR_COMPRESS', `n', `n')
@@ -69,6 +95,8 @@ option(`CONFIG_FEATURE_TAR_OLDGNU_COMPATABILITY', `n', `n')
 option(`CONFIG_FEATURE_TAR_GNU_EXTENSIONS', `y', `y')
 option(`CONFIG_FEATURE_TAR_LONG_OPTIONS', `n', `n')
 option(`CONFIG_UNCOMPRESS', `n', `n')
+option(`CONFIG_UNLZMA', `n', `n')
+option(`CONFIG_FEATURE_LZMA_FAST', `n', `n')
 option(`CONFIG_UNZIP', `n', `n')
 
 #
@@ -77,6 +105,7 @@ option(`CONFIG_UNZIP', `n', `n')
 option(`CONFIG_FEATURE_UNARCHIVE_TAPE', `n', `n')
 option(`CONFIG_FEATURE_DEB_TAR_GZ', `n', `n')
 option(`CONFIG_FEATURE_DEB_TAR_BZ2', `n', `n')
+option(`CONFIG_FEATURE_DEB_TAR_LZMA', `n', `n')
 
 #
 # Coreutils
@@ -91,33 +120,34 @@ option(`CONFIG_CHROOT', `y', `n')
 option(`CONFIG_CMP', `n', `n')
 option(`CONFIG_COMM', `n', `n')
 option(`CONFIG_CP', `y', `y')
-option(`CONFIG_CUT', `y', `y')
+option(`CONFIG_CUT', `y', `n')
 option(`CONFIG_DATE', `y', `y')
-option(`CONFIG_FEATURE_DATE_ISOFMT', `y', `y')
+option(`CONFIG_FEATURE_DATE_ISOFMT', `y', `n')
 option(`CONFIG_DD', `y', `n')
 option(`CONFIG_DF', `y', `y')
-option(`CONFIG_DIRNAME', `y', `y')
+option(`CONFIG_DIRNAME', `y', `n')
 option(`CONFIG_DOS2UNIX', `n', `y')
 option(`CONFIG_UNIX2DOS', `n', `y')
 option(`CONFIG_DU', `y', `y')
 option(`CONFIG_FEATURE_DU_DEFALT_BLOCKSIZE_1K', `n', `y')
 option(`CONFIG_ECHO', `y', `y')
-option(`CONFIG_FEATURE_FANCY_ECHO', `y', `y')
+option(`CONFIG_FEATURE_FANCY_ECHO', `y', `n')
 option(`CONFIG_ENV', `y', `y')
 option(`CONFIG_EXPR', `y', `y')
+option(`CONFIG_EXPR_MATH_SUPPORT_64', `n', `n')
 option(`CONFIG_FALSE', `y', `y')
 option(`CONFIG_FOLD', `n', `n')
-option(`CONFIG_HEAD', `y', `y')
+option(`CONFIG_HEAD', `y', `n')
 option(`CONFIG_FEATURE_FANCY_HEAD', `n', `n')
 option(`CONFIG_HOSTID', `n', `n')
-option(`CONFIG_ID', `y', `y')
+option(`CONFIG_ID', `y', `n')
 option(`CONFIG_INSTALL', `n', `n')
 option(`CONFIG_LENGTH', `n', `n')
 option(`CONFIG_LN', `y', `y')
 option(`CONFIG_LOGNAME', `n', `n')
 option(`CONFIG_LS', `y', `y')
-option(`CONFIG_FEATURE_LS_FILETYPES', `y', `y')
-option(`CONFIG_FEATURE_LS_FOLLOWLINKS', `y', `y')
+option(`CONFIG_FEATURE_LS_FILETYPES', `y', `n')
+option(`CONFIG_FEATURE_LS_FOLLOWLINKS', `y', `n')
 option(`CONFIG_FEATURE_LS_RECURSIVE', `n', `y')
 option(`CONFIG_FEATURE_LS_SORTFILES', `y', `y')
 option(`CONFIG_FEATURE_LS_TIMESTAMPS', `y', `y')
@@ -134,7 +164,7 @@ option(`CONFIG_NOHUP', `n', `n')
 option(`CONFIG_OD', `n', `n')
 option(`CONFIG_PRINTENV', `n', `n')
 option(`CONFIG_PRINTF', `n', `n')
-option(`CONFIG_PWD', `y', `y')
+option(`CONFIG_PWD', `y', `n')
 option(`CONFIG_REALPATH', `n', `n')
 option(`CONFIG_RM', `y', `y')
 option(`CONFIG_RMDIR', `y', `y')
@@ -142,7 +172,7 @@ option(`CONFIG_SEQ', `n', `n')
 option(`CONFIG_SHA1SUM', `n', `n')
 option(`CONFIG_SLEEP', `y', `y')
 option(`CONFIG_FEATURE_FANCY_SLEEP', `n', `n')
-option(`CONFIG_SORT', `y', `y')
+option(`CONFIG_SORT', `y', `n')
 option(`CONFIG_FEATURE_SORT_BIG', `n', `n')
 option(`CONFIG_STAT', `n', `n')
 option(`CONFIG_FEATURE_STAT_FORMAT', `n', `n')
@@ -150,30 +180,26 @@ option(`CONFIG_STTY', `n', `n')
 option(`CONFIG_SUM', `n', `n')
 option(`CONFIG_SYNC', `n', `y')
 option(`CONFIG_TAIL', `y', `y')
-option(`CONFIG_FEATURE_FANCY_TAIL', `n', `y')
+option(`CONFIG_FEATURE_FANCY_TAIL', `y', `y')
 option(`CONFIG_TEE', `n', `n')
 option(`CONFIG_FEATURE_TEE_USE_BLOCK_IO', `n', `n')
 option(`CONFIG_TEST', `y', `y')
-
-#
-# test (forced enabled for use with shell)
-#
 option(`CONFIG_FEATURE_TEST_64', `n', `n')
 option(`CONFIG_TOUCH', `y', `y')
 option(`CONFIG_TR', `n', `n')
 option(`CONFIG_FEATURE_TR_CLASSES', `n', `n')
 option(`CONFIG_FEATURE_TR_EQUIV', `n', `n')
 option(`CONFIG_TRUE', `y', `y')
-option(`CONFIG_TTY', `y', `y')
+option(`CONFIG_TTY', `y', `n')
 option(`CONFIG_UNAME', `y', `y')
-option(`CONFIG_UNIQ', `y', `y')
+option(`CONFIG_UNIQ', `y', `n')
 option(`CONFIG_USLEEP', `n', `n')
 option(`CONFIG_UUDECODE', `n', `n')
 option(`CONFIG_UUENCODE', `n', `n')
 option(`CONFIG_WATCH', `n', `n')
 option(`CONFIG_WC', `n', `n')
 option(`CONFIG_WHO', `n', `n')
-option(`CONFIG_WHOAMI', `y', `y')
+option(`CONFIG_WHOAMI', `y', `n')
 option(`CONFIG_YES', `y', `y')
 
 #
@@ -182,7 +208,7 @@ option(`CONFIG_YES', `y', `y')
 option(`CONFIG_FEATURE_PRESERVE_HARDLINKS', `n', `n')
 
 #
-# Common options for ls and more
+# Common options for ls, more and telnet
 #
 option(`CONFIG_FEATURE_AUTOWIDTH', `y', `y')
 
@@ -202,8 +228,8 @@ option(`CONFIG_DUMPKMAP', `n', `n')
 option(`CONFIG_LOADFONT', `n', `n')
 option(`CONFIG_LOADKMAP', `n', `y')
 option(`CONFIG_OPENVT', `n', `n')
-option(`CONFIG_RESET', `y', `y')
-option(`CONFIG_SETCONSOLE', `y', `y')
+option(`CONFIG_RESET', `y', `n')
+option(`CONFIG_SETCONSOLE', `n', `n')
 option(`CONFIG_SETKEYCODES', `n', `n')
 
 #
@@ -213,21 +239,9 @@ option(`CONFIG_MKTEMP', `n', `n')
 option(`CONFIG_PIPE_PROGRESS', `n', `n')
 option(`CONFIG_READLINK', `n', `n')
 option(`CONFIG_FEATURE_READLINK_FOLLOW', `n', `n')
-option(`CONFIG_RUN_PARTS', `n', `n')
+option(`CONFIG_RUN_PARTS', `y', `n')
 option(`CONFIG_START_STOP_DAEMON', `n', `n')
 option(`CONFIG_WHICH', `n', `n')
-
-#
-# Linux Ext2 FS Progs
-#
-option(`CONFIG_CHATTR', `n', `n')
-option(`CONFIG_E2FSCK', `n', `n')
-option(`CONFIG_FSCK', `n', `n')
-option(`CONFIG_LSATTR', `n', `n')
-option(`CONFIG_MKE2FS', `n', `n')
-option(`CONFIG_TUNE2FS', `n', `n')
-option(`CONFIG_E2LABEL', `n', `n')
-option(`CONFIG_FINDFS', `n', `n')
 
 #
 # Editors
@@ -253,14 +267,15 @@ option(`CONFIG_FEATURE_VI_OPTIMIZE_CURSOR', `y', `y')
 #
 option(`CONFIG_FIND', `y', `y')
 option(`CONFIG_FEATURE_FIND_MTIME', `n', `y')
+option(`CONFIG_FEATURE_FIND_MMIN', `y', `y')
 option(`CONFIG_FEATURE_FIND_PERM', `n', `n')
 option(`CONFIG_FEATURE_FIND_TYPE', `y', `y')
 option(`CONFIG_FEATURE_FIND_XDEV', `n', `n')
 option(`CONFIG_FEATURE_FIND_NEWER', `n', `n')
 option(`CONFIG_FEATURE_FIND_INUM', `n', `n')
-option(`CONFIG_FEATURE_FIND_EXEC', `y', `y')
+option(`CONFIG_FEATURE_FIND_EXEC', `n', `n')
 option(`CONFIG_GREP', `y', `y')
-option(`CONFIG_FEATURE_GREP_EGREP_ALIAS', `n', `n')
+option(`CONFIG_FEATURE_GREP_EGREP_ALIAS', `y', `n')
 option(`CONFIG_FEATURE_GREP_FGREP_ALIAS', `n', `n')
 option(`CONFIG_FEATURE_GREP_CONTEXT', `n', `n')
 option(`CONFIG_XARGS', `y', `y')
@@ -274,16 +289,12 @@ option(`CONFIG_FEATURE_XARGS_SUPPORT_ZERO_TERM', `n', `n')
 #
 option(`CONFIG_INIT', `y', `y')
 option(`CONFIG_FEATURE_USE_INITTAB', `y', `y')
-option(`CONFIG_FEATURE_INITRD', `n', `n')
-option(`CONFIG_FEATURE_INIT_COREDUMPS', `n', `n')
-option(`CONFIG_FEATURE_INIT_SCTTY', `y', `y')
-#option(`CONFIG_FEATURE_INIT_SWAPON', `n', `n')
+option(`CONFIG_FEATURE_INIT_SCTTY', `n', `n')
 option(`CONFIG_FEATURE_EXTRA_QUIET', `n', `n')
+option(`CONFIG_FEATURE_INIT_COREDUMPS', `n', `n')
+option(`CONFIG_FEATURE_INITRD', `n', `n')
 option(`CONFIG_HALT', `y', `y')
 option(`CONFIG_MESG', `n', `n')
-option(`CONFIG_POWEROFF', `n', `y')
-option(`CONFIG_REBOOT', `y', `y')
-#option(`CONFIG_MESG', `n', `n')
 
 #
 # Login/Password Management Utilities
@@ -306,9 +317,86 @@ option(`CONFIG_SULOGIN', `n', `n')
 option(`CONFIG_VLOCK', `n', `n')
 
 #
-# Common options for adduser, deluser, login, su
+# Linux Ext2 FS Progs
 #
-#option(`CONFIG_FEATURE_SHADOWPASSWDS', `y', `n')
+option(`CONFIG_CHATTR', `n', `n')
+option(`CONFIG_E2FSCK', `n', `n')
+option(`CONFIG_FSCK', `n', `n')
+option(`CONFIG_LSATTR', `n', `n')
+option(`CONFIG_MKE2FS', `n', `n')
+option(`CONFIG_TUNE2FS', `n', `n')
+option(`CONFIG_E2LABEL', `n', `n')
+option(`CONFIG_FINDFS', `n', `n')
+
+#
+# Linux Module Utilities
+#
+option(`CONFIG_INSMOD', `n', `y')
+option(`CONFIG_FEATURE_INSMOD_VERSION_CHECKING', `n', `y')
+option(`CONFIG_FEATURE_INSMOD_KSYMOOPS_SYMBOLS', `n', `n')
+option(`CONFIG_FEATURE_INSMOD_LOADINKMEM', `n', `n')
+option(`CONFIG_FEATURE_INSMOD_LOAD_MAP', `n', `n')
+option(`CONFIG_FEATURE_INSMOD_LOAD_MAP_FULL', `n', `n')
+option(`CONFIG_RMMOD', `n', `y')
+option(`CONFIG_LSMOD', `n', `y')
+option(`CONFIG_FEATURE_LSMOD_PRETTY_2_6_OUTPUT', `n', `n')
+option(`CONFIG_MODPROBE', `n', `n')
+option(`CONFIG_FEATURE_MODPROBE_MULTIPLE_OPTIONS', `n', `n')
+option(`CONFIG_FEATURE_CHECK_TAINTED_MODULE', `n', `n')
+option(`CONFIG_FEATURE_2_4_MODULES', `n', `y')
+option(`CONFIG_FEATURE_2_6_MODULES', `n', `n')
+option(`CONFIG_FEATURE_QUERY_MODULE_INTERFACE', `n', `y')
+
+#
+# Linux System Utilities
+#
+option(`CONFIG_DMESG', `y', `y')
+option(`CONFIG_FBSET', `n', `n')
+option(`CONFIG_FEATURE_FBSET_FANCY', `n', `n')
+option(`CONFIG_FEATURE_FBSET_READMODE', `n', `n')
+option(`CONFIG_FDFLUSH', `n', `n')
+option(`CONFIG_FDFORMAT', `n', `n')
+option(`CONFIG_FDISK', `n', `n')
+option(`FDISK_SUPPORT_LARGE_DISKS', `n', `y')
+option(`CONFIG_FEATURE_FDISK_WRITABLE', `n', `n')
+option(`CONFIG_FEATURE_AIX_LABEL', `n', `n')
+option(`CONFIG_FEATURE_SGI_LABEL', `n', `n')
+option(`CONFIG_FEATURE_SUN_LABEL', `n', `n')
+option(`CONFIG_FEATURE_OSF_LABEL', `n', `n')
+option(`CONFIG_FEATURE_FDISK_ADVANCED', `n', `n')
+option(`CONFIG_FREERAMDISK', `n', `n')
+option(`CONFIG_FSCK_MINIX', `n', `n')
+option(`CONFIG_MKFS_MINIX', `n', `n')
+option(`CONFIG_FEATURE_MINIX2', `n', `n')
+option(`CONFIG_GETOPT', `n', `n')
+option(`CONFIG_HEXDUMP', `n', `n')
+option(`CONFIG_HWCLOCK', `n', `n')
+option(`CONFIG_FEATURE_HWCLOCK_LONGOPTIONS', `n', `n')
+option(`CONFIG_FEATURE_HWCLOCK_ADJTIME_FHS', `n', `n')
+option(`CONFIG_IPCRM', `n', `n')
+option(`CONFIG_IPCS', `n', `n')
+option(`CONFIG_LOSETUP', `n', `n')
+option(`CONFIG_MDEV', `n', `n')
+option(`CONFIG_FEATURE_MDEV_CONF', `n', `n')
+option(`CONFIG_MKSWAP', `n', `n')
+option(`CONFIG_MORE', `y', `y')
+option(`CONFIG_FEATURE_USE_TERMIOS', `y', `y')
+option(`CONFIG_MOUNT', `y', `y')
+option(`CONFIG_FEATURE_MOUNT_NFS', `y', `y')
+option(`CONFIG_PIVOT_ROOT', `n', `n')
+option(`CONFIG_RDATE', `n', `y')
+option(`CONFIG_READPROFILE', `n', `n')
+option(`CONFIG_SETARCH', `n', `n')
+option(`CONFIG_SWAPONOFF', `n', `n')
+option(`CONFIG_SWITCH_ROOT', `n', `n')
+option(`CONFIG_UMOUNT', `y', `y')
+option(`CONFIG_FEATURE_UMOUNT_ALL', `n', `n')
+
+#
+# Common options for mount/umount
+#
+option(`CONFIG_FEATURE_MOUNT_LOOP', `y', `y')
+option(`CONFIG_FEATURE_MTAB_SUPPORT', `n', `n')
 
 #
 # Miscellaneous Utilities
@@ -343,7 +431,7 @@ option(`CONFIG_FEATURE_MAKEDEVS_LEAF', `n', `n')
 option(`CONFIG_FEATURE_MAKEDEVS_TABLE', `n', `n')
 option(`CONFIG_MOUNTPOINT', `n', `n')
 option(`CONFIG_MT', `n', `n')
-option(`BB_APPLET_RUNLEVEL', `n', `n')
+option(`CONFIG_RUNLEVEL', `n', `n')
 option(`CONFIG_RX', `n', `n')
 option(`CONFIG_STRINGS', `n', `n')
 option(`CONFIG_SETSID', `n', `n')
@@ -351,30 +439,12 @@ option(`CONFIG_TIME', `n', `n')
 option(`CONFIG_BB_WATCHDOG', `n', `n')
 
 #
-# Linux Module Utilities
-#
-option(`CONFIG_INSMOD', `n', `y')
-option(`CONFIG_FEATURE_INSMOD_VERSION_CHECKING', `n', `y')
-option(`CONFIG_FEATURE_INSMOD_KSYMOOPS_SYMBOLS', `n', `n')
-option(`CONFIG_FEATURE_INSMOD_LOADINKMEM', `n', `n')
-option(`CONFIG_FEATURE_INSMOD_LOAD_MAP', `n', `n')
-option(`CONFIG_FEATURE_INSMOD_LOAD_MAP_FULL', `n', `n')
-option(`CONFIG_RMMOD', `n', `y')
-option(`CONFIG_LSMOD', `n', `y')
-option(`CONFIG_FEATURE_LSMOD_PRETTY_2_6_OUTPUT', `n', `n')
-option(`CONFIG_MODPROBE', `n', `n')
-option(`CONFIG_FEATURE_MODPROBE_MULTIPLE_OPTIONS', `n', `n')
-option(`CONFIG_FEATURE_CHECK_TAINTED_MODULE', `n', `n')
-option(`CONFIG_FEATURE_2_4_MODULES', `n', `y')
-option(`CONFIG_FEATURE_2_6_MODULES', `n', `n')
-option(`CONFIG_FEATURE_QUERY_MODULE_INTERFACE', `n', `n')
-
-#
 # Networking Utilities
 #
-option(`CONFIG_FEATURE_IPV6', `n', `n')
+option(`CONFIG_FEATURE_IPV6', `y', `n')
 option(`CONFIG_ARPING', `n', `n')
-option(`CONFIG_ETHER_WAKE', `y', `y')
+option(`CONFIG_DNSD', `n', `n')
+option(`CONFIG_ETHER_WAKE', `n', `n')
 option(`CONFIG_FAKEIDENTD', `n', `n')
 option(`CONFIG_FTPGET', `n', `n')
 option(`CONFIG_FTPPUT', `n', `n')
@@ -387,6 +457,7 @@ option(`CONFIG_FEATURE_HTTPD_RELOAD_CONFIG_SIGHUP', `n', `n')
 option(`CONFIG_FEATURE_HTTPD_SETUID', `n', `n')
 option(`CONFIG_FEATURE_HTTPD_CONFIG_WITH_MIME_TYPES', `n', `n')
 option(`CONFIG_FEATURE_HTTPD_CGI', `n', `n')
+option(`CONFIG_FEATURE_HTTPD_CONFIG_WITH_SCRIPT_INTERPR', `n', `n')
 option(`CONFIG_FEATURE_HTTPD_SET_REMOTE_PORT_TO_ENV', `n', `n')
 option(`CONFIG_FEATURE_HTTPD_ENCODE_URL_STR', `n', `n')
 option(`CONFIG_IFCONFIG', `n', `y')
@@ -399,7 +470,7 @@ option(`CONFIG_IFUPDOWN', `y', `y')
 option(`CONFIG_FEATURE_IFUPDOWN_IP', `y', `n')
 option(`CONFIG_FEATURE_IFUPDOWN_IP_BUILTIN', `y', `y')
 option(`CONFIG_FEATURE_IFUPDOWN_IPV4', `y', `y')
-option(`CONFIG_FEATURE_IFUPDOWN_IPV6', `n', `n')
+option(`CONFIG_FEATURE_IFUPDOWN_IPV6', `y', `n')
 option(`CONFIG_FEATURE_IFUPDOWN_IPX', `n', `n')
 option(`CONFIG_FEATURE_IFUPDOWN_MAPPING', `n', `n')
 option(`CONFIG_INETD', `y', `y')
@@ -448,7 +519,7 @@ option(`CONFIG_VCONFIG', `n', `n')
 option(`CONFIG_WGET', `y', `y')
 option(`CONFIG_FEATURE_WGET_STATUSBAR', `y', `y')
 option(`CONFIG_FEATURE_WGET_AUTHENTICATION', `n', `y')
-option(`CONFIG_FEATURE_WGET_IP6_LITERAL', `n', `n')
+option(`CONFIG_FEATURE_WGET_IP6_LITERAL', `y', `n')
 
 #
 # udhcp Server/Client
@@ -456,7 +527,7 @@ option(`CONFIG_FEATURE_WGET_IP6_LITERAL', `n', `n')
 option(`CONFIG_UDHCPD', `n', `n')
 option(`CONFIG_UDHCPC', `y', `y')
 option(`CONFIG_DUMPLEASES', `n', `n')
-option(`CONFIG_FEATURE_UDHCP_SYSLOG', `n', `n')
+option(`CONFIG_FEATURE_UDHCP_SYSLOG', `y', `n')
 option(`CONFIG_FEATURE_UDHCP_DEBUG', `n', `n')
 option(`CONFIG_ZCIP', `n', `n')
 
@@ -491,17 +562,17 @@ option(`CONFIG_ASH', `y', `y')
 #
 # Ash Shell Options
 #
-option(`CONFIG_ASH_JOB_CONTROL', `y', `y')
+option(`CONFIG_ASH_JOB_CONTROL', `y', `n')
 option(`CONFIG_ASH_READ_NCHARS', `n', `n')
 option(`CONFIG_ASH_READ_TIMEOUT', `n', `n')
 option(`CONFIG_ASH_ALIAS', `y', `y')
-option(`CONFIG_ASH_MATH_SUPPORT', `n', `n')
+option(`CONFIG_ASH_MATH_SUPPORT', `y', `n')
 option(`CONFIG_ASH_MATH_SUPPORT_64', `n', `n')
 option(`CONFIG_ASH_GETOPTS', `n', `n')
 option(`CONFIG_ASH_CMDCMD', `n', `n')
 option(`CONFIG_ASH_BUILTIN_ECHO', `n', `n')
-option(`CONFIG_ASH_MAIL', `n', `n')
-option(`CONFIG_ASH_OPTIMIZE_FOR_SIZE', `y', `y')
+option(`CONFIG_ASH_MAIL', `y', `n')
+option(`CONFIG_ASH_OPTIMIZE_FOR_SIZE', `y', `n')
 option(`CONFIG_ASH_RANDOM_SUPPORT', `n', `n')
 option(`CONFIG_ASH_EXPAND_PRMT', `n', `n')
 option(`CONFIG_HUSH', `n', `n')
@@ -524,70 +595,12 @@ option(`CONFIG_FEATURE_SH_FANCY_PROMPT', `n', `y')
 #
 # System Logging Utilities
 #
-option(`CONFIG_SYSLOGD', `n', `n')
+option(`CONFIG_SYSLOGD', `y', `n')
 option(`CONFIG_FEATURE_ROTATE_LOGFILE', `n', `n')
 option(`CONFIG_FEATURE_REMOTE_LOG', `n', `n')
 option(`CONFIG_FEATURE_IPC_SYSLOG', `n', `n')
 CONFIG_FEATURE_IPC_SYSLOG_BUFFER_SIZE=0
 option(`CONFIG_LOGREAD', `n', `n')
 option(`CONFIG_FEATURE_LOGREAD_REDUCED_LOCKING', `n', `n')
-option(`CONFIG_KLOGD', `n', `n')
+option(`CONFIG_KLOGD', `y', `n')
 option(`CONFIG_LOGGER', `n', `n')
-
-#
-# Linux System Utilities
-#
-option(`CONFIG_DMESG', `y', `y')
-option(`CONFIG_FBSET', `n', `n')
-option(`CONFIG_FEATURE_FBSET_FANCY', `n', `n')
-option(`CONFIG_FEATURE_FBSET_READMODE', `n', `n')
-option(`CONFIG_FDFLUSH', `n', `n')
-option(`CONFIG_FDFORMAT', `n', `n')
-option(`CONFIG_FDISK', `n', `n')
-option(`FDISK_SUPPORT_LARGE_DISKS', `n', `n')
-option(`CONFIG_FEATURE_FDISK_WRITABLE', `n', `n')
-option(`CONFIG_FEATURE_AIX_LABEL', `n', `n')
-option(`CONFIG_FEATURE_SGI_LABEL', `n', `n')
-option(`CONFIG_FEATURE_SUN_LABEL', `n', `n')
-option(`CONFIG_FEATURE_OSF_LABEL', `n', `n')
-option(`CONFIG_FEATURE_FDISK_ADVANCED', `n', `n')
-option(`CONFIG_FREERAMDISK', `n', `n')
-option(`CONFIG_FSCK_MINIX', `n', `n')
-option(`CONFIG_MKFS_MINIX', `n', `n')
-option(`CONFIG_FEATURE_MINIX2', `n', `n')
-option(`CONFIG_GETOPT', `n', `n')
-option(`CONFIG_HEXDUMP', `n', `n')
-option(`CONFIG_HWCLOCK', `n', `n')
-option(`CONFIG_FEATURE_HWCLOCK_LONGOPTIONS', `n', `n')
-option(`CONFIG_FEATURE_HWCLOCK_ADJTIME_FHS', `n', `n')
-option(`CONFIG_IPCRM', `n', `n')
-option(`CONFIG_IPCS', `n', `n')
-option(`CONFIG_LOSETUP', `n', `n')
-option(`CONFIG_MDEV', `n', `n')
-option(`CONFIG_FEATURE_MDEV_CONF', `n', `n')
-option(`CONFIG_MKSWAP', `n', `n')
-option(`CONFIG_MORE', `y', `y')
-option(`CONFIG_FEATURE_USE_TERMIOS', `y', `y')
-option(`CONFIG_PIVOT_ROOT', `n', `n')
-option(`CONFIG_SWITCH_ROOT', `n', `n')
-option(`CONFIG_RDATE', `n', `y')
-option(`CONFIG_READPROFILE', `n', `n')
-option(`CONFIG_SWAPONOFF', `n', `n')
-option(`CONFIG_MOUNT', `y', `y')
-option(`CONFIG_FEATURE_MOUNT_NFS', `y', `y')
-option(`CONFIG_UMOUNT', `y', `y')
-#option(`CONFIG_FEATURE_MOUNT_FORCE',`n',`y')
-
-#
-# Common options for mount/umount
-#
-option(`CONFIG_FEATURE_MOUNT_LOOP', `y', `y')
-option(`CONFIG_FEATURE_MTAB_SUPPORT', `n', `n')
-
-#
-# Debugging Options
-#
-option(`CONFIG_DEBUG', `n', `n')
-option(`CONFIG_NO_DEBUG_LIB', `n', `n')
-option(`CONFIG_DMALLOC', `n', `n')
-option(`CONFIG_EFENCE', `n', `n')
