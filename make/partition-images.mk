@@ -34,7 +34,7 @@ $(flashprefix)/root-%.jffs2: $(flashprefix)/root-%-jffs2 $(MKJFFS2)
 $(flashprefix)/cramfs.flfs1x $(flashprefix)/cramfs.flfs2x: \
 $(hostprefix)/bin/mkflfs $(bootdir)/u-boot-config/u-boot.dbox2.h.m4 \
 | $(flashprefix)
-	m4 --define=rootfstype=squashfs --define=rootsize=$(ROOT_PARTITION_SIZE) $(bootdir)/u-boot-config/u-boot.dbox2.h.m4 > $(bootdir)/u-boot-config/u-boot.config
+	m4 --define=rootfstype=cramfs --define=rootsize=$(ROOT_PARTITION_SIZE) $(bootdir)/u-boot-config/u-boot.dbox2.h.m4 > $(bootdir)/u-boot-config/u-boot.config
 	$(MAKE) @DIR_uboot@/u-boot.stripped
 	$(hostprefix)/bin/mkflfs 1x -o $(flashprefix)/cramfs.flfs1x @DIR_uboot@/u-boot.stripped
 	$(hostprefix)/bin/mkflfs 2x -o $(flashprefix)/cramfs.flfs2x @DIR_uboot@/u-boot.stripped
