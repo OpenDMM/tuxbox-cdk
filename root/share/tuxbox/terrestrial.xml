@@ -55,6 +55,42 @@ and combinations of this.-->
 		<transponder centre_frequency="506000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="674000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
+	<terrestrial name="Kobenhavn-Hove/Helsingoer(da)" flags="5">
+		<transponder centre_frequency="714000000" bandwidth="0" constellation="1" code_rate_hp="1" code_rate_lp="6" guard_interval="3" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Tommerup/Svendborg(da)" flags="5">
+		<transponder centre_frequency="506000000" bandwidth="0" constellation="1" code_rate_hp="1" code_rate_lp="6" guard_interval="3" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Nibe/Tolne/Frederikshavn/Hadsund/Hobro(da)" flags="5">
+		<transponder centre_frequency="538000000" bandwidth="0" constellation="1" code_rate_hp="1" code_rate_lp="6" guard_interval="3" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Thisted(da)" flags="5">
+		<transponder centre_frequency="554000000" bandwidth="0" constellation="1" code_rate_hp="1" code_rate_lp="6" guard_interval="3" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Aabenraa(da)" flags="5">
+		<transponder centre_frequency="602000000" bandwidth="0" constellation="1" code_rate_hp="1" code_rate_lp="6" guard_interval="3" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Hadsten/Aarhus/Silkeborg(da)" flags="5">
+		<transponder centre_frequency="658000000" bandwidth="0" constellation="1" code_rate_hp="1" code_rate_lp="6" guard_interval="3" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Viborg/Viborg by(da)" flags="5">
+		<transponder centre_frequency="682000000" bandwidth="0" constellation="1" code_rate_hp="1" code_rate_lp="6" guard_interval="3" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Videbaek/Struer/Lemvig(da)" flags="5">
+		<transponder centre_frequency="690000000" bandwidth="0" constellation="1" code_rate_hp="1" code_rate_lp="6" guard_interval="3" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Hedensted/Varde/Vejle/Kolding(da)" flags="5">
+		<transponder centre_frequency="738000000" bandwidth="0" constellation="1" code_rate_hp="1" code_rate_lp="6" guard_interval="3" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Roe/Gudhjem/Hammeren(da)" flags="5">
+		<transponder centre_frequency="778000000" bandwidth="0" constellation="1" code_rate_hp="1" code_rate_lp="6" guard_interval="3" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Jyderup/Kalundborg/Skamlebaek(da)" flags="5">
+		<transponder centre_frequency="826000000" bandwidth="0" constellation="1" code_rate_hp="1" code_rate_lp="6" guard_interval="3" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Vordingborg/Nakskov(da)" flags="5">
+		<transponder centre_frequency="834000000" bandwidth="0" constellation="1" code_rate_hp="1" code_rate_lp="6" guard_interval="3" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
 	<terrestrial name="Berlin/Potsdam(de)" flags="5">
 		<transponder centre_frequency="177500000" bandwidth="1" constellation="1" code_rate_hp="2" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="191500000" bandwidth="1" constellation="1" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
