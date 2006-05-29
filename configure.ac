@@ -404,6 +404,7 @@ TUXBOX_RULES_MAKE(dreamdriver_dm500)
 TUXBOX_RULES_MAKE(nfs_utils)
 TUXBOX_RULES_MAKE(less)
 TUXBOX_RULES_MAKE(diffutils)
+TUXBOX_RULES_MAKE(dropbear)
 
 #
 # additional

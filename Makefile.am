@@ -932,7 +932,7 @@ endif
 #   contrib apps
 #
 
-contrib_apps: .console_data .console_tools .fbset .lsof .ssh .diffutils .less .tcpdump .lirc .xrc
+contrib_apps: .dropbear .console_data .console_tools .fbset .lsof .ssh .diffutils .less .tcpdump .lirc .xrc
 contrib_apps_optional: .dsniff .pump .thttpd
 
 .console_data: .bootstrap @DEPENDS_console_data@
@@ -1227,6 +1227,29 @@ contrib_apps_optional: .dsniff .pump .thttpd
 	@CLEANUP_diffutils@
 	touch $@
 
+.dropbear: .bootstrap .libz @DEPENDS_dropbear@
+	@PREPARE_dropbear@
+	cd @DIR_dropbear@ && \
+		$(BUILDENV) \
+		./configure \
+			--disable-syslog \
+			--disable-lastlog \
+			--disable-shadow \
+			--prefix= \
+			--build=$(build) \
+			--host=$(target) \
+			--disable-utmp \
+			--disable-utmpx \
+			--disable-wtmp \
+			--disable-wtmpx && \
+		cp ../Patches/dropbear-options.h options.h && \
+		$(MAKE) PROGRAMS="dropbear dropbearkey scp" MULTI=1 && \
+		mkdir -p $(targetprefix)/var_init/etc/dropbear && \
+		mkdir -p $(targetprefix)/var_init/.ssh && \
+		@INSTALL_dropbear@ && \
+		$(target)-strip --strip-all $(targetprefix)/sbin/dropbearmulti
+	@CLEANUP_dropbear@
+	touch $@
 
 #######################
 #
@@ -2265,6 +2288,15 @@ $(flashprefix)/.part_less: $(flashprefix)/.flash .less
 flash-diffutils: $(flashprefix)/.part_diffutils
 $(flashprefix)/.part_diffutils: $(flashprefix)/.flash .diffutils
 	$(INSTALL) $(targetprefix)/bin/diff $(flashprefix)/root/bin
+	@touch $@
+
+flash-dropbear: $(flashprefix)/.part_dropbear
+$(flashprefix)/.part_dropbear: $(flashprefix)/.flash .dropbear
+	$(INSTALL) $(targetprefix)/sbin/dropbearmulti $(flashprefix)/root/sbin
+	for i in dropbear scp dropbearkey; do \
+		ln -sf dropbearmulti $(flashprefix)/root/sbin/$$i; done;
+	mkdir -p $(flashprefix)/root/var_init/.ssh
+	ln -sf /var/.ssh $(flashprefix)/root/.ssh
 	@touch $@
 
 ############################# UNTESTED!!! ##################################

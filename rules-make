@@ -96,6 +96,8 @@ dreamdriver_dm500;20050906;dreamdriver_dm500_20050906;dreamdriver_dm500_20050906
 nfs_utils;1.0.6;nfs-utils-1.0.6;nfs-utils-1.0.6.tar.gz:nfs-utils.diff;extract:nfs-utils-1.0.6.tar.gz;patch:nfs-utils.diff
 diffutils;2.8.1;diffutils-2.8.1;diffutils-2.8.1.tar.gz;extract:diffutils-2.8.1.tar.gz;
 less;3.81;less-381;less-381.tar.gz;extract:less-381.tar.gz;
+dropbear;0.48.1;dropbear-0.48.1;dropbear-0.48.1.tar.gz;extract:dropbear-0.48.1.tar.gz
+
 
 #
 # development tools

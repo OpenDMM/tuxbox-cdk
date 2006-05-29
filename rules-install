@@ -90,6 +90,8 @@ samba;make
 etherwake;make:install:INSTALL="$(INSTALL)" DESTDIR=$(targetprefix)
 diffutils;install:-m755:src/diff:TARGET/bin
 less;install:-m755:less:TARGET/bin
+dropbear;install:-m755:dropbearmulti:TARGET/sbin;link:dropbearmulti:TARGET/sbin/dropbear;link:dropbearmulti:TARGET/sbin/dropbearkey;link:dropbearmulti:TARGET/sbin/scp;link:/var/.ssh:TARGET/.ssh;link:/var/etc/dropbear:TARGET/etc/dropbear
+
 
 #
 # development tools
