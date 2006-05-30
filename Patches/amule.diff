@@ -1,11 +1,11 @@
 diff -Naur aMule-2.1.2.orig/amule.install aMule-2.1.2.patched/amule.install
 --- aMule-2.1.2.orig/amule.install	1970-01-01 01:00:00.000000000 +0100
-+++ aMule-2.1.2.patched/amule.install	2006-05-30 14:30:39.963556067 +0100
++++ aMule-2.1.2.patched/amule.install	2006-05-30 20:12:48.128150631 +0100
 @@ -0,0 +1,42 @@
 +#!/bin/sh
 +cd /hdd && gzip -dc /hdd/aMule.tar.gz|tar -x
-+wget http://corpo.free.fr/server.met -O /hdd/aMule/.aMule/server.met.orig
-+wget http://download.overnet2000.de/nodes.dat -O /hdd/aMule/.aMule/nodes.dat.orig
++sleep 30 && wget http://corpo.free.fr/server.met -O /hdd/aMule/.aMule/server.met.orig &
++sleep 30 && wget http://download.overnet2000.de/nodes.dat -O /hdd/aMule/.aMule/nodes.dat.orig &
 +mv /hdd/aMule/amulestart /var/bin/amulestart
 +chmod 755 /var/bin/amulestart
 +cd aMule && HOME=/hdd/aMule ./amuled
