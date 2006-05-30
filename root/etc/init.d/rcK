@@ -16,6 +16,16 @@ if [ $mID -eq 05 ] ; then
 	killall -9 nmbd	
 fi
 
+#Turn off swapspace
+if [ -r /proc/swaps ]; then
+	sync
+	cat /proc/swaps | \
+	while read SWAPSPACE remainder ; do
+		[ "$SWAPSPACE" = "Filename" ] && continue
+		swapoff $SWAPSPACE
+	done
+fi
+
 umount -a > /dev/null 2> /dev/null
 umount /mnt > /dev/null 2> /dev/null
 umount /var > /dev/null 2> /dev/null
