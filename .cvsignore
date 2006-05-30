@@ -53,6 +53,7 @@ linux-2.6.9
 .ppcboot
 .procps
 .reiserfsprogs
+.root
 .samba
 .strace
 .stream
