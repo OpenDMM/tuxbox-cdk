@@ -115,6 +115,8 @@ kaffeh;make:install
 gnuboy;make:install
 scummvm;install:-m755:scummvm:TARGET/bin
 sdldoom;make:install:DESTDIR=TARGET
+wxbase;make:install:DESTDIR=TARGET
+amule;make:install:DESTDIR=TARGET
 
 #
 # dvb apps

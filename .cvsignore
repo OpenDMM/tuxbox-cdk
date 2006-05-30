@@ -3,12 +3,14 @@ Makefile
 Makefile-archive
 linux-2.4.20
 linux-2.6.9
+.amule
 .binutils
 .bootstrap
 .busybox
 .directories
 .dreamfiles
 .driver
+.dropbear
 .dvbsnoop
 .e2fsprogs
 .enigma
@@ -58,4 +60,5 @@ linux-2.6.9
 .tuxbox_tools
 .utillinux
 .watchdog
+.wxbase
 .zapit

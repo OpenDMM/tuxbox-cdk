@@ -1467,6 +1467,62 @@ fun: .gnuboy .scummvm .sdldoom
 	@CLEANUP_sdldoom@
 	touch $@
 
+.wxbase: .bootstrap .libsdl @DEPENDS_wxbase@
+	@PREPARE_wxbase@
+	cd @DIR_wxbase@ && \
+		$(BUILDENV) \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--prefix= \
+			--with-regex=builtin \
+			--with-expat=builtin \
+			--with-sdl=no \
+			--with-sdl-prefix=$(hostprefix)/lib \
+			--with-sdl-exec-prefix=$(hostprefix) \
+			--disable-shared \
+			--disable-gui \
+			--disable-compat24 \
+			--enable-unicode \
+			--enable-largefile \
+			--disable-gtktest \
+			--disable-sdltest && \
+		$(MAKE) && \
+		@INSTALL_wxbase@
+	@CLEANUP_wxbase@
+	touch $@
+
+.amule: .bootstrap .wxbase .libpng @DEPENDS_amule@
+	@PREPARE_amule@
+	cd @DIR_amule@ && \
+		$(BUILDENV) \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--prefix= \
+			--disable-amulecmd \
+			--enable-webserver \
+			--enable-amule-daemon \
+			--with-libpng-prefix=$(targetprefix) \
+			--with-wx-prefix=$(targetprefix) \
+			--disable-debug \
+			--disable-monolithic \
+			--disable-amule-gui \
+			--disable-cas \
+			--disable-wxcas \
+			--disable-alc \
+			--disable-alcc \
+			--without-gdlib-config \
+			--without-x \
+			--disable-nls && \
+		$(MAKE) \
+			HOSTCC=$(CC) &&\
+		@INSTALL_amule@
+		$(INSTALL) @DIR_amule@/amulestart $(targetprefix)/bin/
+		$(INSTALL) @DIR_amule@/amule.install $(targetprefix)/bin/
+	@CLEANUP_amule@
+	touch $@
+
 #######################
 #
 #  DVB apps
@@ -2007,6 +2063,19 @@ endif
 
 	@touch $@
 
+flash-amule: $(flashprefix)/.part_amule
+$(flashprefix)/.part_amule: $(flashprefix)/.flash .amule
+	@rm -rf $(flashprefix)/aMule $(flashprefix)/aMule.tar
+	$(INSTALL) -d $(flashprefix)/aMule
+	@for i in amulecmd amuled amulestart amuleweb ed2k; \
+		do cp -a $(targetprefix)/bin/$$i $(flashprefix)/root/bin; done
+	$(INSTALL) -d $(flashprefix)/aMule/.aMule
+	@cp -a $(targetprefix)/share/amule/webserver $(flashprefix)/aMule/.aMule
+	@cp -a $(targetprefix)/bin/amule.install $(flashprefix)/install
+	chmod 755 $(flashprefix)/install
+	CURRENT_PATH=`pwd` && cd $(flashprefix) && tar -cf install.tar install && rm install && cd $$CURRENT_PATH
+	@touch $@
+
 flash-joe: $(flashprefix)/.part_joe
 $(flashprefix)/.part_joe: $(flashprefix)/.flash .joe
 	$(INSTALL) -d $(flashprefix)/root/etc/joe
@@ -2363,6 +2432,13 @@ $(flashprefix)/.lib: $(flashprefix)/.flash $(shell ls -r -1 $(flashprefix)/.part
 	@if [ -e $(flashprefix)/.part_plugin_links ] ; then \
 		mv $(flashprefix)/root/lib/tuxbox/plugins/links.* $(flashprefix); \
 	fi
+	@if [ -e $(flashprefix)/.part_amule ]; then \
+		for i in amulecmd amuled amulestart amuleweb ed2k; do \
+			mv $(flashprefix)/root/bin/$$i $(flashprefix)/aMule; done && \
+		CURRENT_PATH=`pwd` && cd $(flashprefix) && \
+		tar -cf aMule.tar aMule && gzip -f aMule.tar && \
+		rm -rf aMule && cd $$CURRENT_PATH; \
+	fi
 	@chmod u+rwX,go+rX-w -R $(flashprefix)/root/
 	@touch $@
 
@@ -2425,7 +2501,7 @@ distclean-local:
 	-rm .cabextract
 	-rm .gdb .gdb-remote .insight .ksymoops .ltrace .strace .nano
 	-rm .kaffeh .kaffe
-	-rm .gnuboy .scummvm .sdldoom
+	-rm .gnuboy .scummvm .sdldoom .wxbase .amule
 	-rm .linuxkernel .reiserfsprogs .e2fsprogs .samba .dreamfiles .etherwake .utillinux
 	-rm .dvbsnoop .enigma .lcars .lcdmenu .neutrino .stream .zapit
 	-rm .console_data .console_tools .dsniff .fbset .lirc .pump .ssh .tcpdump .xrc .thttpd

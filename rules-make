@@ -124,6 +124,8 @@ kaffeh;1.0.6;kaffe-1.0.6;kaffe-1.0.6.tar.gz:kaffeh.diff;extract:kaffe-1.0.6.tar.
 gnuboy;1.0.3;gnuboy-1.0.3;gnuboy-1.0.3.tar.gz:gnuboy.diff;extract:gnuboy-1.0.3.tar.gz;patch:gnuboy.diff
 scummvm;0.7.1;scummvm-0.7.1;scummvm-0.7.1.tar.bz2:scummvm.diff;extract:scummvm-0.7.1.tar.bz2;patch:scummvm.diff
 sdldoom;1.10;sdldoom-1.10;sdldoom-1.10.tar.gz;extract:sdldoom-1.10.tar.gz;patch:sdldoom.diff
+wxbase;2.6.3;wxBase-2.6.3;wxBase-2.6.3.tar.bz2:wxWidgets-2.6.3-Patch-2.tar.gz;extract:wxBase-2.6.3.tar.bz2;dirextract:wxWidgets-2.6.3-Patch-2.tar.gz
+amule;2.1.2;aMule-2.1.2;aMule-2.1.2.tar.bz2;extract:aMule-2.1.2.tar.bz2;patch:amule.diff
 
 #
 # dvb apps
