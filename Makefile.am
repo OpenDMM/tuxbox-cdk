@@ -1500,7 +1500,7 @@ fun: .gnuboy .scummvm .sdldoom
 			--build=$(build) \
 			--host=$(target) \
 			--prefix= \
-			--disable-amulecmd \
+			--enable-amulecmd \
 			--enable-webserver \
 			--enable-amule-daemon \
 			--with-libpng-prefix=$(targetprefix) \
@@ -1512,6 +1512,7 @@ fun: .gnuboy .scummvm .sdldoom
 			--disable-wxcas \
 			--disable-alc \
 			--disable-alcc \
+			--enable-embedded-crypto \
 			--without-gdlib-config \
 			--without-x \
 			--disable-nls && \
