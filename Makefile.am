@@ -140,6 +140,9 @@ include make/libtuxbox.mk
 # The Neutrino GUI
 include make/neutrino.mk
 
+# Radiobox GUI (experimental)
+include make/radiobox.mk
+
 # Plugins
 include make/plugins.mk
 
