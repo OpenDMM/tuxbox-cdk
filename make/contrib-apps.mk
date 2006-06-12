@@ -126,55 +126,25 @@ $(DEPDIR)/dropbear: bootstrap libz @DEPENDS_dropbear@
 			--disable-wtmp \
 			--disable-wtmpx && \
 		cp ../Patches/dropbear-options.h options.h && \
-		$(MAKE) PROGRAMS="dropbear dbclient scp" MULTI=1 && \
-		$(MAKE) install PROGRAMS="dropbear dbclient scp" MULTI=1 DESTDIR=$(targetprefix) && \
-		rm -f $(targetprefix)/sbin/dropbear && \
-		rm -f $(targetprefix)/sbin/dbclient && \
-		rm -f $(targetprefix)/bin/scp && \
-		ln -s $(targetprefix)/bin/dropbearmulti $(targetprefix)/sbin/dropbear && \
-		ln -s $(targetprefix)/bin/dropbearmulti $(targetprefix)/sbin/dbclient && \
-		ln -s $(targetprefix)/bin/dropbearmulti $(targetprefix)/bin/scp
-	@CLEANUP_dropbear@
-	touch $@
-
-$(DEPDIR)/dropbearkey: bootstrap libz @DEPENDS_dropbear@
-	@PREPARE_dropbear@
-	cd @DIR_dropbear@ && \
-		$(BUILDENV) \
-		autoconf && \
-		./configure \
-			--prefix= \
-			--disable-syslog \
-			--disable-shadow \
-			--disable-lastlog \
-			--disable-utmp \
-			--disable-utmpx \
-			--disable-wtmp \
-			--disable-wtmpx && \
-		cp ../Patches/dropbear-options.h options.h && \
-		$(MAKE) PROGRAMS="dropbear dropbearkey"
-		@if [ ! -e $(targetprefix)/etc/dropbear ]; then \
-			mkdir $(targetprefix)/etc/dropbear; \
-		fi
-		-rm -rf $(targetprefix)/etc/dropbear/dropbear_rsa_host_key $(targetprefix)/etc/dropbear/dropbear_dss_host_key
-		./@DIR_dropbear@/dropbearkey -t rsa -f $(targetprefix)/etc/dropbear/dropbear_rsa_host_key && \
-		./@DIR_dropbear@/dropbearkey -t dss -f $(targetprefix)/etc/dropbear/dropbear_dss_host_key
+		$(MAKE) PROGRAMS="dropbear dropbearkey scp" MULTI=1 && \
+		mkdir -p $(targetprefix)/var/etc/dropbear && \
+		mkdir -p $(targetprefix)/var/.ssh && \
+		@INSTALL_dropbear@ && \
+		$(target)-strip --strip-all $(targetprefix)/sbin/dropbearmulti
 	@CLEANUP_dropbear@
 	touch $@
 
 if TARGETRULESET_FLASH
-flash-dropbear: $(flashprefix)/root/sbin/dropbear
 
-$(flashprefix)/root/sbin/dropbear: dropbear dropbearkey | $(flashprefix)/root 
-	$(INSTALL) -d $(flashprefix)/root/etc/dropbear
-	$(INSTALL) $(targetprefix)/bin/dropbearmulti $(flashprefix)/root/bin
-	rm -f $(flashprefix)/root/sbin/dropbear
-	rm -f $(flashprefix)/root/sbin/dbclient
-	rm -f $(flashprefix)/root/bin/scp
-	ln -s ../bin/dropbearmulti $(flashprefix)/root/sbin/dropbear
-	ln -s ../bin/dropbearmulti $(flashprefix)/root/sbin/dbclient
-	ln -s ../bin/dropbearmulti $(flashprefix)/root/bin/scp
-	cp -rd $(targetprefix)/etc/dropbear/* $(flashprefix)/root/etc/dropbear
+flash-dropbear: $(flashprefix)/root/sbin/dropbearmulti
+
+$(flashprefix)/root/sbin/dropbearmulti: $(DEPDIR)/dropbear | $(flashprefix)/root
+	$(INSTALL) $(targetprefix)/sbin/dropbearmulti $(flashprefix)/root/sbin
+	for i in dropbear scp dropbearkey; do \
+		ln -sf dropbearmulti $(flashprefix)/root/sbin/$$i; done;
+	mkdir -p $(flashprefix)/root/var/.ssh
+	mkdir -p $(flashprefix)/root/var/etc/dropbear
+	ln -sf /var/.ssh $(flashprefix)/root/.ssh
 	@FLASHROOTDIR_MODIFIED@
 
 endif
