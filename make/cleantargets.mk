@@ -26,6 +26,7 @@ cdk-clean:
 	-$(MAKE) -C $(appsdir)/tuxbox/neutrino clean
 	-$(MAKE) -C $(appsdir)/tuxbox/enigma clean
 	-$(MAKE) -C $(appsdir)/tuxbox/lcars clean
+	-$(MAKE) -C $(appsdir)/tuxbox/radiobox clean
 	-$(MAKE) -C $(appsdir)/tuxbox/plugins clean
 	-$(MAKE) -C $(appsdir)/tuxbox/tools clean
 	-$(MAKE) -C $(appsdir)/tuxbox/lcd clean
@@ -47,6 +48,7 @@ clean-local: mostlyclean-local depsclean
 	-$(MAKE) -C $(appsdir)/tuxbox/neutrino uninstall
 	-$(MAKE) -C $(appsdir)/tuxbox/enigma uninstall
 	-$(MAKE) -C $(appsdir)/tuxbox/lcars uninstall
+	-$(MAKE) -C $(appsdir)/tuxbox/radiobox uninstall
 	-$(MAKE) -C $(appsdir)/tuxbox/plugins uninstall
 	-$(MAKE) -C $(appsdir)/tuxbox/tools uninstall
 	-$(MAKE) -C $(appsdir)/tuxbox/lcd uninstall
@@ -80,6 +82,7 @@ distclean-local:
 	-$(MAKE) -C $(appsdir)/tuxbox/enigma distclean
 	-$(MAKE) -C $(appsdir)/tuxbox/funstuff distclean
 	-$(MAKE) -C $(appsdir)/tuxbox/lcars distclean
+	-$(MAKE) -C $(appsdir)/tuxbox/radiobox distclean
 	-$(MAKE) -C $(appsdir)/tuxbox/lcd distclean
 	-$(MAKE) -C $(appsdir)/tuxbox/libs distclean
 	-$(MAKE) -C $(appsdir)/tuxbox/libtuxbox distclean
