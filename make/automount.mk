@@ -26,6 +26,13 @@ flash-automount: @DEPENDS_automount@ $(flashprefix)/root
 	rm -rf @DIR_automount@
 #	$(INSTALL) $(buildprefix)/root/etc/init.d/start_automount $(flashprefix)/root/etc/init.d
 	ln -sf /proc/mounts $(flashprefix)/root/etc/mtab
+	rm -f $(flashprefix)/root/lib/autofs/lookup_multi.so
+	rm -f $(flashprefix)/root/lib/autofs/lookup_program.so
+	rm -f $(flashprefix)/root/lib/autofs/lookup_userhome.so
+	rm -f $(flashprefix)/root/lib/autofs/lookup_yp.so
+	rm -f $(flashprefix)/root/lib/autofs/mount_afs.so
+	rm -f $(flashprefix)/root/lib/autofs/mount_autofs.so
+	rm -f $(flashprefix)/root/lib/autofs/mount_changer.so
 	@FLASHROOTDIR_MODIFIED@
 endif
 
