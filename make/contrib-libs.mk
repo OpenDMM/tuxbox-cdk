@@ -173,7 +173,7 @@ $(DEPDIR)/libffi: bootstrap @DEPENDS_libffi@
 	@CLEANUP_libffi@
 	touch $@
 
-$(DEPDIR)/libfreetype: bootstrap @DEPENDS_libfreetype@
+$(DEPDIR)/libfreetype: bootstrap @DEPENDS_libfreetype@ Patches/libfreetype.diff
 	@PREPARE_libfreetype@
 	cd @DIR_libfreetype@ && \
 		$(BUILDENV) \
@@ -286,7 +286,7 @@ $(DEPDIR)/libncurses: bootstrap @DEPENDS_libncurses@
 	@CLEANUP_libncurses@
 	touch $@
 
-$(DEPDIR)/libpcap: bootstrap @DEPENDS_libpcap@
+$(DEPDIR)/libpcap: bootstrap @DEPENDS_libpcap@ Patches/libpcap.diff
 	@PREPARE_libpcap@
 	cd @DIR_libpcap@ && \
 		$(BUILDENV) \
@@ -377,7 +377,7 @@ $(DEPDIR)/libsigc: bootstrap @DEPENDS_libsigc@
 	@CLEANUP_libsigc@
 	touch $@
 
-$(DEPDIR)/libvorbisidec: bootstrap @DEPENDS_libvorbisidec@
+$(DEPDIR)/libvorbisidec: bootstrap @DEPENDS_libvorbisidec@ Patches/tremor.diff
 	@PREPARE_libvorbisidec@
 	cd @DIR_libvorbisidec@ && \
 		$(BUILDENV) \

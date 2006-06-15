@@ -53,7 +53,7 @@ $(DEPDIR)/insight: @DEPENDS_insight@
 	@CLEANUP_insight@
 	touch $@
 
-$(DEPDIR)/ltrace: bootstrap @DEPENDS_ltrace@
+$(DEPDIR)/ltrace: bootstrap @DEPENDS_ltrace@ Patches/ltrace.diff
 	@PREPARE_ltrace@
 	cd @DIR_ltrace@ && \
 		$(BUILDENV) \

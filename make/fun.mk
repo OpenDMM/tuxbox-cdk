@@ -31,7 +31,7 @@ $(DEPDIR)/scummvm: bootstrap libreadline libsdl libmad @DEPENDS_scummvm@
 	@CLEANUP_scummvm@
 	touch $@
 
-$(DEPDIR)/sdldoom: bootstrap libsdl @DEPENDS_sdldoom@
+$(DEPDIR)/sdldoom: bootstrap libsdl @DEPENDS_sdldoom@ Patches/sdldoom.diff
 	@PREPARE_sdldoom@
 	cd @DIR_sdldoom@ && \
 		$(BUILDENV) \

@@ -1,4 +1,4 @@
-$(DEPDIR)/fuse: bootstrap @DEPENDS_fuse@
+$(DEPDIR)/fuse: bootstrap @DEPENDS_fuse@ Patches/fuse.diff
 	@PREPARE_fuse@
 	cd @DIR_fuse@ && \
 	$(BUILDENV) \
@@ -30,7 +30,7 @@ if TARGETRULESET_FLASH
 
 flash-upnp: flash-fuse flash-djmount
 
-flash-fuse: bootstrap @DEPENDS_fuse@
+flash-fuse: bootstrap @DEPENDS_fuse@ Patches/fuse.diff
 	@PREPARE_fuse@
 	cd @DIR_fuse@ && \
 	$(BUILDENV) \

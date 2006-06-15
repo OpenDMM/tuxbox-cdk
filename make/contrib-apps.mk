@@ -63,7 +63,7 @@ $(DEPDIR)/fbset: bootstrap @DEPENDS_fbset@
 	@CLEANUP_fbset@
 	touch $@
 
-$(DEPDIR)/lirc: bootstrap @DEPENDS_lirc@
+$(DEPDIR)/lirc: bootstrap @DEPENDS_lirc@ Patches/lirc.diff
 	@PREPARE_lirc@
 	cd @DIR_lirc@ && \
 		$(BUILDENV) \
@@ -109,7 +109,7 @@ $(DEPDIR)/lsof: bootstrap @DEPENDS_lsof@
 	@CLEANUP_lsof@
 	touch $@
 
-$(DEPDIR)/dropbear: bootstrap libz @DEPENDS_dropbear@
+$(DEPDIR)/dropbear: bootstrap libz @DEPENDS_dropbear@ Patches/dropbear-options.h
 	@PREPARE_dropbear@
 	cd @DIR_dropbear@ && \
 		$(BUILDENV) \
@@ -285,7 +285,7 @@ $(flashprefix)/root/bin/lufsd: bootstrap @DEPENDS_lufs@ | $(flashprefix)/root
 	@TUXBOX_CUSTOMIZE@
 endif
 
-$(DEPDIR)/kermit: bootstrap @DEPENDS_kermit@ libcrypto
+$(DEPDIR)/kermit: bootstrap @DEPENDS_kermit@ libcrypto Patches/kermit.diff
 	@echo "Kermit is licensed differently from other software (more restrictively),"
 	@echo "see http://www.columbia.edu/kermit/licensing.html"
 	@PREPARE_kermit@

@@ -4,7 +4,7 @@
 
 if KERNEL26
 else
-$(DEPDIR)/automount: bootstrap @DEPENDS_automount@
+$(DEPDIR)/automount: bootstrap @DEPENDS_automount@ Patches/autofs.diff
 	@PREPARE_automount@
 	cd @DIR_automount@  && \
 		$(BUILDENV) STRIP=$(target)-strip \
@@ -17,7 +17,7 @@ $(DEPDIR)/automount: bootstrap @DEPENDS_automount@
 
 if TARGETRULESET_FLASH
 
-flash-automount: @DEPENDS_automount@ $(flashprefix)/root
+flash-automount: @DEPENDS_automount@ Patches/autofs.diff | $(flashprefix)/root
 	@PREPARE_automount@
 	cd @DIR_automount@  && \
 		$(BUILDENV) STRIP=$(target)-strip \

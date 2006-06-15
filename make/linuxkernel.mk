@@ -41,7 +41,7 @@ endif
 
 kernel-cdk: $(bootprefix)/kernel-cdk
 
-$(bootprefix)/kernel-cdk: linuxdir $(hostprefix)/bin/mkimage
+$(bootprefix)/kernel-cdk: linuxdir $(hostprefix)/bin/mkimage Patches/linux-$(KERNELVERSION).config Patches/dbox2-flash.c.m4
 	cp Patches/linux-$(KERNELVERSION).config $(KERNEL_DIR)/.config
 	m4 Patches/dbox2-flash.c.m4 > linux/drivers/mtd/maps/dbox2-flash.c
 	$(MAKE) $(KERNEL_BUILD_FILENAME)
@@ -92,4 +92,4 @@ $(DEPDIR)/directfb_gtx: $(driverdir)/directfb/Makefile
 	$(MAKE) -C $(driverdir)/directfb all install DESTDIR=$(targetprefix)
 	touch $@
 
-.PHONY: driver-clean 
+.PHONY: driver-clean
