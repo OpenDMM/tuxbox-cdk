@@ -59,6 +59,7 @@ cdk/make/partition-images.mk
 cdk/make/phony.mk
 cdk/make/plugins.mk
 cdk/make/precious.mk
+cdk/make/radiobox.mk
 cdk/make/reduce-libs.mk
 cdk/make/rootutils.mk
 cdk/make/serversupport.mk
