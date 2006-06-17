@@ -58,7 +58,7 @@ flash-tools_misc: $(appsdir)/tuxbox/tools/config.status
 	@FLASHROOTDIR_MODIFIED@
 
 # This target install every program in $(appsdir)/tuxbox/tools/misc
-flash-tools_misc_all: $(appsdir)/tuxbox/tools/config.status
+flash-tools_misc-all: $(appsdir)/tuxbox/tools/config.status
 	$(MAKE) -C $(appsdir)/tuxbox/tools/misc install prefix=$(flashprefix)/root
 	@FLASHROOTDIR_MODIFIED@
 endif 
