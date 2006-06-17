@@ -50,7 +50,15 @@ tools_misc: $(appsdir)/tuxbox/tools/config.status
 	$(MAKE) -C $(appsdir)/tuxbox/tools/misc install
 
 if TARGETRULESET_FLASH
+
+# The directory $(appsdir)/tuxbox/tools/misc contains several tools;
+# we should probaly not install all in an 8MiB image.
 flash-tools_misc: $(appsdir)/tuxbox/tools/config.status
+	$(MAKE) -C $(appsdir)/tuxbox/tools/misc install prefix=$(flashprefix)/root  bin_PROGRAMS="switch saa rcsim"
+	@FLASHROOTDIR_MODIFIED@
+
+# This target install every program in $(appsdir)/tuxbox/tools/misc
+flash-tools_misc_all: $(appsdir)/tuxbox/tools/config.status
 	$(MAKE) -C $(appsdir)/tuxbox/tools/misc install prefix=$(flashprefix)/root
 	@FLASHROOTDIR_MODIFIED@
 endif 
