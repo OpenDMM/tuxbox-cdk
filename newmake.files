@@ -12,6 +12,8 @@ cdk/root/etc/init.d/initialize
 cdk/root/share/udhcpc/Makefile.am
 cdk/root/etc/Makefile.am
 cdk/Patches/linux-2.4.32-dbox2.config-flash
+apps/acinclude.m4
+apps/tuxbox/plugins/acinclude.m4
 apps/tuxbox/plugins/configure.ac
 apps/tuxbox/tools/configure.ac
 apps/tuxbox/tools/misc/Makefile.am
