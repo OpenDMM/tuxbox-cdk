@@ -26,6 +26,9 @@ camd2: $(appsdir)/tuxbox/tools/config.status
 satfind: $(appsdir)/tuxbox/tools/config.status
 	$(MAKE) -C $(appsdir)/tuxbox/tools/satfind install
 
+cdkVcInfo: $(appsdir)/tuxbox/tools/config.status
+	$(MAKE) -C $(appsdir)/tuxbox/tools/cdkVcInfo install
+
 if TARGETRULESET_FLASH
 
 flash-tuxinfo: $(appsdir)/tuxbox/tools/config.status
@@ -38,6 +41,10 @@ flash-camd2: $(appsdir)/tuxbox/tools/config.status
 
 flash-satfind: $(appsdir)/tuxbox/tools/config.status
 	$(MAKE) -C $(appsdir)/tuxbox/tools/satfind install prefix=$(flashprefix)/root
+	@FLASHROOTDIR_MODIFIED@
+
+flash-cdkVcInfo: $(appsdir)/tuxbox/tools/config.status
+	$(MAKE) -C $(appsdir)/tuxbox/tools/cdkVcInfo install prefix=$(flashprefix)/root
 	@FLASHROOTDIR_MODIFIED@
 
 endif
