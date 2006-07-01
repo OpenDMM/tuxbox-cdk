@@ -20,7 +20,7 @@ $(flashprefix)/root-% $(flashprefix)/root
 	$(target)-strip --remove-section=.comment --remove-section=.note $@/bin/camd2
 	@TUXBOX_CUSTOMIZE@
 
-$(flashprefix)/root-neutrino-jffs2 $(flashprefix)/root-enigma-jffs2: \
+$(flashprefix)/root-neutrino-jffs2 $(flashprefix)/root-enigma-jffs2 $(flashprefix)/root-lcars-jffs2: \
 $(flashprefix)/root-%-jffs2: \
 $(flashprefix)/root-% $(flashprefix)/root $(flashprefix)/root-jffs2
 	rm -rf $@
@@ -73,6 +73,17 @@ $(flashprefix)/root-% $(flashprefix)/root $(flashprefix)/root-enigma
 	ln -sf /var/etc/issue.net $@/etc/issue.net
 	ln -sf /var/etc/localtime $@/etc/localtime
 	ln -sf /var/bin/camd2 $@/bin/camd2
+	mv $@/etc/init.d/rcS.insmod $@/etc/init.d/rcS
+	@TUXBOX_CUSTOMIZE@
+
+$(flashprefix)/root-null-jffs2: $(flashprefix)/root $(flashprefix)/root-jffs2
+	rm -rf $@
+	cp -rd $(flashprefix)/root $@
+	cp -rd $(flashprefix)/root-jffs2/* $@
+	rm -rf $@/lib/tuxbox/plugins
+	$(MAKE) $@/lib/ld.so.1 mklibs_librarypath=$(flashprefix)/root/lib:$(flashprefix)/root-jffs2/lib:$(targetprefix)/lib
+	$(MAKE) flash-bootlogos flashbootlogosdir=$@/var/tuxbox/boot
+	$(MAKE) -C root install-flash flashprefix_ro=$@ flashprefix_rw=$@
 	mv $@/etc/init.d/rcS.insmod $@/etc/init.d/rcS
 	@TUXBOX_CUSTOMIZE@
 

@@ -22,7 +22,7 @@ $(flashprefix)/root-%.squashfs: $(flashprefix)/root-%-squashfs $(MKSQUASHFS)
 	chmod 644 $@
 	@TUXBOX_CUSTOMIZE@
 
-$(flashprefix)/root-neutrino.jffs2 $(flashprefix)/root-enigma.jffs2: \
+$(flashprefix)/root-neutrino.jffs2 $(flashprefix)/root-enigma.jffs2 $(flashprefix)/root-lcars.jffs2 $(flashprefix)/root-null.jffs2: \
 $(flashprefix)/root-%.jffs2: $(flashprefix)/root-%-jffs2 $(MKJFFS2)
 	@if [ "$(MKJFFS2)" = "/bin/false" ] ; then \
 		echo "FATAL ERROR: No mkjffs2 or mkfs.jffs2 available"; \

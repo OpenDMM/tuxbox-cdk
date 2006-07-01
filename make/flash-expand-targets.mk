@@ -54,6 +54,9 @@ flash-all-jffs2-1x: flash-enigma-jffs2-1x flash-neutrino-jffs2-1x
 
 flash-all-jffs2-2x: flash-enigma-jffs2-2x flash-neutrino-jffs2-2x 
 
+flash-null-jffs2-all: flash-null-jffs2-2x flash-null-jffs2-1x 
+
+flash-lcars-jffs2-all: flash-lcars-jffs2-2x flash-lcars-jffs2-1x 
 ################################################################
 
 flash-neutrino-cramfs-1x: $(flashprefix)/neutrino-cramfs.img1x
@@ -79,3 +82,11 @@ flash-enigma-squashfs-2x: $(flashprefix)/enigma-squashfs.img2x
 flash-enigma-jffs2-1x: $(flashprefix)/enigma-jffs2.img1x
 
 flash-enigma-jffs2-2x: $(flashprefix)/enigma-jffs2.img2x
+
+flash-null-jffs2-1x: $(flashprefix)/null-jffs2.img1x
+
+flash-null-jffs2-2x: $(flashprefix)/null-jffs2.img2x
+
+flash-lcars-jffs2-1x: $(flashprefix)/lcars-jffs2.img1x
+
+flash-lcars-jffs2-2x: $(flashprefix)/lcars-jffs2.img2x

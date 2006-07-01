@@ -55,6 +55,7 @@ $(flashprefix)/neutrino-jffs2.img%: \
 	@TUXBOX_CHECKIMAGE@
 	@TUXBOX_CUSTOMIZE@
 
+################################################################
 $(flashprefix)/enigma-cramfs.img1x $(flashprefix)/enigma-cramfs.img2x: \
 $(flashprefix)/enigma-cramfs.img%: \
 		$(flashprefix)/cramfs.flfs% \
@@ -87,6 +88,26 @@ $(flashprefix)/enigma-jffs2.img1x $(flashprefix)/enigma-jffs2.img2x: \
 $(flashprefix)/enigma-jffs2.img%: \
 		$(flashprefix)/jffs2.flfs% \
 		$(flashprefix)/root-enigma.jffs2 \
+		$(hostprefix)/bin/checkImage
+	cat $< $(word 2,$+) > $@
+	@TUXBOX_CHECKIMAGE@
+	@TUXBOX_CUSTOMIZE@
+
+################################################################
+$(flashprefix)/lcars-jffs2.img1x $(flashprefix)/lcars-jffs2.img2x: \
+$(flashprefix)/lcars-jffs2.img%: \
+		$(flashprefix)/jffs2.flfs% \
+		$(flashprefix)/root-lcars.jffs2 \
+		$(hostprefix)/bin/checkImage
+	cat $< $(word 2,$+) > $@
+	@TUXBOX_CHECKIMAGE@
+	@TUXBOX_CUSTOMIZE@
+
+################################################################
+$(flashprefix)/null-jffs2.img1x $(flashprefix)/null-jffs2.img2x: \
+$(flashprefix)/null-jffs2.img%: \
+		$(flashprefix)/jffs2.flfs% \
+		$(flashprefix)/root-null.jffs2 \
 		$(hostprefix)/bin/checkImage
 	cat $< $(word 2,$+) > $@
 	@TUXBOX_CHECKIMAGE@

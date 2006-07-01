@@ -3,7 +3,9 @@ $(flashprefix)/root-neutrino-squashfs/lib/ld.so.1 \
 $(flashprefix)/root-neutrino-jffs2/lib/ld.so.1 \
 $(flashprefix)/root-enigma-cramfs/lib/ld.so.1 \
 $(flashprefix)/root-enigma-squashfs/lib/ld.so.1 \
-$(flashprefix)/root-enigma-jffs2/lib/ld.so.1: \
+$(flashprefix)/root-enigma-jffs2/lib/ld.so.1 \
+$(flashprefix)/root-lcars-jffs2/lib/ld.so.1 \
+$(flashprefix)/root-null-jffs2/lib/ld.so.1: \
 %/lib/ld.so.1: %
 	find $</lib -maxdepth 1 -type f -o -type l | xargs rm -f
 	cp -d $(targetprefix)/lib/libnss_dns-?.*.so $</lib
