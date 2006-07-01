@@ -159,6 +159,7 @@ runprogifexists({/sbin/sshd},{/etc/init.d/start_sshd},{&})
 runifexists({/sbin/dropbear})
 runprogifexists({/sbin/automount},{/etc/init.d/start_automount})
 runprogifexists({/bin/djmount},{/etc/init.d/start_upnp})
+runifexists({/bin/cdkVcInfo})
 
 ifmarkerfile({tuxmaild},{tuxmaild})
 ifmarkerfile({tuxcald},{tuxcald})
