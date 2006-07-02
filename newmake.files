@@ -15,9 +15,13 @@ cdk/Patches/linux-2.4.32-dbox2.config-flash
 apps/acinclude.m4
 apps/tuxbox/plugins/acinclude.m4
 apps/tuxbox/plugins/configure.ac
+apps/tuxbox/plugins/Makefile.am
 apps/tuxbox/tools/configure.ac
 apps/tuxbox/tools/misc/Makefile.am
 apps/tuxbox/plugins/fx2/tetris/Makefile.am
+apps/tuxbox/plugins/pluginx/Makefile.am
+apps/tuxbox/plugins/pluginx/pluginx.c
+apps/tuxbox/plugins/pluginx/.cvsignore
 cdk/make/automount.mk
 cdk/make/bluetooth.mk
 cdk/make/bootstrap.mk

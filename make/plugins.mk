@@ -27,6 +27,15 @@ flash-tuxmail: libfreetype $(appsdir)/tuxbox/plugins/config.status | $(flashpref
 	@FLASHROOTDIR_MODIFIED@
 endif
 
+pluginx: $(appsdir)/tuxbox/plugins/config.status
+	$(MAKE) -C $(appsdir)/tuxbox/plugins/pluginx all install
+
+if TARGETRULESET_FLASH
+flash-pluginx: $(appsdir)/tuxbox/plugins/config.status | $(flashprefix)/root
+	$(MAKE) -C $(appsdir)/tuxbox/plugins/pluginx all install prefix=$(flashprefix)/root
+	@FLASHROOTDIR_MODIFIED@
+endif
+
 tuxtxt: $(appsdir)/tuxbox/plugins/config.status $(targetprefix)/include/tuxbox/plugin.h
 	$(MAKE) -C $(appsdir)/tuxbox/plugins/tuxtxt all install
 
