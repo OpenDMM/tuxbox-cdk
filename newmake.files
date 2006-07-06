@@ -5,6 +5,7 @@ cdk/newmake.files
 cdk/doc/BUILD.changes
 cdk/Patches/busybox.config.m4
 cdk/Patches/dbox2-flash.c.m4
+cdk/Patches/libpng.diff
 cdk/root/Makefile.inc
 cdk/root/etc/init.d/Makefile.am
 cdk/root/etc/init.d/rcS.m4
