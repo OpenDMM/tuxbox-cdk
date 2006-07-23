@@ -288,11 +288,8 @@ if test "$YACC" != "bison -y"; then
 fi
 
 if test "$enable_flashrules" = "yes"; then
-	AC_PATH_PROG(MKLIBS,mklibs,no)
-	if test "$MKLIBS" = "no"; then
-		AC_MSG_WARN(using tuxbox mklibs)
-		MKLIBS="$hostappsdir/mklibs/mklibs.py"
-	fi
+	MKLIBS="$hostappsdir/mklibs/mklibs.py"
+
 	AC_PATH_PROG(MKCRAMFS,mkcramfs,no)
 	if test "$MKCRAMFS" = "no"; then
 		AC_MSG_WARN(using tuxbox cramfs)
