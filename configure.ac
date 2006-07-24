@@ -289,6 +289,7 @@ fi
 
 if test "$enable_flashrules" = "yes"; then
 	MKLIBS="$hostappsdir/mklibs/mklibs.py"
+	AC_SUBST(MKLIBS)
 
 	AC_PATH_PROG(MKCRAMFS,mkcramfs,no)
 	if test "$MKCRAMFS" = "no"; then
