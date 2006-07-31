@@ -2,7 +2,7 @@
 #
 # Pattern: $partition-$gui[-$filesystem]
 
-$(flashprefix)/var-neutrino $(flashprefix)/var-enigma: \
+$(flashprefix)/var-neutrino $(flashprefix)/var-enigma $(flashprefix)/var-radiobox: \
 $(flashprefix)/var-%: \
 $(flashprefix)/root-% $(flashprefix)/root
 	rm -rf $@
@@ -20,7 +20,9 @@ $(flashprefix)/root-% $(flashprefix)/root
 	$(target)-strip --remove-section=.comment --remove-section=.note $@/bin/camd2
 	@TUXBOX_CUSTOMIZE@
 
-$(flashprefix)/root-neutrino-jffs2 $(flashprefix)/root-enigma-jffs2 $(flashprefix)/root-lcars-jffs2: \
+$(flashprefix)/root-neutrino-jffs2 $(flashprefix)/root-enigma-jffs2 \
+$(flashprefix)/root-lcars-jffs2 \
+$(flashprefix)/root-radiobox-jffs2: \
 $(flashprefix)/root-%-jffs2: \
 $(flashprefix)/root-% $(flashprefix)/root $(flashprefix)/root-jffs2
 	rm -rf $@
@@ -53,6 +55,37 @@ $(flashprefix)/root-% $(flashprefix)/root $(flashprefix)/root-neutrino
 	ln -sf /var/bin/camd2 $@/bin/camd2
 	mv $@/etc/init.d/rcS.insmod $@/etc/init.d/rcS
 	@TUXBOX_CUSTOMIZE@
+
+$(flashprefix)/root-radiobox-cramfs $(flashprefix)/root-radiobox-squashfs: \
+$(flashprefix)/root-radiobox-%: \
+$(flashprefix)/root-% $(flashprefix)/root $(flashprefix)/root-radiobox
+	rm -rf $@
+	cp -rd $(flashprefix)/root $@
+	cp -rd $</* $@
+	cp -rd $(flashprefix)/root-radiobox/* $@
+
+	cp -rd $(flashprefix)/root/lib/tuxbox/plugins/libfx2.so $@/lib/tuxbox/plugins
+
+	$(MAKE) $@/lib/ld.so.1 mklibs_librarypath=$(flashprefix)/root-radiobox/lib:$(flashprefix)/root-radiobox/lib/tuxbox/plugins:$(flashprefix)/root/lib:$(flashprefix)/root/lib/tuxbox/plugins:$</lib:$(targetprefix)/lib:$(targetprefix)/lib/tuxbox/plugins
+
+	cp $(targetprefix)/lib/libstdc++.so.6.0.3 $@/lib/
+	ln -sf libstdc++.so.6.0.3 $@/lib/libstdc++.so.6
+	ln -sf libstdc++.so.6.0.3 $@/lib/libstdc++.so
+	ls -l $@/lib/
+	
+	$(MAKE) -C root install-flash flashprefix_ro=$@ flashprefix_rw=$(flashprefix)/.junk
+	rm -rf $(flashprefix)/.junk
+	rm -fr $@/var/*
+	echo "/dev/mtdblock/3     /var     jffs2     defaults     0 0" >> $@/etc/fstab
+	if [ -d $@/etc/ssh ] ; then \
+		rm -fr $@/etc/ssh ; \
+		ln -sf /var/etc/ssh $@/etc/ssh ; \
+	fi
+	ln -sf /var/etc/issue.net $@/etc/issue.net
+	ln -sf /var/bin/camd2 $@/bin/camd2
+	mv $@/etc/init.d/rcS.insmod $@/etc/init.d/rcS
+	@TUXBOX_CUSTOMIZE@
+
 
 $(flashprefix)/root-enigma-cramfs $(flashprefix)/root-enigma-squashfs: \
 $(flashprefix)/root-enigma-%: \

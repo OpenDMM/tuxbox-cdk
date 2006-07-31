@@ -1,6 +1,9 @@
 $(flashprefix)/root-neutrino-cramfs/lib/ld.so.1 \
 $(flashprefix)/root-neutrino-squashfs/lib/ld.so.1 \
 $(flashprefix)/root-neutrino-jffs2/lib/ld.so.1 \
+$(flashprefix)/root-radiobox-cramfs/lib/ld.so.1 \
+$(flashprefix)/root-radiobox-squashfs/lib/ld.so.1 \
+$(flashprefix)/root-radiobox-jffs2/lib/ld.so.1 \
 $(flashprefix)/root-enigma-cramfs/lib/ld.so.1 \
 $(flashprefix)/root-enigma-squashfs/lib/ld.so.1 \
 $(flashprefix)/root-enigma-jffs2/lib/ld.so.1 \

@@ -129,6 +129,7 @@ flash-semiclean:
 	$(flashprefix)/*.list
 	rm -rf $(flashprefix)/root
 	rm -rf $(flashprefix)/root-neutrino*
+	rm -rf $(flashprefix)/root-radiobox*
 	rm -rf $(flashprefix)/root-enigma*
 	rm -rf $(flashprefix)/var*
 

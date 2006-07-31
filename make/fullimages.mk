@@ -55,6 +55,45 @@ $(flashprefix)/neutrino-jffs2.img%: \
 	@TUXBOX_CHECKIMAGE@
 	@TUXBOX_CUSTOMIZE@
 
+######################
+
+$(flashprefix)/radiobox-cramfs.img1x $(flashprefix)/radiobox-cramfs.img2x: \
+$(flashprefix)/radiobox-cramfs.img%: \
+		$(flashprefix)/cramfs.flfs% \
+		$(flashprefix)/root-radiobox.cramfs \
+		$(flashprefix)/var-radiobox.jffs2 \
+		$(hostprefix)/bin/checkImage
+	$(hostappsdir)/flash/flashmanage.pl -i $@ -o build \
+		--rootsize=$(ROOT_PARTITION_SIZE) \
+		--part ppcboot=$< \
+		--part root=$(word 2,$+) \
+		--part var=$(word 3,$+)
+	@TUXBOX_CHECKIMAGE@
+	@TUXBOX_CUSTOMIZE@
+
+$(flashprefix)/radiobox-squashfs.img1x $(flashprefix)/radiobox-squashfs.img2x:\
+$(flashprefix)/radiobox-squashfs.img%: \
+		$(flashprefix)/squashfs.flfs% \
+		$(flashprefix)/root-radiobox.squashfs \
+		$(flashprefix)/var-radiobox.jffs2 \
+		$(hostprefix)/bin/checkImage
+	$(hostappsdir)/flash/flashmanage.pl -i $@ -o build \
+		--rootsize=$(ROOT_PARTITION_SIZE) \
+		--part ppcboot=$< \
+		--part root=$(word 2,$+) \
+		--part var=$(word 3,$+)
+	@TUXBOX_CHECKIMAGE@
+	@TUXBOX_CUSTOMIZE@
+
+$(flashprefix)/radiobox-jffs2.img1x $(flashprefix)/radiobox-jffs2.img2x: \
+$(flashprefix)/radiobox-jffs2.img%: \
+		$(flashprefix)/jffs2.flfs% \
+		$(flashprefix)/root-radiobox.jffs2 \
+		$(hostprefix)/bin/checkImage
+	cat $< $(word 2,$+) > $@
+	@TUXBOX_CHECKIMAGE@
+	@TUXBOX_CUSTOMIZE@
+
 ################################################################
 $(flashprefix)/enigma-cramfs.img1x $(flashprefix)/enigma-cramfs.img2x: \
 $(flashprefix)/enigma-cramfs.img%: \
