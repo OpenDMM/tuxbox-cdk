@@ -11,7 +11,7 @@ flash-radiobox: $(flashprefix)/root-radiobox
 
 $(flashprefix)/root-radiobox: $(appsdir)/tuxbox/radiobox/config.status
 	$(MAKE) -C $(appsdir)/tuxbox/radiobox all install prefix=$@
-	mkdir -p $@/var/tuxbox/config/radiobox
+	cp -r $(appsdir)/tuxbox/radiobox/root/* $@
 	$(MAKE) radiobox-additional-fonts targetprefix=$@
 	touch $@
 	@TUXBOX_CUSTOMIZE@

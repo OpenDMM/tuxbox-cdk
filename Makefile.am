@@ -38,6 +38,9 @@ yadd-enigma: yadd-none enigma-plugins fx2-plugins enigma
 yadd-lcars: yadd-none lcars
 	@TUXBOX_YADD_CUSTOMIZE@
 
+yadd-radiobox: yadd-none radiobox
+	@TUXBOX_YADD_CUSTOMIZE@
+
 yadd-all: yadd-none plugins neutrino enigma lcars
 	@TUXBOX_YADD_CUSTOMIZE@
 
