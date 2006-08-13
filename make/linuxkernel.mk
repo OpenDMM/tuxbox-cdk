@@ -39,10 +39,17 @@ endif
 #	$(INSTALL) -m644 $(KERNEL_DIR)/System.map $(targetprefix)/boot/System.map-$(KERNELVERSION)
 #	touch $@
 
+if ENABLE_IDE
+IDE_SED_CONF=$(foreach param,CONFIG_IDE CONFIG_BLK_DEV_IDE CONFIG_BLK_DEV_IDEDISK CONFIG_EXT2_FS CONFIG_EXT3_FS CONFIG_JBD,-e s"/^.*$(param)[= ].*/$(param)=m/")
+else
+IDE_SED_CONF=-e ""
+endif
+
 kernel-cdk: $(bootprefix)/kernel-cdk
 
 $(bootprefix)/kernel-cdk: linuxdir $(hostprefix)/bin/mkimage Patches/linux-$(KERNELVERSION).config Patches/dbox2-flash.c.m4
-	cp Patches/linux-$(KERNELVERSION).config $(KERNEL_DIR)/.config
+	sed $(IDE_SED_CONF) Patches/linux-$(KERNELVERSION).config \
+		> $(KERNEL_DIR)/.config
 	m4 Patches/dbox2-flash.c.m4 > linux/drivers/mtd/maps/dbox2-flash.c
 	$(MAKE) $(KERNEL_BUILD_FILENAME)
 if KERNEL26

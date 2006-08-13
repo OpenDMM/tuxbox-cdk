@@ -38,6 +38,12 @@ $(flashprefix)/root: bootstrap $(wildcard root-local.sh) | $(flashprefix)
 	$(MAKE) flash-ucodes
 	$(MAKE) flash-lcdip
 	$(MAKE) flash-automount
+if ENABLE_LIRC
+	$(MAKE) flash-lircd
+endif
+if ENABLE_CDKVCINFO
+	$(MAKE) flash-cdkVcInfo
+endif
 	$(MAKE) flash-version
 	@FLASHROOTDIR_MODIFIED@
 	@TUXBOX_CUSTOMIZE@

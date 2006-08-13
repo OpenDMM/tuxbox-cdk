@@ -78,6 +78,23 @@ if test -z "$TARGET_CFLAGS" -o -z "$TARGET_CXXFLAGS"; then
 	TARGET_CXXFLAGS="$TARGET_CFLAGS"
 fi
 
+AC_ARG_ENABLE(lirc,
+	AS_HELP_STRING(--enable-lirc,	include lirc in yadds and images),
+	[LIRC=lirc], [enable_lirc=no])
+AM_CONDITIONAL(ENABLE_LIRC,test "$enable_lirc" = "yes")
+AC_SUBST(LIRC)
+
+AC_ARG_ENABLE(cdkVcInfo,
+	AS_HELP_STRING(--enable-cdkVcInfo,	include cdkVcInfo in yadds and images),
+	[CDKVCINFO=cdkVcInfo],[enable_cdkVcInfo=no])
+AM_CONDITIONAL(ENABLE_CDKVCINFO,test "$enable_cdkVcInfo" = "yes")
+AC_SUBST(CDKVCINFO)
+
+AC_ARG_ENABLE(ide,
+	AS_HELP_STRING(--enable-ide,	include ide and ext3 drivers in yadds and images),
+	[],[enable_ide=no])
+AM_CONDITIONAL(ENABLE_IDE,test "$enable_ide" = "yes")
+
 AC_ARG_WITH(rootpartitionsize,
 	[  --with-rootpartitionsize=SIZE	size of the root partition],
 	[ROOT_PARTITION_SIZE="$withval"],[ROOT_PARTITION_SIZE="0x660000"])
