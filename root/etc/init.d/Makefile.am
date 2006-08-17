@@ -1,11 +1,11 @@
 EXTRA_DIST = \
-	rcS.m4 start start_enigma start_lcars start_neutrino start_sshd halt
+	rcS.m4 start start_enigma start_lcars start_neutrino start_sshd halt start_lirc
 
 FILES_EXEC = \
-	rcS start start_enigma start_lcars start_neutrino start_sshd halt start_automount start_upnp initialize
+	rcS start start_enigma start_lcars start_neutrino start_sshd start_lirc halt start_automount start_upnp initialize
 
 FILES_FLASH_RO_EXEC = \
-	rcS rcS.insmod start start_sshd halt initialize
+	rcS rcS.insmod start start_sshd start_lirc halt initialize
 
 FILES_FLASH_RW_EXEC = \
 	start_enigma start_lcars start_neutrino start start_automount start_upnp

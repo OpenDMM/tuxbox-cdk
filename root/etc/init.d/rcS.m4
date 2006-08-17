@@ -156,6 +156,7 @@ runprogifexists({/var/tuxbox/config/lirc/lircd.conf},{lircd},
 runifexists({/bin/loadkeys},{/share/keymaps/i386/qwertz/de-latin1-nodeadkeys.kmap.gz})
 runifexists({/sbin/inetd})
 runprogifexists({/sbin/sshd},{/etc/init.d/start_sshd},{&})
+runprogifexists({/sbin/lircd},{/etc/init.d/start_lirc},{&})
 runifexists({/sbin/dropbear})
 runprogifexists({/sbin/automount},{/etc/init.d/start_automount})
 runprogifexists({/bin/djmount},{/etc/init.d/start_upnp})
