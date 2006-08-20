@@ -319,13 +319,22 @@ option(`CONFIG_VLOCK', `n', `n')
 #
 # Linux Ext2 FS Progs
 #
-option(`CONFIG_CHATTR', `n', `n')
+ifdef(`ide',
+`option(`CONFIG_CHATTR', `y', `y')
+option(`CONFIG_E2FSCK', `y', `y')
+option(`CONFIG_FSCK', `y', `y')
+option(`CONFIG_LSATTR', `y', `y')
+option(`CONFIG_MKE2FS', `y', `y')
+option(`CONFIG_TUNE2FS', `y', `y')
+option(`CONFIG_E2LABEL', `y', `y')',
+`option(`CONFIG_CHATTR', `n', `n')
 option(`CONFIG_E2FSCK', `n', `n')
 option(`CONFIG_FSCK', `n', `n')
 option(`CONFIG_LSATTR', `n', `n')
 option(`CONFIG_MKE2FS', `n', `n')
 option(`CONFIG_TUNE2FS', `n', `n')
-option(`CONFIG_E2LABEL', `n', `n')
+option(`CONFIG_E2LABEL', `n', `n')'
+)
 option(`CONFIG_FINDFS', `n', `n')
 
 #
@@ -356,9 +365,14 @@ option(`CONFIG_FEATURE_FBSET_FANCY', `n', `n')
 option(`CONFIG_FEATURE_FBSET_READMODE', `n', `n')
 option(`CONFIG_FDFLUSH', `n', `n')
 option(`CONFIG_FDFORMAT', `n', `n')
-option(`CONFIG_FDISK', `n', `n')
-option(`FDISK_SUPPORT_LARGE_DISKS', `n', `y')
-option(`CONFIG_FEATURE_FDISK_WRITABLE', `n', `n')
+ifdef(`ide',
+`option(`CONFIG_FDISK', `y', `y')',
+`option(`CONFIG_FDISK', `n', `n')'
+)
+option(`FDISK_SUPPORT_LARGE_DISKS', `y', `y')
+option(`CONFIG_FEATURE_FDISK_WRITABLE', `y', `y')
+option(`FDISK_SUPPORT_LARGE_DISKS', `y', `y')
+option(`CONFIG_FEATURE_FDISK_WRITABLE', `y', `y')
 option(`CONFIG_FEATURE_AIX_LABEL', `n', `n')
 option(`CONFIG_FEATURE_SGI_LABEL', `n', `n')
 option(`CONFIG_FEATURE_SUN_LABEL', `n', `n')
@@ -419,8 +433,12 @@ option(`CONFIG_FEATURE_LESS_FLAGS', `n', `n')
 option(`CONFIG_FEATURE_LESS_FLAGCS', `n', `n')
 option(`CONFIG_FEATURE_LESS_MARKS', `n', `n')
 option(`CONFIG_FEATURE_LESS_REGEXP', `n', `n')
-option(`CONFIG_HDPARM', `n', `n')
-option(`CONFIG_FEATURE_HDPARM_GET_IDENTITY', `n', `n')
+ifdef(`ide',
+`option(`CONFIG_HDPARM', `y', `y')
+option(`CONFIG_FEATURE_HDPARM_GET_IDENTITY', `y', `n')',
+`option(`CONFIG_HDPARM', `n', `n')
+option(`CONFIG_FEATURE_HDPARM_GET_IDENTITY', `n', `n')'
+)
 option(`CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF', `n', `n')
 option(`CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF', `n', `n')
 option(`CONFIG_FEATURE_HDPARM_HDIO_DRIVE_RESET', `n', `n')

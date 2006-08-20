@@ -25,6 +25,9 @@ endif
 	$(INSTALL) -d $(targetprefix)/var/run
 	$(INSTALL) -d $(targetprefix)/var/tuxbox/boot
 #	$(INSTALL) -d $(targetprefix)$(UCODEDIR)
+if ENABLE_IDE
+	$(INSTALL) -d $(targetprefix)/hdd
+endif
 	$(INSTALL) -d $(hostprefix)/$(target)
 	$(INSTALL) -d $(bootprefix)
 	-rm -f $(hostprefix)/$(target)/include

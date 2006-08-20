@@ -18,6 +18,9 @@ $(flashprefix)/root: bootstrap $(wildcard root-local.sh) | $(flashprefix)
 	$(INSTALL) -d $@/root
 	ln -s /tmp $@/var/run
 	ln -s /tmp $@/var/tmp
+if ENABLE_IDE
+	$(INSTALL) -d $@/hdd
+endif
 	$(MAKE) $@/etc/cramfs.urls
 	$(MAKE) flash-tuxinfo
 	$(MAKE) flash-tools_misc

@@ -2,6 +2,11 @@
 #
 # Pattern: $partition-$gui[-$filesystem]
 
+if ENABLE_IDE
+HDD_MOUNT_ENTRY=/dev/ide/host0/bus0/target0/lun0/part2	/hdd	ext3	\
+defaults	1 2
+endif
+
 $(flashprefix)/var-neutrino $(flashprefix)/var-enigma $(flashprefix)/var-radiobox: \
 $(flashprefix)/var-%: \
 $(flashprefix)/root-% $(flashprefix)/root
@@ -33,6 +38,9 @@ $(flashprefix)/root-% $(flashprefix)/root $(flashprefix)/root-jffs2
 	$(MAKE) flash-bootlogos flashbootlogosdir=$@/var/tuxbox/boot
 	$(MAKE) -C root install-flash flashprefix_ro=$@ flashprefix_rw=$@
 	mv $@/etc/init.d/rcS.insmod $@/etc/init.d/rcS
+if ENABLE_IDE
+	echo $(HDD_MOUNT_ENTRY)	>> $@/etc/fstab
+endif
 	@TUXBOX_CUSTOMIZE@
 
 $(flashprefix)/root-neutrino-cramfs $(flashprefix)/root-neutrino-squashfs: \
@@ -47,6 +55,9 @@ $(flashprefix)/root-% $(flashprefix)/root $(flashprefix)/root-neutrino
 	rm -rf $(flashprefix)/.junk
 	rm -fr $@/var/*
 	echo "/dev/mtdblock/3     /var     jffs2     defaults     0 0" >> $@/etc/fstab
+if ENABLE_IDE
+	echo $(HDD_MOUNT_ENTRY)	>> $@/etc/fstab
+endif
 	if [ -d $@/etc/ssh ] ; then \
 		rm -fr $@/etc/ssh ; \
 		ln -sf /var/etc/ssh $@/etc/ssh ; \
@@ -73,6 +84,9 @@ $(flashprefix)/root-% $(flashprefix)/root $(flashprefix)/root-radiobox
 	rm -rf $(flashprefix)/.junk
 	rm -fr $@/var/*
 	echo "/dev/mtdblock/3     /var     jffs2     defaults     0 0" >> $@/etc/fstab
+if ENABLE_IDE
+	echo $(HDD_MOUNT_ENTRY)	>> $@/etc/fstab
+endif
 	if [ -d $@/etc/ssh ] ; then \
 		rm -fr $@/etc/ssh ; \
 		ln -sf /var/etc/ssh $@/etc/ssh ; \
@@ -94,6 +108,9 @@ $(flashprefix)/root-% $(flashprefix)/root $(flashprefix)/root-enigma
 	rm -rf $(flashprefix)/.junk
 	rm -fr $@/var/*
 	echo "/dev/mtdblock/3     /var     jffs2     defaults     0 0" >> $@/etc/fstab
+if ENABLE_IDE
+	echo $(HDD_MOUNT_ENTRY)	>> $@/etc/fstab
+endif
 	if [ -d $@/etc/ssh ] ; then \
 		rm -fr $@/etc/ssh ; \
 		ln -sf /var/etc/ssh $@/etc/ssh ; \

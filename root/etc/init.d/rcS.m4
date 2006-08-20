@@ -32,13 +32,21 @@ dnl
 #!/bin/sh
 # This file was automatically generated from rcS.m4
 #
-# Mount file systems in /etc/fstab
-mount -a
-
 PATH=/sbin:/bin
 ifdef({insmod},{IM=/sbin/{insmod}
 MD=/lib/modules/$(uname -r)/misc
 })dnl
+
+# If appropriate, load ide drivers
+if [ -e /lib/modules/$(uname -r)/misc/dboxide.o ] ; then
+	loadmodule(ide-core)
+	loadmodule(dboxide)
+	loadmodule(ide-detect)
+	loadmodule(ide-disk)	
+fi
+
+# Mount file systems in /etc/fstab
+mount -a
 
 # Set time zone etc
 . /etc/profile
