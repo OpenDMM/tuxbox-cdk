@@ -1,14 +1,14 @@
 EXTRA_DIST = \
-	rcS.m4 start start_enigma start_lcars start_neutrino start_sshd halt start_lircd
+	rcS.m4 start start_enigma start_lcars start_neutrino start_sshd halt start_lircd start_radiobox
 
 FILES_EXEC = \
-	rcS start start_enigma start_lcars start_neutrino start_sshd start_lircd halt start_automount start_upnp initialize
+	rcS start start_enigma start_lcars start_neutrino start_sshd start_lircd halt start_automount start_upnp initialize start_radiobox
 
 FILES_FLASH_RO_EXEC = \
 	rcS rcS.insmod start start_sshd start_lircd halt initialize
 
 FILES_FLASH_RW_EXEC = \
-	start_enigma start_lcars start_neutrino start start_automount start_upnp
+	start_enigma start_lcars start_neutrino start start_automount start_upnp start_radiobox
 
 DIR = /etc/init.d
 
