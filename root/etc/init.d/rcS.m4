@@ -37,12 +37,15 @@ ifdef({insmod},{IM=/sbin/{insmod}
 MD=/lib/modules/$(uname -r)/misc
 })dnl
 
-# If appropriate, load ide drivers
+# If appropriate, load ide drivers and file system drivers
 if [ -e /lib/modules/$(uname -r)/misc/dboxide.o ] ; then
 	loadmodule(ide-core)
 	loadmodule(dboxide)
 	loadmodule(ide-detect)
-	loadmodule(ide-disk)	
+	loadmodule(ide-disk)
+	loadmodule(ext2)
+	loadmodule(jbd)
+	loadmodule(ext3)
 fi
 
 # Mount file systems in /etc/fstab
