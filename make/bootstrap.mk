@@ -92,7 +92,11 @@ $(DEPDIR)/binutils: @DEPENDS_binutils@ directories
 #
 # gcc first stage without glibc
 #
+if ASSUME_KERNELSOURCES_OLD
+$(DEPDIR)/bootstrap_gcc: @DEPENDS_bootstrap_gcc@ binutils | linuxdir
+else
 $(DEPDIR)/bootstrap_gcc: @DEPENDS_bootstrap_gcc@ binutils linuxdir
+endif
 	@PREPARE_bootstrap_gcc@
 	$(INSTALL) -d $(hostprefix)/$(target)/sys-include
 	ln -sf $(buildprefix)/linux/include/{asm,linux} $(hostprefix)/$(target)/sys-include/

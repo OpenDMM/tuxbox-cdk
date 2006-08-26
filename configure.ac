@@ -51,6 +51,11 @@ if test "$TARGETRULESET" != "notset"; then
 	AC_MSG_WARN([--with-targetruleset is obsolete; use --[[enable|disable]]-flashrules instead]);
 fi
 
+AC_ARG_WITH(assume-kernelsources-old,
+	[  --with-assume-kernelsources-old	Do not recompile due to new kernel sources],
+	[assume_kernelsources_old="yes"],[assume_kernelsources_old="no"])
+AM_CONDITIONAL(ASSUME_KERNELSOURCES_OLD,test "$assume_kernelsources_old" = "yes")
+
 AC_ARG_ENABLE(flashrules,
 	AS_HELP_STRING(--enable-flashrules,	enable rules for creating flash targets),
 	,[enable_flashrules=yes])
