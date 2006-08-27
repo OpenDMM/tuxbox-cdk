@@ -12,6 +12,7 @@ $(DEPDIR)/automount: bootstrap @DEPENDS_automount@ Patches/autofs.diff
 		$(MAKE) install INSTALLROOT=$(targetprefix)
 	rm -rf @DIR_automount@
 #	$(INSTALL) $(buildprefix)/root/etc/init.d/start_automount $(targetprefix)/etc/init.d
+	$(INSTALL) $(buildprefix)/root/etc/auto.net $(targetprefix)/etc
 	ln -sf /proc/mounts $(targetprefix)/etc/mtab
 	@touch $@
 
