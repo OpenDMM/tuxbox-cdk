@@ -10,7 +10,7 @@ $(flashprefix)/root/.version: $(flashprefix)/root
 	if [ -x $(customizationsdir)/flash-version-local.sh ] ; then \
 		$(customizationsdir)/flash-version-local.sh $(flashprefix) $(buildprefix); \
 	else \
-		echo "version=0200`date +%Y%m%d%H%M`" 	>  $@;	\
+		echo "version=1200`date +%Y%m%d%H%M`" 	>  $@;	\
 		echo "creator=`id -un`" 		>> $@;	\
 		echo "imagename=newmake-image" 		>> $@;	\
 		echo "homepage=http://www.tuxbox.org" 	>> $@;	\
@@ -21,7 +21,7 @@ $(targetprefix)/.version: $(targetprefix)
 	if [ -x $(customizationsdir)/version-local.sh ] ; then \
 		$(customizationsdir)/version-local.sh $(targetprefix) $(buildprefix); \
 	else \
-		echo "version=0200`date +%Y%m%d%H%M`" 	 > $@;	\
+		echo "version=1200`date +%Y%m%d%H%M`" 	 > $@;	\
 		echo "creator=`id -un`" 		>> $@;	\
 		echo "imagename=newmake-yadd" 		>> $@;	\
 		echo "homepage=http://www.tuxbox.org" 	>> $@;	\
