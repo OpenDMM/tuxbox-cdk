@@ -453,7 +453,7 @@ option(`CONFIG_RUNLEVEL', `n', `n')
 option(`CONFIG_RX', `n', `n')
 option(`CONFIG_STRINGS', `n', `n')
 option(`CONFIG_SETSID', `n', `n')
-option(`CONFIG_TIME', `n', `n')
+option(`CONFIG_TIME', `y', `y')
 option(`CONFIG_BB_WATCHDOG', `n', `n')
 
 #
