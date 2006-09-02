@@ -297,3 +297,12 @@ $(DEPDIR)/kermit: bootstrap @DEPENDS_kermit@ libcrypto Patches/kermit.diff
 	[ -d $(targetprefix)/var/lock ] ||  mkdir $(targetprefix)/var/lock
 	@CLEANUP_kermit@
 	touch $@
+
+$(DEPDIR)/hdparm: bootstrap @DEPENDS_hdparm@
+	@PREPARE_hdparm@
+	cd @DIR_hdparm@ && \
+		$(BUILDENV) \
+		$(MAKE) all && \
+		@INSTALL_hdparm@
+		@CLEANUP_hdparm@
+	touch $@
