@@ -3,7 +3,7 @@
 #   contrib apps
 #
 
-contrib_apps: bzip2 console_data console_tools fbset lirc lsof dropbear ssh tcpdump bonnie lufs kermit
+contrib_apps: bzip2 console_data console_tools fbset lirc utillinux e2fsprogs lsof dropbear ssh tcpdump bonnie lufs kermit hdparm
 
 $(DEPDIR)/bzip2: bootstrap @DEPENDS_bzip2@
 	@PREPARE_bzip2@
@@ -91,6 +91,49 @@ $(flashprefix)/root/sbin/lircd: lirc
 
 endif
 
+# contains [cs]fdisk etc
+$(DEPDIR)/utillinux: bootstrap @DEPENDS_utillinux@
+	@PREPARE_utillinux@
+	cd @DIR_utillinux@ && \
+		CC=$(target)-gcc \
+		CFLAGS="-Os -msoft-float" \
+		LDFLAGS="$(TARGET_LDFLAGS)" \
+		./configure && \
+		$(MAKE) ARCH=ppc all && \
+		@INSTALL_utillinux@
+	@CLEANUP_utillinux@
+	touch $@
+
+$(DEPDIR)/e2fsprogs: bootstrap @DEPENDS_e2fsprogs@
+	@PREPARE_e2fsprogs@
+	cd @DIR_e2fsprogs@ && \
+		CC=$(target)-gcc \
+		RANLIB=$(target)-ranlib \
+		CFLAGS="-Os -msoft-float" \
+		LDFLAGS="$(TARGET_LDFLAGS)" \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--target=$(target) \
+			--prefix=$(targetprefix) \
+			--with-cc=$(target)-gcc \
+			--with-linker=$(target)-ld \
+			--disable-evms \
+			--enable-elf-shlibs \
+			--enable-htree \
+			--disable-profile \
+			--disable-swapfs \
+			--disable-debugfs \
+			--disable-image \
+			--enable-resizer \
+			--enable-dynamic-e2fsck \
+			--enable-fsck \
+			--with-gnu-ld \
+			--disable-nls && \
+		$(MAKE) libs progs && \
+		@INSTALL_e2fsprogs@
+	@CLEANUP_e2fsprogs@
+	touch $@
 
 $(DEPDIR)/lsof: bootstrap @DEPENDS_lsof@
 	@PREPARE_lsof@
