@@ -359,7 +359,7 @@ TUXBOX_RULES_MAKE(uboot)
 
 TUXBOX_RULES_MAKE(linux)
 TUXBOX_RULES_MAKE(linux24)
-if test "$enable_kernel26" == "yes"; then
+if test "$enable_kernel26" = "yes"; then
 	KERNELVERSION=$VERSION_linux
 else
 	KERNELVERSION=$VERSION_linux24
@@ -445,6 +445,7 @@ TUXBOX_RULES_MAKE(kermit)
 TUXBOX_RULES_MAKE(hdparm)
 TUXBOX_RULES_MAKE(e2fsprogs)
 TUXBOX_RULES_MAKE(utillinux)
+TUXBOX_RULES_MAKE(parted)
 
 #
 # msttf

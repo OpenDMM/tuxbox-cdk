@@ -3,7 +3,9 @@
 #   contrib apps
 #
 
-contrib_apps: bzip2 console_data console_tools fbset lirc utillinux e2fsprogs lsof dropbear ssh tcpdump bonnie lufs kermit hdparm
+contrib_apps: bzip2 console_data console_tools fbset lirc ide_apps lsof dropbear ssh tcpdump bonnie lufs kermit
+
+ide_apps: hdparm utillinux e2fsprogs parted
 
 $(DEPDIR)/bzip2: bootstrap @DEPENDS_bzip2@
 	@PREPARE_bzip2@
@@ -131,8 +133,27 @@ $(DEPDIR)/e2fsprogs: bootstrap @DEPENDS_e2fsprogs@
 			--with-gnu-ld \
 			--disable-nls && \
 		$(MAKE) libs progs && \
+		$(MAKE) install-libs && \
 		@INSTALL_e2fsprogs@
 	@CLEANUP_e2fsprogs@
+	touch $@
+
+$(DEPDIR)/parted: bootstrap libreadline e2fsprogs @DEPENDS_parted@
+	@PREPARE_parted@
+	cd @DIR_parted@ && \
+		CC=$(target)-gcc \
+		RANLIB=$(target)-ranlib \
+		CFLAGS="-Os -msoft-float" \
+		LDFLAGS="$(TARGET_LDFLAGS)" \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--target=$(target) \
+			--prefix=$(targetprefix) \
+			--disable-nls && \
+		$(MAKE) all && \
+		@INSTALL_parted@
+	@CLEANUP_parted@
 	touch $@
 
 $(DEPDIR)/lsof: bootstrap @DEPENDS_lsof@
