@@ -29,7 +29,6 @@ $(DEPDIR)/modutils: bootstrap @DEPENDS_modutils@
 	@CLEANUP_modutils@
 	touch $@
 
-# Seems to be broken...
 $(DEPDIR)/portmap: bootstrap @DEPENDS_portmap@
 	@PREPARE_portmap@
 	cd @DIR_portmap@ && \
@@ -38,6 +37,19 @@ $(DEPDIR)/portmap: bootstrap @DEPENDS_portmap@
 		@INSTALL_portmap@
 	@CLEANUP_portmap@
 	touch $@
+
+if TARGETRULESET_FLASH
+flash-portmap: $(flashprefix)/root/sbin/portmap
+
+$(flashprefix)/root/sbin/portmap: bootstrap @DEPENDS_portmap@ | $(flashprefix)/root
+	@PREPARE_portmap@
+	cd @DIR_portmap@ && \
+		$(BUILDENV) \
+		$(MAKE) && \
+		$(INSTALL) -m 755 portmap $(flashprefix)/root/sbin
+	@CLEANUP_portmap@
+	@FLASHROOTDIR_MODIFIED@
+endif
 
 $(DEPDIR)/procps: bootstrap libncurses @DEPENDS_procps@
 	@PREPARE_procps@
@@ -87,7 +99,7 @@ if TARGETRULESET_FLASH
 
 flash-mrouted: $(flashprefix)/root/bin/mrouted
 
-$(flashprefix)/root/bin/mrouted: $(flashprefix)/root plugins mrouted $(flashprefix)/root
+$(flashprefix)/root/bin/mrouted: $(flashprefix)/root plugins mrouted | $(flashprefix)/root
 	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
 	$(INSTALL) -d $(flashprefix)/root/var/tuxbox/config
 	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/dreamdata.so $(flashprefix)/root/lib/tuxbox/plugins/
