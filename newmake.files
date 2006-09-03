@@ -12,6 +12,7 @@ cdk/root/etc/init.d/rcS.m4
 cdk/root/etc/init.d/initialize
 cdk/root/share/udhcpc/Makefile.am
 cdk/root/etc/Makefile.am
+cdk/root/etc/exports
 cdk/Patches/linux-2.4.32-dbox2.config
 cdk/Patches/linux-2.4.32-dbox2.config-flash
 apps/acinclude.m4
@@ -52,6 +53,7 @@ cdk/make/ftpd.mk
 cdk/make/fullimages.mk
 cdk/make/fun.mk
 cdk/make/funstuff.mk
+cdk/make/high-level-yadd.mk
 cdk/make/hostapps.mk
 cdk/make/java-stuff.mk
 cdk/make/lcars.mk
@@ -63,6 +65,7 @@ cdk/make/linuxkernel.mk
 cdk/make/misc_libs.mk
 cdk/make/misc_tools.mk
 cdk/make/neutrino.mk
+cdk/make/nfsserver.mk
 cdk/make/partition-images.mk
 cdk/make/phony.mk
 cdk/make/plugins.mk
