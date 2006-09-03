@@ -173,6 +173,13 @@ runprogifexists({/sbin/automount},{/etc/init.d/start_automount})
 runprogifexists({/bin/djmount},{/etc/init.d/start_upnp})
 runifexists({/bin/cdkVcInfo})
 
+# Start the nfs server if /etc/exports exists
+runprogifexists({/etc/exports},{loadmodule(nfsd)
+	pidof portmap >/dev/null || portmap
+	exportfs -r
+	rpc.mountd
+	rpc.nfsd 3})	
+
 ifmarkerfile({tuxmaild},{tuxmaild})
 ifmarkerfile({tuxcald},{tuxcald})
 ifmarkerfile({rdate},{rdate time.fu-berlin.de})

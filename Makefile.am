@@ -16,6 +16,9 @@ include make/bootstrap.mk
 # The automounter (optional)
 include make/automount.mk
 
+# NFS server
+include make/nfsserver.mk
+
 # The busybox (implements most standard Unix commands, like ls,...)
 include make/busybox.mk
 

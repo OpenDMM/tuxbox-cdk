@@ -100,6 +100,12 @@ AC_ARG_ENABLE(ide,
 	[],[enable_ide=no])
 AM_CONDITIONAL(ENABLE_IDE,test "$enable_ide" = "yes")
 
+AC_ARG_ENABLE(nfsserver,
+	AS_HELP_STRING(--enable-nfsserver,	enable the dBox NFS server),
+	[NFSSERVER=nfsserver],[enable_nfsserver=no])
+AM_CONDITIONAL(ENABLE_NFSSERVER,test "$enable_nfsserver" = "yes")
+AC_SUBST(NFSSERVER)
+
 AC_ARG_WITH(rootpartitionsize,
 	[  --with-rootpartitionsize=SIZE	size of the root partition],
 	[ROOT_PARTITION_SIZE="$withval"],[ROOT_PARTITION_SIZE="0x660000"])
@@ -370,6 +376,7 @@ TUXBOX_RULES_MAKE(uclibc)
 #
 TUXBOX_RULES_MAKE(busybox)
 TUXBOX_RULES_MAKE(automount)
+TUXBOX_RULES_MAKE(nfs_utils)
 TUXBOX_RULES_MAKE(fuse)
 TUXBOX_RULES_MAKE(djmount)
 TUXBOX_RULES_MAKE(ftpd)
@@ -512,27 +519,29 @@ fi
 AC_MSG_RESULT([
 summary:
 ----------------------------------------
-target cpu:            $CPU_MODEL
-kernel:                $used_kernelversion
-glibc-pthreads:        $GLIBC_PTHREADS
+target cpu:	       $CPU_MODEL
+kernel:		       $used_kernelversion
+glibc-pthreads:	       $GLIBC_PTHREADS
 flash rules:	       $enable_flashrules
-target prefix:         $targetprefix
-host prefix:           $hostprefix
-boot prefix:           $bootprefix
-build prefix:          $buildprefix
+target prefix:	       $targetprefix
+host prefix:	       $hostprefix
+boot prefix:	       $bootprefix
+build prefix:	       $buildprefix
 root partition size:   $ROOT_PARTITION_SIZE
 serversupport:	       $serversupport
 checkImage:	       $CHECKIMAGE_BEHAVIOR
 target apps directory: $appsdir
-boot directory:        $bootdir
+boot directory:	       $bootdir
 driver directory:      $driverdir
 host apps directory:   $hostappsdir
 logo directory:	       $logosdir
 customization directory: $customizationsdir
 ucode directory:       $ucodesdir
-GNU server:            $gnuserver
-default server:        $defaultserver
+GNU server:	       $gnuserver
+default server:	       $defaultserver
 update http prefix:    $updatehttpprefix
+IDE support:	       $enable_ide
+NFS server:	       $enable_nfsserver
 ])
 
 if test "$dircheck" = "fail"; then

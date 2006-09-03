@@ -47,6 +47,9 @@ endif
 if ENABLE_CDKVCINFO
 	$(MAKE) flash-cdkVcInfo
 endif
+if ENABLE_NFSSERVER
+	$(MAKE) flash-nfsserver
+endif
 	$(MAKE) flash-version
 	@FLASHROOTDIR_MODIFIED@
 	@TUXBOX_CUSTOMIZE@

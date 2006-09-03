@@ -45,10 +45,16 @@ else
 IDE_SED_CONF=-e ""
 endif
 
+if ENABLE_NFSSERVER
+NFSSERVER_SED_CONF=$(foreach param,CONFIG_NFSD CONFIG_NFSD_V3 CONFIG_NFSD_TCP,-e s"/^.*$(param)[= ].*/$(param)=m/")
+else
+NFSSERVER_SED_CONF=-e ""
+endif
+
 kernel-cdk: $(bootprefix)/kernel-cdk
 
 $(bootprefix)/kernel-cdk: linuxdir $(hostprefix)/bin/mkimage Patches/linux-$(KERNELVERSION).config Patches/dbox2-flash.c.m4
-	sed $(IDE_SED_CONF) Patches/linux-$(KERNELVERSION).config \
+	sed $(IDE_SED_CONF) $(NFSSERVER_SED_CONF) Patches/linux-$(KERNELVERSION).config \
 		> $(KERNEL_DIR)/.config
 	m4 Patches/dbox2-flash.c.m4 > linux/drivers/mtd/maps/dbox2-flash.c
 	$(MAKE) $(KERNEL_BUILD_FILENAME)
