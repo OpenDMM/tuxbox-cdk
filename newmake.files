@@ -34,6 +34,7 @@ cdk/make/cleantargets.mk
 cdk/make/contrib-apps.mk
 cdk/make/contrib-libs.mk
 cdk/make/cramfs.urls.mk
+cdk/make/defaultlocale.mk
 cdk/make/defaultvalues.mk
 cdk/make/development-tools.mk
 cdk/make/distribution-lists.mk

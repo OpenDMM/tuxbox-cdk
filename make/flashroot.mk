@@ -50,6 +50,7 @@ endif
 if ENABLE_NFSSERVER
 	$(MAKE) flash-nfsserver
 endif
+	$(MAKE) flash-defaultlocale
 	$(MAKE) flash-version
 	@FLASHROOTDIR_MODIFIED@
 	@TUXBOX_CUSTOMIZE@

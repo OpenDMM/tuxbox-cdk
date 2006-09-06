@@ -28,6 +28,9 @@ include make/etc.mk
 # The ftpd
 include make/ftpd.mk
 
+# Set up default locale
+include make/defaultlocale.mk
+
 # Some core tools (important and less important)
 include make/rootutils.mk
 

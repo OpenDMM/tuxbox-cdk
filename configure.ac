@@ -111,6 +111,11 @@ AC_ARG_WITH(rootpartitionsize,
 	[ROOT_PARTITION_SIZE="$withval"],[ROOT_PARTITION_SIZE="0x660000"])
 AC_SUBST(ROOT_PARTITION_SIZE)
 
+AC_ARG_WITH(defaultlocale,
+	[  --with-defaultlocale=LOCALE	default locale],
+	[DEFAULTLOCALE="$withval"],[DEFAULTLOCALE="deutsch"])
+AC_SUBST(DEFAULTLOCALE)
+
 AC_SUBST(CFLAGS)
 AC_SUBST(TARGET_CFLAGS)
 AC_SUBST(TARGET_CXXFLAGS)
@@ -529,6 +534,7 @@ host prefix:	       $hostprefix
 boot prefix:	       $bootprefix
 build prefix:	       $buildprefix
 root partition size:   $ROOT_PARTITION_SIZE
+default locale	       $DEFAULTLOCALE
 serversupport:	       $serversupport
 checkImage:	       $CHECKIMAGE_BEHAVIOR
 target apps directory: $appsdir
