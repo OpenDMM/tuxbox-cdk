@@ -4,7 +4,7 @@
 
 # This file is intended to be called from
 # e.g. root-neutrino-jffs2-local.sh using the call
-# $2/customization/nukegames $1/root-neutrino-jffs
+# $2/customization/nukegames $1/root-neutrino-jffs2
 
 if [ $# != 1 ] ; then
     echo "usage: $0 rootdirectory"

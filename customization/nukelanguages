@@ -4,7 +4,7 @@
 # Defalt is german ("deutsch") and english.
 
 # This file can be called from e.g. root-neutrino-jffs2-local.sh using the call
-# $2/customization/nukelanguages $1/root-neutrino-jffs
+# $2/customization/nukelanguages $1/root-neutrino-jffs2
 
 if [ $# -lt 1 ] ; then
     echo "usage: $0 rootdirectory [LANGUAGES_TO_KEEP]..."
