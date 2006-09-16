@@ -451,6 +451,7 @@ TUXBOX_RULES_MAKE(hdparm)
 TUXBOX_RULES_MAKE(e2fsprogs)
 TUXBOX_RULES_MAKE(utillinux)
 TUXBOX_RULES_MAKE(parted)
+TUXBOX_RULES_MAKE(hddtemp)
 
 #
 # msttf

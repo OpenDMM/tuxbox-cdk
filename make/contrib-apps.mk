@@ -5,7 +5,7 @@
 
 contrib_apps: bzip2 console_data console_tools fbset lirc ide_apps lsof dropbear ssh tcpdump bonnie lufs kermit
 
-ide_apps: hdparm utillinux e2fsprogs parted
+ide_apps: hdparm utillinux e2fsprogs parted hddtemp
 
 $(DEPDIR)/bzip2: bootstrap @DEPENDS_bzip2@
 	@PREPARE_bzip2@
@@ -370,3 +370,39 @@ $(DEPDIR)/hdparm: bootstrap @DEPENDS_hdparm@
 		@INSTALL_hdparm@
 		@CLEANUP_hdparm@
 	touch $@
+
+$(DEPDIR)/hddtemp: bootstrap @DEPENDS_hddtemp@
+	@PREPARE_hddtemp@
+	cd @DIR_hddtemp@ && \
+		$(BUILDENV) \
+		./configure \
+		--with-db-path=/share/tuxbox/hddtemp.db \
+			--build=$(build) \
+			--host=$(target) \
+			--prefix= && \
+		$(MAKE) all && \
+		$(MAKE) install DESTDIR=$(targetprefix)
+		$(INSTALL) -m 644 Patches/hddtemp.db $(targetprefix)/share/tuxbox
+	@CLEANUP_hddtemp@
+	touch $@ 
+
+if TARGETRULESET_FLASH
+flash-hddtemp: $(flashprefix)/root/sbin/hddtemp
+
+$(flashprefix)/root/sbin/hddtemp: bootstrap @DEPENDS_hddtemp@ | $(flashprefix)/root
+	@PREPARE_hddtemp@
+	cd @DIR_hddtemp@ && \
+		$(BUILDENV) \
+		./configure \
+		--with-db-path=/share/tuxbox/hddtemp.db \
+			--build=$(build) \
+			--host=$(target) \
+			--prefix= && \
+		$(MAKE) all && \
+		$(MAKE) install DESTDIR=$(flashprefix)/root
+		$(INSTALL) -m 644 Patches/hddtemp.db $(flashprefix)/root/share/tuxbox
+	@CLEANUP_hddtemp@
+	@FLASHROOTDIR_MODIFIED@
+	@TUXBOX_CUSTOMIZE@
+
+endif
