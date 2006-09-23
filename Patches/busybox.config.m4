@@ -30,20 +30,18 @@ option(`CONFIG_FEATURE_SUID_CONFIG', `n', `n')
 option(`CONFIG_FEATURE_SUID_CONFIG_QUIET', `n', `n')
 option(`CONFIG_SELINUX', `n', `n')
 CONFIG_BUSYBOX_EXEC_PATH="/proc/self/exe"
-option(`CONFIG_AUTH_IN_VAR_ETC', `n', `y')
+option(`CONFIG_AUTH_IN_VAR_ETC', `n', `n')
 
 #
 # Build Options
 #
 option(`CONFIG_STATIC', `n', `n')
-option(`CONFIG_DISABLE_SHARED', `n', `n')
 option(`CONFIG_BUILD_LIBBUSYBOX', `n', `n')
 option(`CONFIG_FEATURE_FULL_LIBBUSYBOX', `n', `n')
 option(`CONFIG_FEATURE_SHARED_BUSYBOX', `n', `n')
 option(`CONFIG_LFS', `n', `y')
 option(`USING_CROSS_COMPILER', `n', `n')
 CROSS_COMPILER_PREFIX=""
-EXTRA_CFLAGS_OPTIONS=""
 option(`CONFIG_BUILD_AT_ONCE', `n', `n')
 
 #
@@ -407,7 +405,6 @@ option(`CONFIG_FEATURE_MINIX2', `n', `n')
 option(`CONFIG_GETOPT', `n', `n')
 option(`CONFIG_HEXDUMP', `n', `n')
 option(`CONFIG_HWCLOCK', `n', `n')
-option(`CONFIG_FEATURE_HWCLOCK_LONGOPTIONS', `n', `n')
 option(`CONFIG_FEATURE_HWCLOCK_ADJTIME_FHS', `n', `n')
 option(`CONFIG_IPCRM', `n', `n')
 option(`CONFIG_IPCS', `n', `n')
@@ -500,7 +497,6 @@ option(`CONFIG_FTPGET', `n', `n')
 option(`CONFIG_FTPPUT', `n', `n')
 option(`CONFIG_HOSTNAME', `y', `y')
 option(`CONFIG_HTTPD', `n', `n')
-option(`CONFIG_FEATURE_HTTPD_USAGE_FROM_INETD_ONLY', `n', `n')
 option(`CONFIG_FEATURE_HTTPD_BASIC_AUTH', `n', `n')
 option(`CONFIG_FEATURE_HTTPD_AUTH_MD5', `n', `n')
 option(`CONFIG_FEATURE_HTTPD_RELOAD_CONFIG_SIGHUP', `n', `n')
@@ -561,7 +557,6 @@ option(`CONFIG_TFTP', `n', `n')
 option(`CONFIG_FEATURE_TFTP_GET', `n', `n')
 option(`CONFIG_FEATURE_TFTP_PUT', `n', `n')
 option(`CONFIG_FEATURE_TFTP_BLOCKSIZE', `n', `n')
-option(`CONFIG_FEATURE_TFTP_DEBUG', `n', `n')
 option(`CONFIG_TRACEROUTE', `n', `n')
 option(`CONFIG_FEATURE_TRACEROUTE_VERBOSE', `n', `n')
 option(`CONFIG_FEATURE_TRACEROUTE_SOURCE_ROUTE', `n', `n')
