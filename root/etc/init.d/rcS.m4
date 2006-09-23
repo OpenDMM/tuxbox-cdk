@@ -51,6 +51,9 @@ fi
 # Mount file systems in /etc/fstab
 mount -a
 
+# Turn on swap
+ifmarkerfile({swap},{swapon -a})
+
 # Set time zone etc
 . /etc/profile
   
