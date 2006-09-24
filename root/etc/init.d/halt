@@ -2,7 +2,8 @@
 
 # $Id$
 
+[ -e /var/run/automount.pid ] && kill -TERM $( cat /var/run/automount.pid )
 [ -e /tmp/tuxmaild.pid ] && kill $( cat /tmp/tuxmaild.pid )
 [ -e /tmp/tuxcald.pid ] && kill $( cat /tmp/tuxcald.pid )
 
-/bin/switch -fnc 0
+switch -fnc 0 -fblk 0
