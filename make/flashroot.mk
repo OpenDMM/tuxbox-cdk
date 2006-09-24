@@ -50,6 +50,9 @@ endif
 if ENABLE_NFSSERVER
 	$(MAKE) flash-nfsserver
 endif
+if ENABLE_GERMAN_KEYMAPS
+	$(MAKE) flash-german-keymaps
+endif
 	$(MAKE) flash-defaultlocale
 	$(MAKE) flash-version
 	@FLASHROOTDIR_MODIFIED@

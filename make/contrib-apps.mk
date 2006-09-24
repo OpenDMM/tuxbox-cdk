@@ -43,6 +43,25 @@ $(DEPDIR)/console_tools: bootstrap console_data @DEPENDS_console_tools@
 	@CLEANUP_console_tools@
 	touch $@
 
+if TARGETRULESET_FLASH 
+
+# This is ugly, very ugly. But I do not know of a completely clean way
+# of installing just the minimum.
+
+flash-german-keymaps: $(DEPDIR)/console_tools
+	$(INSTALL) $(targetprefix)/bin/loadkeys $(flashprefix)/root/bin
+	$(INSTALL) -d $(flashprefix)/root/share/keymaps/i386/qwertz
+	$(INSTALL) -d $(flashprefix)/root/share/keymaps/i386/include
+	$(INSTALL) -m 444 $(targetprefix)/share/keymaps/i386/qwertz/de-latin1-nodeadkeys.kmap.gz $(flashprefix)/root/share/keymaps/i386/qwertz
+	$(INSTALL) -m 444 $(targetprefix)/share/keymaps/i386/qwertz/de-latin1.kmap.gz $(flashprefix)/root/share/keymaps/i386/qwertz
+	$(INSTALL) -m 444 $(targetprefix)/share/keymaps/i386/include/linux-keys-bare.inc.gz $(flashprefix)/root/share/keymaps/i386/include
+	$(INSTALL) -m 444 $(targetprefix)/share/keymaps/i386/include/linux-with-alt-and-altgr.inc.gz $(flashprefix)/root/share/keymaps/i386/include
+	$(INSTALL) -m 444 $(targetprefix)/share/keymaps/i386/include/qwertz-layout.inc.gz $(flashprefix)/root/share/keymaps/i386/include
+	@FLASHROOTDIR_MODIFIED@
+	@TUXBOX_CUSTOMIZE@
+
+endif
+
 $(DEPDIR)/directfb_examples: bootstrap libdirectfb @DEPENDS_directfb_examples@
 	@PREPARE_directfb_examples@
 	cd @DIR_directfb_examples@ && \

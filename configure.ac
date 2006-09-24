@@ -95,6 +95,12 @@ AC_ARG_ENABLE(cdkVcInfo,
 AM_CONDITIONAL(ENABLE_CDKVCINFO,test "$enable_cdkVcInfo" = "yes")
 AC_SUBST(CDKVCINFO)
 
+AC_ARG_ENABLE(german_keymaps,
+	AS_HELP_STRING(--enable-german-keymaps,	include loadkey and German keymaps in yadds and images),
+	[CONSOLE_TOOLS=console_tools],[enable_german_keymaps=no])
+AM_CONDITIONAL(ENABLE_GERMAN_KEYMAPS,test "$enable_german_keymaps" = "yes")
+AC_SUBST(CONSOLE_TOOLS)
+
 AC_ARG_ENABLE(ide,
 	AS_HELP_STRING(--enable-ide,	include ide and ext3 drivers in yadds and images),
 	[],[enable_ide=no])
@@ -550,6 +556,7 @@ default server:	       $defaultserver
 update http prefix:    $updatehttpprefix
 IDE support:	       $enable_ide
 NFS server:	       $enable_nfsserver
+German keymaps:	       $enable_german_keymaps
 ])
 
 if test "$dircheck" = "fail"; then
