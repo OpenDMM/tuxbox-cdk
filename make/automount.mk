@@ -3,6 +3,8 @@
 # manually.
 
 if KERNEL26
+$(DEPDIR)/automount:
+	@echo "This is the non-existing automount rule speaking: implement me for 2.6 please"
 else
 $(DEPDIR)/automount: bootstrap @DEPENDS_automount@ Patches/autofs.diff
 	@PREPARE_automount@
