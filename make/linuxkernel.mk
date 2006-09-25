@@ -54,9 +54,13 @@ endif
 kernel-cdk: $(bootprefix)/kernel-cdk
 
 $(bootprefix)/kernel-cdk: linuxdir $(hostprefix)/bin/mkimage Patches/linux-$(KERNELVERSION).config Patches/dbox2-flash.c.m4
+if KERNEL26
+	$(INSTALL) -m644 Patches/linux-$(KERNELVERSION).config $(KERNEL_DIR)/.config
+else
 	sed $(IDE_SED_CONF) $(NFSSERVER_SED_CONF) Patches/linux-$(KERNELVERSION).config \
 		> $(KERNEL_DIR)/.config
 	m4 Patches/dbox2-flash.c.m4 > linux/drivers/mtd/maps/dbox2-flash.c
+endif
 	$(MAKE) $(KERNEL_BUILD_FILENAME)
 if KERNEL26
 # not tested
