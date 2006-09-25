@@ -110,7 +110,7 @@ fi
 # If appropriate, load ide drivers and file system drivers
 if [ $KMINOR -ge 6 ]; then
 	# kernel 2.6
-	if [ -e /lib/modules/$(uname -r)/misc/dboxide.ko ] ; then
+	if [ -e /lib/modules/$(uname -r)/extra/ide/dboxide.ko ] ; then
 		loadmodule(dboxide)
 	fi
 else
@@ -170,6 +170,10 @@ fi
 
 if [ $KMINOR -ge 6 ]; then
 	# kernel 2.6
+
+	dnl FIXME: using loadmodule makes no sense here
+	dnl since modprobe is used to pull in the dependencies
+
 	loadmodule(dbox2_i2c)
 	loadmodule(dbox2_napi)
 
