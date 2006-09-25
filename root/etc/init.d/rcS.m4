@@ -37,15 +37,93 @@ ifdef({insmod},{IM=/sbin/{insmod}
 MD=/lib/modules/$(uname -r)/misc
 })dnl
 
+# extract kernel minor without using cut
+OLD_IFS=IFS
+IFS='.'
+get_second() {{ echo $2; }}
+KMINOR=`get_second $(uname -r)`
+IFS=$OLD_IFS
+
+if [ $KMINOR -ge 6 ]; then
+	if [ ! -d /dev/pts ]; then
+		# create necessary nodes,
+		# static for now
+		mkdir /dev/pts
+		mknod /dev/tty c 5 0
+		mknod /dev/tty0 c 4 0
+		mknod /dev/tty1 c 4 1
+		mknod /dev/tty2 c 4 2
+		mknod /dev/tty3 c 4 3
+		mknod /dev/ptmx c 5 2
+
+		mknod /dev/urandom c 1 9
+		mknod /dev/random c 1 8
+
+		# this is fragile because
+		# it's module load order
+		# dependent
+		mkdir /dev/dbox
+		mknod /dev/dbox/avs0 c 10 60
+		mknod /dev/dbox/event0 c 10 63
+		mknod /dev/dbox/fp0 c 10 62
+		mknod /dev/dbox/lcd0 c 10 59
+		mknod /dev/dbox/saa0 c 10 58
+		mknod /dev/dbox/dvb2eth c 10 57
+
+		mknod /dev/watchdog c 10 130
+		mknod /dev/lirc c 10 61
+
+		mkdir /dev/dvb
+		mkdir /dev/dvb/adapter0
+		mknod /dev/dvb/adapter0/audio0 c 212 1
+		mknod /dev/dvb/adapter0/ca0 c 212 6
+		mknod /dev/dvb/adapter0/ca1 c 212 22
+		mknod /dev/dvb/adapter0/demux0 c 212 4
+		mknod /dev/dvb/adapter0/dvr0 c 212 5
+		mknod /dev/dvb/adapter0/frontend0 c 212 3
+		mknod /dev/dvb/adapter0/net0 c 212 7
+		mknod /dev/dvb/adapter0/video0 c 212 0
+		
+		mknod /dev/fb0 c 29 0
+
+		mkdir /dev/fb
+		ln -sf /dev/fb0 /dev/fb/0
+		
+		mkdir /dev/vc
+		ln -sf /dev/tty0 /dev/vc/0
+		
+		mkdir /dev/v4l
+		mknod /dev/v4l/video0 c 81 0
+		
+		mkdir /dev/sound
+		mknod /dev/sound/dsp c 14 3
+		mknod /dev/sound/mixer c 14 0
+		mknod /dev/sound/mixer1 c 14 16
+		
+		mkdir /dev/input
+		mknod /dev/input/event0 c 13 64
+		mknod /dev/input/mice c 13 63
+	fi
+	mount /dev/pts
+fi
+
 # If appropriate, load ide drivers and file system drivers
-if [ -e /lib/modules/$(uname -r)/misc/dboxide.o ] ; then
-	loadmodule(ide-core)
-	loadmodule(dboxide)
-	loadmodule(ide-detect)
-	loadmodule(ide-disk)
-	loadmodule(ext2)
-	loadmodule(jbd)
-	loadmodule(ext3)
+if [ $KMINOR -ge 6 ]; then
+	# kernel 2.6
+	if [ -e /lib/modules/$(uname -r)/misc/dboxide.ko ] ; then
+		loadmodule(dboxide)
+	fi
+else
+	# kernel 2.4
+	if [ -e /lib/modules/$(uname -r)/misc/dboxide.o ] ; then
+		loadmodule(ide-core)
+		loadmodule(dboxide)
+		loadmodule(ide-detect)
+		loadmodule(ide-disk)
+		loadmodule(ext2)
+		loadmodule(jbd)
+		loadmodule(ext3)
+	fi
 fi
 
 # Mount file systems in /etc/fstab
@@ -60,6 +138,10 @@ ifmarkerfile({swap},{swapon -a})
 # Setup hostname
 hostname -F /etc/hostname
 ifup -a
+
+if test -x /sys ; then
+	mount /sys
+fi
 
 ifdef({insmod},{loadmodule(event)},{touch /etc/modules.conf
 depmod -ae}) dnl
@@ -86,79 +168,104 @@ if [ $MODEL_ID -eq 2 ]; then
 	exit 1
 fi
 
-# I2C core
-loadmodule(dbox2_i2c)
+if [ $KMINOR -ge 6 ]; then
+	# kernel 2.6
+	loadmodule(dbox2_i2c)
+	loadmodule(dbox2_napi)
 
-# Frontprocessor
-loadmodule(dbox2_fp)
-if [ -e /var/etc/.oldrc ]; then
-        loadmodule(dbox2_fp_input, disable_new_rc=1)
-elif [ -e /var/etc/.newrc ]; then
-	loadmodule(dbox2_fp_input.o, disable_old_rc=1)
+	loadmodule(dbox2_fp_input)
+
+	loadmodule(avia_gt_fb)
+	loadmodule(avia_gt_lirc)
+	loadmodule(avia_gt_oss)
+	loadmodule(avia_gt_v4l2)
+
+	loadmodule(avs)
+	loadmodule(lcd)
+	loadmodule(saa7126)
+	loadmodule(dvb2eth)
 else
-        loadmodule(dbox2_fp_input)
-fi
+	# kernel 2.4
 
-# Misc IO
-loadmodule(avs)
-loadmodule(saa7126)
+	# I2C core
+	loadmodule(dbox2_i2c)
 
-# Frontends
-if [ $VENDOR_ID -eq 1 ]; then
-	# Nokia
-	loadmodule(ves1820)
-	loadmodule(ves1x93, board_type=1)
-	loadmodule(cam, mio=0xC000000 firmware=/var/tuxbox/ucodes/cam-alpha.bin)
-elif [ $VENDOR_ID -eq 2 ]; then
-	# Philips
-	ifmarkerfile({tda80xx.o},
-		{loadmodule(tda80xx)},
-		{loadmodule(tda8044h)})
-	loadmodule(cam, mio=0xC040000 firmware=/var/tuxbox/ucodes/cam-alpha.bin)
-elif [ $VENDOR_ID -eq 3 ]; then
-	# Sagem
-	loadmodule(at76c651)
-	loadmodule(ves1x93, board_type=2)
-	loadmodule(cam, mio=0xC000000 firmware=/var/tuxbox/ucodes/cam-alpha.bin)
-fi
+	# Frontprocessor
+	loadmodule(dbox2_fp)
+	if [ -e /var/etc/.oldrc ]; then
+    	    loadmodule(dbox2_fp_input, disable_new_rc=1)
+	elif [ -e /var/etc/.newrc ]; then
+		loadmodule(dbox2_fp_input.o, disable_old_rc=1)
+	else
+    	loadmodule(dbox2_fp_input)
+	fi
 
-loadmodule(dvb_i2c_bridge)
-loadmodule(avia_napi)
-loadmodule(cam_napi)
-loadmodule(dbox2_fp_napi)
-# Possibly turn off the watchdog on AVIA 500
-ifmarkerfile({no_watchdog},
-	{loadmodule(avia_av, firmware=/var/tuxbox/ucodes no_watchdog=1)},
-	{loadmodule(avia_av, firmware=/var/tuxbox/ucodes)})
+	# Misc IO
+	loadmodule(avs)
+	loadmodule(saa7126)
 
-# Bei Avia_gt hw_sections und nowatchdog abfragen
-GTOPTS=""
-ifmarkerfile({hw_sections},{GTOPTS="hw_sections=0 "})
-ifmarkerfile({no_enxwatchdog},{GTOPTS="${{GTOPTS}}no_watchdog=1 "})
+	# Frontends
+	if [ $VENDOR_ID -eq 1 ]; then
+		# Nokia
+		loadmodule(ves1820)
+		loadmodule(ves1x93, board_type=1)
+		loadmodule(cam, mio=0xC000000 firmware=/var/tuxbox/ucodes/cam-alpha.bin)
+	elif [ $VENDOR_ID -eq 2 ]; then
+		# Philips
+		ifmarkerfile({tda80xx.o},
+			{loadmodule(tda80xx)},
+			{loadmodule(tda8044h)})
+		loadmodule(cam, mio=0xC040000 firmware=/var/tuxbox/ucodes/cam-alpha.bin)
+	elif [ $VENDOR_ID -eq 3 ]; then
+		# Sagem
+		loadmodule(at76c651)
+		loadmodule(ves1x93, board_type=2)
+		loadmodule(cam, mio=0xC000000 firmware=/var/tuxbox/ucodes/cam-alpha.bin)
+	fi
 
-loadmodule(avia_gt, {ucode=/var/tuxbox/ucodes/ucode.bin ${GTOPTS}})
+	loadmodule(dvb_i2c_bridge)
+
+	loadmodule(avia_napi)
+	loadmodule(cam_napi)
+	loadmodule(dbox2_fp_napi)
+
+	# Possibly turn off the watchdog on AVIA 500
+	ifmarkerfile({no_watchdog},
+		{loadmodule(avia_av, firmware=/var/tuxbox/ucodes no_watchdog=1)},
+		{loadmodule(avia_av, firmware=/var/tuxbox/ucodes)})
+
+	# Bei Avia_gt hw_sections und nowatchdog abfragen
+	GTOPTS=""
+	ifmarkerfile({hw_sections},{GTOPTS="hw_sections=0 "})
+	ifmarkerfile({no_enxwatchdog},{GTOPTS="${{GTOPTS}}no_watchdog=1 "})
+
+	loadmodule(avia_gt, {ucode=/var/tuxbox/ucodes/ucode.bin ${GTOPTS}})
   
-loadmodule(avia_gt_fb, console_transparent=0)
-loadmodule(lcd)
-loadmodule(avia_gt_lirc)
-loadmodule(avia_gt_oss)
-loadmodule(avia_gt_v4l2)
+	loadmodule(avia_gt_fb, console_transparent=0)
+	loadmodule(lcd)
+	loadmodule(avia_gt_lirc)
+	loadmodule(avia_gt_oss)
+	loadmodule(avia_gt_v4l2)
 
-loadmodule(avia_av_napi)
-ifmarkerfile({spts_mode},
-	{loadmodule(avia_gt_napi, mode=1)
-		loadmodule(dvb2eth)},
-	{loadmodule(avia_gt_napi)})
+	loadmodule(avia_av_napi)
+	ifmarkerfile({spts_mode},
+		{loadmodule(avia_gt_napi, mode=1)
+			loadmodule(dvb2eth)},
+		{loadmodule(avia_gt_napi)})
 
-loadmodule(aviaEXT)
+	loadmodule(aviaEXT)
+fi
 
 # Create a telnet greeting
 echo "$VENDOR $MODEL - Kernel %r (%t)." > /etc/issue.net
 
 # compatibility links
-ln -sf demux0 /dev/dvb/adapter0/demux1
-ln -sf dvr0 /dev/dvb/adapter0/dvr1
-ln -sf fb/0 /dev/fb0
+if [ $KMINOR -lt 6 ]; then
+	# compatibility links
+	ln -sf demux0 /dev/dvb/adapter0/demux1
+	ln -sf dvr0 /dev/dvb/adapter0/dvr1
+	ln -sf fb/0 /dev/fb0
+fi
 
 if [ ! -d /var/etc ] ; then
     mkdir /var/etc
