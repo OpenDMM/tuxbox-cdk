@@ -132,6 +132,9 @@ mount -a
 # Turn on swap
 ifmarkerfile({swap},{swapon -a})
 
+runprogifexists({/var/tuxbox/config/target0.hdparm},{hdparm},{"`cat /var/tuxbox/config/target0.hdparm`" /dev/ide/host0/bus0/target0/lun0/disc})
+runprogifexists({/var/tuxbox/config/target1.hdparm},{hdparm},{"`cat /var/tuxbox/config/target1.hdparm`" /dev/ide/host0/bus0/target1/lun0/disc})
+
 # Set time zone etc
 . /etc/profile
   
