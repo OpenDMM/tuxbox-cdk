@@ -2,8 +2,12 @@
 
 # $Id$
 
+mount | grep /hdd >/dev/null && umount /hdd
+
 [ -e /var/run/automount.pid ] && kill -TERM $( cat /var/run/automount.pid )
 [ -e /tmp/tuxmaild.pid ] && kill $( cat /tmp/tuxmaild.pid )
 [ -e /tmp/tuxcald.pid ] && kill $( cat /tmp/tuxcald.pid )
 
 switch -fnc 0 -fblk 0
+
+mount | grep /var >/dev/null && umount /var
