@@ -42,4 +42,10 @@ $(flashprefix)/root/bin/etherwake: $(appsdir)/misc/tools/config.status | $(flash
 	$(MAKE) -C $(appsdir)/misc/tools/etherwake all install prefix=$(flashprefix)/root
 	@FLASHROOTDIR_MODIFIED@
 
+flash-rtc: $(flashprefix)/root/bin/hwrtc
+
+$(flashprefix)/root/bin/hwrtc:  $(appsdir)/misc/tools/config.status | $(flashprefix)/root
+	$(MAKE) -C $(appsdir)/misc/tools/rtc all install prefix=$(flashprefix)/root
+	@FLASHROOTDIR_MODIFIED@
+
 endif
