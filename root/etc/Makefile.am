@@ -6,13 +6,13 @@ SUBDIRS = init.d network
 
 FILES_FLASH_RO = \
 	fstab host.conf inittab mime.types nsswitch.conf \
-	protocols termcap timezone.xml
+	protocols termcap timezone.xml modules.conf
 
 FILES_FLASH_RW = \
 	group hostname hosts inetd.conf passwd profile resolv.conf services auto.net $(EXPORTS)
 
 FILES = \
-	$(FILES_FLASH_RO) $(FILES_FLASH_RW) modules.conf
+	$(FILES_FLASH_RO) $(FILES_FLASH_RW)
 
 EXTRA_DIST = $(FILES)
 
