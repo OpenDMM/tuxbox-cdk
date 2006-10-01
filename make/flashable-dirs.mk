@@ -34,6 +34,7 @@ $(flashprefix)/root-% $(flashprefix)/root $(flashprefix)/root-jffs2
 	cp -rd $(flashprefix)/root $@
 	cp -rd $</* $@
 	cp -rd $(flashprefix)/root-jffs2/* $@
+	rm -rf $@/man
 	$(MAKE) --assume-old=$@ $@/lib/ld.so.1 mklibs_librarypath=$</lib:$</lib/tuxbox/plugins:$(flashprefix)/root/lib:$(flashprefix)/root/lib/tuxbox/plugins:$(flashprefix)/root-jffs2/lib:$(targetprefix)/lib:$(targetprefix)/lib/tuxbox/plugins
 	$(MAKE) flash-bootlogos flashbootlogosdir=$@/var/tuxbox/boot
 	$(MAKE) -C root install-flash flashprefix_ro=$@ flashprefix_rw=$@
@@ -50,6 +51,7 @@ $(flashprefix)/root-% $(flashprefix)/root $(flashprefix)/root-neutrino
 	cp -rd $(flashprefix)/root $@
 	cp -rd $</* $@
 	cp -rd $(flashprefix)/root-neutrino/* $@
+	rm -rf $@/man
 	$(MAKE) --assume-old=$@ $@/lib/ld.so.1 mklibs_librarypath=$(flashprefix)/root-neutrino/lib:$(flashprefix)/root-neutrino/lib/tuxbox/plugins:$(flashprefix)/root/lib:$(flashprefix)/root/lib/tuxbox/plugins:$</lib:$(targetprefix)/lib:$(targetprefix)/lib/tuxbox/plugins
 	$(MAKE) -C root install-flash flashprefix_ro=$@ flashprefix_rw=$(flashprefix)/.junk
 	rm -rf $(flashprefix)/.junk
@@ -74,6 +76,7 @@ $(flashprefix)/root-% $(flashprefix)/root $(flashprefix)/root-radiobox
 	cp -rd $(flashprefix)/root $@
 	cp -rd $</* $@
 	cp -rd $(flashprefix)/root-radiobox/* $@
+	rm -rf $@/man
 	cp -rd $(flashprefix)/root/lib/tuxbox/plugins/libfx2.so $@/lib/tuxbox/plugins
 	$(MAKE) --assume-old=$@ $@/lib/ld.so.1 mklibs_librarypath=$(flashprefix)/root-radiobox/lib:$(flashprefix)/root-radiobox/lib/tuxbox/plugins:$(flashprefix)/root/lib:$(flashprefix)/root/lib/tuxbox/plugins:$</lib:$(targetprefix)/lib:$(targetprefix)/lib/tuxbox/plugins
 	cp $(targetprefix)/lib/libstdc++.so.6.0.3 $@/lib/
@@ -103,6 +106,7 @@ $(flashprefix)/root-% $(flashprefix)/root $(flashprefix)/root-enigma
 	cp -rd $(flashprefix)/root $@
 	cp -rd $</* $@
 	cp -rd $(flashprefix)/root-enigma/* $@
+	rm -rf $@/man
 	$(MAKE) --assume-old=$@ $@/lib/ld.so.1 mklibs_librarypath=$(flashprefix)/root-enigma/lib:$(flashprefix)/root-enigma/lib/tuxbox/plugins:$(flashprefix)/root/lib:$(flashprefix)/root/lib/tuxbox/plugins:$</lib:$(targetprefix)/lib:$(targetprefix)/lib/tuxbox/plugins
 	$(MAKE) -C root install-flash flashprefix_ro=$@ flashprefix_rw=$(flashprefix)/.junk
 	rm -rf $(flashprefix)/.junk
@@ -125,6 +129,7 @@ $(flashprefix)/root-null-jffs2: $(flashprefix)/root $(flashprefix)/root-jffs2
 	rm -rf $@
 	cp -rd $(flashprefix)/root $@
 	cp -rd $(flashprefix)/root-jffs2/* $@
+	rm -rf $@/man
 	rm -rf $@/lib/tuxbox/plugins
 	$(MAKE) --assume-old=$@ $@/lib/ld.so.1 mklibs_librarypath=$(flashprefix)/root/lib:$(flashprefix)/root-jffs2/lib:$(targetprefix)/lib
 	$(MAKE) flash-bootlogos flashbootlogosdir=$@/var/tuxbox/boot
