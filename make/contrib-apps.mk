@@ -17,6 +17,21 @@ $(DEPDIR)/bzip2: bootstrap @DEPENDS_bzip2@
 	@CLEANUP_bzip2@
 	touch $@
 
+if TARGETRULESET_FLASH
+flash-bzip2: $(flashprefix)/root/bin/bzip2
+
+$(flashprefix)/root/bin/bzip2: @DEPENDS_bzip2@ | $(flashprefix)/root
+	@PREPARE_bzip2@
+	cd @DIR_bzip2@ && \
+	mv Makefile-libbz2_so Makefile && \
+		CC=$(target)-gcc \
+		$(MAKE) all && \
+		$(MAKE) install PREFIX=$(flashprefix)/root
+	@CLEANUP_bzip2@
+	@FLASHROOTDIR_MODIFIED@
+
+endif
+
 $(DEPDIR)/console_data: bootstrap @DEPENDS_console_data@
 	@PREPARE_console_data@
 	cd @DIR_console_data@ && \
@@ -124,6 +139,15 @@ $(DEPDIR)/utillinux: bootstrap @DEPENDS_utillinux@
 		@INSTALL_utillinux@
 	@CLEANUP_utillinux@
 	touch $@
+
+if TARGETRULESET_FLASH
+flash-sfdisk: $(flashprefix)/root/sbin/sfdisk
+
+$(flashprefix)/root/sbin/sfdisk: utillinux
+	$(INSTALL) $(targetprefix)/sbin/sfdisk $@
+	@FLASHROOTDIR_MODIFIED@
+
+endif
 
 $(DEPDIR)/e2fsprogs: bootstrap @DEPENDS_e2fsprogs@
 	@PREPARE_e2fsprogs@
@@ -306,6 +330,15 @@ $(DEPDIR)/bonnie: bootstrap @DEPENDS_bonnie@
 		cp bonnie++ $(targetprefix)/sbin/bonnie
 	@CLEANUP_bonnie@
 	touch $@
+
+if TARGETRULESET_FLASH
+flash-bonnie: $(flashprefix)/root/sbin/bonnie
+
+$(flashprefix)/root/sbin/bonnie: bonnie | $(flashprefix)/root
+	cp $(targetprefix)/sbin/bonnie $@
+	@FLASHROOTDIR_MODIFIED@
+
+endif
 
 $(DEPDIR)/vdr: bootstrap @DEPENDS_vdr@
 	@PREPARE_vdr@
