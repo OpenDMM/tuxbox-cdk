@@ -53,7 +53,7 @@ libid3tag;0.15.0b;libid3tag-0.15.0b;libid3tag-0.15.0b.tar.gz:libid3tag.diff;extr
 libncurses;5.3;ncurses-5.3;ncurses-5.3.tar.gz;extract:ncurses-5.3.tar.gz
 libnet;1.0.2a;Libnet-1.0.2a;libnet-1.0.2a.tar.gz:libnet.diff;extract:libnet-1.0.2a.tar.gz;patch:libnet.diff
 libnids;1.16;libnids-1.16;libnids-1.16.tar.gz;extract:libnids-1.16.tar.gz
-libpcap;0.7.1;libpcap-0.7.1;libpcap-0.7.1.tar.gz;extract:libpcap-0.7.1.tar.gz;patch:libpcap.diff
+libpcap;0.9.3;libpcap-0.9.3;libpcap-0.9.3.tar.gz;extract:libpcap-0.9.3.tar.gz;patch:libpcap.diff
 libpng;1.2.8;libpng-1.2.8;libpng-1.2.8.tar.bz2:libpng.diff;extract:libpng-1.2.8.tar.bz2;patch:libpng.diff
 libpopt;1.6.4;popt-1.6.4;popt-1.6.4.tar.gz;extract:popt-1.6.4.tar.gz
 libreadline;4.3;readline-4.3;readline-4.3.tar.gz:readline.diff;extract:readline-4.3.tar.gz;patch:readline.diff
@@ -81,7 +81,7 @@ lirc;0.6.6;lirc-0.6.6;lirc-0.6.6.tar.bz2;extract:lirc-0.6.6.tar.bz2;patch:lirc.d
 lsof;4.64;lsof_4.64_src;lsof_4.64_src.tar.bz2:lsof.diff;extract:lsof_4.64_src.tar.bz2;patch:lsof.diff
 pump;0.8.11;pump-0.8.11;pump-0.8.11.tar.bz2:pump.diff;extract:pump-0.8.11.tar.bz2;patch:pump.diff
 ssh;3.5p1;openssh-3.5p1;openssh-3.5p1.tar.gz:ssh.diff;extract:openssh-3.5p1.tar.gz;patch:ssh.diff
-tcpdump;3.7.1;tcpdump-3.7.1;tcpdump-3.7.1.tar.gz;extract:tcpdump-3.7.1.tar.gz;patch:tcpdump.diff
+tcpdump;3.9.3;tcpdump-3.9.3;tcpdump-3.9.3.tar.gz;extract:tcpdump-3.9.3.tar.gz;patch:tcpdump.diff
 xrc;0.6.3;xrc-0.6.3;xrc-0.6.3.tar.gz:xrc.diff;extract:xrc-0.6.3.tar.gz;patch:xrc.diff
 thttpd;2.23beta1;thttpd-2.23beta1;thttpd-2.23beta1.tar.gz;extract:thttpd-2.23beta1.tar.gz;patch:thttpd.diff
 e2fsprogs;1.35;e2fsprogs-1.35;e2fsprogs-1.35.tar.gz;extract:e2fsprogs-1.35.tar.gz;patch:e2fsprogs_gcc4_build_fix.diff
