@@ -2167,8 +2167,10 @@ $(flashprefix)/.part_plugin_tuxtxt: $(flashprefix)/.flash .plugins
 flash-plugin_tuxcom: $(flashprefix)/.part_plugin_tuxcom
 $(flashprefix)/.part_plugin_tuxcom: $(flashprefix)/.flash .plugins
 	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
+	$(INSTALL) -d $(flashprefix)/root/var_init/tuxbox/config/tuxcom
 	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/tuxcom.so $(flashprefix)/root/lib/tuxbox/plugins/
 	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/tuxcom.cfg $(flashprefix)/root/lib/tuxbox/plugins/
+	$(INSTALL) -m755 $(targetprefix)/var/tuxbox/config/tuxcom/mp3 $(flashprefix)/root/var_init/tuxbox/config/tuxcom
 	@touch $@
 
 flash-plugin_tuxcal: $(flashprefix)/.part_plugin_tuxcal
