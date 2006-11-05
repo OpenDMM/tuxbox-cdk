@@ -439,6 +439,22 @@ and combinations of this.-->
 		<transponder centre_frequency="642000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="666000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
+	<terrestrial name="Keflavik(is)" flags="5">
+		<transponder centre_frequency="242000000" bandwidth="0" constellation="2" code_rate_hp="5" code_rate_lp="5" guard_interval="4" transmission_mode="2" hierarchy_information="4" inversion="2" />
+		<transponder centre_frequency="250000000" bandwidth="0" constellation="2" code_rate_hp="5" code_rate_lp="2" guard_interval="4" transmission_mode="2" hierarchy_information="4" inversion="2" />
+		<transponder centre_frequency="258000000" bandwidth="0" constellation="2" code_rate_hp="5" code_rate_lp="2" guard_interval="4" transmission_mode="2" hierarchy_information="4" inversion="2" />
+		<transponder centre_frequency="266000000" bandwidth="0" constellation="2" code_rate_hp="5" code_rate_lp="2" guard_interval="4" transmission_mode="2" hierarchy_information="4" inversion="2" />
+		<transponder centre_frequency="274000000" bandwidth="0" constellation="2" code_rate_hp="5" code_rate_lp="2" guard_interval="4" transmission_mode="2" hierarchy_information="4" inversion="2" />
+		<transponder centre_frequency="282000000" bandwidth="0" constellation="2" code_rate_hp="5" code_rate_lp="2" guard_interval="4" transmission_mode="2" hierarchy_information="4" inversion="2" />
+		<transponder centre_frequency="298000000" bandwidth="0" constellation="2" code_rate_hp="5" code_rate_lp="2" guard_interval="4" transmission_mode="2" hierarchy_information="4" inversion="2" />
+		<transponder centre_frequency="314000000" bandwidth="0" constellation="2" code_rate_hp="5" code_rate_lp="2" guard_interval="4" transmission_mode="2" hierarchy_information="4" inversion="2" />
+		<transponder centre_frequency="322000000" bandwidth="0" constellation="2" code_rate_hp="5" code_rate_lp="2" guard_interval="4" transmission_mode="2" hierarchy_information="4" inversion="2" />
+		<transponder centre_frequency="330000000" bandwidth="0" constellation="2" code_rate_hp="5" code_rate_lp="2" guard_interval="4" transmission_mode="2" hierarchy_information="4" inversion="2" />
+		<transponder centre_frequency="338000000" bandwidth="0" constellation="2" code_rate_hp="5" code_rate_lp="2" guard_interval="4" transmission_mode="2" hierarchy_information="4" inversion="2" />
+		<transponder centre_frequency="354000000" bandwidth="0" constellation="2" code_rate_hp="5" code_rate_lp="2" guard_interval="4" transmission_mode="2" hierarchy_information="4" inversion="2" />
+		<transponder centre_frequency="362000000" bandwidth="0" constellation="2" code_rate_hp="5" code_rate_lp="2" guard_interval="4" transmission_mode="2" hierarchy_information="4" inversion="2" />
+		<transponder centre_frequency="378000000" bandwidth="0" constellation="2" code_rate_hp="5" code_rate_lp="2" guard_interval="4" transmission_mode="2" hierarchy_information="4" inversion="2" />
+	</terrestrial>
 	<terrestrial name="AlphenaandenRijn(nl)" flags="5">
 		<transponder centre_frequency="474000000" bandwidth="0" constellation="2" code_rate_hp="0" code_rate_lp="6" guard_interval="3" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="578000000" bandwidth="0" constellation="2" code_rate_hp="0" code_rate_lp="6" guard_interval="3" transmission_mode="1" hierarchy_information="0" inversion="2" />
