@@ -69,6 +69,7 @@ if [ $KMINOR -ge 6 ]; then
 		mknod /dev/dbox/lcd0 c 10 59
 		mknod /dev/dbox/saa0 c 10 58
 		mknod /dev/dbox/dvb2eth c 10 57
+		mknod /dev/dbox/aviaEXT c 10 56
 
 		mknod /dev/watchdog c 10 130
 		mknod /dev/lirc c 10 61
@@ -191,6 +192,7 @@ if [ $KMINOR -ge 6 ]; then
 	loadmodule(lcd)
 	loadmodule(saa7126)
 	loadmodule(dvb2eth)
+	loadmodule(aviaEXT)
 else
 	# kernel 2.4
 
