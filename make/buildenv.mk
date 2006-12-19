@@ -31,6 +31,7 @@ endif
 if TARGETRULESET_FLASH
 CONFIGURE_OPTS_DEBUG = \
 	--without-debug
+MKSQUASHFS = $(hostprefix)/bin/mksquashfs
 endif
 
 CONFIGURE = \
