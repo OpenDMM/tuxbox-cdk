@@ -344,11 +344,6 @@ if test "$enable_flashrules" = "yes"; then
 		fi
 		MKJFFS2="$MKFSJFFS2"
 	fi
-	AC_PATH_PROG(MKSQUASHFS,mksquashfs,no)
-	if test "$MKSQUASHFS" = "no"; then
-		AC_MSG_WARN(using tuxbox squashfs)
-		MKSQUASHFS=$hostprefix/bin/mksquashfs
-	fi
 fi
 
 FONTDIR="/share/fonts"
