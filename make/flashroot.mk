@@ -50,6 +50,9 @@ endif
 if ENABLE_NFSSERVER
 	$(MAKE) flash-nfsserver
 endif
+if ENABLE_SAMBASERVER
+	$(MAKE) flash-sambaserver
+endif
 if ENABLE_GERMAN_KEYMAPS
 	$(MAKE) flash-german-keymaps
 endif
