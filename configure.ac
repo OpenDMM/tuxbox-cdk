@@ -112,6 +112,12 @@ AC_ARG_ENABLE(nfsserver,
 AM_CONDITIONAL(ENABLE_NFSSERVER,test "$enable_nfsserver" = "yes")
 AC_SUBST(NFSSERVER)
 
+AC_ARG_ENABLE(sambaserver,
+	AS_HELP_STRING(--enable-sambaserver,    enable the dBox samba server),
+	[SAMBASERVER=sambaserver],[enable_sambaserver=no])
+AM_CONDITIONAL(ENABLE_SAMBASERVER,test "$enable_sambaserver" = "yes")
+AC_SUBST(SAMBASERVER)
+
 AC_ARG_WITH(rootpartitionsize,
 	[  --with-rootpartitionsize=SIZE	size of the root partition],
 	[ROOT_PARTITION_SIZE="$withval"],[ROOT_PARTITION_SIZE="0x660000"])
@@ -394,6 +400,7 @@ TUXBOX_RULES_MAKE(procps)
 TUXBOX_RULES_MAKE(udev)
 TUXBOX_RULES_MAKE(watchdog)
 TUXBOX_RULES_MAKE(mrouted)
+TUXBOX_RULES_MAKE(samba)
 
 TUXBOX_RULES_MAKE(cramfs)
 TUXBOX_RULES_MAKE(squashfs)
@@ -551,6 +558,7 @@ default server:	       $defaultserver
 update http prefix:    $updatehttpprefix
 IDE support:	       $enable_ide
 NFS server:	       $enable_nfsserver
+Samba server:          $enable_sambaserver
 German keymaps:	       $enable_german_keymaps
 ])
 

@@ -75,6 +75,7 @@ cdk/make/precious.mk
 cdk/make/radiobox.mk
 cdk/make/reduce-libs.mk
 cdk/make/rootutils.mk
+cdk/make/sambaserver.mk
 cdk/make/serversupport.mk
 cdk/make/tags.mk
 cdk/make/tuxbox_libs.mk

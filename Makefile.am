@@ -19,6 +19,9 @@ include make/automount.mk
 # NFS server
 include make/nfsserver.mk
 
+# Samba server
+include make/sambaserver.mk
+
 # The busybox (implements most standard Unix commands, like ls,...)
 include make/busybox.mk
 

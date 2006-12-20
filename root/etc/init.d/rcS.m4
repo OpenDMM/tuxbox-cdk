@@ -298,6 +298,12 @@ runprogifexists({/etc/exports},{loadmodule(nfsd)
 	rpc.mountd
 	rpc.nfsd 3})	
 
+#Start the samba server if /var/etc/.sambaserver and /etc/smb.conf.dbox exist
+ifmarkerfile({sambaserver},{if [ -e /etc/smb.conf -a -x /bin/nmbd -a -x /bin/smbd ]; then
+		/bin/nmbd -D
+		/bin/smbd -D -a -s /etc/smb.conf
+	fi})
+
 ifmarkerfile({tuxmaild},{tuxmaild})
 ifmarkerfile({tuxcald},{tuxcald})
 ifmarkerfile({rdate},{rdate time.fu-berlin.de})
