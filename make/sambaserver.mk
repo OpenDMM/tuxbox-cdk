@@ -41,9 +41,7 @@ $(flashprefix)/root/sbin/samba: bootstrap @DEPENDS_samba@ | $(flashprefix)/root
 			cp $$i $(flashprefix)/root/bin; \
 		done; \
 		$(INSTALL) -m 644 $(buildprefix)/root/etc/smb.conf $(flashprefix)/root/var/etc && \
-		$(INSTALL) -m 644 $(buildprefix)/root/etc/smbpasswd $(flashprefix)/root/var/etc \
-		ln -sf /var/etc/smb.conf $(flashprefix)/root/etc/smb.conf
-		ln -sf /var/etc/smbpasswd $(flashprefix)/root/etc/smbpasswd
+		$(INSTALL) -m 644 $(buildprefix)/root/etc/smbpasswd $(flashprefix)/root/var/etc ;
 	@CLEANUP_samba@
 	@FLASHROOTDIR_MODIFIED@
 
