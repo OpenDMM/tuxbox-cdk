@@ -1009,6 +1009,22 @@ contrib_apps_optional: .dsniff .pump .thttpd
 	@CLEANUP_lirc@
 	touch $@
 
+.polipo: .bootstrap @DEPENDS_polipo@
+	@PREPARE_polipo@
+	cd @DIR_polipo@ && \
+		$(BUILDENV) \
+		$(MAKE) polipo \
+			PREFIX="" && \
+		@INSTALL_polipo@
+		$(INSTALL) -d $(targetprefix)/var/etc/polipo
+		$(INSTALL) -d $(targetprefix)/var/etc/polipo/www
+		$(INSTALL) -m644 @DIR_polipo@/config.dbox2 $(targetprefix)/var/etc/polipo/config
+		$(INSTALL) -m644 @DIR_polipo@/forbidden.dbox2 $(targetprefix)/var/etc/polipo/forbidden
+		$(INSTALL) -m644 @DIR_polipo@/localindex.html $(targetprefix)/var/etc/polipo/www/index.html
+		ln -sf /var/etc/polipo $(targetprefix)/etc/polipo
+	@CLEANUP_polipo@
+	touch $@
+
 .utillinux: .bootstrap @DEPENDS_utillinux@
 	@PREPARE_utillinux@
 	cd @DIR_utillinux@ && \
@@ -1522,6 +1538,19 @@ fun: .gnuboy .scummvm .sdldoom
 		$(INSTALL) @DIR_amule@/amulestart $(targetprefix)/bin/
 		$(INSTALL) @DIR_amule@/amule.install $(targetprefix)/bin/
 	@CLEANUP_amule@
+	touch $@
+
+.ctorrent: .bootstrap @DEPENDS_ctorrent@
+	@PREPARE_ctorrent@
+	cd @DIR_ctorrent@ && \
+		$(BUILDENV) \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--prefix= && \
+		$(MAKE) all && \
+		@INSTALL_ctorrent@
+	@CLEANUP_ctorrent@
 	touch $@
 
 #######################
@@ -2077,6 +2106,27 @@ $(flashprefix)/.part_amule: $(flashprefix)/.flash .amule
 	CURRENT_PATH=`pwd` && cd $(flashprefix) && tar -cf install.tar install && rm install && cd $$CURRENT_PATH
 	@touch $@
 
+flash-polipo: $(flashprefix)/.part_polipo
+$(flashprefix)/.part_polipo: $(flashprefix)/.flash .polipo
+	$(INSTALL) $(targetprefix)/bin/polipo $(flashprefix)/root/bin
+	$(INSTALL) -d $(flashprefix)/root/var_init/etc
+	cp -pa $(targetprefix)/var/etc/polipo $(flashprefix)/root/var_init/etc
+	echo "diskCacheRoot = \"/hdd/cache/\"" >> $(flashprefix)/root/var_init/etc/polipo/config
+	@touch $@
+
+flash-ctorrent: $(flashprefix)/.part_ctorrent
+$(flashprefix)/.part_ctorrent: $(flashprefix)/.flash .ctorrent
+	$(INSTALL) -d $(flashprefix)/root/var_init/bin
+	@echo "#!/bin/sh" > $(flashprefix)/root/var_init/bin/ctorrent.sh
+	@echo "#Optional IP of a Server" >> $(flashprefix)/root/var_init/bin/ctorrent.sh
+	@echo "Server=192.168.0.11" >> $(flashprefix)/root/var_init/bin/ctorrent.sh
+	@echo "#Optional Port is 2780 (TCP)" >> $(flashprefix)/root/var_init/bin/ctorrent.sh
+	@echo "Port=2780" >> $(flashprefix)/root/var_init/bin/ctorrent.sh
+	@echo "#Exit after 1:1 ratio, dont use cache memory" >> $(flashprefix)/root/var_init/bin/ctorrent.sh
+	@echo "/bin/ctorrent -E 1 -C 0 -S \$$Server:\$$Port \$$1 \$$2 \$$3" >> $(flashprefix)/root/var_init/bin/ctorrent.sh
+	$(INSTALL) $(targetprefix)/bin/ctorrent $(flashprefix)/root/bin
+	@touch $@
+
 flash-joe: $(flashprefix)/.part_joe
 $(flashprefix)/.part_joe: $(flashprefix)/.flash .joe
 	$(INSTALL) -d $(flashprefix)/root/etc/joe
@@ -2504,10 +2554,10 @@ distclean-local:
 	-rm .cabextract
 	-rm .gdb .gdb-remote .insight .ksymoops .ltrace .strace .nano
 	-rm .kaffeh .kaffe
-	-rm .gnuboy .scummvm .sdldoom .wxbase .amule
+	-rm .gnuboy .scummvm .sdldoom .wxbase .amule .ctorrent
 	-rm .linuxkernel .reiserfsprogs .e2fsprogs .samba .dreamfiles .etherwake .utillinux
 	-rm .dvbsnoop .enigma .lcars .lcdmenu .neutrino .stream .zapit
-	-rm .console_data .console_tools .dsniff .fbset .lirc .pump .ssh .tcpdump .xrc .thttpd
+	-rm .console_data .console_tools .dsniff .fbset .lirc .polipo .pump .ssh .tcpdump .xrc .thttpd
 	-rm .dvbdate .dvbstream .dvbtext .dvbtune .vls
 	-rm .misc_libs .misc_tools .plugins .libtuxbox .tuxbox_libs .tuxbox_tools
 	-rm -rf $(targetprefix)

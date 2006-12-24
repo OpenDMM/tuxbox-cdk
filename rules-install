@@ -78,6 +78,7 @@ dsniff;make:install:install_prefix=TARGET
 fbset;install:-m755:fbset:TARGET/bin
 lirc;make:install
 lsof;install:-m755:lsof:TARGET/sbin
+polipo;install:polipo:TARGET/bin
 pump;make:install:DEST=TARGET
 ssh;make:install:DESTDIR=TARGET
 tcpdump;make:install
@@ -117,6 +118,7 @@ scummvm;install:-m755:scummvm:TARGET/bin
 sdldoom;make:install:DESTDIR=TARGET
 wxbase;make:install:DESTDIR=TARGET
 amule;make:install:DESTDIR=TARGET
+ctorrent;make:install:DESTDIR=TARGET
 
 #
 # dvb apps
