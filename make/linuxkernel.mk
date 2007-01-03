@@ -40,9 +40,21 @@ endif
 #	touch $@
 
 if ENABLE_IDE
-IDE_SED_CONF=$(foreach param,CONFIG_IDE CONFIG_BLK_DEV_IDE CONFIG_BLK_DEV_IDEDISK CONFIG_EXT2_FS CONFIG_EXT3_FS CONFIG_JBD,-e s"/^.*$(param)[= ].*/$(param)=m/")
+IDE_SED_CONF=$(foreach param,CONFIG_IDE CONFIG_BLK_DEV_IDE CONFIG_BLK_DEV_IDEDISK,-e s"/^.*$(param)[= ].*/$(param)=m/")
 else
 IDE_SED_CONF=-e ""
+endif
+
+if ENABLE_EXT3
+EXT3_SED_CONF=$(foreach param,CONFIG_EXT2_FS CONFIG_EXT3_FS CONFIG_JBD,-e s"/^.*$(param)[= ].*/$(param)=m/")
+else
+EXT3_SED_CONF=-e ""
+endif
+
+if ENABLE_XFS
+XFS_SED_CONF=$(foreach param,CONFIG_XFS_FS,-e s"/^.*$(param)[= ].*/$(param)=m/")
+else
+XFS_SED_CONF=-e ""
 endif
 
 if ENABLE_NFSSERVER
@@ -57,7 +69,7 @@ $(bootprefix)/kernel-cdk: linuxdir $(hostprefix)/bin/mkimage Patches/linux-$(KER
 if KERNEL26
 	$(INSTALL) -m644 Patches/linux-$(KERNELVERSION).config $(KERNEL_DIR)/.config
 else
-	sed $(IDE_SED_CONF) $(NFSSERVER_SED_CONF) Patches/linux-$(KERNELVERSION).config \
+	sed $(IDE_SED_CONF) $(EXT3_SED_CONF) $(XFS_SED_CONF) $(NFSSERVER_SED_CONF) Patches/linux-$(KERNELVERSION).config \
 		> $(KERNEL_DIR)/.config
 	m4 Patches/dbox2-flash.c.m4 > linux/drivers/mtd/maps/dbox2-flash.c
 endif
