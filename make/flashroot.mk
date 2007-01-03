@@ -47,6 +47,9 @@ endif
 if ENABLE_CDKVCINFO
 	$(MAKE) flash-cdkVcInfo
 endif
+if ENABLE_XFS
+	$(MAKE) flash-xfsprogs
+endif
 if ENABLE_NFSSERVER
 	$(MAKE) flash-nfsserver
 endif
