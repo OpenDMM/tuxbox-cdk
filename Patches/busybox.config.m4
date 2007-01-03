@@ -340,7 +340,7 @@ option(`CONFIG_VLOCK', `n', `n')
 #
 # Linux Ext2 FS Progs
 #
-ifdef(`ide',
+ifdef(`ext3',
 `option(`CONFIG_CHATTR', `y', `y')
 option(`CONFIG_E2FSCK', `y', `y')
 option(`CONFIG_FSCK', `y', `y')
