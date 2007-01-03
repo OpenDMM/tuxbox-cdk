@@ -102,9 +102,30 @@ AM_CONDITIONAL(ENABLE_GERMAN_KEYMAPS,test "$enable_german_keymaps" = "yes")
 AC_SUBST(CONSOLE_TOOLS)
 
 AC_ARG_ENABLE(ide,
-	AS_HELP_STRING(--enable-ide,	include ide and ext3 drivers in yadds and images),
+	AS_HELP_STRING(--enable-ide,	include ide and ext2/ext3 drivers in yadds and images),
 	[],[enable_ide=no])
+
+AC_ARG_ENABLE(ext3,
+	AS_HELP_STRING(--disable-ext3,	exclude ext2/ext3 drivers in yadds and images),
+	[],[enable_ext3=yes])
+
+AC_ARG_ENABLE(xfs,
+	AS_HELP_STRING(--enable-xfs,	include xfs drivers in yadds and images),
+	[XFSPROGS=xfsprogs],[enable_xfs=no])
+AC_SUBST(XFSPROGS)
+
+if test "$enable_ide" = "no"; then
+	enable_ext3=no
+	enable_xfs=no
+fi
+if ! test "$enable_ext3" = "yes" -o "$enable_xfs" = "yes"; then
+	enable_ide=no
+	enable_ext3=no
+	enable_xfs=no
+fi
 AM_CONDITIONAL(ENABLE_IDE,test "$enable_ide" = "yes")
+AM_CONDITIONAL(ENABLE_EXT3,test "$enable_ext3" = "yes")
+AM_CONDITIONAL(ENABLE_XFS,test "$enable_xfs" = "yes")
 
 AC_ARG_ENABLE(nfsserver,
 	AS_HELP_STRING(--enable-nfsserver,	enable the dBox NFS server),
@@ -437,6 +458,7 @@ TUXBOX_RULES_MAKE(libxml2)
 TUXBOX_RULES_MAKE(libz)
 TUXBOX_RULES_MAKE(libglib)
 TUXBOX_RULES_MAKE(libiconv)
+TUXBOX_RULES_MAKE(libtool)
 
 #
 # contrib apps
@@ -460,6 +482,7 @@ TUXBOX_RULES_MAKE(e2fsprogs)
 TUXBOX_RULES_MAKE(utillinux)
 TUXBOX_RULES_MAKE(parted)
 TUXBOX_RULES_MAKE(hddtemp)
+TUXBOX_RULES_MAKE(xfsprogs)
 
 #
 # msttf
@@ -557,6 +580,8 @@ GNU server:	       $gnuserver
 default server:	       $defaultserver
 update http prefix:    $updatehttpprefix
 IDE support:	       $enable_ide
+Ext2/3 support for IDE: $enable_ext3
+XFS support for IDE:   $enable_xfs
 NFS server:	       $enable_nfsserver
 Samba server:          $enable_sambaserver
 German keymaps:	       $enable_german_keymaps

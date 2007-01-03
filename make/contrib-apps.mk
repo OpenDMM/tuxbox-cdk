@@ -5,7 +5,7 @@
 
 contrib_apps: bzip2 console_data console_tools fbset lirc ide_apps lsof dropbear ssh tcpdump bonnie lufs kermit
 
-ide_apps: hdparm utillinux e2fsprogs parted hddtemp
+ide_apps: hdparm utillinux e2fsprogs parted hddtemp xfsprogs
 
 $(DEPDIR)/bzip2: bootstrap @DEPENDS_bzip2@
 	@PREPARE_bzip2@
@@ -132,7 +132,7 @@ $(DEPDIR)/utillinux: bootstrap @DEPENDS_utillinux@
 	@PREPARE_utillinux@
 	cd @DIR_utillinux@ && \
 		CC=$(target)-gcc \
-		CFLAGS="-Os -msoft-float" \
+		CFLAGS="-Os -msoft-float -I$(targetprefix)/include/ncurses" \
 		LDFLAGS="$(TARGET_LDFLAGS)" \
 		./configure && \
 		$(MAKE) ARCH=ppc all && \
@@ -456,5 +456,118 @@ $(flashprefix)/root/sbin/hddtemp: bootstrap @DEPENDS_hddtemp@ | $(flashprefix)/r
 	@CLEANUP_hddtemp@
 	@FLASHROOTDIR_MODIFIED@
 	@TUXBOX_CUSTOMIZE@
+
+endif
+
+# xfsprogs needs "special" built libtool and uuid header/lib of e2fsprogs
+$(DEPDIR)/xfsprogs: bootstrap libtool @DEPENDS_e2fsprogs@ @DEPENDS_xfsprogs@
+	@PREPARE_e2fsprogs@
+	cd @DIR_e2fsprogs@ && \
+		CC=$(target)-gcc \
+		RANLIB=$(target)-ranlib \
+		CFLAGS="-Os -msoft-float" \
+		LDFLAGS="$(TARGET_LDFLAGS)" \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--target=$(target) \
+			--prefix= \
+			--with-cc=$(target)-gcc \
+			--with-linker=$(target)-ld \
+			--disable-evms \
+			--enable-elf-shlibs \
+			--enable-htree \
+			--disable-profile \
+			--disable-swapfs \
+			--disable-debugfs \
+			--disable-image \
+			--enable-resizer \
+			--enable-dynamic-e2fsck \
+			--enable-fsck \
+			--with-gnu-ld \
+			--disable-nls && \
+		$(MAKE) libs && \
+		$(INSTALL) -d $(targetprefix)/include/uuid && \
+		$(INSTALL) -m 644 lib/uuid/uuid.h $(targetprefix)/include/uuid && \
+		$(INSTALL) -m 644 lib/uuid/uuid_types.h $(targetprefix)/include/uuid && \
+		$(INSTALL) lib/uuid/libuuid.a $(targetprefix)/lib && \
+		$(INSTALL) lib/uuid/libuuid.so.1.2 $(targetprefix)/lib && \
+		ln -sf libuuid.so.1.2 $(targetprefix)/lib/libuuid.so.1 && \
+		ln -sf libuuid.so.1 $(targetprefix)/lib/libuuid.so
+#		$(MAKE) libs
+#		$(MAKE) install-libs DESTDIR=$(targetprefix)
+	@CLEANUP_e2fsprogs@
+	@PREPARE_xfsprogs@
+	cd @DIR_xfsprogs@ && \
+		$(BUILDENV) \
+		autoconf && \
+		LIBTOOL=$(hostprefix)/bin/libtool \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--target=$(target) \
+			--includedir=$(targetprefix)/include \
+			--prefix=$(targetprefix) &&\
+		$(MAKE) && \
+		$(MAKE) install DESTDIR=$(targetprefix)
+	@CLEANUP_xfsprogs@
+	touch $@
+
+if TARGETRULESET_FLASH
+flash-xfsprogs: $(flashprefix)/root/sbin/mkfs.xfs
+
+$(flashprefix)/root/sbin/mkfs.xfs: bootstrap libtool @DEPENDS_e2fsprogs@ @DEPENDS_xfsprogs@ | $(flashprefix)/root
+	@PREPARE_e2fsprogs@
+	cd @DIR_e2fsprogs@ && \
+		CC=$(target)-gcc \
+		RANLIB=$(target)-ranlib \
+		CFLAGS="-Os -msoft-float" \
+		LDFLAGS="$(TARGET_LDFLAGS)" \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--target=$(target) \
+			--prefix= \
+			--with-cc=$(target)-gcc \
+			--with-linker=$(target)-ld \
+			--disable-evms \
+			--enable-elf-shlibs \
+			--enable-htree \
+			--disable-profile \
+			--disable-swapfs \
+			--disable-debugfs \
+			--disable-image \
+			--enable-resizer \
+			--enable-dynamic-e2fsck \
+			--enable-fsck \
+			--with-gnu-ld \
+			--disable-nls && \
+		$(MAKE) libs && \
+		$(INSTALL) -d $(targetprefix)/include/uuid && \
+		$(INSTALL) -m 644 lib/uuid/uuid.h $(targetprefix)/include/uuid && \
+		$(INSTALL) -m 644 lib/uuid/uuid_types.h $(targetprefix)/include/uuid && \
+		$(INSTALL) lib/uuid/libuuid.a $(targetprefix)/lib && \
+		$(INSTALL) lib/uuid/libuuid.so.1.2 $(targetprefix)/lib && \
+		ln -sf libuuid.so.1.2 $(targetprefix)/lib/libuuid.so.1 && \
+		ln -sf libuuid.so.1 $(targetprefix)/lib/libuuid.so
+#		$(MAKE) libs
+#		$(MAKE) install-libs DESTDIR=$(targetprefix)
+	@CLEANUP_e2fsprogs@
+	@PREPARE_xfsprogs@
+	cd @DIR_xfsprogs@ && \
+		$(BUILDENV) \
+		autoconf && \
+		LIBTOOL=$(hostprefix)/bin/libtool \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--target=$(target) \
+			--includedir=$(targetprefix)/include \
+			--prefix=$(targetprefix) && \
+		$(MAKE) && \
+		for i in mkfs/mkfs.xfs repair/xfs_repair; do \
+			$(INSTALL) $$i $(flashprefix)/root/sbin; done;
+	@CLEANUP_xfsprogs@
+	@FLASHROOTDIR_MODIFIED@
 
 endif

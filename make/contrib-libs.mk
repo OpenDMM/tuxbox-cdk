@@ -6,7 +6,7 @@
 libs: \
 	libcurl libdirectfb libdirectfbpp libppdirectfb libdvbpsi \
 	libfreetype libjpeg libmad libid3tag libncurses libpng \
-	libreadline libsdl libsigc libz libdvb 
+	libreadline libsdl libsigc libz libdvb libtool
 
 libs_optional: \
 	libcommoncplusplus libffi \
@@ -474,4 +474,28 @@ $(DEPDIR)/libiconv: bootstrap @DEPENDS_libiconv@
 		$(MAKE) && \
 		@INSTALL_libiconv@
 	@CLEANUP_libiconv@
+	touch $@
+
+# ripped from uclibc/.../libtool.mk
+$(DEPDIR)/libtool: bootstrap @DEPENDS_libtool@
+	@PREPARE_libtool@
+	cd @DIR_libtool@ && \
+		$(BUILDENV) \
+		./configure \
+			--target=$(target) \
+			--host=$(target) \
+			--build=$(build) \
+			--prefix=/usr \
+			--exec-prefix=/usr \
+			--bindir=/usr/bin \
+			--sbindir=/usr/sbin \
+			--libexecdir=/usr/lib \
+			--sysconfdir=/etc \
+			--datadir=/usr/share \
+			--localstatedir=/var \
+			--mandir=/usr/man \
+			--infodir=/usr/info && \
+		$(MAKE) CC=$(target)-gcc && \
+		$(INSTALL) -m755 libtool $(hostprefix)/bin
+	@CLEANUP_libtool@
 	touch $@

@@ -124,6 +124,7 @@ else
 		loadmodule(ext2)
 		loadmodule(jbd)
 		loadmodule(ext3)
+		loadmodule(xfs)
 	fi
 fi
 
