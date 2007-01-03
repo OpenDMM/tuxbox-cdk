@@ -52,6 +52,11 @@ $(flashprefix)/neutrino-jffs2.img%: \
 		$(flashprefix)/root-neutrino.jffs2 \
 		$(hostprefix)/bin/checkImage
 	cat $< $(word 2,$+) > $@
+	@FILESIZE=$$(stat -c%s $@); \
+	if [ $$FILESIZE -gt 8257536 ]; \
+		then echo "fatal error: File $@ too large ($$FILESIZE > 8257536)"; \
+		rm $@; exit 1; \
+	fi
 	@TUXBOX_CHECKIMAGE@
 	@TUXBOX_CUSTOMIZE@
 
