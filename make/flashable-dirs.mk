@@ -2,8 +2,14 @@
 #
 # Pattern: $partition-$gui[-$filesystem]
 
+if ENABLE_EXT3
+EXT3=ext3
+else
+XFS=xfs
+endif
+
 if ENABLE_IDE
-HDD_MOUNT_ENTRY=/dev/ide/host0/bus0/target0/lun0/part2	/hdd	ext3	\
+HDD_MOUNT_ENTRY=/dev/ide/host0/bus0/target0/lun0/part2	/hdd	$(EXT3)$(XFS)	\
 defaults	1 2
 endif
 
