@@ -147,6 +147,19 @@ $(flashprefix)/root/sbin/sfdisk: utillinux
 	$(INSTALL) $(targetprefix)/sbin/sfdisk $@
 	@FLASHROOTDIR_MODIFIED@
 
+flash-cfdisk: $(flashprefix)/root/sbin/cfdisk
+
+$(flashprefix)/root/sbin/cfdisk: utillinux
+	$(INSTALL) $(targetprefix)/sbin/cfdisk $@
+	@FLASHROOTDIR_MODIFIED@
+
+#replaces busybox fdisk
+flash-fdisk: $(flashprefix)/root/sbin/fdisk
+
+$(flashprefix)/root/sbin/fdisk: utillinux
+	$(INSTALL) $(targetprefix)/sbin/fdisk $@
+	@FLASHROOTDIR_MODIFIED@
+
 endif
 
 $(DEPDIR)/e2fsprogs: bootstrap @DEPENDS_e2fsprogs@
