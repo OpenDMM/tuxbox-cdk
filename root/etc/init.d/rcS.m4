@@ -38,7 +38,7 @@ MD=/lib/modules/$(uname -r)/misc
 })dnl
 
 # extract kernel minor without using cut
-OLD_IFS=IFS
+OLD_IFS=$IFS
 IFS='.'
 get_second() {{ echo $2; }}
 KMINOR=`get_second $(uname -r)`
