@@ -5,7 +5,7 @@
 
 contrib_apps: bzip2 console_data console_tools fbset lirc ide_apps lsof dropbear ssh tcpdump bonnie lufs kermit
 
-ide_apps: hdparm utillinux e2fsprogs parted hddtemp xfsprogs
+ide_apps: hdparm utillinux e2fsprogs parted hddtemp xfsprogs smartmontools
 
 $(DEPDIR)/bzip2: bootstrap @DEPENDS_bzip2@
 	@PREPARE_bzip2@
@@ -581,6 +581,42 @@ $(flashprefix)/root/sbin/mkfs.xfs: bootstrap libtool @DEPENDS_e2fsprogs@ @DEPEND
 		for i in mkfs/mkfs.xfs repair/xfs_repair; do \
 			$(INSTALL) $$i $(flashprefix)/root/sbin; done;
 	@CLEANUP_xfsprogs@
+	@FLASHROOTDIR_MODIFIED@
+
+endif
+
+$(DEPDIR)/smartmontools: bootstrap @DEPENDS_smartmontools@
+	@PREPARE_smartmontools@
+	cd @DIR_smartmontools@ && \
+		$(BUILDENV) \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--target=$(target) \
+			--includedir=$(targetprefix)/include \
+			--prefix=$(targetprefix) &&\
+		$(MAKE) && \
+		$(MAKE) install DESTDIR=
+	@CLEANUP_smartmontools@
+	touch $@
+
+if TARGETRULESET_FLASH
+flash-smartmontools: $(flashprefix)/root/sbin/smartctl
+
+$(flashprefix)/root/sbin/smartctl: bootstrap @DEPENDS_smartmontools@ | $(flashprefix)/root
+	@PREPARE_smartmontools@
+	cd @DIR_smartmontools@ && \
+		$(BUILDENV) \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--target=$(target) \
+			--includedir=$(targetprefix)/include \
+			--prefix=$(targetprefix) &&\
+		$(MAKE) && \
+		for i in smartctl ; do \
+			$(INSTALL) $$i $(flashprefix)/root/sbin; done;
+	@CLEANUP_smartmontools@
 	@FLASHROOTDIR_MODIFIED@
 
 endif
