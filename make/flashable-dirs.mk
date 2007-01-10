@@ -25,6 +25,9 @@ $(flashprefix)/root-% $(flashprefix)/root
 	if [ -d $(flashprefix)/root/etc/ssh ] ; then \
 		cp -rd $(flashprefix)/root/etc/ssh $@/etc/ssh ; \
 	fi
+	if [ -e $(flashprefix)/root/etc/profile.local ]; then \
+		cp $(flashprefix)/root/etc/profile.local $@/etc; \
+	fi
 	$(INSTALL) -d $@/plugins
 	$(INSTALL) -d $@/tuxbox/plugins
 	$(MAKE) -C $(appsdir)/tuxbox/tools/camd install prefix=$@
@@ -72,6 +75,10 @@ endif
 	fi
 	ln -sf /var/etc/issue.net $@/etc/issue.net
 	ln -sf /var/bin/camd2 $@/bin/camd2
+	if [ -e $@/etc/profile.local ]; then \
+		rm $@/etc/profile.local; \
+		ln -sf /var/etc/profile.local $@/etc/profile.local; \
+	fi
 	mv $@/etc/init.d/rcS.insmod $@/etc/init.d/rcS
 	@TUXBOX_CUSTOMIZE@
 
@@ -102,6 +109,10 @@ endif
 	fi
 	ln -sf /var/etc/issue.net $@/etc/issue.net
 	ln -sf /var/bin/camd2 $@/bin/camd2
+	if [ -e $@/etc/profile.local ]; then \
+		rm $@/etc/profile.local; \
+		ln -sf /var/etc/profile.local $@/etc/profile.local; \
+	fi
 	mv $@/etc/init.d/rcS.insmod $@/etc/init.d/rcS
 	@TUXBOX_CUSTOMIZE@
 
@@ -128,6 +139,10 @@ endif
 	ln -sf /var/etc/issue.net $@/etc/issue.net
 	ln -sf /var/etc/localtime $@/etc/localtime
 	ln -sf /var/bin/camd2 $@/bin/camd2
+	if [ -e $@/etc/profile.local ]; then \
+		rm $@/etc/profile.local; \
+		ln -sf /var/etc/profile.local $@/etc/profile.local; \
+	fi
 	mv $@/etc/init.d/rcS.insmod $@/etc/init.d/rcS
 	@TUXBOX_CUSTOMIZE@
 
