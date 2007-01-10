@@ -1,11 +1,9 @@
 if ENABLE_SAMBASERVER
 
-sambaserver: samba
-
-$(DEPDIR)/samba: bootstrap @DEPENDS_samba@
+$(DEPDIR)/sambaserver: bootstrap @DEPENDS_samba@
 	@PREPARE_samba@
 	cd @DIR_samba@ && \
-		$(INSTALL) -m 644 examples/dbox/smb.conf.dbox $(targetprefix)/etc/smb.conf && \
+		$(INSTALL) -m 644 examples/dbox/smb.conf.dbox $(targetprefix)/var/etc && \
 		cd source && \
 		$(MAKE) make_smbcodepage CC=$(CC) && \
 		$(INSTALL) -d $(targetprefix)/lib/codepages && \
@@ -14,22 +12,18 @@ $(DEPDIR)/samba: bootstrap @DEPENDS_samba@
 		$(MAKE) clean && \
 		for i in smbd nmbd smbclient smbmount smbmnt smbpasswd; do \
 			$(MAKE) $$i; \
-			cp $$i $(targetprefix)/bin; \
-		done; \
-		$(INSTALL) -m 644 $(buildprefix)/root/etc/smb.conf $(targetprefix)/etc && \
-		$(INSTALL) -m 644 $(buildprefix)/root/etc/smbpasswd $(targetprefix)/etc
+			$(INSTALL) $$i $(targetprefix)/bin; \
+		done 
 	@CLEANUP_samba@
 	touch $@
 
 if TARGETRULESET_FLASH
-flash-sambaserver: flash-samba
+flash-sambaserver: $(flashprefix)/root/sbin/smbd
 
-flash-samba: $(flashprefix)/root/sbin/samba
-
-$(flashprefix)/root/sbin/samba: bootstrap @DEPENDS_samba@ | $(flashprefix)/root
+$(flashprefix)/root/sbin/smbd: bootstrap @DEPENDS_samba@ | $(flashprefix)/root
 	@PREPARE_samba@
 	cd @DIR_samba@ && \
-		$(INSTALL) -m 644 examples/dbox/smb.conf.dbox $(flashprefix)/root/etc/smb.conf && \
+		$(INSTALL) -m 644 examples/dbox/smb.conf.dbox $(flashprefix)/root/var/etc && \
 		cd source && \
 		$(MAKE) make_smbcodepage CC=$(CC) && \
 		$(INSTALL) -d $(flashprefix)/root/lib/codepages && \
@@ -38,10 +32,8 @@ $(flashprefix)/root/sbin/samba: bootstrap @DEPENDS_samba@ | $(flashprefix)/root
 		$(MAKE) clean && \
 		for i in smbd nmbd smbpasswd; do \
 			$(MAKE) $$i; \
-			cp $$i $(flashprefix)/root/bin; \
-		done; \
-		$(INSTALL) -m 644 $(buildprefix)/root/etc/smb.conf $(flashprefix)/root/var/etc && \
-		$(INSTALL) -m 644 $(buildprefix)/root/etc/smbpasswd $(flashprefix)/root/var/etc ;
+			$(INSTALL) $$i $(flashprefix)/root/bin; \
+		done
 	@CLEANUP_samba@
 	@FLASHROOTDIR_MODIFIED@
 
