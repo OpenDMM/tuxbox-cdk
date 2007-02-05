@@ -411,6 +411,9 @@ TUXBOX_RULES_MAKE(busybox)
 TUXBOX_RULES_MAKE(automount)
 TUXBOX_RULES_MAKE(nfs_utils)
 TUXBOX_RULES_MAKE(fuse)
+if test "$enable_kernel26" != "yes"; then
+TUXBOX_RULES_MAKE(fusekernel)
+fi
 TUXBOX_RULES_MAKE(djmount)
 TUXBOX_RULES_MAKE(ftpd)
 TUXBOX_RULES_MAKE(module_init_tools)
