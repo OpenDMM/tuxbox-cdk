@@ -140,6 +140,18 @@ if [ -e /var/etc/install.tar ] ; then
 	rm /var/etc/install.tar
 fi
 
+#Scan and mount swap partitions
+if [ -e /var/etc/.swap ]; then
+	find /dev -type b | grep disc | \
+	while read DISC ; do 
+		/sbin/sfdisk -d $DISC | grep 82 | \
+		while read SWAPPARTITION restofline ; do
+			/sbin/swapon $SWAPPARTITION
+		done
+	done
+	echo 0 > /proc/sys/vm/swappiness
+fi
+
 if [ -e /var/etc/init ] ; then
 	. /var/etc/init
 fi
