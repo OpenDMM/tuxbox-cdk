@@ -90,8 +90,8 @@ reiserfsprogs;3.6.14;reiserfsprogs-3.6.14;reiserfsprogs-3.6.14.tar.gz;extract:re
 utillinux;2.12i;util-linux-2.12i;util-linux-2.12i.tar.bz2;extract:util-linux-2.12i.tar.bz2;patch:util-linux.diff
 samba;1.9.18p8;samba-1.9.18p8;samba-1.9.18p8.tar.gz:samba_ppc.diff;extract:samba-1.9.18p8.tar.gz;patch:samba_ppc.diff
 etherwake;1.08;etherwake-1.08.orig;etherwake_1.08.orig.tar.gz;extract:etherwake_1.08.orig.tar.gz;patch:etherwake.diff
-dreamfiles;20051001;dreamfiles_20051001;dreamfiles_20051001.tar.bz2;extract:dreamfiles_20051001.tar.bz2
-dreamdriver_dm7000;20050909;dreamdriver_dm7000_20050909;dreamdriver_dm7000_20050909.tar.bz2;extract:dreamdriver_dm7000_20050909.tar.bz2
+dreamfiles;20061230;dreamfiles_20061230;dreamfiles_20061230.tar.bz2;extract:dreamfiles_20061230.tar.bz2
+dreamdriver_dm7000;20061230;dreamdriver_dm7000_20061230;dreamdriver_dm7000_20061230.tar.bz2;extract:dreamdriver_dm7000_20061230.tar.bz2
 dreamdriver_dm56x0;20050906;dreamdriver_dm56x0_20050906;dreamdriver_dm56x0_20050906.tar.bz2;extract:dreamdriver_dm56x0_20050906.tar.bz2
 dreamdriver_dm500;20060803;dreamdriver_dm500_20060803;dreamdriver_dm500_20060803.tar.bz2;extract:dreamdriver_dm500_20060803.tar.bz2
 nfs_utils;1.0.6;nfs-utils-1.0.6;nfs-utils-1.0.6.tar.gz:nfs-utils.diff;extract:nfs-utils-1.0.6.tar.gz;patch:nfs-utils.diff

@@ -15,7 +15,7 @@ fi
 	--with-cpu=405 \
 	--enable-maintainer-mode \
 	--with-targetruleset=flash \
-	--with-epg=standard \
+	--with-epg=private \
 	--with-mhw-epg=no \
 	--with-flashtool=standard \
 	--with-reiserfs=no \
