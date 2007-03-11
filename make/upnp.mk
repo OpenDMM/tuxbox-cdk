@@ -97,7 +97,7 @@ flash-fuse: bootstrap $(DEPDIR)/fusekernel flash-fusekernel @DEPENDS_fuse@
 	   --disable-kernel-module \
 	   --prefix= && \
 	$(MAKE) all && \
-	$(MAKE) install DESTDIR=$(targetprefix)
+	$(MAKE) install DESTDIR=$(flashprefix)/root
 	@CLEANUP_fuse@
 	@FLASHROOTDIR_MODIFIED@
 endif
