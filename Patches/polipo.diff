@@ -1,7 +1,7 @@
-diff -Naur polipo-0.9.11.orig/config.dbox2 polipo-0.9.11/config.dbox2
---- polipo-0.9.11.orig/config.dbox2	1970-01-01 01:00:00.000000000 +0100
-+++ polipo-0.9.11/config.dbox2	2006-12-24 08:30:55.110022253 +0000
-@@ -0,0 +1,158 @@
+diff -Naur polipo-1.0.0.orig/config.dbox2 polipo-1.0.0/config.dbox2
+--- polipo-1.0.0.orig/config.dbox2	1970-01-01 01:00:00.000000000 +0100
++++ polipo-1.0.0/config.dbox2	2007-03-11 14:50:35.180714310 +0000
+@@ -0,0 +1,159 @@
 +# Sample configuration file for Polipo. -*-sh-*-
 +
 +# You should not need to use a configuration file; all configuration
@@ -30,7 +30,7 @@ diff -Naur polipo-0.9.11.orig/config.dbox2 polipo-0.9.11/config.dbox2
 +# Uncomment this if you want your Polipo to identify itself by
 +# something else than the host name:
 +
-+# proxyName = "polipo.example.org"
++proxyName = "localhost"
 +
 +# Uncomment this if there's only one user using this instance of Polipo:
 +
@@ -54,6 +54,8 @@ diff -Naur polipo-0.9.11.orig/config.dbox2 polipo-0.9.11/config.dbox2
 +
 +# chunkHighMark = 819200
 +# objectHighMark = 128
++chunkHighMark = 2000000
++objectHighMark = 256
 +
 +# Uncomment this if you've got plenty of memory:
 +
@@ -102,7 +104,7 @@ diff -Naur polipo-0.9.11.orig/config.dbox2 polipo-0.9.11/config.dbox2
 +# default resolver instead.  If you do that, Polipo will freeze during
 +# every DNS query:
 +
-+# dnsUseGethostbyname = yes
++dnsUseGethostbyname = yes
 +
 +
 +### HTTP
@@ -117,8 +119,8 @@ diff -Naur polipo-0.9.11.orig/config.dbox2 polipo-0.9.11/config.dbox2
 +# Uncomment this if you want to slightly reduce the amount of
 +# information that you leak about yourself:
 +
-+# censoredHeaders = from, accept-language
-+# censorReferer = maybe
++censoredHeaders = from, accept-language
++censorReferer = maybe
 +
 +# Uncomment this if you're paranoid.  This will break a lot of sites,
 +# though:
@@ -156,15 +158,23 @@ diff -Naur polipo-0.9.11.orig/config.dbox2 polipo-0.9.11/config.dbox2
 +# mindlesslyCacheVary = true
 +
 +daemonise=true
-+logFile="/tmp/polipo.log"
-+chunkHighMark = 3276800
-+objectHighMark = 512
-+localDocumentRoot = "/etc/polipo/www/"
-diff -Naur polipo-0.9.11.orig/forbidden.dbox2 polipo-0.9.11/forbidden.dbox2
---- polipo-0.9.11.orig/forbidden.dbox2	1970-01-01 01:00:00.000000000 +0100
-+++ polipo-0.9.11/forbidden.dbox2	2006-12-24 08:24:00.613963800 +0000
-@@ -0,0 +1,1248 @@
++localDocumentRoot = "/share/polipo/www/"
++logFile=/tmp/polipo.log
++pidFile=/tmp/polipo.pid
+diff -Naur polipo-1.0.0.orig/forbidden.dbox2 polipo-1.0.0/forbidden.dbox2
+--- polipo-1.0.0.orig/forbidden.dbox2	1970-01-01 01:00:00.000000000 +0100
++++ polipo-1.0.0/forbidden.dbox2	2007-03-10 06:00:46.000000000 +0000
+@@ -0,0 +1,1250 @@
 +# Put this in /etc/polipo/forbidden or in ~/.polipo-forbidden.
++
++# Forbid all hosts contaning a string matching a given regex:
++
++^http://[^/]*counter\.com
++/ads/
++/phpAdsNew
++counting\.php
++
++# Forbid all hosts belonging to a given domain name:
 +
 +us.a1.yimg.com/us.yimg.com/a/ya/
 +us.i1.yimg.com/us.yimg.com/i/
@@ -186,15 +196,6 @@ diff -Naur polipo-0.9.11.orig/forbidden.dbox2 polipo-0.9.11/forbidden.dbox2
 +addme.com
 +ademails.com
 +sec.yimg.com
-+
-+
-+# Forbid all hosts contaning a string matching a given regex:
-+
-+^http://[^/]*counter\.com
-+/ads/
-+/phpAdsNew
-+counting\.php
-+
 +^us.a1.yimg.com/a
 +101order.com
 +123banners.com
@@ -700,6 +701,7 @@ diff -Naur polipo-0.9.11.orig/forbidden.dbox2 polipo-0.9.11/forbidden.dbox2
 +adserver.tribuneinteractive.com
 +adserver.ugo.com
 +adserver.usermagnet.com
++adserver.vi-su.net
 +adserver.virtuous.co.uk
 +adserver.yahoo.com
 +adserver1.backbeatmedia.com
@@ -1390,6 +1392,7 @@ diff -Naur polipo-0.9.11.orig/forbidden.dbox2 polipo-0.9.11/forbidden.dbox2
 +www.cash4banner.com
 +www.dnps.com
 +www.freestats.com
++www.google-analytics.com
 +www.kaplanindex.com
 +www.megacash.de
 +www.money4exit.de

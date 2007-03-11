@@ -78,7 +78,7 @@ dsniff;make:install:install_prefix=TARGET
 fbset;install:-m755:fbset:TARGET/bin
 lirc;make:install
 lsof;install:-m755:lsof:TARGET/sbin
-polipo;install:polipo:TARGET/bin
+polipo;install:-m755:polipo:TARGET/bin
 pump;make:install:DEST=TARGET
 ssh;make:install:DESTDIR=TARGET
 tcpdump;make:install

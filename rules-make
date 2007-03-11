@@ -79,7 +79,7 @@ dsniff;2.4b1;dsniff-2.4;dsniff-2.4b1.tar.gz:dsniff.diff;extract:dsniff-2.4b1.tar
 fbset;2.1;fbset-2.1;fbset-2.1.tar.gz:fbset.diff;extract:fbset-2.1.tar.gz;patch:fbset.diff
 lirc;0.6.6;lirc-0.6.6;lirc-0.6.6.tar.bz2;extract:lirc-0.6.6.tar.bz2;patch:lirc.diff
 lsof;4.64;lsof_4.64_src;lsof_4.64_src.tar.bz2:lsof.diff;extract:lsof_4.64_src.tar.bz2;patch:lsof.diff
-polipo;0.9.11;polipo-0.9.11;polipo-0.9.11.tar.gz;extract:polipo-0.9.11.tar.gz;patch:polipo.diff
+polipo;1.0.0;polipo-1.0.0;polipo-1.0.0.tar.gz;extract:polipo-1.0.0.tar.gz;patch:polipo.diff
 pump;0.8.11;pump-0.8.11;pump-0.8.11.tar.bz2:pump.diff;extract:pump-0.8.11.tar.bz2;patch:pump.diff
 ssh;3.5p1;openssh-3.5p1;openssh-3.5p1.tar.gz:ssh.diff;extract:openssh-3.5p1.tar.gz;patch:ssh.diff
 tcpdump;3.9.3;tcpdump-3.9.3;tcpdump-3.9.3.tar.gz;extract:tcpdump-3.9.3.tar.gz;patch:tcpdump.diff

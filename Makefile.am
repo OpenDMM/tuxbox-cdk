@@ -1012,16 +1012,18 @@ contrib_apps_optional: .dsniff .pump .thttpd
 .polipo: .bootstrap @DEPENDS_polipo@
 	@PREPARE_polipo@
 	cd @DIR_polipo@ && \
-		$(BUILDENV) \
 		$(MAKE) polipo \
+			CC=$(target)-gcc \
+			CDEBUGFLAGS="$(TARGET_CFLAGS)" \
+			LDFLAGS="$(TARGET_LDFLAGS)" \
 			PREFIX="" && \
 		@INSTALL_polipo@
 		$(INSTALL) -d $(targetprefix)/var/etc/polipo
-		$(INSTALL) -d $(targetprefix)/var/etc/polipo/www
 		$(INSTALL) -m644 @DIR_polipo@/config.dbox2 $(targetprefix)/var/etc/polipo/config
 		$(INSTALL) -m644 @DIR_polipo@/forbidden.dbox2 $(targetprefix)/var/etc/polipo/forbidden
-		$(INSTALL) -m644 @DIR_polipo@/localindex.html $(targetprefix)/var/etc/polipo/www/index.html
-		ln -sf /var/etc/polipo $(targetprefix)/etc/polipo
+		$(INSTALL) -d $(targetprefix)/share/polipo/www
+		$(INSTALL) -m644 @DIR_polipo@/localindex.html $(targetprefix)/share/polipo/www/index.html
+		@ln -sf /var/etc/polipo $(targetprefix)/etc/polipo
 	@CLEANUP_polipo@
 	touch $@
 
@@ -2109,9 +2111,11 @@ $(flashprefix)/.part_amule: $(flashprefix)/.flash .amule
 flash-polipo: $(flashprefix)/.part_polipo
 $(flashprefix)/.part_polipo: $(flashprefix)/.flash .polipo
 	$(INSTALL) $(targetprefix)/bin/polipo $(flashprefix)/root/bin
+	$(INSTALL) -d $(flashprefix)/root/share
+	@cp -ap $(targetprefix)/share/polipo $(flashprefix)/root/share
 	$(INSTALL) -d $(flashprefix)/root/var_init/etc
-	cp -pa $(targetprefix)/var/etc/polipo $(flashprefix)/root/var_init/etc
-	echo "diskCacheRoot = \"/hdd/cache/\"" >> $(flashprefix)/root/var_init/etc/polipo/config
+	@cp -pa $(targetprefix)/var/etc/polipo $(flashprefix)/root/var_init/etc
+	@echo "diskCacheRoot = \"/hdd/cache/\"" >> $(flashprefix)/root/var_init/etc/polipo/config
 	@touch $@
 
 flash-ctorrent: $(flashprefix)/.part_ctorrent
