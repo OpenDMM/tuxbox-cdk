@@ -97,7 +97,9 @@ flash-fuse: bootstrap $(DEPDIR)/fusekernel flash-fusekernel @DEPENDS_fuse@
 	   --disable-kernel-module \
 	   --prefix= && \
 	$(MAKE) all && \
-	$(MAKE) install DESTDIR=$(flashprefix)/root
+	$(MAKE) install-exec DESTDIR=$(flashprefix)/root
+	rm -f $(flashprefix)/root/lib/libfuse.a $(flashprefix)/root/lib/libfuse.la
+	rm -f $(flashprefix)/root/lib/libulockmgr.a $(flashprefix)/root/lib/libulockmgr.la
 	@CLEANUP_fuse@
 	@FLASHROOTDIR_MODIFIED@
 endif
@@ -117,7 +119,7 @@ flash-fusekernel: bootstrap @DEPENDS_fusekernel@
 	   --disable-example \
 	   --prefix= && \
 	$(MAKE) all && \
-	@INSTALL_fusekernel@
+	$(MAKE) -C kernel install DESTDIR=$(flashprefix)/root
 	@CLEANUP_fusekernel@
 	@FLASHROOTDIR_MODIFIED@
 
