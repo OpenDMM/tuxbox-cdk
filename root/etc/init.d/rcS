@@ -113,7 +113,7 @@ if [ $mID -eq 05 ] ; then
 	fi
 	
 	if [ ! -e /var/etc/.dont_mount_hdd ] ; then
-		if [ -e /proc/ide/hdb ] ; then
+		if [ -e /proc/ide/hdb ] && [ ! -e /dev/cdroms/cdrom0 ] ; then
 			mount /dev/ide/host0/bus0/target0/lun0/part1 /var/mnt/cf -osync
 			HD=1
 		else
