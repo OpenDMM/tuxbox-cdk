@@ -91,3 +91,7 @@ cdk/customization/mkversion
 cdk/customization/nukegames
 cdk/customization/nukelanguages
 boot/u-boot-config/u-boot.dbox2.h.m4
+apps/tuxbox/neutrino/data/icons/blau.raw
+apps/tuxbox/neutrino/data/icons/gelb.raw
+apps/tuxbox/neutrino/data/icons/gruen.raw
+apps/tuxbox/neutrino/data/icons/rot.raw
