@@ -85,19 +85,25 @@ fi
 
 AC_ARG_ENABLE(lirc,
 	AS_HELP_STRING(--enable-lirc,	include lirc in yadds and images),
-	[LIRC=lirc], [enable_lirc=no])
+	[case "${enableval}" in
+		yes) LIRC=lirc ;;
+	esac], [enable_lirc=no])
 AM_CONDITIONAL(ENABLE_LIRC,test "$enable_lirc" = "yes")
 AC_SUBST(LIRC)
 
 AC_ARG_ENABLE(cdkVcInfo,
 	AS_HELP_STRING(--enable-cdkVcInfo,	include cdkVcInfo in yadds and images),
-	[CDKVCINFO=cdkVcInfo],[enable_cdkVcInfo=no])
+	[case "${enableval}" in
+		yes) CDKVCINFO=cdkVcInfo ;;
+	esac],[enable_cdkVcInfo=no])
 AM_CONDITIONAL(ENABLE_CDKVCINFO,test "$enable_cdkVcInfo" = "yes")
 AC_SUBST(CDKVCINFO)
 
 AC_ARG_ENABLE(german_keymaps,
 	AS_HELP_STRING(--enable-german-keymaps,	include loadkey and German keymaps in yadds and images),
-	[CONSOLE_TOOLS=console_tools],[enable_german_keymaps=no])
+	[case "${enableval}" in
+		yes) CONSOLE_TOOLS=console_tools ;;
+	esac],[enable_german_keymaps=no])
 AM_CONDITIONAL(ENABLE_GERMAN_KEYMAPS,test "$enable_german_keymaps" = "yes")
 AC_SUBST(CONSOLE_TOOLS)
 
@@ -111,7 +117,9 @@ AC_ARG_ENABLE(ext3,
 
 AC_ARG_ENABLE(xfs,
 	AS_HELP_STRING(--enable-xfs,	include xfs drivers in yadds and images),
-	[XFSPROGS=xfsprogs],[enable_xfs=no])
+	[case "${enableval}" in
+		yes) XFSPROGS=xfsprogs ;;
+	esac],[enable_xfs=no])
 AC_SUBST(XFSPROGS)
 
 if test "$enable_ide" = "no"; then
@@ -129,13 +137,17 @@ AM_CONDITIONAL(ENABLE_XFS,test "$enable_xfs" = "yes")
 
 AC_ARG_ENABLE(nfsserver,
 	AS_HELP_STRING(--enable-nfsserver,	enable the dBox NFS server),
-	[NFSSERVER=nfsserver],[enable_nfsserver=no])
+	[case "${enableval}" in
+		yes) NFSSERVER=nfsserver ;;
+	esac],[enable_nfsserver=no])
 AM_CONDITIONAL(ENABLE_NFSSERVER,test "$enable_nfsserver" = "yes")
 AC_SUBST(NFSSERVER)
 
 AC_ARG_ENABLE(sambaserver,
 	AS_HELP_STRING(--enable-sambaserver,    enable the dBox samba server),
-	[SAMBASERVER=sambaserver],[enable_sambaserver=no])
+	[case "${enableval}" in
+		yes) SAMBASERVER=sambaserver ;;
+	esac],[enable_sambaserver=no])
 AM_CONDITIONAL(ENABLE_SAMBASERVER,test "$enable_sambaserver" = "yes")
 AC_SUBST(SAMBASERVER)
 
