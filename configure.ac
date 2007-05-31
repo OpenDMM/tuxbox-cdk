@@ -151,6 +151,14 @@ AC_ARG_ENABLE(sambaserver,
 AM_CONDITIONAL(ENABLE_SAMBASERVER,test "$enable_sambaserver" = "yes")
 AC_SUBST(SAMBASERVER)
 
+AC_ARG_ENABLE(dosfstools,
+	AS_HELP_STRING(--enable-dosfstools,    enable the dosfstools),
+	[case "${enableval}" in
+		yes) DOSFSTOOLS=dosfstools ;;
+	esac])
+AM_CONDITIONAL(ENABLE_DOSFSTOOLS,test "$enable_dosfstools" = "yes")
+AC_SUBST(DOSFSTOOLS)
+
 AC_ARG_WITH(rootpartitionsize,
 	[  --with-rootpartitionsize=SIZE	size of the root partition],
 	[ROOT_PARTITION_SIZE="$withval"],[ROOT_PARTITION_SIZE="0x660000"])
@@ -437,10 +445,9 @@ TUXBOX_RULES_MAKE(udev)
 TUXBOX_RULES_MAKE(watchdog)
 TUXBOX_RULES_MAKE(mrouted)
 TUXBOX_RULES_MAKE(samba)
-
 TUXBOX_RULES_MAKE(cramfs)
 TUXBOX_RULES_MAKE(squashfs)
-
+TUXBOX_RULES_MAKE(dosfstools)
 #
 # contrib libs
 #
@@ -600,6 +607,7 @@ Ext2/3 support for IDE: $enable_ext3
 XFS support for IDE:   $enable_xfs
 NFS server:	       $enable_nfsserver
 Samba server:          $enable_sambaserver
+dosfstools:            $enable_dosfstools	
 German keymaps:	       $enable_german_keymaps
 ])
 

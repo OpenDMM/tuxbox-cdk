@@ -13,6 +13,9 @@ include make/buildenv.mk
 # source and directory structure
 include make/bootstrap.mk
 
+# dosfstools (nonessential)
+include make/dosfstools.mk
+
 # The automounter (optional)
 include make/automount.mk
 

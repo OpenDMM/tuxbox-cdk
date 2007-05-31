@@ -41,6 +41,7 @@ cdk/make/defaultvalues.mk
 cdk/make/development-tools.mk
 cdk/make/distribution-lists.mk
 cdk/make/disttargets.mk
+cdk/make/dosfstools.mk
 cdk/make/dvb-apps.mk
 cdk/make/dvb-config.mk
 cdk/make/dvb_tools.mk

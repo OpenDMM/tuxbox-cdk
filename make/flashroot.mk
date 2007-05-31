@@ -41,6 +41,9 @@ endif
 	$(MAKE) flash-ucodes
 	$(MAKE) flash-lcdip
 	$(MAKE) flash-automount
+if ENABLE_DOSFSTOOLS
+	$(MAKE) flash-dosfstools
+endif
 if ENABLE_LIRC
 	$(MAKE) flash-lircd
 endif
