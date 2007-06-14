@@ -159,6 +159,11 @@ AC_ARG_ENABLE(dosfstools,
 AM_CONDITIONAL(ENABLE_DOSFSTOOLS,test "$enable_dosfstools" = "yes")
 AC_SUBST(DOSFSTOOLS)
 
+AC_ARG_ENABLE(upnp,
+	AS_HELP_STRING(--enable-upnp,include upnp support),
+	,[enable_upnp=no])
+AM_CONDITIONAL(ENABLE_UPNP,test "$enable_upnp" = "yes")
+
 AC_ARG_WITH(rootpartitionsize,
 	[  --with-rootpartitionsize=SIZE	size of the root partition],
 	[ROOT_PARTITION_SIZE="$withval"],[ROOT_PARTITION_SIZE="0x660000"])
@@ -607,7 +612,8 @@ Ext2/3 support for IDE: $enable_ext3
 XFS support for IDE:   $enable_xfs
 NFS server:	       $enable_nfsserver
 Samba server:          $enable_sambaserver
-dosfstools:            $enable_dosfstools	
+dosfstools:            $enable_dosfstools
+Neutrino UPnP-support: $enable_upnp	
 German keymaps:	       $enable_german_keymaps
 ])
 

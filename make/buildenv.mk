@@ -34,6 +34,11 @@ CONFIGURE_OPTS_DEBUG = \
 MKSQUASHFS = $(hostprefix)/bin/mksquashfs
 endif
 
+if ENABLE_UPNP
+CONFIGURE_OPTS_UPNP = \
+	--enable-upnp
+endif
+
 CONFIGURE = \
 	./autogen.sh && \
 	CC=$(target)-gcc \
@@ -41,7 +46,8 @@ CONFIGURE = \
 	CFLAGS="-Wall $(TARGET_CFLAGS)" \
 	CXXFLAGS="-Wall $(TARGET_CXXFLAGS)" \
 	LDFLAGS="$(TARGET_LDFLAGS)" \
-	./configure $(CONFIGURE_OPTS) $(CONFIGURE_OPTS_MAINTAINER) $(CONFIGURE_OPTS_DEBUG)
+	./configure $(CONFIGURE_OPTS) $(CONFIGURE_OPTS_MAINTAINER) $(CONFIGURE_OPTS_DEBUG) \
+	$(CONFIGURE_OPTS_UPNP)
 
 ACLOCAL_AMFLAGS = -I .
 
