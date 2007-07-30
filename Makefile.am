@@ -410,6 +410,21 @@ libs_optional: \
 	@CLEANUP_libdvbpsi@
 	touch $@
 
+.libevent: .bootstrap @DEPENDS_libevent@
+	@PREPARE_libevent@
+	cd @DIR_libevent@ && \
+		$(BUILDENV) \
+		./configure \
+			--prefix= \
+			--build=$(build) \
+			--host=$(target) \
+			--disable-shared \
+			--enable-static && \
+		$(MAKE) all && \
+		@INSTALL_libevent@
+	@CLEANUP_libevent@
+	touch $@
+
 .libffi: .bootstrap @DEPENDS_libffi@
 	@PREPARE_libffi@
 	cd @DIR_libffi@ && \
@@ -1181,6 +1196,21 @@ contrib_apps_optional: .dsniff .pump .thttpd
 		$(MAKE) && \
 		@INSTALL_tcpdump@
 	@CLEANUP_tcpdump@
+	touch $@
+
+.tor: .bootstrap .libevent .libcrypto @DEPENDS_tor@
+	@PREPARE_tor@
+	cd @DIR_tor@ && \
+		$(BUILDENV) \
+		CROSS_COMPILE=$(target)- \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--prefix= \
+			--sysconfdir=/var/etc && \
+		$(MAKE) && \
+		@INSTALL_tor@
+	@CLEANUP_tor@
 	touch $@
 
 .thttpd: @DEPENDS_thttpd@
@@ -2116,6 +2146,19 @@ $(flashprefix)/.part_polipo: $(flashprefix)/.flash .polipo
 	$(INSTALL) -d $(flashprefix)/root/var_init/etc
 	@cp -pa $(targetprefix)/var/etc/polipo $(flashprefix)/root/var_init/etc
 	@echo "diskCacheRoot = \"/hdd/cache/\"" >> $(flashprefix)/root/var_init/etc/polipo/config
+	@if [ -f $(flashprefix)/.part_tor ]; then \
+		echo "socksParentProxy = localhost:9050" >> $(flashprefix)/root/var_init/etc/polipo/config; fi
+	@if [ ! -e $(flashprefix)/root/var_init/etc/init ]; then \
+		echo "#!/bin/sh" >> $(flashprefix)/root/var_init/etc/init; fi
+	@echo "#Polipo - delayed start, wait until network is up" >> $(flashprefix)/root/var_init/etc/init
+	@echo "sleep 30 && polipo -c /var/etc/polipo/config &" >> $(flashprefix)/root/var_init/etc/init
+	@echo "export http_proxy=http://localhost:8123/" >> $(flashprefix)/root/var_init/etc/init
+	chmod 755 $(flashprefix)/root/var_init/etc/init
+	@if [ ! -e $(flashprefix)/root/var_init/etc/uinit ]; then \
+		echo "#!/bin/sh" >> $(flashprefix)/root/var_init/etc/uinit; fi
+	@echo "#Stop polipo and purge the on-disk cache" >> $(flashprefix)/root/var_init/etc/uinit
+	@echo "killall polipo && polipo -x" >> $(flashprefix)/root/var_init/etc/uinit
+	chmod 755 $(flashprefix)/root/var_init/etc/uinit
 	@touch $@
 
 flash-ctorrent: $(flashprefix)/.part_ctorrent
@@ -2129,6 +2172,28 @@ $(flashprefix)/.part_ctorrent: $(flashprefix)/.flash .ctorrent
 	@echo "#Exit after 1:1 ratio, dont use cache memory" >> $(flashprefix)/root/var_init/bin/ctorrent.sh
 	@echo "/bin/ctorrent -E 1 -C 0 -S \$$Server:\$$Port \$$1 \$$2 \$$3" >> $(flashprefix)/root/var_init/bin/ctorrent.sh
 	$(INSTALL) $(targetprefix)/bin/ctorrent $(flashprefix)/root/bin
+	@touch $@
+
+flash-tor: $(flashprefix)/.part_tor
+$(flashprefix)/.part_tor: $(flashprefix)/.flash .tor
+	$(INSTALL) $(targetprefix)/bin/tor $(flashprefix)/root/bin
+	$(INSTALL) -d $(flashprefix)/root/var_init/bin
+	@ln -sf /hdd/tor $(flashprefix)/root/var_init/bin
+	$(INSTALL) -d $(flashprefix)/root/var_init/etc
+	@cp -pa $(targetprefix)/var/etc/tor $(flashprefix)/root/var_init/etc
+	@ln -sf /var/etc/tor $(flashprefix)/root/etc
+	@sed -e "{s,#RunAsDaemon,RunAsDaemon,};{s,#DataDirectory /var/lib/tor,DataDirectory /hdd/tor,}" \
+		< $(flashprefix)/root/var_init/etc/tor/torrc.sample > $(flashprefix)/root/var_init/etc/tor/torrc
+	@if [ ! -e $(flashprefix)/root/var_init/etc/init ]; then \
+		echo "#!/bin/sh" >> $(flashprefix)/root/var_init/etc/init; fi
+	@echo "#tor - delayed start, wait until network is up" >> $(flashprefix)/root/var_init/etc/init
+	@echo "sleep 30 && tor &" >> $(flashprefix)/root/var_init/etc/init
+	chmod 755 $(flashprefix)/root/var_init/etc/init
+	@if [ ! -e $(flashprefix)/root/var_init/etc/uinit ]; then \
+		echo "#!/bin/sh" >> $(flashprefix)/root/var_init/etc/uinit; fi
+	@echo "#Stop tor" >> $(flashprefix)/root/var_init/etc/uinit
+	@echo "killall tor" >> $(flashprefix)/root/var_init/etc/uinit
+	chmod 755 $(flashprefix)/root/var_init/etc/uinit
 	@touch $@
 
 flash-joe: $(flashprefix)/.part_joe
@@ -2496,6 +2561,12 @@ $(flashprefix)/.lib: $(flashprefix)/.flash $(shell ls -r -1 $(flashprefix)/.part
 		tar -cf aMule.tar aMule && gzip -f aMule.tar && \
 		rm -rf aMule && cd $$CURRENT_PATH; \
 	fi
+	@if [ -e $(flashprefix)/.part_tor ]; then \
+		mv $(flashprefix)/root/bin/tor $(flashprefix) && \
+		CURRENT_PATH=`pwd` && cd $(flashprefix) && \
+		tar -czf tor.tar.gz tor && \
+		rm -rf tor && cd $$CURRENT_PATH; \
+	fi
 	@chmod u+rwX,go+rX-w -R $(flashprefix)/root/
 	@touch $@
 
@@ -2552,7 +2623,7 @@ distclean-local:
 	-rm .bootstrap
 	-rm .directories .linuxdir .binutils .glibc .gcc .rpcgen
 	-rm .root .busybox .ftpd .modutils .procps .watchdog .mrouted
-	-rm .libboost .libcommoncplusplus .libcrypto .libcurl .libdb2 .libdvbpsi .libffi .libfreetype
+	-rm .libboost .libcommoncplusplus .libcrypto .libcurl .libdb2 .libdvbpsi .libevent .libffi .libfreetype
 	-rm .libncurses .libfribidi .libjpeg .libmad .libid3tag .libnet .libnids .libpcap .libpng .libpopt
 	-rm .libreadline .libsdl .libsigc .libungif .libxml2 .libxmlwrapp .libz .libvorbisidec .libgmp
 	-rm .cabextract
@@ -2561,7 +2632,8 @@ distclean-local:
 	-rm .gnuboy .scummvm .sdldoom .wxbase .amule .ctorrent
 	-rm .linuxkernel .reiserfsprogs .e2fsprogs .samba .dreamfiles .etherwake .utillinux
 	-rm .dvbsnoop .enigma .lcars .lcdmenu .neutrino .stream .zapit
-	-rm .console_data .console_tools .dsniff .fbset .lirc .polipo .pump .ssh .tcpdump .xrc .thttpd
+	-rm .console_data .console_tools .dropbear .dsniff .fbset .lirc 
+	-rm .polipo .pump .ssh .tcpdump .tor .xrc .thttpd
 	-rm .dvbdate .dvbstream .dvbtext .dvbtune .vls
 	-rm .misc_libs .misc_tools .plugins .libtuxbox .tuxbox_libs .tuxbox_tools
 	-rm -rf $(targetprefix)
@@ -2569,6 +2641,7 @@ distclean-local:
 if TARGETRULESET_FLASH
 	-rm -rf $(flashprefix)
 endif
+
 
 @ARCHIVE@
 

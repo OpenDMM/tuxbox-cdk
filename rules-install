@@ -42,6 +42,7 @@ libcurl;make:install:DESTDIR=TARGET
 libcommoncplusplus;make:install;link:TARGET/bin/ccgnu2-config:HOST/bin/ccgnu2-config
 libdb2;make:install:DESTDIR=TARGET
 libdvbpsi;make:install:DESTDIR=TARGET
+libevent;make:install:DESTDIR=TARGET
 libffi;make:install
 libfreetype;make:install:libdir=TARGET/lib:includedir=TARGET/include:bindir=TARGET/bin:prefix=TARGET
 libfribidi;rewrite-pkgconfig:fribidi.pc;make:install:DESTDIR=TARGET
@@ -82,6 +83,7 @@ polipo;install:-m755:polipo:TARGET/bin
 pump;make:install:DEST=TARGET
 ssh;make:install:DESTDIR=TARGET
 tcpdump;make:install
+tor;make:install:DESTDIR=TARGET
 xrc;make:install
 thttpd;make:install
 e2fsprogs;make:install
