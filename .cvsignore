@@ -27,6 +27,7 @@ linux-2.6.9
 .libcurl
 .libcrypto
 .libdvbpsi
+.libevent
 .libffi
 .libfreetype
 .libfribidi
@@ -57,8 +58,10 @@ linux-2.6.9
 .reiserfsprogs
 .root
 .samba
+.sdldoom
 .strace
 .stream
+.tor
 .tuxbox_libs
 .tuxbox_tools
 .utillinux
