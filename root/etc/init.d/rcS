@@ -156,6 +156,66 @@ if [ -e /var/etc/init ] ; then
 	. /var/etc/init
 fi
 
+if [ -e /bin/neutrino ] ; then
+	if [ ! -d /var/etc/network ]; then
+		mkdir /var/etc/network
+	fi
+	ifup -a
+	sectionsd -tc
+	timerd
+	dccamd
+	zapit
+	controld
+	nhttpd
+	until neutrino -f -u ; do
+		echo "Neutrino exited with nonzero exit status, restarting..."
+		pidof sectionsd >/dev/null || sectionsd -tc
+		pidof timerd    >/dev/null || timerd
+		pidof dccamd    >/dev/null || dccamd
+		pidof zapit     >/dev/null || zapit
+		pidof controld  >/dev/null || controld
+		pidof nhttpd    >/dev/null || nhttpd
+	done
+	
+	[ -e /tmp/tuxmaild.pid ] && kill $( cat /tmp/tuxmaild.pid )
+	[ -e /tmp/tuxcald.pid ] && kill $( cat /tmp/tuxcald.pid )
+	[ -e /var/run/automount.pid ] && kill -TERM $( cat /var/run/automount.pid )
+	pzapit -kill
+	
+	i=9
+	while expr $i != 0 > /dev/null
+	do
+		if pidof controld > /dev/null; then echo "Waiting for controld (max. $i seconds)"
+		elif pidof timerd > /dev/null; then echo "Waiting for timerd (max. $i seconds)"
+		elif pidof zapit > /dev/null; then echo "Waiting for zapit (max. $i seconds)"
+		elif pidof tuxmaild > /dev/null; then echo "Waiting for tuxmaild (max. $i seconds)"
+		elif pidof tuxcald > /dev/null; then echo "Waiting for tuxcald (max. $i seconds)"
+		else break;
+		fi
+		i=`expr $i - 1`
+		sleep 1
+	done
+	
+	if [ -e /tmp/.nohalt ] ; then
+		killall -q sectionsd
+		killall -q timerd
+		killall -9 dccamd
+		killall -q zapit
+		killall -q controld
+		killall -q nhttpd
+		saa --fbas
+		switch -fnc 0 -fblk 0
+		echo "Neutrino and its daemons terminated (hopefully)"
+		exit
+	fi
+	
+	if [ -e /tmp/.reboot ] ; then
+		reboot
+	else
+		halt
+	fi
+	exit 0
+fi
 rm /var/etc/.dont_restart_enigma
 touch /tmp/.enigma
 while [ -e /tmp/.enigma ]

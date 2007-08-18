@@ -83,6 +83,19 @@ AC_SUBST(EPG)
 AM_CONDITIONAL(EPG_STANDARD,test "$EPG" = "standard")
 AM_CONDITIONAL(EPG_PRIVATE,test "$EPG" = "private")
 
+AC_ARG_WITH(busybox,
+	[  --with-busybox=NAME dreambox busybox [[1.0,1.2]]],
+	[BUSYBOX="$withval"],[BUSYBOX="1.0"])
+AC_SUBST(BUSYBOX)
+AM_CONDITIONAL(BUSYBOX_12,test "$BUSYBOX" = "1.2")
+
+AC_ARG_WITH(freetype,
+	[  --with-freetype=NAME dreambox freetype [[2.0,2.1]]],
+	[FREETYPE="$withval"],[FREETYPE="2.0"])
+AC_SUBST(FREETYPE)
+AM_CONDITIONAL(FREETYPE_21,test "$FREETYPE" = "2.1")
+
+
 AC_ARG_WITH(mhw-epg,
 	[  --with-mhw-epg          enable capture of mhw epg (default off)],
 	[MHW_EPG="$withval"],[MHW_EPG="no"])
@@ -327,11 +340,13 @@ TUXBOX_RULES_MAKE_EXDIR(bootstrap_gcc)
 TUXBOX_RULES_MAKE_EXDIR(glibc)
 TUXBOX_RULES_MAKE_EXDIR(gcc)
 TUXBOX_RULES_MAKE(uclibc)
+TUXBOX_RULES_MAKE(squashfs)
 
 #
 # root
 #
 TUXBOX_RULES_MAKE(busybox)
+TUXBOX_RULES_MAKE(busybox12)
 TUXBOX_RULES_MAKE(ftpd)
 TUXBOX_RULES_MAKE(modutils)
 TUXBOX_RULES_MAKE(portmap)
@@ -354,6 +369,7 @@ TUXBOX_RULES_MAKE(libdvbpsi)
 TUXBOX_RULES_MAKE(libevent)
 TUXBOX_RULES_MAKE(libffi)
 TUXBOX_RULES_MAKE(libfreetype)
+TUXBOX_RULES_MAKE(libfreetype21)
 TUXBOX_RULES_MAKE(libfribidi)
 TUXBOX_RULES_MAKE(libgmp)
 TUXBOX_RULES_MAKE(libmad)

@@ -23,6 +23,7 @@ watchdog;make:install:DESTDIR=TARGET
 # root
 #
 busybox;make:install:PREFIX=TARGET
+busybox12;make:install:PREFIX=TARGET
 ftpd;install:-m755:vsftpd:TARGET/sbin/in.ftpd;install:-m644:vsftpd-dbox2.conf:TARGET/etc/vsftpd.conf;install:-d:TARGET/share/empty
 inetd;install:-m755:inetd:TARGET/sbin
 modutils;make:install-bin:sbindir=TARGET/sbin
@@ -45,6 +46,7 @@ libdvbpsi;make:install:DESTDIR=TARGET
 libevent;make:install:DESTDIR=TARGET
 libffi;make:install
 libfreetype;make:install:libdir=TARGET/lib:includedir=TARGET/include:bindir=TARGET/bin:prefix=TARGET
+libfreetype21;make:install:libdir=TARGET/lib:includedir=TARGET/include:bindir=TARGET/bin:prefix=TARGET
 libfribidi;rewrite-pkgconfig:fribidi.pc;make:install:DESTDIR=TARGET
 libgmp;make:install
 libjpeg;make:install-lib:prefix=TARGET
@@ -64,7 +66,7 @@ libsdl_sound;make:install:DESTDIR=TARGET
 libsdl_net;make:install:DESTDIR=TARGET
 libsigc;rewrite-pkgconfig:sigc++-1.2.pc;make:install:DESTDIR=TARGET
 libungif;make:install:DESTDIR=TARGET
-libvorbisidec;make:install:DESTDIR=TARGET
+libvorbisidec;rewrite-pkgconfig:vorbisidec.pc;make:install:DESTDIR=TARGET;install:-m644:vorbisidec.pc:TARGET/lib/pkgconfig
 libxmlparse;make:install
 libxmlwrapp;make:install;link:TARGET/bin/xmlwrapp-config:HOST/bin/xmlwrapp-config
 libxml2;rewrite-pkgconfig:libxml-2.0.pc;make:install:DESTDIR=TARGET
@@ -130,5 +132,10 @@ dvbstream;install:-m755:dvbstream:rtpfeed:TARGET/bin
 dvbtext;install:-m755:dvbtext:TARGET/bin
 dvbtune;install:-m755:dvbtune:TARGET/bin
 vls;make:install:DESTDIR=TARGET
+
+#
+# mksquashfs with LZMA support
+#
+squashfs
 
 >>?;rules-install-local

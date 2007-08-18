@@ -21,6 +21,11 @@ extra: java contrib_apps fun dvb_apps
 
 core: .directories .binutils .linuxdir .glibc .gcc
 
+checkout_neutrino:
+	CURRENT_PATH=`pwd`;
+	cd ../apps && cvs update -d -P -A;
+	cd $$CURRENT_PATH; 
+
 checkout:
 	@for i in apps/tuxbox/enigma apps/dvb/dvbsnoop \
 		apps/dvb/tools/stream apps/tuxbox/plugins \
@@ -231,6 +236,18 @@ root: \
 root_optional: \
 	.portmap .mrouted
 
+if BUSYBOX_12
+.busybox: .bootstrap @DEPENDS_busybox12@
+	@PREPARE_busybox12@
+	cat Patches/busybox12.config > @DIR_busybox12@/.config
+	cd @DIR_busybox12@ && \
+		$(MAKE) dep all \
+			CROSS=$(target)- \
+			CFLAGS_EXTRA="-Os -msoft-float" && \
+		@INSTALL_busybox12@
+	@CLEANUP_busybox12@
+	touch $@
+else
 .busybox: .bootstrap @DEPENDS_busybox@
 	@PREPARE_busybox@
 	cat Patches/busybox.config > @DIR_busybox@/.config
@@ -241,6 +258,7 @@ root_optional: \
 		@INSTALL_busybox@
 	@CLEANUP_busybox@
 	touch $@
+endif
 
 .root:
 	$(MAKE) -C root install
@@ -315,6 +333,26 @@ root_optional: \
 		$(INSTALL) -m755 map-mbone $(targetprefix)/bin/map-mbone && \
 		$(INSTALL) -m755 mrinfo $(targetprefix)/bin/mrinfo
 	@CLEANUP_mrouted@
+	touch $@
+
+#######################
+#
+# mksquashfs with LZMA support
+#
+mksquashfs: .mksquashfs
+.mksquashfs: .bootstrap @DEPENDS_squashfs@
+	rm -rf @DIR_squashfs@
+	mkdir -p @DIR_squashfs@
+	cd @DIR_squashfs@ && \
+	bunzip2 -cd ../Archive/lzma442.tar.bz2 | TAPE=- tar -x && \
+	patch -p1 < ../Patches/lzma_zlib-stream.diff && \
+	gunzip -cd ../Archive/squashfs2.2-r2.tar.gz | TAPE=- tar -x && \
+	cd squashfs2.2-r2 && \
+	patch -p1 < ../../Patches/mksquashfs_lzma.diff
+	$(MAKE) -C @DIR_squashfs@/C/7zip/Compress/LZMA_Lib
+	$(MAKE) -C @DIR_squashfs@/squashfs2.2-r2/squashfs-tools
+	$(INSTALL) -m755 @DIR_squashfs@/squashfs2.2-r2/squashfs-tools/mksquashfs $(flashprefix)/
+	@CLEANUP_squashfs@
 	touch $@
 
 #######################
@@ -437,7 +475,23 @@ libs_optional: \
 		@INSTALL_libffi@
 	@CLEANUP_libffi@
 	touch $@
-
+if FREETYPE_21
+.libfreetype: .bootstrap @DEPENDS_libfreetype21@
+	@PREPARE_libfreetype21@
+	cd @DIR_libfreetype21@ && \
+		$(BUILDENV) \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--prefix= && \
+		$(MAKE) all && \
+		rm -f $(hostprefix)/bin/freetype-config && \
+		sed -e "s,^prefix=,prefix=$(targetprefix)," < builds/unix/freetype-config > $(hostprefix)/bin/freetype-config && \
+		chmod 755 $(hostprefix)/bin/freetype-config && \
+		@INSTALL_libfreetype21@
+	@CLEANUP_libfreetype21@
+	touch $@
+else
 .libfreetype: .bootstrap @DEPENDS_libfreetype@
 	@PREPARE_libfreetype@
 	cd @DIR_libfreetype@ && \
@@ -453,7 +507,7 @@ libs_optional: \
 		@INSTALL_libfreetype@
 	@CLEANUP_libfreetype@
 	touch $@
-
+endif
 .libfribidi: .bootstrap @DEPENDS_libfribidi@
 	@PREPARE_libfribidi@
 	cd @DIR_libfribidi@ && \
@@ -1756,6 +1810,15 @@ if TARGETRULESET_FLASH
 endif
 	touch $@
 
+# misc/tools
+
+$(appsdir)/misc/tools/config.status: .bootstrap
+	cd $(appsdir)/misc/tools && $(CONFIGURE)
+
+.misc_tools: $(appsdir)/misc/tools/config.status
+	$(MAKE) -C $(appsdir)/misc/tools all install CFLAGS=-I$(appsdir)/../cdk/linux/include
+	touch $@
+
 # tuxbox/enigma
 
 $(appsdir)/tuxbox/enigma/Makefile: .bootstrap .libfreetype .libfribidi .libmad .libid3tag .libpng .libsigc .libtuxbox .misc_libs .plugins .libvorbisidec
@@ -1807,7 +1870,14 @@ $(appsdir)/tuxbox/libtuxbox/config.status: .bootstrap
 
 # tuxbox/neutrino
 
-$(appsdir)/tuxbox/neutrino/Makefile: .bootstrap .libboost .libcurl .libfreetype .libtuxbox .misc_libs .plugins .tuxbox_libs .zapit
+$(appsdir)/dvb/config/config.status:
+	cd $(appsdir)/dvb/config && $(CONFIGURE)
+
+.config: $(appsdir)/dvb/config/config.status
+	$(MAKE) -C $(appsdir)/dvb/config all install
+	touch $@
+
+$(appsdir)/tuxbox/neutrino/Makefile: .bootstrap .libboost .libcurl .libfreetype .libtuxbox .misc_libs .libsigc .plugins .tuxbox_libs .zapit .tuxbox_tools .libid3tag .libmad .libvorbisidec .misc_tools .config
 	cd $(appsdir)/tuxbox/neutrino && $(CONFIGURE)
 
 .neutrino: $(appsdir)/tuxbox/neutrino/Makefile
@@ -1883,6 +1953,12 @@ dreamboximage_root: core .enigma .etherwake .linuxkernel .dreamfiles .dvbsnoop \
 	flash-sambaclient
 endif
 
+dreamboximage_neutrinoroot: core .neutrino .etherwake .linuxkernel .dreamfiles .dvbsnoop\
+	flash-neutrino \
+	flash-plugin_tuxtxt flash-plugin_tuxcom flash-misc-tools\
+	flash-ftpd flash-dvb-tools flash-etherwake flash-dreamfiles flash-dvbsnoop \
+	flash-sambaclient
+
 rebuild-flash:
 	-rm -rf $(flashprefix)/root
 	-rm -f $(flashprefix)/.flash
@@ -1929,7 +2005,15 @@ flash-dvb-tools: $(flashprefix)/.part_dvb_tools
 $(flashprefix)/.part_dvb_tools: $(flashprefix)/.flash .stream
 	@for i in streampes streamsec streamts udpstreampes; do \
 		$(INSTALL) $(targetprefix)/sbin/$$i $(flashprefix)/root/sbin; done;
-	$(INSTALL) $(targetprefix)/bin/dvbnet $(flashprefix)/root/bin;
+	@if [ -e $(targetprefix)/bin/dvbnet ] ; then \
+		$(INSTALL) $(targetprefix)/bin/dvbnet $(flashprefix)/root/bin; \
+	fi
+	@touch $@
+
+flash-misc-tools: $(flashprefix)/.part_misc_tools
+$(flashprefix)/.part_misc_tools: $(flashprefix)/.flash .misc_tools
+	$(INSTALL) $(targetprefix)/bin/fbshot	$(flashprefix)/root/bin
+	$(INSTALL) $(targetprefix)/sbin/fcp	$(flashprefix)/root/sbin
 	@touch $@
 
 flash-scummvm: $(flashprefix)/.part_scummvm .scummvm
@@ -2002,9 +2086,14 @@ $(flashprefix)/.part_dreamfiles: $(flashprefix)/.flash .dreamfiles
 	@for i in log mnt mnt/cf mnt/nfs mnt/usb run tuxbox/plugins tuxbox/config ; do \
 		$(INSTALL) -d $(flashprefix)/root/var_init/$$i; \
 	done;
-	@for i in tuxtxt enigma/cable enigma/fonts enigma/pictures enigma/resources enigma/skins enigma/terrestrial; do \
+	@if [ -e $(flashprefix)/.part_enigma ]; then \
+	    for i in tuxtxt enigma/cable enigma/fonts enigma/pictures enigma/resources enigma/skins enigma/terrestrial; do \
 		$(INSTALL) -d $(flashprefix)/root/var_init/tuxbox/config/$$i; \
-	done;
+	     done \
+	fi
+	@if [ -e $(flashprefix)/.part_neutrino ] ; then \
+		$(INSTALL) -d $(flashprefix)/root/var_init/tuxbox/config/zapit; \
+	fi
 	@ln -sf /tmp $(flashprefix)/root/var_init/tmp
 	@ln -sf /proc/mounts $(flashprefix)/root/var_init/etc/mtab
 # etc
@@ -2021,10 +2110,12 @@ $(flashprefix)/.part_dreamfiles: $(flashprefix)/.flash .dreamfiles
 # share
 	@cp -R $(targetprefix)/share/udhcpc $(flashprefix)/root/share
 if BOXTYPE_DM500
-	@for i in cables.xml satellites.xml terrestrial.xml; do \
-		cp -R $(targetprefix)/share/tuxbox/$$i $(flashprefix)/root/share/tuxbox; \
-		ln -sf tuxbox/$$i $(flashprefix)/root/share; \
-	done;
+	@if [ -e $(flashprefix)/.part_enigma ] ; then \
+		for i in cables.xml satellites.xml terrestrial.xml; do \
+			cp -R $(targetprefix)/share/tuxbox/$$i $(flashprefix)/root/share/tuxbox; \
+			ln -sf tuxbox/$$i $(flashprefix)/root/share; \
+		done \
+	fi
 else
 	@cp $(targetprefix)/share/tuxbox/satellites.xml $(flashprefix)/root/share/tuxbox;
 	@ln -sf tuxbox/satellites.xml $(flashprefix)/root/share;
@@ -2034,9 +2125,11 @@ endif
 	@if [ ! -d $(flashprefix)/root/hdd ]; then mkdir $(flashprefix)/root/hdd; fi
 
 if !BOXTYPE_DM7000
-	@echo "i:/ezap/osd/alpha=00000000" >> $(flashprefix)/root/var_init/tuxbox/config/enigma/config
-	@echo "i:/ezap/osd/brightness=00000073" >> $(flashprefix)/root/var_init/tuxbox/config/enigma/config
-	@echo "i:/ezap/osd/gamma=00000066" >> $(flashprefix)/root/var_init/tuxbox/config/enigma/config
+	@if [ -e $(flashprefix)/.part_enigma ] ; then \
+	    echo "i:/ezap/osd/alpha=00000000" >> $(flashprefix)/root/var_init/tuxbox/config/enigma/config; \
+	    echo "i:/ezap/osd/brightness=00000073" >> $(flashprefix)/root/var_init/tuxbox/config/enigma/config; \
+	    echo "i:/ezap/osd/gamma=00000066" >> $(flashprefix)/root/var_init/tuxbox/config/enigma/config; \
+	fi
 endif
 if !BOXTYPE_DM56x0
 	@for i in skins/small_red*.esml skins/small_red*.info pictures/small-red pictures/triaxlogo-fs8.png ; do \
@@ -2493,20 +2586,34 @@ $(flashprefix)/.part_dropbear: $(flashprefix)/.flash .dropbear
 ############################# UNTESTED!!! ##################################
 flash-neutrino: $(flashprefix)/.part_neutrino
 $(flashprefix)/.part_neutrino: $(flashprefix)/.flash .neutrino
-	$(INSTALL) $(targetprefix)/bin/controld $(targetprefix)/bin/lcdd $(targetprefix)/bin/neutrino \
+	$(INSTALL) -d $(flashprefix)/root/share/fonts
+	$(INSTALL) -d $(flashprefix)/root/share/iso-codes
+	$(INSTALL) -d $(flashprefix)/root/share/tuxbox
+	$(INSTALL) -d $(flashprefix)/root/etc/init.d
+	$(INSTALL) -d $(flashprefix)/root/var/etc/init.d
+	$(INSTALL) -d $(flashprefix)/root/var/tuxbox/config/lirc
+	$(INSTALL) $(targetprefix)/bin/controld $(targetprefix)/bin/neutrino \
 		$(targetprefix)/bin/nhttpd $(targetprefix)/bin/timerd \
 		$(flashprefix)/root/bin
-	cp -a $(targetprefix)/share/tuxbox/neutrino $(targetprefix)/share/tuxbox/lcdd \
+	cp -pa $(targetprefix)/share/tuxbox/neutrino $(targetprefix)/share/tuxbox/lcdd \
 		$(flashprefix)/root/share/tuxbox
-
+#	$(INSTALL) $(targetprefix)/bin/camd2 $(flashprefix)/root/bin
 	$(INSTALL) $(targetprefix)/bin/sectionsd $(flashprefix)/root/bin
-
+	$(INSTALL) $(targetprefix)/bin/pzapit $(flashprefix)/root/bin
+#	$(INSTALL) $(targetprefix)/bin/satfind $(flashprefix)/root/bin
 	$(INSTALL) $(targetprefix)/bin/zapit $(flashprefix)/root/bin
-	cp -a $(targetprefix)/var/tuxbox/config/zapit $(flashprefix)/root/var/tuxbox/config
-
-	$(INSTALL) -d $(flashprefix)/root/share/fonts
-	cp -a $(targetprefix)/share/fonts/micron*.ttf $(flashprefix)/root/share/fonts
-
+	cp -pa $(appsdir)/tuxbox/enigma/data/fonts/bluebold.ttf $(flashprefix)/root/share/fonts
+	cp -pa $(appsdir)/tuxbox/enigma/data/fonts/bluehigh.ttf $(flashprefix)/root/share/fonts
+	cp -pa $(appsdir)/tuxbox/enigma/data/fonts/md_khmurabi_10.ttf $(flashprefix)/root/share/fonts
+	cp -pa $(appsdir)/tuxbox/enigma/data/fonts/pakenham.ttf $(flashprefix)/root/share/fonts
+	cp -pa $(appsdir)/tuxbox/enigma/data/fonts/unmrs.pfa $(flashprefix)/root/share/fonts
+	cp -pa $(targetprefix)/share/fonts/micron*.ttf $(flashprefix)/root/share/fonts
+	cp -pa $(targetprefix)/share/fonts/12.pcf.gz $(flashprefix)/root/share/fonts
+	cp -pa $(targetprefix)/share/fonts/14B.pcf.gz $(flashprefix)/root/share/fonts
+	cp -pa $(targetprefix)/share/fonts/15B.pcf.gz $(flashprefix)/root/share/fonts
+	cp -pa $(targetprefix)/share/iso-codes/iso-639.tab $(flashprefix)/root/share/iso-codes
+	@ln -sf /var/etc/network $(targetprefix)/etc/network
+	ln -sf /var/etc/localtime $(flashprefix)/root/etc
 	@touch $@
 
 flash-lcars: $(flashprefix)/.part_lcars

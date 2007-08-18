@@ -25,11 +25,14 @@ watchdog;5.2;watchdog-5.2.orig;watchdog_5.2.orig.tar.gz:watchdog.diff;extract:wa
 # root
 #
 busybox;1.01;busybox-1.01;busybox-1.01.tar.bz2;extract:busybox-1.01.tar.bz2;patch:busybox.diff
+busybox12;1.2.1;busybox-1.2.1;busybox-1.2.1.tar.bz2;extract:busybox-1.2.1.tar.bz2;patch:busybox12.diff
 ftpd;1.1.0;vsftpd-1.1.0;vsftpd-1.1.0.tar.gz:ftpd.diff;extract:vsftpd-1.1.0.tar.gz;patch:ftpd.diff
 modutils;2.4.21;modutils-2.4.21;modutils-2.4.21.tar.bz2;extract:modutils-2.4.21.tar.bz2
 portmap;5;portmap-5;portmap-5.tar.bz2:portmap_5-8.diff.gz:portmap.diff;extract:portmap-5.tar.bz2;patch:portmap_5-8.diff.gz;patch:portmap.diff
 procps;010114;procps-010114;procps-010114.tar.gz:procps.diff;extract:procps-010114.tar.gz;patch:procps.diff
 mrouted;3.9-beta3;mrouted-3.9-beta3.orig;mrouted_3.9-beta3.orig.tar.gz:mrouted_3.9-beta3-3.diff;extract:mrouted_3.9-beta3.orig.tar.gz;patch:mrouted_3.9-beta3-3.diff
+
+squashfs;2.2-r2;mksquashfs;squashfs2.2-r2.tar.gz:mksquashfs_lzma.diff:lzma442.tar.bz2:lzma_zlib-stream.diff;dircreate:mksquashfs;extract:lzma442.tar.bz2;patch:lzma_zlib-stream.diff;extract:squashfs2.2-r2.tar.gz;patch:mksquashfs_lzma.diff
 
 #
 # contrib libs
@@ -46,6 +49,7 @@ libdvbpsi;0.1.2;libdvbpsi-0.1.2;libdvbpsi-0.1.2.tar.gz;extract:libdvbpsi-0.1.2.t
 libevent;1.3b;libevent-1.3b;libevent-1.3b.tar.gz;extract:libevent-1.3b.tar.gz
 libffi;1.20;libffi-1.20;libffi-1.20.tar.gz:libffi.diff;extract:libffi-1.20.tar.gz;patch:libffi.diff
 libfreetype;2.0.9;freetype-2.0.9;freetype-2.0.9.tar.bz2;extract:freetype-2.0.9.tar.bz2;patch:libfreetype.diff
+libfreetype21;2.1.4;freetype-2.1.4;freetype-2.1.4.tar.bz2;extract:freetype-2.1.4.tar.bz2;patch:libfreetype.diff
 libfribidi;0.10.4;fribidi-0.10.4;fribidi-0.10.4.tar.bz2;extract:fribidi-0.10.4.tar.bz2
 libgmp;4.1.2;gmp-4.1.2;gmp-4.1.2.tar.gz;extract:gmp-4.1.2.tar.gz
 libjpeg;6b;jpeg-6b;jpegsrc.v6b.tar.gz:jpeg.diff;extract:jpegsrc.v6b.tar.gz;patch:jpeg.diff
