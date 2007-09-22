@@ -251,176 +251,662 @@ and combinations of this.-->
 		<transponder centre_frequency="698000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="786000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
+	<terrestrial name="Alajärvi(fi)" flags="5">
+		<transponder centre_frequency="642000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="730000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="746000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="578000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
 	<terrestrial name="Anjalankoski(fi)" flags="5">
 		<transponder centre_frequency="482000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="522000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="730000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="754000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
 	<terrestrial name="Espoo(fi)" flags="5">
 		<transponder centre_frequency="562000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="658000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="674000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="730000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
 	<terrestrial name="Eurajoki(fi)" flags="5">
 		<transponder centre_frequency="610000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="666000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="722000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="746000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
 	<terrestrial name="Fiskars(fi)" flags="5">
 		<transponder centre_frequency="562000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="658000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="674000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="770000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
 	<terrestrial name="Haapavesi(fi)" flags="5">
 		<transponder centre_frequency="578000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="642000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="730000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Hanko(fi)" flags="5">
+		<transponder centre_frequency="618000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="746000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="674000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="706000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Hartola(fi)" flags="5">
+		<transponder centre_frequency="514000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="602000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="762000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="714000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Heinola(fi)" flags="5">
+		<transponder centre_frequency="554000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="786000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="826000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="706000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Heinävesi(fi)" flags="5">
+		<transponder centre_frequency="658000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="706000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="570000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
 	<terrestrial name="Hetta(fi)" flags="5">
 		<transponder centre_frequency="554000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="610000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
+	<terrestrial name="Houtskari(fi)" flags="5">
+		<transponder centre_frequency="626000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="682000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="538000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="522000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Hyrynsalmi(fi)" flags="5">
+		<transponder centre_frequency="626000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="658000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="746000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Hyvinkää/Musta-Männistö(fi)" flags="5">
+		<transponder centre_frequency="538000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="698000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="674000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="754000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Hämeenkyrö/Kyröskoski(fi)" flags="5">
+		<transponder centre_frequency="578000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="490000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="770000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="778000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Hämeenlinna/Painokangas(fi)" flags="5">
+		<transponder centre_frequency="482000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="522000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="706000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
 	<terrestrial name="Iisalmi(fi)" flags="5">
 		<transponder centre_frequency="514000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="610000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
+	<terrestrial name="Ikaalinen(fi)" flags="5">
+		<transponder centre_frequency="538000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="658000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="770000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="618000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Ikaalinen/Riitiala(fi)" flags="5">
+		<transponder centre_frequency="650000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="738000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="770000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="706000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
 	<terrestrial name="Inari(fi)" flags="5">
-		<transponder centre_frequency="506000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="690000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="506000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Ivalo/Saarineitämövaara(fi)" flags="5">
+		<transponder centre_frequency="490000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="522000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Jalasjärvi(fi)" flags="5">
+		<transponder centre_frequency="522000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="650000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="746000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="594000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Joensuu/Vestinkallio(fi)" flags="5">
+		<transponder centre_frequency="666000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="786000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="682000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Joutsa/Lankia(fi)" flags="5">
+		<transponder centre_frequency="482000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="786000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="746000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="522000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
 	<terrestrial name="Joutseno(fi)" flags="5">
 		<transponder centre_frequency="682000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="586000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="762000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
 	<terrestrial name="Juntusranta(fi)" flags="5">
 		<transponder centre_frequency="642000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="666000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
-	<terrestrial name="Jyvaskyla(fi)" flags="5">
+	<terrestrial name="Jyväskylä(fi)" flags="5">
 		<transponder centre_frequency="546000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="786000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="746000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="634000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
-	<terrestrial name="Kaihuanvaara(fi)" flags="5">
-		<transponder centre_frequency="626000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	<terrestrial name="Jämsä/Kaipola(fi)" flags="5">
+		<transponder centre_frequency="602000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="658000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="746000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="538000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Jämsä/Kuorevesi/Halli(fi)" flags="5">
+		<transponder centre_frequency="674000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="650000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="746000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="570000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Jämsä/Matkosvuori(fi)" flags="5">
+		<transponder centre_frequency="602000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="658000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="554000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="538000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Jämsänkoski(fi)" flags="5">
+		<transponder centre_frequency="546000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="786000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="746000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="634000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Kajaani/Pöllyvaara(fi)" flags="5">
+		<transponder centre_frequency="546000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="722000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="746000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Kangaslampi(fi)" flags="5">
+		<transponder centre_frequency="754000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="786000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="618000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="658000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Kangasniemi/Turkinmäki(fi)" flags="5">
+		<transponder centre_frequency="602000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="706000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="746000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="690000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Kankaanpää(fi)" flags="5">
+		<transponder centre_frequency="650000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="682000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="722000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="714000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
 	<terrestrial name="Karigasniemi(fi)" flags="5">
 		<transponder centre_frequency="706000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="698000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
-	<terrestrial name="Kaunispaa(fi)" flags="5">
+	<terrestrial name="Karkkila(fi)" flags="5">
+		<transponder centre_frequency="594000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="650000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="762000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="698000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Karstula(fi)" flags="5">
+		<transponder centre_frequency="722000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="762000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="770000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Karvia(fi)" flags="5">
+		<transponder centre_frequency="762000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="786000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="714000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Kaunispää(fi)" flags="5">
 		<transponder centre_frequency="690000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="506000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
-	<terrestrial name="Kerimaki(fi)" flags="5">
+	<terrestrial name="Kerimäki(fi)" flags="5">
 		<transponder centre_frequency="546000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="602000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="570000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Keuruu(fi)" flags="5">
+		<transponder centre_frequency="674000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="706000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="826000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="482000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Keuruu/Haapamäki(fi)" flags="5">
+		<transponder centre_frequency="682000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="762000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="746000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="602000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Kihniö(fi)" flags="5">
+		<transponder centre_frequency="738000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="786000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="770000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="714000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
 	<terrestrial name="Kiihtelysvaara(fi)" flags="5">
 		<transponder centre_frequency="514000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="778000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
-	<terrestrial name="Kilpisjarvi(fi)" flags="5">
+	<terrestrial name="Kilpisjärvi(fi)" flags="5">
 		<transponder centre_frequency="666000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="690000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Kittilä/Sirkka/Levitunturi(fi)" flags="5">
+		<transponder centre_frequency="506000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="626000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
 	<terrestrial name="Koli(fi)" flags="5">
 		<transponder centre_frequency="506000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="626000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="682000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Korpilahti/Vaarunvuori(fi)" flags="5">
+		<transponder centre_frequency="546000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="786000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="746000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="634000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Korppoo(fi)" flags="5">
+		<transponder centre_frequency="626000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="682000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="538000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="522000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
 	<terrestrial name="Kruunupyy(fi)" flags="5">
 		<transponder centre_frequency="522000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="482000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="634000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="658000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Kuhmo/Lentiira(fi)" flags="5">
+		<transponder centre_frequency="498000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="562000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="746000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Kuhmoinen(fi)" flags="5">
+		<transponder centre_frequency="594000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="666000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="746000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="786000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Kuhmoinen/Harjunsalmi(fi)" flags="5">
+		<transponder centre_frequency="482000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="522000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="746000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="618000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
 	<terrestrial name="Kuopio(fi)" flags="5">
 		<transponder centre_frequency="498000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="554000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="618000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="722000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Kustavi/Viherlahti(fi)" flags="5">
+		<transponder centre_frequency="714000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="698000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="538000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="786000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
 	<terrestrial name="Kuttanen(fi)" flags="5">
-		<transponder centre_frequency="522000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="730000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="770000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
 	<terrestrial name="Lahti(fi)" flags="5">
 		<transponder centre_frequency="570000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="682000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="762000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="714000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
 	<terrestrial name="Lapua(fi)" flags="5">
 		<transponder centre_frequency="610000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="602000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="746000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="690000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Laukaa(fi)" flags="5">
+		<transponder centre_frequency="546000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="786000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="746000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="634000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Laukaa/Vihtavuori(fi)" flags="5">
+		<transponder centre_frequency="546000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="786000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="746000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="634000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Lieksa/Vieki(fi)" flags="5">
+		<transponder centre_frequency="610000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="698000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="682000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Lohja(fi)" flags="5">
+		<transponder centre_frequency="706000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="746000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="754000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="650000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Loimaa(fi)" flags="5">
+		<transponder centre_frequency="650000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="682000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="538000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="722000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Luhanka(fi)" flags="5">
+		<transponder centre_frequency="562000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="674000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="746000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="490000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Luopioinen(fi)" flags="5">
+		<transponder centre_frequency="650000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="674000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="762000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="706000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
 	<terrestrial name="Mikkeli(fi)" flags="5">
 		<transponder centre_frequency="538000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="650000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="778000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Muonio/Olostunturi(fi)" flags="5">
+		<transponder centre_frequency="506000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="562000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Mänttä(fi)" flags="5">
+		<transponder centre_frequency="658000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="722000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="770000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="594000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Mäntyharju(fi)" flags="5">
+		<transponder centre_frequency="490000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="514000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="778000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Nilsiä(fi)" flags="5">
+		<transponder centre_frequency="578000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="642000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="618000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="562000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Nilsiä/Keski-Siikajärvi(fi)" flags="5">
+		<transponder centre_frequency="706000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="778000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="618000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="722000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Nokia(fi)" flags="5">
+		<transponder centre_frequency="594000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="746000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="826000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="690000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Nokia/Siuro/Linnavuori(fi)" flags="5">
+		<transponder centre_frequency="594000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="746000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="770000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="690000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Nummi-Pusula/Hyönölä(fi)" flags="5">
+		<transponder centre_frequency="682000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="778000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="674000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="642000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Nurmes/Porokylä(fi)" flags="5">
+		<transponder centre_frequency="562000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="578000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="682000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Orivesi/Längelmäki/Talviainen(fi)" flags="5">
+		<transponder centre_frequency="610000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="698000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="770000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="778000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
 	<terrestrial name="Oulu(fi)" flags="5">
 		<transponder centre_frequency="634000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="714000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="738000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="602000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Padasjoki(fi)" flags="5">
+		<transponder centre_frequency="570000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="682000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="762000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="714000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Padasjoki/Arrakoski(fi)" flags="5">
+		<transponder centre_frequency="498000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="530000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="762000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="746000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Parikkala(fi)" flags="5">
+		<transponder centre_frequency="554000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="778000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="762000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Parkano(fi)" flags="5">
+		<transponder centre_frequency="506000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="546000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="770000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="562000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
 	<terrestrial name="Pello(fi)" flags="5">
 		<transponder centre_frequency="546000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="594000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
+	<terrestrial name="Pello/Ratasvaara(fi)" flags="5">
+		<transponder centre_frequency="698000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="730000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Perho(fi)" flags="5">
+		<transponder centre_frequency="594000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="674000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="746000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="554000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
 	<terrestrial name="Pernaja(fi)" flags="5">
 		<transponder centre_frequency="490000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="706000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="618000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
 	<terrestrial name="Pihtipudas(fi)" flags="5">
 		<transponder centre_frequency="706000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="666000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="770000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Porvoo/Suomenkylä(fi)" flags="5">
+		<transponder centre_frequency="490000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="706000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="618000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
 	<terrestrial name="Posio(fi)" flags="5">
 		<transponder centre_frequency="554000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="618000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
-	<terrestrial name="Pudasjarvi(fi)" flags="5">
+	<terrestrial name="Pudasjärvi(fi)" flags="5">
 		<transponder centre_frequency="658000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="690000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="738000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="602000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Pudasjärvi/Iso-Syöte(fi)" flags="5">
+		<transponder centre_frequency="650000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="786000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="738000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="602000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Pudasjärvi/Kangasvaara(fi)" flags="5">
+		<transponder centre_frequency="514000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="538000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
 	<terrestrial name="Puolanka(fi)" flags="5">
 		<transponder centre_frequency="642000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="666000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="746000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
-	<terrestrial name="Pyhatunturi(fi)" flags="5">
+	<terrestrial name="Pyhätunturi(fi)" flags="5">
 		<transponder centre_frequency="786000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="634000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
-	<terrestrial name="Pyhavuori(fi)" flags="5">
+	<terrestrial name="Pyhävuori(fi)" flags="5">
 		<transponder centre_frequency="530000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="634000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="586000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
-	<terrestrial name="Ranua(fi)" flags="5">
+	<terrestrial name="Pylkönmäki/Karankajärvi(fi)" flags="5">
+		<transponder centre_frequency="594000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="642000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="770000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Raahe/Mestauskallio(fi)" flags="5">
+		<transponder centre_frequency="546000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="618000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="730000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Ranua/Haasionmaa(fi)" flags="5">
 		<transponder centre_frequency="578000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="778000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Rautavaara/Angervikko(fi)" flags="5">
+		<transponder centre_frequency="658000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="738000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="618000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="530000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Rautjärvi/Simpele(fi)" flags="5">
+		<transponder centre_frequency="610000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="754000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="762000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Ristijärvi(fi)" flags="5">
+		<transponder centre_frequency="482000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="506000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="746000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
 	<terrestrial name="Rovaniemi(fi)" flags="5">
 		<transponder centre_frequency="650000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="674000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
+	<terrestrial name="Rovaniemi/Ala-Nampa/Yli-Nampa/Rantalaki(fi)" flags="5">
+		<transponder centre_frequency="714000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="770000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Rovaniemi/Kaihuanvaara(fi)" flags="5">
+		<transponder centre_frequency="626000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="706000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Rovaniemi/Meltaus/Sorviselkä(fi)" flags="5">
+		<transponder centre_frequency="714000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="770000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
 	<terrestrial name="Ruka(fi)" flags="5">
 		<transponder centre_frequency="570000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="690000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="778000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Ruovesi/Storminiemi(fi)" flags="5">
+		<transponder centre_frequency="578000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="490000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="770000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="778000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Saarijärvi(fi)" flags="5">
+		<transponder centre_frequency="682000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="722000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="746000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="610000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
 	<terrestrial name="Salla(fi)" flags="5">
 		<transponder centre_frequency="514000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="610000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
+	<terrestrial name="Salla/Ihistysjänkä(fi)" flags="5">
+		<transponder centre_frequency="610000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="674000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Salla/Naruska(fi)" flags="5">
+		<transponder centre_frequency="650000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="714000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Salla/Saija(fi)" flags="5">
+		<transponder centre_frequency="514000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="602000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Salo Isokylä(fi)" flags="5">
+		<transponder centre_frequency="482000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="666000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="682000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="570000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Siilinjärvi(fi)" flags="5">
+		<transponder centre_frequency="634000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="770000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="618000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="658000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Sipoo/Galthagen(fi)" flags="5">
+		<transponder centre_frequency="698000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="754000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="674000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="730000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Sodankylä/Pittiövaara(fi)" flags="5">
+		<transponder centre_frequency="658000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="770000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Sulkava/Väätälänmäki(fi)" flags="5">
+		<transponder centre_frequency="674000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="714000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="570000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Sysmä/Liikola(fi)" flags="5">
+		<transponder centre_frequency="498000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="594000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="762000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="658000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
 	<terrestrial name="Taivalkoski(fi)" flags="5">
 		<transponder centre_frequency="562000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="610000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
+	<terrestrial name="Taivalkoski/Taivalvaara(fi)" flags="5">
+		<transponder centre_frequency="594000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="626000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
 	<terrestrial name="Tammela(fi)" flags="5">
 		<transponder centre_frequency="482000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="522000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="706000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Tammisaari(fi)" flags="5">
+		<transponder centre_frequency="618000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="650000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="674000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="602000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
 	<terrestrial name="Tampere(fi)" flags="5">
 		<transponder centre_frequency="578000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="490000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="770000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="778000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Tampere/Pyynikki(fi)" flags="5">
+		<transponder centre_frequency="626000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="658000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="682000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="586000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
 	<terrestrial name="Tervola(fi)" flags="5">
 		<transponder centre_frequency="626000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
@@ -430,34 +916,111 @@ and combinations of this.-->
 		<transponder centre_frequency="714000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="698000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="538000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="786000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
 	<terrestrial name="Utsjoki(fi)" flags="5">
 		<transponder centre_frequency="658000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="714000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
+	<terrestrial name="Utsjoki/Nuorgam/Njallavaara(fi)" flags="5">
+		<transponder centre_frequency="594000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="674000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Utsjoki/Nuorgam/raja(fi)" flags="5">
+		<transponder centre_frequency="594000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="674000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Uusikaupunki/Ruokola(fi)" flags="5">
+		<transponder centre_frequency="482000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="514000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="538000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="554000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Vaala(fi)" flags="5">
+		<transponder centre_frequency="770000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="786000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="730000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
 	<terrestrial name="Vaasa(fi)" flags="5">
 		<transponder centre_frequency="610000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="602000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="762000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Valtimo(fi)" flags="5">
+		<transponder centre_frequency="586000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="610000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="682000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Vammala/Jyränvuori(fi)" flags="5">
+		<transponder centre_frequency="594000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="746000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="770000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="690000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Vammala/Roismala(fi)" flags="5">
+		<transponder centre_frequency="514000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="562000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="770000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="778000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Vantaa/Hakunila(fi)" flags="5">
+		<transponder centre_frequency="562000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="658000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="674000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="730000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Varpaisjärvi/Honkamäki(fi)" flags="5">
+		<transponder centre_frequency="634000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="786000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="618000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="650000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Virrat/Lappavuori(fi)" flags="5">
+		<transponder centre_frequency="522000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="762000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="770000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="554000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
 	<terrestrial name="Vuokatti(fi)" flags="5">
 		<transponder centre_frequency="546000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="722000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="746000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
 	<terrestrial name="Vuotso(fi)" flags="5">
 		<transponder centre_frequency="554000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="706000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
-	<terrestrial name="Yllas(fi)" flags="5">
+	<terrestrial name="Ylitornio/Ainiovaara(fi)" flags="5">
+		<transponder centre_frequency="546000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="602000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Ylitornio/Raanujärvi(fi)" flags="5">
+		<transponder centre_frequency="570000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="618000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Ylläs(fi)" flags="5">
 		<transponder centre_frequency="546000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="594000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
-	<terrestrial name="Ahtari(fi)" flags="5">
+	<terrestrial name="Ähtäri(fi)" flags="5">
 		<transponder centre_frequency="722000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="658000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
-	<terrestrial name="Ammansaari(fi)" flags="5">
+	<terrestrial name="Ämmänsaari(fi)" flags="5">
 		<transponder centre_frequency="642000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 		<transponder centre_frequency="666000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Äänekoski(fi)" flags="5">
+		<transponder centre_frequency="610000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="730000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="826000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="682000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+	</terrestrial>
+	<terrestrial name="Äänekoski/Konginkangas(fi)" flags="5">
+		<transponder centre_frequency="658000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="690000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="746000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
+		<transponder centre_frequency="762000000" bandwidth="0" constellation="2" code_rate_hp="1" code_rate_lp="6" guard_interval="2" transmission_mode="1" hierarchy_information="0" inversion="2" />
 	</terrestrial>
 	<terrestrial name="Iceland(is)" flags="5">
 		<transponder centre_frequency="242000000" bandwidth="0" constellation="2" code_rate_hp="5" code_rate_lp="5" guard_interval="4" transmission_mode="2" hierarchy_information="4" inversion="2" />
