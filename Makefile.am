@@ -1,4 +1,5 @@
-PATH := $(hostprefix)/bin:$(PATH)
+PATH := $(hostprefix)/ccache-bin:$(hostprefix)/bin:$(PATH)
+#PATH := $(hostprefix)/bin:$(PATH)
 BUILDENV := \
 	AR=$(target)-ar \
 	AS=$(target)-as \
@@ -55,6 +56,13 @@ checkout:
 if TARGETRULESET_FLASH
 	$(INSTALL) -d $(flashprefix)
 endif
+	if [ -e $(ccachedir)/ccache ]; then \
+		$(INSTALL) -d $(hostprefix)/ccache-bin ;\
+		ln -s $(ccachedir)/ccache $(hostprefix)/ccache-bin/powerpc-tuxbox-linux-gnu-gcc ;\
+		ln -s $(ccachedir)/ccache $(hostprefix)/ccache-bin/powerpc-tuxbox-linux-gnu-g++ ;\
+		ln -s $(ccachedir)/ccache $(hostprefix)/ccache-bin/powerpc-tuxbox-linux-gnu-cpp ;\
+		ln -s $(ccachedir)/ccache $(hostprefix)/ccache-bin/powerpc-tuxbox-linux-gnu-gcc-.3.4.4 ;\
+	fi
 	touch $@
 
 .linuxdir: @DEPENDS_linux@
@@ -1107,6 +1115,16 @@ contrib_apps_optional: .dsniff .pump .thttpd
 		@INSTALL_utillinux@
 	@CLEANUP_utillinux@
 	touch $@
+.automount: .bootstrap @DEPENDS_automount@
+	@PREPARE_automount@
+	cd @DIR_automount@  && \
+		$(BUILDENV) STRIP=$(target)-strip \
+		$(MAKE) && \
+		$(MAKE) install INSTALLROOT=$(targetprefix)
+	rm -rf @DIR_automount@
+	$(INSTALL) $(buildprefix)/root/etc/init.d/start_automount $(targetprefix)/etc/init.d
+	ln -sf /proc/mounts $(targetprefix)/etc/mtab
+	@touch $@
 
 .nfs_utils: .bootstrap @DEPENDS_nfs_utils@
 	@PREPARE_nfs_utils@
@@ -1953,11 +1971,11 @@ dreamboximage_root: core .enigma .etherwake .linuxkernel .dreamfiles .dvbsnoop \
 	flash-sambaclient
 endif
 
-dreamboximage_neutrinoroot: core .neutrino .etherwake .linuxkernel .dreamfiles .dvbsnoop\
+dreamboximage_neutrinoroot: core .neutrino .etherwake .linuxkernel .dreamfiles .dvbsnoop .automount\
 	flash-neutrino \
 	flash-plugin_tuxtxt flash-plugin_tuxcom flash-misc-tools\
 	flash-ftpd flash-dvb-tools flash-etherwake flash-dreamfiles flash-dvbsnoop \
-	flash-sambaclient
+	flash-sambaclient flash-automount
 
 rebuild-flash:
 	-rm -rf $(flashprefix)/root
@@ -2063,6 +2081,18 @@ $(flashprefix)/.part_sambaclient: $(flashprefix)/.flash .samba
 	$(INSTALL) -d $(flashprefix)/root/bin
 	@for i in smbmount smbmnt ; do \
 		$(INSTALL) $(targetprefix)/bin/$$i $(flashprefix)/root/bin; done
+	@touch $@
+
+flash-automount: $(flashprefix)/.part_automount
+$(flashprefix)/.part_automount: $(flashprefix)/.flash
+	cp -pa $(targetprefix)/etc/init.d/start_automount $(flashprefix)/root/etc/init.d
+	rm -f $(flashprefix)/root/etc/init.d/autofs
+	cp -pa $(targetprefix)/sbin/automount $(flashprefix)/root/sbin
+	$(INSTALL) -d $(flashprefix)/root/lib/autofs
+	@for i in lookup_file.so mount_bind.so mount_generic.so mount_nfs.so parse_sun.so; do \
+	cp -pa $(targetprefix)/lib/autofs/$$i $(flashprefix)/root/lib/autofs; done
+	ln -sf /proc/mounts $(flashprefix)/root/etc/mtab
+	ln -sf /var/etc/auto.net $(flashprefix)/root/etc/auto.net
 	@touch $@
 
 flash-cifs: $(flashprefix)/.part_cifs
@@ -2648,6 +2678,7 @@ $(flashprefix)/.lib: $(flashprefix)/.flash $(shell ls -r -1 $(flashprefix)/.part
 		`find $(flashprefix)/root/bin/ -path "*bin/?*"` \
 		`find $(flashprefix)/root/lib/ -name "libnss_*"` \
 		`find $(flashprefix)/root/lib/tuxbox/ -name "*.so" -type f` \
+		`find $(flashprefix)/root/lib/autofs/ -name "*.so" -type f` \
 		`find $(flashprefix)/root/sbin/ -path "*sbin/?*"`
 	cd $(flashprefix)/root/lib && ln -sf libgcc_s_nof.so.1 libgcc_s.so.1
 	@if [ -x ./customize-flash ] ; then \

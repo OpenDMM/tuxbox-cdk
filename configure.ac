@@ -53,6 +53,11 @@ elif test "$HOSTRULESET" = "cygwin"; then
 else
 	AC_MSG_ERROR([invalid hostruleset "$HOSTRULESET", choose on from standard or cygwin]);
 fi
+AC_ARG_WITH(ccachedir,
+	[  --with-ccachedir=DIR directory where ccache is installed ],
+	[ccachedir="$with_ccachedir"],[ccachedir="NONE"])
+AC_SUBST(ccachedir)
+
 
 AC_SUBST(HOSTRULESET)
 AM_CONDITIONAL(HOSTRULESET_STANDARD,test "$HOSTRULESET" = "standard")
@@ -420,6 +425,7 @@ TUXBOX_RULES_MAKE(dreamfiles)
 TUXBOX_RULES_MAKE(dreamdriver_dm7000)
 TUXBOX_RULES_MAKE(dreamdriver_dm56x0)
 TUXBOX_RULES_MAKE(dreamdriver_dm500)
+TUXBOX_RULES_MAKE(automount)
 TUXBOX_RULES_MAKE(nfs_utils)
 TUXBOX_RULES_MAKE(less)
 TUXBOX_RULES_MAKE(diffutils)
@@ -496,6 +502,7 @@ boot directory:		$bootdir
 driver directory:	$driverdir
 host apps directory:	$hostappsdir
 GNU server:		$gnuserver
+ccache:			$ccachedir
 ])
 
 AC_OUTPUT([

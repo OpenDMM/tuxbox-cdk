@@ -151,6 +151,14 @@ if [ -e /var/etc/.swap ]; then
 	done
 	echo 0 > /proc/sys/vm/swappiness
 fi
+# Start automounter 
+if [ -e /var/etc/init.d/start_automount ] ; then
+	/var/etc/init.d/start_automount
+else
+	if [ -e /etc/init.d/start_automount ] ; then
+		/etc/init.d/start_automount
+	fi
+fi
 
 if [ -e /var/etc/init ] ; then
 	. /var/etc/init
