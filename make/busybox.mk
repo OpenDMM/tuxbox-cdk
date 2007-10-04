@@ -11,7 +11,7 @@ $(DEPDIR)/busybox: bootstrap @DEPENDS_busybox@ Patches/busybox.config.m4 Patches
 	cd @DIR_busybox@ && \
 		$(MAKE) all install \
 			CROSS=$(target)- \
-			CFLAGS_EXTRA="$(TARGET_CFLAGS)" && \
+			CFLAGS_EXTRA="$(TARGET_CFLAGS)"
 	@CLEANUP_busybox@
 	touch $@
 
@@ -24,7 +24,7 @@ flash-busybox: bootstrap $(flashprefix)/root @DEPENDS_busybox@ Patches/busybox.c
 	cd @DIR_busybox@ && \
 		$(MAKE) all install \
 			CROSS=$(target)- \
-			CFLAGS_EXTRA="$(TARGET_CFLAGS)" && \
+			CFLAGS_EXTRA="$(TARGET_CFLAGS)"
 	@CLEANUP_busybox@
 	@FLASHROOTDIR_MODIFIED@
 
