@@ -2189,7 +2189,7 @@ $(flashprefix)/.part_enigma: $(flashprefix)/.flash .enigma
 	$(INSTALL) -d $(flashprefix)/root/share/locale
 	@for i in `find $(targetprefix)/share/locale -name "tuxbox-enigma.mo"` ; \
 		do cp -pa $${i%%/LC_MESSAGES/tuxbox-enigma.mo} $(flashprefix)/root/share/locale; done
-	@for i in ar sr ur ; do rm -R $(flashprefix)/root/share/locale/$$i; done
+	@for i in ar sr ur ; do rm -Rf $(flashprefix)/root/share/locale/$$i; done
 	@rm -rf $(flashprefix)/root/share/locale/LC_MESSAGES
 	@find $(flashprefix)/root/share/locale -name libc.mo -o -name nano.mo | xargs rm -f
 	$(INSTALL) $(appsdir)/tuxbox/enigma/po/locale.alias $(flashprefix)/root/share/locale
