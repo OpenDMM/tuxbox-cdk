@@ -488,7 +488,7 @@ webif type:		$WEBIF
 epg:			$EPG
 mhw-epg:		$MHW_EPG
 flashtool:		$FLASHTOOL
-external-flastool:	$EXTFLASHTOOL
+external flashtool:	$EXTFLASHTOOL
 reiserfs:		$REISERFS
 enigma debug:		$ENIGMA_DEBUG
 host rule set:		$HOSTRULESET
