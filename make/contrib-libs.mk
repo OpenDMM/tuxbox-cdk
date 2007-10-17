@@ -3,10 +3,14 @@
 #   contrib libs
 #
 
+if ENABLE_FLAC
+FLAClib = libFLAC
+endif
+
 libs: \
 	libcurl libdirectfb libdirectfbpp libppdirectfb libdvbpsi \
 	libfreetype libjpeg libmad libid3tag libncurses libpng \
-	libreadline libsdl libsigc libz libdvb libtool
+	libreadline libsdl libsigc libz libdvb libtool $(FLAClib)
 
 libs_optional: \
 	libcommoncplusplus libffi \
@@ -470,10 +474,26 @@ $(DEPDIR)/libiconv: bootstrap @DEPENDS_libiconv@
 		./configure \
 			--host=$(target) \
 			--build=$(build) \
-			--prefix= \
+			--prefix= && \
 		$(MAKE) && \
 		@INSTALL_libiconv@
 	@CLEANUP_libiconv@
+	touch $@
+
+$(DEPDIR)/libFLAC: bootstrap @DEPENDS_libFLAC@
+	@PREPARE_libFLAC@
+	cd @DIR_libFLAC@ && \
+		$(BUILDENV) \
+		./configure \
+			--host=$(target) \
+			--build=$(build) \
+			--prefix= \
+			--disable-ogg \
+			--disable-altivec && \
+		$(MAKE) -C src/libFLAC && \
+		$(MAKE) install  -C include/FLAC DESTDIR=$(targetprefix) && \
+		@INSTALL_libFLAC@
+	@CLEANUP_libFLAC@
 	touch $@
 
 # ripped from uclibc/.../libtool.mk

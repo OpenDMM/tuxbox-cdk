@@ -9,7 +9,11 @@ $(DEPDIR)/nfs-utils: bootstrap @DEPENDS_nfs_utils@
 	@PREPARE_nfs_utils@
 	chmod +x @DIR_nfs_utils@/autogen.sh
 	cd @DIR_nfs_utils@  && \
-		$(CONFIGURE) CC_FOR_BUILD=$(target)-gcc --disable-gss --disable-nfsv4 --prefix= && \
+		$(CONFIGURE) \
+		CC_FOR_BUILD=$(target)-gcc \
+		--disable-gss \
+		--disable-nfsv4 \
+		--prefix= && \
 		$(MAKE) && \
 		$(MAKE) install DESTDIR=$(targetprefix)
 	rm -rf @DIR_nfs_utils@
@@ -27,13 +31,17 @@ $(flashprefix)/root/sbin/rpc.nfsd: bootstrap @DEPENDS_nfs_utils@ | $(flashprefix
 	@PREPARE_nfs_utils@
 	chmod +x @DIR_nfs_utils@/autogen.sh
 	cd @DIR_nfs_utils@  && \
-		$(CONFIGURE) CC_FOR_BUILD=$(target)-gcc --disable-gss --disable-nfsv4 --prefix= && \
+		$(CONFIGURE) \
+		CC_FOR_BUILD=$(target)-gcc \
+		--disable-gss \
+		--disable-nfsv4 \
+		--prefix= && \
 		$(MAKE) && \
 		$(MAKE) install DESTDIR=$(flashprefix)/root SUBDIRS= && \
 		$(MAKE) -C utils/exportfs DESTDIR=$(flashprefix)/root install && \
 		$(MAKE) -C utils/mountd DESTDIR=$(flashprefix)/root install   && \
 		$(MAKE) -C utils/nfsd DESTDIR=$(flashprefix)/root install
-#	rm -rf @DIR_nfs_utils@
+	rm -rf @DIR_nfs_utils@
 	@FLASHROOTDIR_MODIFIED@
 
 endif

@@ -27,5 +27,3 @@ $(flashprefix)/root/sbin/mkfs.msdos: dosfstools | $(flashprefix)/root
 endif
 
 endif
-
-.PHONY: flash-dosfstools

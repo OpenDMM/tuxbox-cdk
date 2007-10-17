@@ -14,6 +14,48 @@ AM_MAINTAINER_MODE
 
 AC_PROG_CC
 
+################################################################
+# ccache
+#
+AC_ARG_ENABLE(ccache,
+   AS_HELP_STRING(--enable-ccache,   enable ccache supported compiling ),
+   [case "${enableval}" in
+      yes) CCACHE=ccache ;;
+   esac],[enable_ccache=no])
+AM_CONDITIONAL(ENABLE_CCACHE,test "$enable_ccache" = "yes")
+
+# optional ccache settings
+AC_ARG_WITH(ccachedir,
+	[  --with-ccachedir=DIR directory where ccache is installed ],
+	[ccachedir="$with_ccachedir"],[ccachedir=$(dirname `which ccache`)])
+
+AC_ARG_WITH(maxcachesize,
+	[  --with-maxcachesize=SIZE maximal ccachesize for ccache ],
+	[maxcachesize="$with_maxcachesize"],[maxcachesize="0"])
+
+AC_ARG_WITH(maxcachefiles,
+	[  --with-maxcachefiles=COUNT maximal count of cachefiles for ccache ],
+	[maxcachefiles="$with_maxcachefiles"],[maxcachefiles="0"])
+
+if test "$enable_ccache" = "yes"; then
+	if [[ -e $ccachedir/ccache ]]; then
+	$ccachedir/ccache -M $maxcachesize
+	$ccachedir/ccache -F $maxcachefiles
+	ccacheinfo=$($ccachedir/ccache -s)
+	else
+	enable_ccache="no"
+	ccacheinfo="ccache is not installed, please run make ccache or install"
+	fi
+fi
+
+AC_SUBST(ccachedir)
+AC_SUBST(maxcachesize)
+AC_SUBST(maxcachefiles)
+AC_SUBST(ccacheinfo)
+#
+################################################################
+
+
 AC_ARG_ENABLE(kernel26,
 	AS_HELP_STRING(--enable-kernel26,set up the CDK to use the 2.6 kernel (experimental)),
 	,[enable_kernel26=no])
@@ -163,6 +205,11 @@ AC_ARG_ENABLE(upnp,
 	AS_HELP_STRING(--enable-upnp,include upnp support),
 	,[enable_upnp=no])
 AM_CONDITIONAL(ENABLE_UPNP,test "$enable_upnp" = "yes")
+
+AC_ARG_ENABLE(flac,
+	AS_HELP_STRING(--enable-flac,include Neutrino flac audio decoder with libFLAC),
+	,[enable_flac=no])
+AM_CONDITIONAL(ENABLE_FLAC,test "$enable_flac" = "yes")
 
 AC_ARG_WITH(rootpartitionsize,
 	[  --with-rootpartitionsize=SIZE	size of the root partition],
@@ -486,6 +533,7 @@ TUXBOX_RULES_MAKE(libz)
 TUXBOX_RULES_MAKE(libglib)
 TUXBOX_RULES_MAKE(libiconv)
 TUXBOX_RULES_MAKE(libtool)
+TUXBOX_RULES_MAKE(libFLAC)
 
 #
 # contrib apps
@@ -511,6 +559,13 @@ TUXBOX_RULES_MAKE(parted)
 TUXBOX_RULES_MAKE(hddtemp)
 TUXBOX_RULES_MAKE(xfsprogs)
 TUXBOX_RULES_MAKE(smartmontools)
+TUXBOX_RULES_MAKE(wget)
+TUXBOX_RULES_MAKE(ncftp)
+
+#
+# ccache
+#
+TUXBOX_RULES_MAKE(ccache)
 
 #
 # msttf
@@ -585,36 +640,44 @@ fi
 AC_MSG_RESULT([
 summary:
 ----------------------------------------
-target cpu:	       $CPU_MODEL
-kernel:		       $used_kernelversion
-glibc-pthreads:	       $GLIBC_PTHREADS
-flash rules:	       $enable_flashrules
-target prefix:	       $targetprefix
-host prefix:	       $hostprefix
-boot prefix:	       $bootprefix
-build prefix:	       $buildprefix
-root partition size:   $ROOT_PARTITION_SIZE
-default locale	       $DEFAULTLOCALE
-serversupport:	       $serversupport
-checkImage:	       $CHECKIMAGE_BEHAVIOR
-target apps directory: $appsdir
-boot directory:	       $bootdir
-driver directory:      $driverdir
-host apps directory:   $hostappsdir
-logo directory:	       $logosdir
-customization directory: $customizationsdir
-ucode directory:       $ucodesdir
-GNU server:	       $gnuserver
-default server:	       $defaultserver
-update http prefix:    $updatehttpprefix
-IDE support:	       $enable_ide
-Ext2/3 support for IDE: $enable_ext3
-XFS support for IDE:   $enable_xfs
-NFS server:	       $enable_nfsserver
-Samba server:          $enable_sambaserver
-dosfstools:            $enable_dosfstools
-Neutrino UPnP-support: $enable_upnp	
-German keymaps:	       $enable_german_keymaps
+target cpu:			$CPU_MODEL
+kernel:				$used_kernelversion
+glibc-pthreads:			$GLIBC_PTHREADS
+target:				$target
+host:				$host
+flash rules:			$enable_flashrules
+target prefix:			$targetprefix
+host prefix:			$hostprefix
+boot prefix:			$bootprefix
+build prefix:			$buildprefix
+root partition size:		$ROOT_PARTITION_SIZE
+default locale:			$DEFAULTLOCALE
+serversupport:			$serversupport
+checkImage:			$CHECKIMAGE_BEHAVIOR
+target apps directory:		$appsdir
+boot directory:			$bootdir
+driver directory:		$driverdir
+host apps directory:		$hostappsdir
+logo directory:			$logosdir
+customization directory:	$customizationsdir
+ucode directory:		$ucodesdir
+GNU server:			$gnuserver
+default server:			$defaultserver
+update http prefix:		$updatehttpprefix
+IDE support:			$enable_ide
+Ext2/3 support for IDE:		$enable_ext3
+XFS support for IDE:		$enable_xfs
+NFS server:			$enable_nfsserver
+Samba server:			$enable_sambaserver
+dosfstools:			$enable_dosfstools
+Neutrino UPnP-support:		$enable_upnp
+FLAC support:			$enable_flac	
+German keymaps:			$enable_german_keymaps
+----------------------------------------
+ccache support:			$enable_ccache
+ccache installdir:		$ccachedir
+$ccacheinfo
+----------------------------------------
 ])
 
 if test "$dircheck" = "fail"; then
@@ -635,6 +698,9 @@ TUXBOX_YADD_CUSTOMIZE='[[ -x $(customizationsdir)/$(notdir $@)-local.sh ] && $(c
 AC_SUBST(TUXBOX_YADD_CUSTOMIZE)
 FLASHROOTDIR_MODIFIED='touch $(flashprefix)/root'
 AC_SUBST(FLASHROOTDIR_MODIFIED)
+
+#reset
+ccacheinfo=""
 
 AC_CONFIG_FILES([
 Makefile

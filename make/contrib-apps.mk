@@ -3,9 +3,9 @@
 #   contrib apps
 #
 
-contrib_apps: bzip2 console_data console_tools fbset lirc ide_apps lsof dropbear ssh tcpdump bonnie lufs kermit
+contrib_apps: bzip2 console_data console_tools fbset lirc ide_apps lsof dropbear ssh tcpdump bonnie lufs kermit wget ncftp
 
-ide_apps: hdparm utillinux e2fsprogs parted hddtemp xfsprogs smartmontools
+ide_apps: hdparm utillinux e2fsprogs parted hddtemp xfsprogs smartmontools 
 
 $(DEPDIR)/bzip2: bootstrap @DEPENDS_bzip2@
 	@PREPARE_bzip2@
@@ -180,6 +180,7 @@ $(DEPDIR)/e2fsprogs: bootstrap @DEPENDS_e2fsprogs@
 			--enable-elf-shlibs \
 			--enable-htree \
 			--disable-profile \
+			--disable-e2initrd-helper \
 			--disable-swapfs \
 			--disable-debugfs \
 			--disable-image \
@@ -193,6 +194,53 @@ $(DEPDIR)/e2fsprogs: bootstrap @DEPENDS_e2fsprogs@
 		@INSTALL_e2fsprogs@
 	@CLEANUP_e2fsprogs@
 	touch $@
+
+if TARGETRULESET_FLASH
+
+flash-e2fsprogs: $(flashprefix)/root/sbin/e2fsck
+
+$(flashprefix)/root/sbin/e2fsck: bootstrap @DEPENDS_e2fsprogs@ | $(flashprefix)/root
+	@PREPARE_e2fsprogs@
+	cd @DIR_e2fsprogs@ && \
+		CC=$(target)-gcc \
+		RANLIB=$(target)-ranlib \
+		CFLAGS="-Os -msoft-float" \
+		LDFLAGS="$(TARGET_LDFLAGS)" \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--target=$(target) \
+			--prefix=$(targetprefix) \
+			--with-cc=$(target)-gcc \
+			--with-linker=$(target)-ld \
+			--disable-evms \
+			--enable-elf-shlibs \
+			--enable-htree \
+			--disable-profile \
+			--disable-e2initrd-helper \
+			--disable-swapfs \
+			--disable-debugfs \
+			--disable-image \
+			--enable-resizer \
+			--enable-dynamic-e2fsck \
+			--enable-fsck \
+			--with-gnu-ld \
+			--disable-nls && \
+		$(MAKE) libs progs && \
+		$(MAKE) install-libs && \
+		@INSTALL_e2fsprogs@
+	$(INSTALL) $(targetprefix)/sbin/badblocks $(flashprefix)/root/sbin/
+	$(INSTALL) $(targetprefix)/sbin/resize2fs $(flashprefix)/root/sbin/
+	$(INSTALL) $(targetprefix)/sbin/tune2fs $(flashprefix)/root/sbin/
+	$(INSTALL) $(targetprefix)/sbin/fsck $(flashprefix)/root/sbin/
+	$(INSTALL) $(targetprefix)/sbin/fsck.ext2 $(flashprefix)/root/sbin/
+	$(INSTALL) $(targetprefix)/sbin/fsck.ext3 $(flashprefix)/root/sbin/
+	$(INSTALL) $(targetprefix)/sbin/mkfs.ext2 $(flashprefix)/root/sbin/
+	$(INSTALL) $(targetprefix)/sbin/mkfs.ext3 $(flashprefix)/root/sbin/
+	$(INSTALL) $(targetprefix)/sbin/e2label $(flashprefix)/root/sbin/
+		@CLEANUP_e2fsprogs@
+	@@FLASHROOTDIR_MODIFIED@@
+endif
 
 $(DEPDIR)/parted: bootstrap libreadline e2fsprogs @DEPENDS_parted@
 	@PREPARE_parted@
@@ -436,6 +484,22 @@ $(DEPDIR)/hdparm: bootstrap @DEPENDS_hdparm@
 		@CLEANUP_hdparm@
 	touch $@
 
+if TARGETRULESET_FLASH
+flash-hdparm: $(flashprefix)/root/sbin/hdparm
+
+$(flashprefix)/root/sbin/hdparm: bootstrap @DEPENDS_hdparm@ | $(flashprefix)/root
+	@PREPARE_hdparm@
+	cd @DIR_hdparm@ && \
+		$(BUILDENV) \
+		$(MAKE) CROSS=$(target)- all && \
+		$(MAKE) install DESTDIR=$(targetprefix)
+		$(INSTALL) $(targetprefix)/sbin/hdparm $(flashprefix)/root/sbin/
+	@CLEANUP_hdparm@
+	@FLASHROOTDIR_MODIFIED@
+	@TUXBOX_CUSTOMIZE@
+
+endif
+
 $(DEPDIR)/hddtemp: bootstrap @DEPENDS_hddtemp@
 	@PREPARE_hddtemp@
 	cd @DIR_hddtemp@ && \
@@ -476,8 +540,8 @@ endif
 $(DEPDIR)/xfsprogs: bootstrap libtool @DEPENDS_e2fsprogs@ @DEPENDS_xfsprogs@
 	@PREPARE_e2fsprogs@
 	cd @DIR_e2fsprogs@ && \
-		CC=$(target)-gcc \
 		RANLIB=$(target)-ranlib \
+		CC=$(target)-gcc \
 		CFLAGS="-Os -msoft-float" \
 		LDFLAGS="$(TARGET_LDFLAGS)" \
 		./configure \
@@ -512,9 +576,8 @@ $(DEPDIR)/xfsprogs: bootstrap libtool @DEPENDS_e2fsprogs@ @DEPENDS_xfsprogs@
 	@CLEANUP_e2fsprogs@
 	@PREPARE_xfsprogs@
 	cd @DIR_xfsprogs@ && \
-		$(BUILDENV) \
-		autoconf && \
 		LIBTOOL=$(hostprefix)/bin/libtool \
+		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
@@ -532,8 +595,8 @@ flash-xfsprogs: $(flashprefix)/root/sbin/mkfs.xfs
 $(flashprefix)/root/sbin/mkfs.xfs: bootstrap libtool @DEPENDS_e2fsprogs@ @DEPENDS_xfsprogs@ | $(flashprefix)/root
 	@PREPARE_e2fsprogs@
 	cd @DIR_e2fsprogs@ && \
-		CC=$(target)-gcc \
 		RANLIB=$(target)-ranlib \
+		CC=$(target)-gcc \
 		CFLAGS="-Os -msoft-float" \
 		LDFLAGS="$(TARGET_LDFLAGS)" \
 		./configure \
@@ -568,9 +631,8 @@ $(flashprefix)/root/sbin/mkfs.xfs: bootstrap libtool @DEPENDS_e2fsprogs@ @DEPEND
 	@CLEANUP_e2fsprogs@
 	@PREPARE_xfsprogs@
 	cd @DIR_xfsprogs@ && \
-		$(BUILDENV) \
-		autoconf && \
 		LIBTOOL=$(hostprefix)/bin/libtool \
+		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
@@ -620,3 +682,54 @@ $(flashprefix)/root/sbin/smartctl: bootstrap @DEPENDS_smartmontools@ | $(flashpr
 	@FLASHROOTDIR_MODIFIED@
 
 endif
+
+$(DEPDIR)/wget: bootstrap @DEPENDS_wget@
+	@PREPARE_wget@
+	cd @DIR_wget@ && \
+		$(BUILDENV) \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--prefix=$(targetprefix) && \
+		$(MAKE) all && \
+	$(MAKE) install $(targetprefix)/bin
+	@CLEANUP_wget@
+	touch $@
+
+if TARGETRULESET_FLASH
+flash-wget: $(flashprefix)/root/bin/wget
+
+$(flashprefix)/root/bin/wget: wget | $(flashprefix)/root
+	rm -f $(flashprefix)/root/bin/wget
+	@$(INSTALL) -d $(flashprefix)/root/bin
+	$(INSTALL) $(targetprefix)/bin/wget $(flashprefix)/root/bin
+	@FLASHROOTDIR_MODIFIED@
+
+endif
+
+$(DEPDIR)/ncftp: bootstrap Archive/ncftp-3.2.0-src.tar.bz2
+	( rm -rf ncftp-3.2.0 || /bin/true ) && bunzip2 -cd Archive/ncftp-3.2.0-src.tar.bz2 | TAPE=- tar -x
+	cd ncftp-3.2.0 && \
+		$(BUILDENV) \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--prefix= && \
+		$(MAKE) clean all LD=$(target)-ld && \
+		$(MAKE) install DESTDIR=$(targetprefix)
+	rm -rf ncftp-3.2.0
+	touch $@
+
+
+if TARGETRULESET_FLASH
+
+flash-ncftp: $(flashprefix)/root/bin/ncftp
+
+$(flashprefix)/root/bin/ncftp: ncftp | $(flashprefix)/root
+	@$(INSTALL) -d $(flashprefix)/root/sbin
+	@for i in ncftp ncftpbatch ncftpget ncftpls ncftpput ncftpspooler; do \
+	$(INSTALL) $(targetprefix)/bin/$$i $(flashprefix)/root/bin; done;
+	@FLASHROOTDIR_MODIFIED@
+
+endif
+

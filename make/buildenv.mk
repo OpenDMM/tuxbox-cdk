@@ -1,4 +1,9 @@
+if ENABLE_CCACHE
+PATH := $(hostprefix)/ccache-bin:$(hostprefix)/bin:$(PATH)
+else
 PATH := $(hostprefix)/bin:$(PATH)
+endif
+
 BUILDENV := \
 	AR=$(target)-ar \
 	AS=$(target)-as \
@@ -39,6 +44,20 @@ CONFIGURE_OPTS_UPNP = \
 	--enable-upnp
 endif
 
+if ENABLE_FLAC
+CONFIGURE_OPTS_FLAC =  \
+	--enable-flac
+endif
+
+if ENABLE_IDE
+CONFIGURE_OPTS_IDE =  \
+	--enable-ide
+endif
+
+if ENABLE_CCACHE
+CONFIGURE_OPTS += --enable-ccache
+endif
+
 CONFIGURE = \
 	./autogen.sh && \
 	CC=$(target)-gcc \
@@ -47,7 +66,7 @@ CONFIGURE = \
 	CXXFLAGS="-Wall $(TARGET_CXXFLAGS)" \
 	LDFLAGS="$(TARGET_LDFLAGS)" \
 	./configure $(CONFIGURE_OPTS) $(CONFIGURE_OPTS_MAINTAINER) $(CONFIGURE_OPTS_DEBUG) \
-	$(CONFIGURE_OPTS_UPNP)
+	$(CONFIGURE_OPTS_UPNP) $(CONFIGURE_OPTS_FLAC) $(CONFIGURE_OPTS_IDE)
 
 ACLOCAL_AMFLAGS = -I .
 

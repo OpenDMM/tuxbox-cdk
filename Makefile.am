@@ -13,6 +13,9 @@ include make/buildenv.mk
 # source and directory structure
 include make/bootstrap.mk
 
+# Target for building and install own independ ccache for tuxbox-cdk
+include make/ccache.mk
+
 # dosfstools (nonessential)
 include make/dosfstools.mk
 

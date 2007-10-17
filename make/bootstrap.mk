@@ -24,7 +24,22 @@ endif
 	$(INSTALL) -d $(targetprefix)/var/etc
 	$(INSTALL) -d $(targetprefix)/var/run
 	$(INSTALL) -d $(targetprefix)/var/tuxbox/boot
-#	$(INSTALL) -d $(targetprefix)$(UCODEDIR)
+	$(INSTALL) -d $(targetprefix)$(UCODEDIR)
+if ENABLE_CCACHE
+	if [ -e $(ccachedir)/ccache ]; then \
+		$(INSTALL) -d $(hostprefix)/ccache-bin ;\
+			ln -s $(ccachedir)/ccache $(hostprefix)/ccache-bin/gcc ;\
+			ln -s $(ccachedir)/ccache $(hostprefix)/ccache-bin/g++ ;\
+			ln -s $(ccachedir)/ccache $(hostprefix)/ccache-bin/powerpc-tuxbox-linux-gnu-gcc ;\
+			ln -s $(ccachedir)/ccache $(hostprefix)/ccache-bin/powerpc-tuxbox-linux-gnu-g++ ;\
+			ln -s $(ccachedir)/ccache $(hostprefix)/ccache-bin/powerpc-tuxbox-linux-gnu-cpp ;\
+			ln -s $(ccachedir)/ccache $(hostprefix)/ccache-bin/powerpc-tuxbox-linux-gnu-gcc-.3.4.4 ;\
+		$(ccachedir)/ccache -M $(maxcachesize) ;\
+		$(ccachedir)/ccache -F $(maxcachefiles) ;\
+		$(ccachedir)/ccache -s ;\
+	fi
+endif
+	touch $@
 if ENABLE_IDE
 	$(INSTALL) -d $(targetprefix)/hdd
 endif
@@ -47,7 +62,6 @@ if TARGETRULESET_FLASH
 endif
 	touch $@
 
-
 if KERNEL26
 KERNEL_DEPENDS = @DEPENDS_linux@
 KERNEL_DIR = @DIR_linux@
@@ -59,6 +73,7 @@ KERNEL_DIR = @DIR_linux24@
 KERNEL_PREPARE = @PREPARE_linux24@
 KERNEL_BUILD_FILENAME = @DIR_linux24@/arch/ppc/boot/images/vmlinux.gz
 endif
+
 
 $(DEPDIR)/linuxdir: $(KERNEL_DEPENDS) directories
 	$(KERNEL_PREPARE)
@@ -73,6 +88,7 @@ endif
 		ARCH=ppc
 	rm $(KERNEL_DIR)/.config
 	touch $@
+
 
 $(DEPDIR)/binutils: @DEPENDS_binutils@ directories
 	@PREPARE_binutils@
