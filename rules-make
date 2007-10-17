@@ -17,7 +17,7 @@ linux_libc_headers;2.6.9.1;linux-libc-headers-2.6.9.1;linux-libc-headers-2.6.9.1
 binutils;2.15.91.0.2;binutils-2.15.91.0.2;binutils-2.15.91.0.2.tar.bz2;extract:binutils-2.15.91.0.2.tar.bz2
 bootstrap_gcc;3.4.4;gcc-3.4.4;gcc-core-3.4.4.tar.bz2;extract:gcc-core-3.4.4.tar.bz2;
 gcc;3.4.4;gcc-3.4.4;gcc-core-3.4.4.tar.bz2:gcc-g++-3.4.4.tar.bz2:gcc-g++.diff;extract:gcc-core-3.4.4.tar.bz2;extract:gcc-g++-3.4.4.tar.bz2;patch:gcc-g++.diff;patch:gcc-ibmppc4xx_fp_perflib.diff
-glibc;2.3.2;glibc-2.3.2;glibc-2.3.2.tar.bz2:nptl-0.60.tar.bz2:glibc-2.3.2-r0.diff.bz2;extract:glibc-2.3.2.tar.bz2;dirextract:nptl-0.60.tar.bz2;patch:glibc-2.3.2-r0.diff.bz2;patch:glibc_ppc4xx_ibmstropt.diff;patch:glibc-ibmppc4xx_fp_perflib.diff
+glibc;2.3.2;glibc-2.3.2;glibc-2.3.2.tar.bz2:nptl-0.60.tar.bz2:glibc-2.3.2-r0.diff.bz2;extract:glibc-2.3.2.tar.bz2;dirextract:nptl-0.60.tar.bz2;patch:glibc-2.3.2-r0.diff.bz2;patch:glibc_ppc4xx_ibmstropt.diff;patch:glibc-ibmppc4xx_fp_perflib.diff;patch:glibc-makefile-printf.diff
 uclibc;0.9.11;uClibc-0.9.11;uClibc-0.9.11.tar.bz2:uclibc-0.9.11.diff;extract:uClibc-0.9.11.tar.bz2;patch:uclibc-0.9.11.diff
 watchdog;5.2;watchdog-5.2.orig;watchdog_5.2.orig.tar.gz:watchdog.diff;extract:watchdog_5.2.orig.tar.gz;patch:watchdog.diff
 
