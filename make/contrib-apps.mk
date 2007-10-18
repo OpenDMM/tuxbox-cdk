@@ -707,9 +707,9 @@ $(flashprefix)/root/bin/wget: wget | $(flashprefix)/root
 
 endif
 
-$(DEPDIR)/ncftp: bootstrap Archive/ncftp-3.2.0-src.tar.bz2
-	( rm -rf ncftp-3.2.0 || /bin/true ) && bunzip2 -cd Archive/ncftp-3.2.0-src.tar.bz2 | TAPE=- tar -x
-	cd ncftp-3.2.0 && \
+$(DEPDIR)/ncftp: bootstrap @DEPENDS_ncftp@
+	@PREPARE_ncftp@
+	cd @DIR_ncftp@ && \
 		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
@@ -717,7 +717,7 @@ $(DEPDIR)/ncftp: bootstrap Archive/ncftp-3.2.0-src.tar.bz2
 			--prefix= && \
 		$(MAKE) clean all LD=$(target)-ld && \
 		$(MAKE) install DESTDIR=$(targetprefix)
-	rm -rf ncftp-3.2.0
+	@CLEANUP_ncftp@
 	touch $@
 
 
