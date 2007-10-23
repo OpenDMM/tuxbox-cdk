@@ -90,6 +90,7 @@ cdk/Patches/linux-2.4.32-dbox2.config
 cdk/Patches/linux-2.4.32-dbox2.config-flash
 cdk/Patches/linux-2.4.33.3-dbox2.config-flash
 cdk/Patches/linux-2.4.34-dbox2.config-flash
+cdk/Patches/linux-2.4.35.3-dbox2.config-flash
 cdk/root/etc/exports
 cdk/root/etc/init.d/initialize
 cdk/root/etc/init.d/Makefile.am
