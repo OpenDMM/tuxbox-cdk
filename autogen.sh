@@ -19,7 +19,13 @@ cd "$srcdir"
 
 check_version ()
 {
-    if expr $1 \>= $2 > /dev/null; then
+    firstL=`echo $1|cut -f 1 -d '.'`
+    secondL=`echo $1|cut -f 2 -d '.'`
+    thirdL=`echo $1|cut -f 3 -d '.'`
+    firstR=`echo $2|cut -f 1 -d '.'`
+    secondR=`echo $2|cut -f 2 -d '.'`
+    thirdR=`echo $2|cut -f 3 -d '.'`
+    if expr $firstL \>= $firstR > /dev/null && expr $secondL \>= $secondR > /dev/null && expr $thirdL \>= $thirdR > /dev/null; then
         echo "yes (version $1)"
     else
         echo "Too old (found version $1)!"
