@@ -19,18 +19,22 @@ cd "$srcdir"
 
 check_version ()
 {
-    firstL=`echo $1|cut -f 1 -d '.'`
-    secondL=`echo $1|cut -f 2 -d '.'`
-    thirdL=`echo $1|cut -f 3 -d '.'`
-    firstR=`echo $2|cut -f 1 -d '.'`
-    secondR=`echo $2|cut -f 2 -d '.'`
-    thirdR=`echo $2|cut -f 3 -d '.'`
-    if expr $firstL \>= $firstR > /dev/null && expr $secondL \>= $secondR > /dev/null && expr $thirdL \>= $thirdR > /dev/null; then
-        echo "yes (version $1)"
-    else
-        echo "Too old (found version $1)!"
-        DIE=1
-    fi
+	firstL=`echo $1|cut -f 1 -d '.'`
+	secondL=`echo $1|cut -f 2 -d '.'`
+	thirdL=`echo $1|cut -f 3 -d '.'`
+	firstR=`echo $2|cut -f 1 -d '.'`
+	secondR=`echo $2|cut -f 2 -d '.'`
+	thirdR=`echo $2|cut -f 3 -d '.'`
+	if [ -z $secondL ]; then secondL="0"; fi
+	if [ -z $secondR ]; then secondR="0"; fi
+	if [ -z $thirdL ]; then thirdL="0"; fi
+	if [ -z $thirdR ]; then thirdR="0"; fi
+	if expr $firstL \> $firstR \| \( $firstL = $firstR \& $secondL \> $secondR \) \| \( $firstL = $firstR \& $secondL = $secondR \& $thirdL \>= $thirdR \) > /dev/null; then
+		echo "yes (version $1)"
+	else
+		echo "Too old (found version $1)!"
+		DIE=1
+	fi
 }
 
 check_version_alternate ()
