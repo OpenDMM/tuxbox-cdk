@@ -54,7 +54,6 @@ cdk/make/fun.mk
 cdk/make/funstuff.mk
 cdk/make/high-level-yadd.mk
 cdk/make/hostapps.mk
-cdk/make/hostapps.mk
 cdk/make/ide-apps.mk
 cdk/make/lcars.mk
 cdk/make/lcd.mk
