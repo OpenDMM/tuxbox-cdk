@@ -11,6 +11,17 @@
 depsclean:
 	$(DEPSCLEANUP)
 
+# Delete all marker files in .deps for ccache-enviroment
+ccache-depsclean:
+	$(CCACHE_DEPSCLEANUP)
+
+# Delete all marker files in .deps for ide-apps, contrib-apps
+ide-apps-depsclean:
+	$(IDE_DEPSCLEANUP)
+contrib-apps-depsclean:
+	$(CONTRIB_DEPSCLEANUP)
+
+
 if TARGETRULESET_FLASH
 mostlyclean-local: flash-clean cdk-clean
 else

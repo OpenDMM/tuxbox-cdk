@@ -26,20 +26,8 @@ endif
 	$(INSTALL) -d $(targetprefix)/var/tuxbox/boot
 	$(INSTALL) -d $(targetprefix)$(UCODEDIR)
 if ENABLE_CCACHE
-	if [ -e $(ccachedir)/ccache ]; then \
-		$(INSTALL) -d $(hostprefix)/ccache-bin ;\
-			ln -s $(ccachedir)/ccache $(hostprefix)/ccache-bin/gcc ;\
-			ln -s $(ccachedir)/ccache $(hostprefix)/ccache-bin/g++ ;\
-			ln -s $(ccachedir)/ccache $(hostprefix)/ccache-bin/powerpc-tuxbox-linux-gnu-gcc ;\
-			ln -s $(ccachedir)/ccache $(hostprefix)/ccache-bin/powerpc-tuxbox-linux-gnu-g++ ;\
-			ln -s $(ccachedir)/ccache $(hostprefix)/ccache-bin/powerpc-tuxbox-linux-gnu-cpp ;\
-			ln -s $(ccachedir)/ccache $(hostprefix)/ccache-bin/powerpc-tuxbox-linux-gnu-gcc-.3.4.4 ;\
-		$(ccachedir)/ccache -M $(maxcachesize) ;\
-		$(ccachedir)/ccache -F $(maxcachefiles) ;\
-		$(ccachedir)/ccache -s ;\
-	fi
+	$(CCACHE_ENV)
 endif
-	touch $@
 if ENABLE_IDE
 	$(INSTALL) -d $(targetprefix)/hdd
 endif

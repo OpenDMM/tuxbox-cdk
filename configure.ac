@@ -14,48 +14,6 @@ AM_MAINTAINER_MODE
 
 AC_PROG_CC
 
-################################################################
-# ccache
-#
-AC_ARG_ENABLE(ccache,
-   AS_HELP_STRING(--enable-ccache,   enable ccache supported compiling ),
-   [case "${enableval}" in
-      yes) CCACHE=ccache ;;
-   esac],[enable_ccache=no])
-AM_CONDITIONAL(ENABLE_CCACHE,test "$enable_ccache" = "yes")
-
-# optional ccache settings
-AC_ARG_WITH(ccachedir,
-	[  --with-ccachedir=DIR directory where ccache is installed ],
-	[ccachedir="$with_ccachedir"],[ccachedir=$(dirname `which ccache`)])
-
-AC_ARG_WITH(maxcachesize,
-	[  --with-maxcachesize=SIZE maximal ccachesize for ccache ],
-	[maxcachesize="$with_maxcachesize"],[maxcachesize="0"])
-
-AC_ARG_WITH(maxcachefiles,
-	[  --with-maxcachefiles=COUNT maximal count of cachefiles for ccache ],
-	[maxcachefiles="$with_maxcachefiles"],[maxcachefiles="0"])
-
-if test "$enable_ccache" = "yes"; then
-	if [[ -e $ccachedir/ccache ]]; then
-	$ccachedir/ccache -M $maxcachesize
-	$ccachedir/ccache -F $maxcachefiles
-	ccacheinfo=$($ccachedir/ccache -s)
-	else
-	enable_ccache="no"
-	ccacheinfo="ccache is not installed, please run make ccache or install"
-	fi
-fi
-
-AC_SUBST(ccachedir)
-AC_SUBST(maxcachesize)
-AC_SUBST(maxcachefiles)
-AC_SUBST(ccacheinfo)
-#
-################################################################
-
-
 AC_ARG_ENABLE(kernel26,
 	AS_HELP_STRING(--enable-kernel26,set up the CDK to use the 2.6 kernel (experimental)),
 	,[enable_kernel26=no])
@@ -445,6 +403,52 @@ if test "$enable_flashrules" = "yes"; then
 	fi
 fi
 
+
+################################################################
+# ccache
+#
+AC_ARG_ENABLE(ccache,
+   AS_HELP_STRING(--enable-ccache,   enable ccache supported compiling ),
+   [case "${enableval}" in
+      yes) CCACHE=ccache ;;
+   esac],[enable_ccache=no])
+AM_CONDITIONAL(ENABLE_CCACHE,test "$enable_ccache" = "yes")
+
+# optional ccache settings
+AC_ARG_WITH(ccachedir,
+	[  --with-ccachedir=DIR directory where ccache is installed ],
+	[ccachedir="$with_ccachedir"],	[if  [[ -e $hostprefix/bin/ccache ]]; then
+		ccachedir=$hostprefix/bin
+	else
+		ccachedir=$(dirname `which ccache`)
+	fi])
+
+AC_ARG_WITH(maxcachesize,
+	[  --with-maxcachesize=SIZE maximal ccachesize for ccache ],
+	[maxcachesize="$with_maxcachesize"],[maxcachesize="0"])
+
+AC_ARG_WITH(maxcachefiles,
+	[  --with-maxcachefiles=COUNT maximal count of cachefiles for ccache ],
+	[maxcachefiles="$with_maxcachefiles"],[maxcachefiles="0"])
+
+if test "$enable_ccache" = "yes"; then
+	if  [[ -e $ccachedir/ccache ]]; then
+		$ccachedir/ccache -M $maxcachesize
+		$ccachedir/ccache -F $maxcachefiles
+		ccacheinfo=$($ccachedir/ccache -s)
+	else
+		enable_ccache="no"
+		ccacheinfo="ccache is not installed please run make ccache or install it and configure again"
+	fi
+fi
+
+AC_SUBST(ccachedir)
+AC_SUBST(maxcachesize)
+AC_SUBST(maxcachefiles)
+AC_SUBST(ccacheinfo)
+#
+################################################################
+
 FONTDIR="/share/fonts"
 AC_SUBST(FONTDIR)
 UCODEDIR="/var/tuxbox/ucodes"
@@ -552,6 +556,12 @@ TUXBOX_RULES_MAKE(vdr)
 TUXBOX_RULES_MAKE(lufs)
 TUXBOX_RULES_MAKE(dropbear)
 TUXBOX_RULES_MAKE(kermit)
+TUXBOX_RULES_MAKE(wget)
+TUXBOX_RULES_MAKE(ncftp)
+
+#
+# ide apps
+#
 TUXBOX_RULES_MAKE(hdparm)
 TUXBOX_RULES_MAKE(e2fsprogs)
 TUXBOX_RULES_MAKE(utillinux)
@@ -559,8 +569,6 @@ TUXBOX_RULES_MAKE(parted)
 TUXBOX_RULES_MAKE(hddtemp)
 TUXBOX_RULES_MAKE(xfsprogs)
 TUXBOX_RULES_MAKE(smartmontools)
-TUXBOX_RULES_MAKE(wget)
-TUXBOX_RULES_MAKE(ncftp)
 
 #
 # ccache

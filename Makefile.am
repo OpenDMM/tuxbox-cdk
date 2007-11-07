@@ -49,6 +49,9 @@ include make/contrib-libs.mk
 # Some non-GUI applications, none of which are essential
 include make/contrib-apps.mk
 
+# Some IDE/HDD tools and applications if IDE-support enabled
+include make/ide-apps.mk
+
 # Tools (debugger etc) for the Tuxbox developer
 include make/development-tools.mk
 

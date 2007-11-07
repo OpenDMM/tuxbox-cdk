@@ -3,10 +3,11 @@
 #   contrib apps
 #
 
-contrib_apps: bzip2 console_data console_tools fbset lirc ide_apps lsof dropbear ssh tcpdump bonnie lufs kermit wget ncftp
+contrib_apps: bzip2 console_data console_tools fbset lirc lsof dropbear ssh tcpdump bonnie lufs kermit wget ncftp
 
-ide_apps: hdparm utillinux e2fsprogs parted hddtemp xfsprogs smartmontools 
+CONTRIB_DEPSCLEANUP = rm -f .deps/bzip2 .deps/console_data .deps/console_tools .deps/directfb_examples .deps/fbset .deps/lirc .deps/lsof .deps/ssh .deps/tcpdump .deps/bonnie .deps/vdr .deps/lufs .deps/dropbear .deps/kermit .deps/wget .deps/ncftp
 
+#bzip2
 $(DEPDIR)/bzip2: bootstrap @DEPENDS_bzip2@
 	@PREPARE_bzip2@
 	cd @DIR_bzip2@ && \
@@ -32,6 +33,7 @@ $(flashprefix)/root/bin/bzip2: @DEPENDS_bzip2@ | $(flashprefix)/root
 
 endif
 
+#console_data console_tools
 $(DEPDIR)/console_data: bootstrap @DEPENDS_console_data@
 	@PREPARE_console_data@
 	cd @DIR_console_data@ && \
@@ -90,6 +92,8 @@ $(DEPDIR)/directfb_examples: bootstrap libdirectfb @DEPENDS_directfb_examples@
 	@CLEANUP_directfb_examples@
 	touch $@
 
+
+#fbset
 $(DEPDIR)/fbset: bootstrap @DEPENDS_fbset@
 	@PREPARE_fbset@
 	cd @DIR_fbset@ && \
@@ -99,6 +103,7 @@ $(DEPDIR)/fbset: bootstrap @DEPENDS_fbset@
 	@CLEANUP_fbset@
 	touch $@
 
+#lirc
 $(DEPDIR)/lirc: bootstrap @DEPENDS_lirc@ Patches/lirc.diff
 	@PREPARE_lirc@
 	cd @DIR_lirc@ && \
@@ -127,139 +132,8 @@ $(flashprefix)/root/sbin/lircd: lirc
 
 endif
 
-# contains [cs]fdisk etc
-$(DEPDIR)/utillinux: bootstrap @DEPENDS_utillinux@
-	@PREPARE_utillinux@
-	cd @DIR_utillinux@ && \
-		CC=$(target)-gcc \
-		CFLAGS="-Os -msoft-float -I$(targetprefix)/include/ncurses" \
-		LDFLAGS="$(TARGET_LDFLAGS)" \
-		./configure && \
-		$(MAKE) ARCH=ppc all && \
-		@INSTALL_utillinux@
-	@CLEANUP_utillinux@
-	touch $@
 
-if TARGETRULESET_FLASH
-flash-sfdisk: $(flashprefix)/root/sbin/sfdisk
-
-$(flashprefix)/root/sbin/sfdisk: utillinux
-	$(INSTALL) $(targetprefix)/sbin/sfdisk $@
-	@FLASHROOTDIR_MODIFIED@
-
-flash-cfdisk: $(flashprefix)/root/sbin/cfdisk
-
-$(flashprefix)/root/sbin/cfdisk: utillinux
-	$(INSTALL) $(targetprefix)/sbin/cfdisk $@
-	@FLASHROOTDIR_MODIFIED@
-
-#replaces busybox fdisk
-flash-fdisk: $(flashprefix)/root/sbin/fdisk
-
-$(flashprefix)/root/sbin/fdisk: utillinux
-	$(INSTALL) $(targetprefix)/sbin/fdisk $@
-	@FLASHROOTDIR_MODIFIED@
-
-endif
-
-$(DEPDIR)/e2fsprogs: bootstrap @DEPENDS_e2fsprogs@
-	@PREPARE_e2fsprogs@
-	cd @DIR_e2fsprogs@ && \
-		CC=$(target)-gcc \
-		RANLIB=$(target)-ranlib \
-		CFLAGS="-Os -msoft-float" \
-		LDFLAGS="$(TARGET_LDFLAGS)" \
-		./configure \
-			--build=$(build) \
-			--host=$(target) \
-			--target=$(target) \
-			--prefix=$(targetprefix) \
-			--with-cc=$(target)-gcc \
-			--with-linker=$(target)-ld \
-			--disable-evms \
-			--enable-elf-shlibs \
-			--enable-htree \
-			--disable-profile \
-			--disable-e2initrd-helper \
-			--disable-swapfs \
-			--disable-debugfs \
-			--disable-image \
-			--enable-resizer \
-			--enable-dynamic-e2fsck \
-			--enable-fsck \
-			--with-gnu-ld \
-			--disable-nls && \
-		$(MAKE) libs progs && \
-		$(MAKE) install-libs && \
-		@INSTALL_e2fsprogs@
-	@CLEANUP_e2fsprogs@
-	touch $@
-
-if TARGETRULESET_FLASH
-
-flash-e2fsprogs: $(flashprefix)/root/sbin/e2fsck
-
-$(flashprefix)/root/sbin/e2fsck: bootstrap @DEPENDS_e2fsprogs@ | $(flashprefix)/root
-	@PREPARE_e2fsprogs@
-	cd @DIR_e2fsprogs@ && \
-		CC=$(target)-gcc \
-		RANLIB=$(target)-ranlib \
-		CFLAGS="-Os -msoft-float" \
-		LDFLAGS="$(TARGET_LDFLAGS)" \
-		./configure \
-			--build=$(build) \
-			--host=$(target) \
-			--target=$(target) \
-			--prefix=$(targetprefix) \
-			--with-cc=$(target)-gcc \
-			--with-linker=$(target)-ld \
-			--disable-evms \
-			--enable-elf-shlibs \
-			--enable-htree \
-			--disable-profile \
-			--disable-e2initrd-helper \
-			--disable-swapfs \
-			--disable-debugfs \
-			--disable-image \
-			--enable-resizer \
-			--enable-dynamic-e2fsck \
-			--enable-fsck \
-			--with-gnu-ld \
-			--disable-nls && \
-		$(MAKE) libs progs && \
-		$(MAKE) install-libs && \
-		@INSTALL_e2fsprogs@
-	$(INSTALL) $(targetprefix)/sbin/badblocks $(flashprefix)/root/sbin/
-	$(INSTALL) $(targetprefix)/sbin/resize2fs $(flashprefix)/root/sbin/
-	$(INSTALL) $(targetprefix)/sbin/tune2fs $(flashprefix)/root/sbin/
-	$(INSTALL) $(targetprefix)/sbin/fsck $(flashprefix)/root/sbin/
-	$(INSTALL) $(targetprefix)/sbin/fsck.ext2 $(flashprefix)/root/sbin/
-	$(INSTALL) $(targetprefix)/sbin/fsck.ext3 $(flashprefix)/root/sbin/
-	$(INSTALL) $(targetprefix)/sbin/mkfs.ext2 $(flashprefix)/root/sbin/
-	$(INSTALL) $(targetprefix)/sbin/mkfs.ext3 $(flashprefix)/root/sbin/
-	$(INSTALL) $(targetprefix)/sbin/e2label $(flashprefix)/root/sbin/
-		@CLEANUP_e2fsprogs@
-	@@FLASHROOTDIR_MODIFIED@@
-endif
-
-$(DEPDIR)/parted: bootstrap libreadline e2fsprogs @DEPENDS_parted@
-	@PREPARE_parted@
-	cd @DIR_parted@ && \
-		CC=$(target)-gcc \
-		RANLIB=$(target)-ranlib \
-		CFLAGS="-Os -msoft-float" \
-		LDFLAGS="$(TARGET_LDFLAGS)" \
-		./configure \
-			--build=$(build) \
-			--host=$(target) \
-			--target=$(target) \
-			--prefix=$(targetprefix) \
-			--disable-nls && \
-		$(MAKE) all && \
-		@INSTALL_parted@
-	@CLEANUP_parted@
-	touch $@
-
+#lsof
 $(DEPDIR)/lsof: bootstrap @DEPENDS_lsof@
 	@PREPARE_lsof@
 	cd @DIR_lsof@ && \
@@ -277,6 +151,7 @@ $(DEPDIR)/lsof: bootstrap @DEPENDS_lsof@
 	@CLEANUP_lsof@
 	touch $@
 
+#dropbear
 $(DEPDIR)/dropbear: bootstrap libz @DEPENDS_dropbear@ Patches/dropbear-options.h
 	@PREPARE_dropbear@
 	cd @DIR_dropbear@ && \
@@ -317,6 +192,7 @@ $(flashprefix)/root/sbin/dropbearmulti: $(DEPDIR)/dropbear | $(flashprefix)/root
 
 endif
 
+#ssh
 $(DEPDIR)/ssh: bootstrap libcrypto libz @DEPENDS_ssh@
 	@PREPARE_ssh@
 	cd @DIR_ssh@ && \
@@ -362,6 +238,7 @@ $(flashprefix)/root/sbin/sshd: $(DEPDIR)/ssh | $(flashprefix)/root
 	@FLASHROOTDIR_MODIFIED@
 endif
 
+#tcpdump
 $(DEPDIR)/tcpdump: bootstrap libpcap @DEPENDS_tcpdump@
 	@PREPARE_tcpdump@
 	cd @DIR_tcpdump@ && \
@@ -378,6 +255,7 @@ $(DEPDIR)/tcpdump: bootstrap libpcap @DEPENDS_tcpdump@
 	@CLEANUP_tcpdump@
 	touch $@
 
+#bonnie
 $(DEPDIR)/bonnie: bootstrap @DEPENDS_bonnie@
 	@PREPARE_bonnie@
 	cd @DIR_bonnie@ && \
@@ -401,6 +279,7 @@ $(flashprefix)/root/sbin/bonnie: bonnie | $(flashprefix)/root
 
 endif
 
+#vdr
 $(DEPDIR)/vdr: bootstrap @DEPENDS_vdr@
 	@PREPARE_vdr@
 	cd @DIR_vdr@ && \
@@ -412,6 +291,7 @@ $(DEPDIR)/vdr: bootstrap @DEPENDS_vdr@
 	@CLEANUP_vdr@
 	touch $@
 
+#lufs
 $(DEPDIR)/lufs: bootstrap @DEPENDS_lufs@
 	@PREPARE_lufs@
 	cd @DIR_lufs@ && \
@@ -462,6 +342,7 @@ $(flashprefix)/root/bin/lufsd: bootstrap @DEPENDS_lufs@ | $(flashprefix)/root
 	@TUXBOX_CUSTOMIZE@
 endif
 
+#kermit
 $(DEPDIR)/kermit: bootstrap @DEPENDS_kermit@ libcrypto Patches/kermit.diff
 	@echo "Kermit is licensed differently from other software (more restrictively),"
 	@echo "see http://www.columbia.edu/kermit/licensing.html"
@@ -475,214 +356,7 @@ $(DEPDIR)/kermit: bootstrap @DEPENDS_kermit@ libcrypto Patches/kermit.diff
 	@CLEANUP_kermit@
 	touch $@
 
-$(DEPDIR)/hdparm: bootstrap @DEPENDS_hdparm@
-	@PREPARE_hdparm@
-	cd @DIR_hdparm@ && \
-		$(BUILDENV) \
-		$(MAKE) CROSS=$(target)- all && \
-		@INSTALL_hdparm@
-		@CLEANUP_hdparm@
-	touch $@
-
-if TARGETRULESET_FLASH
-flash-hdparm: $(flashprefix)/root/sbin/hdparm
-
-$(flashprefix)/root/sbin/hdparm: bootstrap @DEPENDS_hdparm@ | $(flashprefix)/root
-	@PREPARE_hdparm@
-	cd @DIR_hdparm@ && \
-		$(BUILDENV) \
-		$(MAKE) CROSS=$(target)- all && \
-		$(MAKE) install DESTDIR=$(targetprefix)
-		$(INSTALL) $(targetprefix)/sbin/hdparm $(flashprefix)/root/sbin/
-	@CLEANUP_hdparm@
-	@FLASHROOTDIR_MODIFIED@
-	@TUXBOX_CUSTOMIZE@
-
-endif
-
-$(DEPDIR)/hddtemp: bootstrap @DEPENDS_hddtemp@
-	@PREPARE_hddtemp@
-	cd @DIR_hddtemp@ && \
-		$(BUILDENV) \
-		./configure \
-		--with-db-path=/share/tuxbox/hddtemp.db \
-			--build=$(build) \
-			--host=$(target) \
-			--prefix= && \
-		$(MAKE) all && \
-		$(MAKE) install DESTDIR=$(targetprefix)
-		$(INSTALL) -m 644 Patches/hddtemp.db $(targetprefix)/share/tuxbox
-	@CLEANUP_hddtemp@
-	touch $@ 
-
-if TARGETRULESET_FLASH
-flash-hddtemp: $(flashprefix)/root/sbin/hddtemp
-
-$(flashprefix)/root/sbin/hddtemp: bootstrap @DEPENDS_hddtemp@ | $(flashprefix)/root
-	@PREPARE_hddtemp@
-	cd @DIR_hddtemp@ && \
-		$(BUILDENV) \
-		./configure \
-		--with-db-path=/share/tuxbox/hddtemp.db \
-			--build=$(build) \
-			--host=$(target) \
-			--prefix= && \
-		$(MAKE) all && \
-		$(MAKE) install DESTDIR=$(flashprefix)/root
-		$(INSTALL) -m 644 Patches/hddtemp.db $(flashprefix)/root/share/tuxbox
-	@CLEANUP_hddtemp@
-	@FLASHROOTDIR_MODIFIED@
-	@TUXBOX_CUSTOMIZE@
-
-endif
-
-# xfsprogs needs "special" built libtool and uuid header/lib of e2fsprogs
-$(DEPDIR)/xfsprogs: bootstrap libtool @DEPENDS_e2fsprogs@ @DEPENDS_xfsprogs@
-	@PREPARE_e2fsprogs@
-	cd @DIR_e2fsprogs@ && \
-		RANLIB=$(target)-ranlib \
-		CC=$(target)-gcc \
-		CFLAGS="-Os -msoft-float" \
-		LDFLAGS="$(TARGET_LDFLAGS)" \
-		./configure \
-			--build=$(build) \
-			--host=$(target) \
-			--target=$(target) \
-			--prefix= \
-			--with-cc=$(target)-gcc \
-			--with-linker=$(target)-ld \
-			--disable-evms \
-			--enable-elf-shlibs \
-			--enable-htree \
-			--disable-profile \
-			--disable-swapfs \
-			--disable-debugfs \
-			--disable-image \
-			--enable-resizer \
-			--enable-dynamic-e2fsck \
-			--enable-fsck \
-			--with-gnu-ld \
-			--disable-nls && \
-		$(MAKE) libs && \
-		$(INSTALL) -d $(targetprefix)/include/uuid && \
-		$(INSTALL) -m 644 lib/uuid/uuid.h $(targetprefix)/include/uuid && \
-		$(INSTALL) -m 644 lib/uuid/uuid_types.h $(targetprefix)/include/uuid && \
-		$(INSTALL) lib/uuid/libuuid.a $(targetprefix)/lib && \
-		$(INSTALL) lib/uuid/libuuid.so.1.2 $(targetprefix)/lib && \
-		ln -sf libuuid.so.1.2 $(targetprefix)/lib/libuuid.so.1 && \
-		ln -sf libuuid.so.1 $(targetprefix)/lib/libuuid.so
-#		$(MAKE) libs
-#		$(MAKE) install-libs DESTDIR=$(targetprefix)
-	@CLEANUP_e2fsprogs@
-	@PREPARE_xfsprogs@
-	cd @DIR_xfsprogs@ && \
-		LIBTOOL=$(hostprefix)/bin/libtool \
-		$(BUILDENV) \
-		./configure \
-			--build=$(build) \
-			--host=$(target) \
-			--target=$(target) \
-			--includedir=$(targetprefix)/include \
-			--prefix=$(targetprefix) &&\
-		$(MAKE) && \
-		$(MAKE) install DESTDIR=$(targetprefix)
-	@CLEANUP_xfsprogs@
-	touch $@
-
-if TARGETRULESET_FLASH
-flash-xfsprogs: $(flashprefix)/root/sbin/mkfs.xfs
-
-$(flashprefix)/root/sbin/mkfs.xfs: bootstrap libtool @DEPENDS_e2fsprogs@ @DEPENDS_xfsprogs@ | $(flashprefix)/root
-	@PREPARE_e2fsprogs@
-	cd @DIR_e2fsprogs@ && \
-		RANLIB=$(target)-ranlib \
-		CC=$(target)-gcc \
-		CFLAGS="-Os -msoft-float" \
-		LDFLAGS="$(TARGET_LDFLAGS)" \
-		./configure \
-			--build=$(build) \
-			--host=$(target) \
-			--target=$(target) \
-			--prefix= \
-			--with-cc=$(target)-gcc \
-			--with-linker=$(target)-ld \
-			--disable-evms \
-			--enable-elf-shlibs \
-			--enable-htree \
-			--disable-profile \
-			--disable-swapfs \
-			--disable-debugfs \
-			--disable-image \
-			--enable-resizer \
-			--enable-dynamic-e2fsck \
-			--enable-fsck \
-			--with-gnu-ld \
-			--disable-nls && \
-		$(MAKE) libs && \
-		$(INSTALL) -d $(targetprefix)/include/uuid && \
-		$(INSTALL) -m 644 lib/uuid/uuid.h $(targetprefix)/include/uuid && \
-		$(INSTALL) -m 644 lib/uuid/uuid_types.h $(targetprefix)/include/uuid && \
-		$(INSTALL) lib/uuid/libuuid.a $(targetprefix)/lib && \
-		$(INSTALL) lib/uuid/libuuid.so.1.2 $(targetprefix)/lib && \
-		ln -sf libuuid.so.1.2 $(targetprefix)/lib/libuuid.so.1 && \
-		ln -sf libuuid.so.1 $(targetprefix)/lib/libuuid.so
-#		$(MAKE) libs
-#		$(MAKE) install-libs DESTDIR=$(targetprefix)
-	@CLEANUP_e2fsprogs@
-	@PREPARE_xfsprogs@
-	cd @DIR_xfsprogs@ && \
-		LIBTOOL=$(hostprefix)/bin/libtool \
-		$(BUILDENV) \
-		./configure \
-			--build=$(build) \
-			--host=$(target) \
-			--target=$(target) \
-			--includedir=$(targetprefix)/include \
-			--prefix=$(targetprefix) && \
-		$(MAKE) && \
-		for i in mkfs/mkfs.xfs repair/xfs_repair; do \
-			$(INSTALL) $$i $(flashprefix)/root/sbin; done;
-	@CLEANUP_xfsprogs@
-	@FLASHROOTDIR_MODIFIED@
-
-endif
-
-$(DEPDIR)/smartmontools: bootstrap @DEPENDS_smartmontools@
-	@PREPARE_smartmontools@
-	cd @DIR_smartmontools@ && \
-		$(BUILDENV) \
-		./configure \
-			--build=$(build) \
-			--host=$(target) \
-			--target=$(target) \
-			--includedir=$(targetprefix)/include \
-			--prefix=$(targetprefix) &&\
-		$(MAKE) && \
-		$(MAKE) install DESTDIR=
-	@CLEANUP_smartmontools@
-	touch $@
-
-if TARGETRULESET_FLASH
-flash-smartmontools: $(flashprefix)/root/sbin/smartctl
-
-$(flashprefix)/root/sbin/smartctl: bootstrap @DEPENDS_smartmontools@ | $(flashprefix)/root
-	@PREPARE_smartmontools@
-	cd @DIR_smartmontools@ && \
-		$(BUILDENV) \
-		./configure \
-			--build=$(build) \
-			--host=$(target) \
-			--target=$(target) \
-			--includedir=$(targetprefix)/include \
-			--prefix=$(targetprefix) &&\
-		$(MAKE) && \
-		for i in smartctl ; do \
-			$(INSTALL) $$i $(flashprefix)/root/sbin; done;
-	@CLEANUP_smartmontools@
-	@FLASHROOTDIR_MODIFIED@
-
-endif
-
+#wget
 $(DEPDIR)/wget: bootstrap @DEPENDS_wget@
 	@PREPARE_wget@
 	cd @DIR_wget@ && \
@@ -707,6 +381,7 @@ $(flashprefix)/root/bin/wget: wget | $(flashprefix)/root
 
 endif
 
+#ncftp
 $(DEPDIR)/ncftp: bootstrap @DEPENDS_ncftp@
 	@PREPARE_ncftp@
 	cd @DIR_ncftp@ && \
