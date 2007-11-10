@@ -55,6 +55,7 @@ cdk/make/funstuff.mk
 cdk/make/high-level-yadd.mk
 cdk/make/hostapps.mk
 cdk/make/ide-apps.mk
+cdk/make/java-stuff.mk
 cdk/make/lcars.mk
 cdk/make/lcd.mk
 cdk/make/libdvb++.mk
