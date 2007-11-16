@@ -40,10 +40,16 @@ $(flashprefix)/root-%.jffs2: $(flashprefix)/root-%-jffs2 $(MKJFFS2)
 	$(MKJFFS2)  -b -e 0x20000 --pad=0x7c0000 -r $< -o $@
 
 ################ $fs-to-boot.flfs*x
+if KERNEL26
+UBOOT_TEMPLATE = u-boot.dbox2.2_6.h.m4
+else
+UBOOT_TEMPLATE = u-boot.dbox2.h.m4
+endif
+
 $(flashprefix)/cramfs.flfs1x $(flashprefix)/cramfs.flfs2x: \
-$(hostprefix)/bin/mkflfs $(bootdir)/u-boot-config/u-boot.dbox2.h.m4 \
+$(hostprefix)/bin/mkflfs $(bootdir)/u-boot-config/$(UBOOT_TEMPLATE) \
 | $(flashprefix)
-	m4 --define=rootfstype=cramfs --define=rootsize=$(ROOT_PARTITION_SIZE) $(bootdir)/u-boot-config/u-boot.dbox2.h.m4 > $(bootdir)/u-boot-config/u-boot.config
+	m4 --define=rootfstype=cramfs --define=rootsize=$(ROOT_PARTITION_SIZE) $(bootdir)/u-boot-config/$(UBOOT_TEMPLATE) > $(bootdir)/u-boot-config/u-boot.config
 	$(MAKE) @DIR_uboot@/u-boot.stripped
 	$(hostprefix)/bin/mkflfs 1x -o $(flashprefix)/cramfs.flfs1x @DIR_uboot@/u-boot.stripped
 	$(hostprefix)/bin/mkflfs 2x -o $(flashprefix)/cramfs.flfs2x @DIR_uboot@/u-boot.stripped
@@ -51,9 +57,9 @@ $(hostprefix)/bin/mkflfs $(bootdir)/u-boot-config/u-boot.dbox2.h.m4 \
 	rm $(bootdir)/u-boot-config/u-boot.config
 
 $(flashprefix)/squashfs.flfs1x $(flashprefix)/squashfs.flfs2x: \
-$(hostprefix)/bin/mkflfs $(bootdir)/u-boot-config/u-boot.dbox2.h.m4  \
+$(hostprefix)/bin/mkflfs $(bootdir)/u-boot-config/$(UBOOT_TEMPLATE)  \
 | $(flashprefix)
-	m4 --define=rootfstype=squashfs --define=rootsize=$(ROOT_PARTITION_SIZE) $(bootdir)/u-boot-config/u-boot.dbox2.h.m4 > $(bootdir)/u-boot-config/u-boot.config
+	m4 --define=rootfstype=squashfs --define=rootsize=$(ROOT_PARTITION_SIZE) $(bootdir)/u-boot-config/$(UBOOT_TEMPLATE) > $(bootdir)/u-boot-config/u-boot.config
 	$(MAKE) @DIR_uboot@/u-boot.stripped
 	$(hostprefix)/bin/mkflfs 1x -o $(flashprefix)/squashfs.flfs1x @DIR_uboot@/u-boot.stripped
 	$(hostprefix)/bin/mkflfs 2x -o $(flashprefix)/squashfs.flfs2x @DIR_uboot@/u-boot.stripped
@@ -61,9 +67,9 @@ $(hostprefix)/bin/mkflfs $(bootdir)/u-boot-config/u-boot.dbox2.h.m4  \
 	rm $(bootdir)/u-boot-config/u-boot.config
 
 $(flashprefix)/jffs2.flfs1x $(flashprefix)/jffs2.flfs2x: \
-$(hostprefix)/bin/mkflfs $(bootdir)/u-boot-config/u-boot.dbox2.h.m4 \
+$(hostprefix)/bin/mkflfs $(bootdir)/u-boot-config/$(UBOOT_TEMPLATE) \
 | $(flashprefix)
-	m4 --define=rootfstype=jffs2 $(bootdir)/u-boot-config/u-boot.dbox2.h.m4 > $(bootdir)/u-boot-config/u-boot.config
+	m4 --define=rootfstype=jffs2 $(bootdir)/u-boot-config/$(UBOOT_TEMPLATE) > $(bootdir)/u-boot-config/u-boot.config
 	$(MAKE) @DIR_uboot@/u-boot.stripped
 	$(hostprefix)/bin/mkflfs 1x -o $(flashprefix)/jffs2.flfs1x @DIR_uboot@/u-boot.stripped
 	$(hostprefix)/bin/mkflfs 2x -o $(flashprefix)/jffs2.flfs2x @DIR_uboot@/u-boot.stripped

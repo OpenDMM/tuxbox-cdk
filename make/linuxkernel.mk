@@ -4,8 +4,8 @@
 # as a target.
 # This is deliberate, and makes the target "private".
 
-#$(DEPDIR)/linuxkernel: bootstrap linuxdir $(KERNEL_DIR)/.config
-$(KERNEL_BUILD_FILENAME): bootstrap linuxdir $(KERNEL_DIR)/.config
+#$(DEPDIR)/linuxkernel: bootstrap linuxdir install-linux-headers $(KERNEL_DIR)/.config
+$(KERNEL_BUILD_FILENAME): bootstrap linuxdir install-linux-headers $(KERNEL_DIR)/.config
 	$(MAKE) -C $(KERNEL_DIR) oldconfig ARCH=ppc
 if KERNEL26
 	$(MAKE) -C $(KERNEL_DIR) include/asm \
@@ -39,38 +39,86 @@ endif
 #	$(INSTALL) -m644 $(KERNEL_DIR)/System.map $(targetprefix)/boot/System.map-$(KERNELVERSION)
 #	touch $@
 
+$(DEPDIR)/install-linux-headers: linuxdir
+if KERNEL26
+# Kernels after 2.6.18 offer a special "headers_install" target to generate
+# "userspace-blessed" heades. This will create an include directory in
+# $(KERNEL_DIR)/usr
+
+# It would be more correct to copy all directories, but some files seem to also
+# be provided by the glibc (e.g. scsi) so the directory exists and we simply use
+# those directories that are necessary. This is a rule of its own since glibc
+# needs the linux headers to build. For 2.4 this does nothing. Note that we cheat
+# here and declare the target powerpc since ppc will be gone in a not too distant
+# future and the headers are slowly being removed.
+	@if [ `echo $(KERNELVERSION) | sed -e 's/\([0-9]\+\)\.\([0-9]\+\)\.\([0-9]\+\).*/\3/g'` -lt 18 ]; then \
+		ln -sf $(buildprefix)/linux/include/linux $(hostprefix)/$(target)/include; \
+		ln -sf $(buildprefix)/linux/include/asm $(hostprefix)/$(target)/include; \
+		ln -sf $(buildprefix)/linux/include/asm-generic $(hostprefix)/$(target)/include; \
+		ln -sf $(buildprefix)/linux/include/mtd $(hostprefix)/$(target)/include; \
+	else \
+		$(MAKE) -C $(KERNEL_DIR) headers_install ARCH=powerpc; \
+		ln -sf $(buildprefix)/linux/usr/include/linux $(hostprefix)/$(target)/include; \
+		ln -sf $(buildprefix)/linux/usr/include/asm $(hostprefix)/$(target)/include; \
+		ln -sf $(buildprefix)/linux/usr/include/asm-generic $(hostprefix)/$(target)/include; \
+		ln -sf $(buildprefix)/linux/usr/include/mtd $(hostprefix)/$(target)/include; \
+	fi
+endif
+	touch $@
+
+
 if ENABLE_IDE
 IDE_SED_CONF=$(foreach param,CONFIG_IDE CONFIG_BLK_DEV_IDE CONFIG_BLK_DEV_IDEDISK,-e s"/^.*$(param)[= ].*/$(param)=m/")
 else
-IDE_SED_CONF=-e ""
+if KERNEL26
+IDE_SED_CONF=$(foreach param,CONFIG_IDE CONFIG_BLK_DEV_IDE CONFIG_BLK_DEV_IDEDISK,-e s"/^.*$(param)[= ].*/\# $(param) is not set/")
+else
+IDE_SET_CONF=-e ""
+endif
 endif
 
 if ENABLE_EXT3
 EXT3_SED_CONF=$(foreach param,CONFIG_EXT2_FS CONFIG_EXT3_FS CONFIG_JBD,-e s"/^.*$(param)[= ].*/$(param)=m/")
 else
+if KERNEL26
+EXT3_SED_CONF=$(foreach param,CONFIG_EXT2_FS CONFIG_EXT3_FS CONFIG_JBD,-e s"/^.*$(param)[= ].*/\# $(param) is not set/")
+else
 EXT3_SED_CONF=-e ""
+endif
 endif
 
 if ENABLE_XFS
 XFS_SED_CONF=$(foreach param,CONFIG_XFS_FS,-e s"/^.*$(param)[= ].*/$(param)=m/")
 else
+if KERNEL26
+XFS_SED_CONF=$(foreach param,CONFIG_XFS_FS,-e s"/^.*$(param)[= ].*/\# $(param) is not set/")
+else
 XFS_SED_CONF=-e ""
+endif
 endif
 
 if ENABLE_NFSSERVER
 NFSSERVER_SED_CONF=$(foreach param,CONFIG_NFSD CONFIG_NFSD_V3 CONFIG_NFSD_TCP,-e s"/^.*$(param)[= ].*/$(param)=m/")
 else
+if KERNEL26
+NFSSERVER_SED_CONF=$(foreach param,CONFIG_NFSD CONFIG_NFSD_V3 CONFIG_NFSD_TCP,-e s"/^.*$(param)[= ].*/\# $(param) is not set/")
+else
 NFSSERVER_SED_CONF=-e ""
+endif
 endif
 
 kernel-cdk: $(bootprefix)/kernel-cdk
 
-$(bootprefix)/kernel-cdk: linuxdir $(hostprefix)/bin/mkimage Patches/linux-$(KERNELVERSION).config Patches/dbox2-flash.c.m4
 if KERNEL26
-	$(INSTALL) -m644 Patches/linux-$(KERNELVERSION).config $(KERNEL_DIR)/.config
+$(bootprefix)/kernel-cdk: linuxdir $(hostprefix)/bin/mkimage Patches/linux-$(KERNELVERSION).config Patches/dbox2-flash.c-26.m4
 else
+$(bootprefix)/kernel-cdk: linuxdir $(hostprefix)/bin/mkimage Patches/linux-$(KERNELVERSION).config Patches/dbox2-flash.c.m4
+endif
 	sed $(IDE_SED_CONF) $(EXT3_SED_CONF) $(XFS_SED_CONF) $(NFSSERVER_SED_CONF) Patches/linux-$(KERNELVERSION).config \
 		> $(KERNEL_DIR)/.config
+if KERNEL26
+	m4 Patches/dbox2-flash.c-26.m4 > linux/drivers/mtd/maps/dbox2-flash.c
+else
 	m4 Patches/dbox2-flash.c.m4 > linux/drivers/mtd/maps/dbox2-flash.c
 endif
 	$(MAKE) $(KERNEL_BUILD_FILENAME)
@@ -95,11 +143,20 @@ driver: $(KERNEL_BUILD_FILENAME)
 	$(MAKE) -C $(driverdir) \
 		KERNEL_LOCATION=$(buildprefix)/linux \
 		CROSS_COMPILE=$(target)-
+if KERNEL26
+	$(MAKE) -C $(driverdir) \
+		KERNEL_LOCATION=$(buildprefix)/linux \
+		BIN_DEST=$(targetprefix)/bin \
+		INSTALL_MOD_PATH=$(targetprefix) \
+		DEPMOD=/bin/true \
+		install
+else
 	$(MAKE) -C $(driverdir) \
 		KERNEL_LOCATION=$(buildprefix)/linux \
 		BIN_DEST=$(targetprefix)/bin \
 		INSTALL_MOD_PATH=$(targetprefix) \
 		install
+endif
 
 driver-clean:
 	$(MAKE) -C $(driverdir) \

@@ -2,10 +2,6 @@
 # option CONFIG_AUTOFS4_FS enabled. At this time, this must be changed
 # manually.
 
-if KERNEL26
-$(DEPDIR)/automount:
-	@echo "This is the non-existing automount rule speaking: implement me for 2.6 please"
-else
 $(DEPDIR)/automount: bootstrap @DEPENDS_automount@ Patches/autofs.diff
 	@PREPARE_automount@
 	cd @DIR_automount@  && \
@@ -37,8 +33,6 @@ flash-automount: @DEPENDS_automount@ Patches/autofs.diff | $(flashprefix)/root
 	rm -f $(flashprefix)/root/lib/autofs/mount_autofs.so
 	rm -f $(flashprefix)/root/lib/autofs/mount_changer.so
 	@FLASHROOTDIR_MODIFIED@
-endif
-
 endif
 
 .PHONY: flash-automount

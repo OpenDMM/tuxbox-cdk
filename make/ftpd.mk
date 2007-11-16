@@ -1,6 +1,9 @@
 $(DEPDIR)/ftpd: bootstrap @DEPENDS_ftpd@
 	-rm -rf $(targetprefix)/share/empty
 	@PREPARE_ftpd@
+if KERNEL26
+	cd @DIR_ftpd@ && patch -p1 < $(buildprefix)/Patches/ftpd26.diff
+endif
 	cd @DIR_ftpd@ && \
 		CC=$(target)-gcc \
 		CFLAGS="$(TARGET_CFLAGS)" \
@@ -17,6 +20,9 @@ if TARGETRULESET_FLASH
 flash-ftpd: | $(flashprefix)/root @DEPENDS_ftpd@
 	-rm -rf $(flashprefix)/root/share/empty
 	@PREPARE_ftpd@
+if KERNEL26
+	cd @DIR_ftpd@ && patch -p1 < $(buildprefix)/Patches/ftpd26.diff
+endif
 	cd @DIR_ftpd@ && \
 		CC=$(target)-gcc \
 		CFLAGS="$(TARGET_CFLAGS)" \

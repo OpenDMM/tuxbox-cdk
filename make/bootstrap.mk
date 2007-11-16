@@ -37,14 +37,12 @@ endif
 	-rm -f $(hostprefix)/$(target)/lib
 	-ln -sf $(targetprefix)/include $(hostprefix)/$(target)/include
 	-ln -sf $(targetprefix)/lib $(hostprefix)/$(target)/lib
-if KERNEL26
-	-ln -sf $(buildprefix)/linux/include/asm-powerpc $(hostprefix)/$(target)/include/asm
-else
-	-ln -sf $(buildprefix)/linux/include/asm $(hostprefix)/$(target)/include
-endif
-	-ln -sf $(buildprefix)/linux/include/asm-generic $(hostprefix)/$(target)/include
+if !KERNEL26
 	-ln -sf $(buildprefix)/linux/include/linux $(hostprefix)/$(target)/include
+	-ln -sf $(buildprefix)/linux/include/asm $(hostprefix)/$(target)/include
+	-ln -sf $(buildprefix)/linux/include/asm-generic $(hostprefix)/$(target)/include
 	-ln -sf $(buildprefix)/linux/include/mtd $(hostprefix)/$(target)/include
+endif
 if TARGETRULESET_FLASH
 	$(INSTALL) -d $(flashprefix)
 endif
@@ -124,7 +122,7 @@ endif
 	@CLEANUP_bootstrap_gcc@
 	touch $@
 
-$(DEPDIR)/glibc: @DEPENDS_glibc@ bootstrap_gcc
+$(DEPDIR)/glibc: @DEPENDS_glibc@ bootstrap_gcc install-linux-headers
 	@PREPARE_glibc@
 	touch @DIR_glibc@/config.cache
 	@if [ $(GLIBC_PTHREADS) = "nptl" ]; then \

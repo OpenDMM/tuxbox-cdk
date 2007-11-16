@@ -25,8 +25,15 @@ CONFIGURE_OPTS = \
 	--host=$(target) \
 	--prefix=$(targetprefix) \
 	--with-driver=$(driverdir) \
-	--with-dvbincludes=$(driverdir)/dvb/include \
 	--with-target=cdk
+
+if KERNEL26
+CONFIGURE_OPTS += \
+	--with-dvbincludes=$(targetprefix)/include
+else
+CONFIGURE_OPTS += \
+	--with-dvbincludes=$(driverdir)/dvb/include
+endif
 
 if MAINTAINER_MODE
 CONFIGURE_OPTS_MAINTAINER = \
