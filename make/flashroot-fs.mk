@@ -7,10 +7,14 @@ else
 endif
 	sed -e 's/.*CONFIG_CRAMFS[= ].*$$/CONFIG_CRAMFS=y/' $(IDE_SED_CONF) $(EXT3_SED_CONF) $(XFS_SED_CONF) $(NFSSERVER_SED_CONF) Patches/linux-$(KERNELVERSION).config-flash > $(KERNEL_DIR)/.config
 	$(MAKE) $(KERNEL_BUILD_FILENAME) targetprefix=$@
+if KERNEL26
+	$(INSTALL) -m644 $(KERNEL_DIR)/arch/ppc/boot/images/uImage $@/vmlinuz
+else
 	$(hostprefix)/bin/mkimage \
 		-n 'dbox2' -A ppc -O linux -T kernel -C gzip \
 		-a 00000000 -e 00000000 -d $(KERNEL_BUILD_FILENAME) $@/vmlinuz
 	$(MAKE) driver targetprefix=$@
+endif
 	rm -f $@/lib/modules/$(KERNELVERSION)/build
 	@TUXBOX_CUSTOMIZE@
 
@@ -23,9 +27,13 @@ else
 endif
 	sed -e 's/.*CONFIG_JFFS2_FS[= ].*$$/CONFIG_JFFS2_FS=y/' $(IDE_SED_CONF) $(EXT3_SED_CONF) $(XFS_SED_CONF) $(NFSSERVER_SED_CONF) Patches/linux-$(KERNELVERSION).config-flash > $(KERNEL_DIR)/.config
 	$(MAKE) $(KERNEL_BUILD_FILENAME) targetprefix=$@
+if KERNEL26
+	$(INSTALL) -m644 $(KERNEL_DIR)/arch/ppc/boot/images/uImage $@/vmlinuz
+else
 	$(hostprefix)/bin/mkimage \
 		-n 'dbox2' -A ppc -O linux -T kernel -C gzip \
 		-a 00000000 -e 00000000 -d $(KERNEL_BUILD_FILENAME) $@/vmlinuz
+endif
 	$(MAKE) driver targetprefix=$@
 	rm -f $@/lib/modules/$(KERNELVERSION)/build
 	@TUXBOX_CUSTOMIZE@
@@ -39,9 +47,13 @@ else
 endif
 	sed -e 's/.*CONFIG_SQUASHFS[= ].*$$/CONFIG_SQUASHFS=y/' $(IDE_SED_CONF) $(EXT3_SED_CONF) $(XFS_SED_CONF) $(NFSSERVER_SED_CONF) Patches/linux-$(KERNELVERSION).config-flash > $(KERNEL_DIR)/.config
 	$(MAKE) $(KERNEL_BUILD_FILENAME) targetprefix=$@
+if KERNEL26
+	$(INSTALL) -m644 $(KERNEL_DIR)/arch/ppc/boot/images/uImage $@/vmlinuz
+else
 	$(hostprefix)/bin/mkimage \
 		-n 'dbox2' -A ppc -O linux -T kernel -C gzip \
 		-a 00000000 -e 00000000 -d $(KERNEL_BUILD_FILENAME) $@/vmlinuz
+endif
 	$(MAKE) driver targetprefix=$@
 	rm -f $@/lib/modules/$(KERNELVERSION)/build
 	@TUXBOX_CUSTOMIZE@
