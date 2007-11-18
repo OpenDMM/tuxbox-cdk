@@ -48,4 +48,10 @@ $(flashprefix)/root/bin/hwrtc:  $(appsdir)/misc/tools/config.status | $(flashpre
 	$(MAKE) -C $(appsdir)/misc/tools/rtc all install prefix=$(flashprefix)/root
 	@FLASHROOTDIR_MODIFIED@
 
+flash-makedevices: $(flashprefix)/root/bin/makedevices
+
+$(flashprefix)/root/bin/makedevices:  $(appsdir)/misc/tools/config.status | $(flashprefix)/root
+	$(MAKE) -C $(appsdir)/misc/tools/makedevices all install prefix=$(flashprefix)/root
+	@FLASHROOTDIR_MODIFIED@
+
 endif

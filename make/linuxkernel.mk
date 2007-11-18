@@ -16,16 +16,20 @@ if KERNEL26
 	$(MAKE) -C $(KERNEL_DIR) uImage modules \
 		ARCH=ppc \
 		CROSS_COMPILE=$(target)-
+	$(MAKE) -C $(KERNEL_DIR) modules_install \
+		ARCH=ppc \
+		CROSS_COMPILE=$(target)- \
+		INSTALL_MOD_PATH=$(targetprefix)
 else
 	$(MAKE) -C $(KERNEL_DIR) zImage modules \
 		ARCH=ppc \
 		CROSS_COMPILE=$(target)-
-endif
 	$(MAKE) -C $(KERNEL_DIR) modules_install \
 		ARCH=ppc \
 		CROSS_COMPILE=$(target)- \
 		DEPMOD=/bin/true \
 		INSTALL_MOD_PATH=$(targetprefix)
+endif
 # if KERNEL26
 # 	$(INSTALL) -m644 $(KERNEL_DIR)/arch/ppc/boot/images/uImage $(bootprefix)/kernel-cdk
 # else
@@ -148,7 +152,6 @@ if KERNEL26
 		KERNEL_LOCATION=$(buildprefix)/linux \
 		BIN_DEST=$(targetprefix)/bin \
 		INSTALL_MOD_PATH=$(targetprefix) \
-		DEPMOD=/bin/true \
 		install
 else
 	$(MAKE) -C $(driverdir) \

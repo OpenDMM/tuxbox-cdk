@@ -13,6 +13,15 @@ $(DEPDIR)/module_init_tools: bootstrap       @DEPENDS_module_init_tools@
 	@CLEANUP_module_init_tools@
 	touch $@
 
+if TARGETRULESET_FLASH
+flash-module-init-tools: $(flashprefix)/root/sbin/modprobe
+$(flashprefix)/root/sbin/modprobe: module_init_tools
+	$(INSTALL) $(targetprefix)/sbin/insmod $(flashprefix)/root/sbin
+	$(INSTALL) $(targetprefix)/sbin/modprobe $(flashprefix)/root/sbin
+	$(INSTALL) $(targetprefix)/sbin/depmod $(flashprefix)/root/sbin
+	@FLASHROOTDIR_MODIFIED@
+endif
+
 $(DEPDIR)/modutils: bootstrap @DEPENDS_modutils@
 	@PREPARE_modutils@
 	cd @DIR_modutils@ && \

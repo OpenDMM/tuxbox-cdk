@@ -47,7 +47,9 @@ $(flashprefix)/root-% $(flashprefix)/root $(flashprefix)/root-jffs2
 	$(MAKE) --assume-old=$@ $@/lib/ld.so.1 mklibs_librarypath=$</lib:$</lib/tuxbox/plugins:$(flashprefix)/root/lib:$(flashprefix)/root/lib/tuxbox/plugins:$(flashprefix)/root-jffs2/lib:$(targetprefix)/lib:$(targetprefix)/lib/tuxbox/plugins
 	$(MAKE) flash-bootlogos flashbootlogosdir=$@/var/tuxbox/boot
 	$(MAKE) -C root install-flash flashprefix_ro=$@ flashprefix_rw=$@
+if !KERNEL26
 	mv $@/etc/init.d/rcS.insmod $@/etc/init.d/rcS
+endif
 if ENABLE_IDE
 	echo $(HDD_MOUNT_ENTRY)	>> $@/etc/fstab
 endif
@@ -79,7 +81,12 @@ endif
 		rm $@/etc/profile.local; \
 		ln -sf /var/etc/profile.local $@/etc/profile.local; \
 	fi
+if !KERNEL26
 	mv $@/etc/init.d/rcS.insmod $@/etc/init.d/rcS
+endif
+if KERNEL26
+	ln -s libgcc_s_nof.so.1 $@/lib/libgcc_s.so.1
+endif
 	@TUXBOX_CUSTOMIZE@
 
 $(flashprefix)/root-radiobox-cramfs $(flashprefix)/root-radiobox-squashfs: \
@@ -113,7 +120,9 @@ endif
 		rm $@/etc/profile.local; \
 		ln -sf /var/etc/profile.local $@/etc/profile.local; \
 	fi
+if !KERNEL26
 	mv $@/etc/init.d/rcS.insmod $@/etc/init.d/rcS
+endif
 	@TUXBOX_CUSTOMIZE@
 
 $(flashprefix)/root-enigma-cramfs $(flashprefix)/root-enigma-squashfs: \
@@ -143,7 +152,9 @@ endif
 		rm $@/etc/profile.local; \
 		ln -sf /var/etc/profile.local $@/etc/profile.local; \
 	fi
+if !KERNEL26
 	mv $@/etc/init.d/rcS.insmod $@/etc/init.d/rcS
+endif
 	@TUXBOX_CUSTOMIZE@
 
 $(flashprefix)/root-null-jffs2: $(flashprefix)/root $(flashprefix)/root-jffs2

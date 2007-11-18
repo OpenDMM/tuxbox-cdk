@@ -110,6 +110,11 @@ $(DEPDIR)/tuxbox_hotplug: $(appsdir)/tuxbox/tools/hotplug/config.status
 $(targetprefix)/sbin/hotplug: $(appsdir)/tuxbox/tools/config.status
 	$(MAKE) -C $(appsdir)/tuxbox/tools/hotplug install
 
+if TARGETRULESET_FLASH
+flash-hotplug: $(targetprefix)/sbin/hotplug
+	$(INSTALL) $(targetprefix)/sbin/hotplug $(flashprefix)/root/sbin
+	@FLASHROOTDIR_MODIFIED@
+endif
 endif
 
 .PHONY: tuxbox_tools tuxinfo camd2 satfind flash-tuxinfo flash-camd2 \

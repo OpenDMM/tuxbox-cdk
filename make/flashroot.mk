@@ -16,6 +16,9 @@ $(flashprefix)/root: bootstrap $(wildcard root-local.sh) | $(flashprefix)
 	$(INSTALL) -d $@/tmp
 	$(INSTALL) -d $@/etc/init.d
 	$(INSTALL) -d $@/root
+if KERNEL26
+	$(INSTALL) -d $@/sys
+endif
 	ln -s /tmp $@/var/run
 	ln -s /tmp $@/var/tmp
 if ENABLE_IDE
@@ -41,6 +44,10 @@ endif
 	$(MAKE) flash-ucodes
 	$(MAKE) flash-lcdip
 	$(MAKE) flash-automount
+if KERNEL26
+	$(MAKE) flash-makedevices
+	$(MAKE) flash-hotplug
+endif
 if ENABLE_DOSFSTOOLS
 	$(MAKE) flash-dosfstools
 endif

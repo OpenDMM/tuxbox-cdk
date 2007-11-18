@@ -13,9 +13,11 @@ else
 	$(hostprefix)/bin/mkimage \
 		-n 'dbox2' -A ppc -O linux -T kernel -C gzip \
 		-a 00000000 -e 00000000 -d $(KERNEL_BUILD_FILENAME) $@/vmlinuz
-	$(MAKE) driver targetprefix=$@
 endif
+	$(MAKE) driver targetprefix=$@
 	rm -f $@/lib/modules/$(KERNELVERSION)/build
+	rm -f $@/lib/modules/$(KERNELVERSION)/source
+	rm -f $@/lib/modules/$(KERNELVERSION)/modules.[^d]*
 	@TUXBOX_CUSTOMIZE@
 
 $(flashprefix)/root-jffs2: bootstrap $(hostprefix)/bin/mkimage
@@ -36,6 +38,8 @@ else
 endif
 	$(MAKE) driver targetprefix=$@
 	rm -f $@/lib/modules/$(KERNELVERSION)/build
+	rm -f $@/lib/modules/$(KERNELVERSION)/source
+	rm -f $@/lib/modules/$(KERNELVERSION)/modules.[^d]*
 	@TUXBOX_CUSTOMIZE@
 
 $(flashprefix)/root-squashfs: bootstrap $(hostprefix)/bin/mkimage
@@ -56,4 +60,6 @@ else
 endif
 	$(MAKE) driver targetprefix=$@
 	rm -f $@/lib/modules/$(KERNELVERSION)/build
+	rm -f $@/lib/modules/$(KERNELVERSION)/source
+	rm -f $@/lib/modules/$(KERNELVERSION)/modules.[^d]*
 	@TUXBOX_CUSTOMIZE@
