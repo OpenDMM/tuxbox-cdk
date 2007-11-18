@@ -38,6 +38,12 @@ install-flash: $(FILES_FLASH_RO) $(FILES_FLASH_RW) $(FILES_FLASH_RO_EXEC) $(FILE
 			ln -sf /var$(DIR)/$$file $(flashprefix_ro)$(DIR)/$$file ; \
 		fi \
 	done
+if KERNEL26
+	if [ -e $(flashprefix_rw)/etc/modules.conf ]; then \
+		mv -f $(flashprefix_rw)/etc/modules.conf $(flashprefix_rw)/etc/modules.conf.example ; \
+		touch $(flashprefix_rw)/etc/modules.conf ; \
+	fi
+endif
 	@files="$(FILES_FLASH_RO_EXEC)" ; \
 	for i in $$files ; do \
 		install -d $(flashprefix_ro)$(DIR) ; \

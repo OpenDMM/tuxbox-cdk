@@ -11,10 +11,10 @@ SUBDIRS = init.d network
 
 FILES_FLASH_RO = \
 	fstab host.conf inittab mime.types nsswitch.conf \
-	protocols termcap timezone.xml modules.conf
+	protocols termcap timezone.xml
 
 FILES_FLASH_RW = \
-	group hostname hosts inetd.conf passwd profile resolv.conf services auto.net \
+	group hostname hosts inetd.conf passwd profile resolv.conf services auto.net modules.conf \
 	$(EXPORTS) $(SMBCONF) $(SMBPASSWD)
 
 FILES = \

@@ -4,7 +4,7 @@ dnl Most of its "power" comes from the macro loadmodule, that is expanded
 dnl differently depending upon if insmod is defined or not.
 dnl 
 changequote({,})dnl
-define({loadmodule},{ifdef({insmod},{$IM $MD/$1.o $2},{modprobe $1 $2})})dnl
+define({loadmodule},{ifdef({insmod},{$IM ${{MD}}$1 $2},{modprobe $1 $2})})dnl
 define({ifmarkerfile},{if [ -e /var/etc/.$1 ]; then
 	$2
 ifelse($3,,,{else
@@ -34,7 +34,7 @@ dnl
 #
 PATH=/sbin:/bin
 ifdef({insmod},{IM=/sbin/{insmod}
-MD=/lib/modules/$(uname -r)/misc
+MD=/lib/modules/$(uname -r)/misc/
 })dnl
 
 # extract kernel minor without using cut
@@ -45,10 +45,21 @@ KMINOR=`get_second $(uname -r)`
 IFS=$OLD_IFS
 
 if [ $KMINOR -ge 6 ]; then
-	if [ ! -d /dev/pts ]; then
-		# create necessary nodes,
-		# static for now
-		mkdir /dev/pts
+	MD=
+	mount -t proc proc /proc
+	mount -t tmpfs tmp /tmp
+	mount -t tmpfs dev /dev
+	mount -t sysfs sys /sys
+	echo "/sbin/hotplug" > /proc/sys/kernel/hotplug
+	# create necessary nodes,
+	# static for now, i am just too lazy for udev :-)
+	mkdir -p /dev/pts /dev/dbox /dev/dvb/adapter0 /dev/loop /dev/i2c /dev/input /dev/sound /dev/v4l /dev/fb /dev/vc /dev/mtdblock /dev/mtd /dev/tts
+	if type -p makedevices; then
+		makedevices
+	else
+		# in theory, now it is too late to create /dev/console...
+		mknod /dev/console c 5 1
+		mknod /dev/null c 1 3
 		mknod /dev/tty c 5 0
 		mknod /dev/tty0 c 4 0
 		mknod /dev/tty1 c 4 1
@@ -58,24 +69,11 @@ if [ $KMINOR -ge 6 ]; then
 
 		mknod /dev/urandom c 1 9
 		mknod /dev/random c 1 8
-
-		# this is fragile because
-		# it's module load order
-		# dependent
-		mkdir /dev/dbox
-		mknod /dev/dbox/avs0 c 10 60
-		mknod /dev/dbox/event0 c 10 63
-		mknod /dev/dbox/fp0 c 10 62
-		mknod /dev/dbox/lcd0 c 10 59
-		mknod /dev/dbox/saa0 c 10 58
-		mknod /dev/dbox/dvb2eth c 10 57
-		mknod /dev/dbox/aviaEXT c 10 56
+		mknod /dev/mem c 1 1
+		mknod /dev/kmem c 1 2
 
 		mknod /dev/watchdog c 10 130
-		mknod /dev/lirc c 10 61
 
-		mkdir /dev/dvb
-		mkdir /dev/dvb/adapter0
 		mknod /dev/dvb/adapter0/audio0 c 212 1
 		mknod /dev/dvb/adapter0/ca0 c 212 6
 		mknod /dev/dvb/adapter0/ca1 c 212 22
@@ -87,24 +85,52 @@ if [ $KMINOR -ge 6 ]; then
 		
 		mknod /dev/fb0 c 29 0
 
-		mkdir /dev/fb
-		ln -sf /dev/fb0 /dev/fb/0
-		
-		mkdir /dev/vc
-		ln -sf /dev/tty0 /dev/vc/0
-		
-		mkdir /dev/v4l
 		mknod /dev/v4l/video0 c 81 0
 		
-		mkdir /dev/sound
 		mknod /dev/sound/dsp c 14 3
 		mknod /dev/sound/mixer c 14 0
 		mknod /dev/sound/mixer1 c 14 16
 		
-		mkdir /dev/input
 		mknod /dev/input/event0 c 13 64
+		mknod /dev/input/mouse0 c 13 32
 		mknod /dev/input/mice c 13 63
+
+		mknod /dev/i2c/0 c 89 0
+
+		# 6 loop devices are enough.
+		for i in 0 1 2 3 4 5; do
+			mknod /dev/loop/$i b 7 $i
+			mknod /dev/mtdblock/$i b 31 $i
+		done
+		mknod /dev/mtd/0 c 90 0
+		mknod /dev/mtd/1 c 90 2
+		mknod /dev/mtd/2 c 90 4
+		mknod /dev/mtd/3 c 90 6
+		mknod /dev/mtd/4 c 90 8
+		mknod /dev/mtd/5 c 90 10
+		mknod /dev/mtd/0ro c 90 1
+		mknod /dev/mtd/1ro c 90 3
+		mknod /dev/mtd/2ro c 90 5
+		mknod /dev/mtd/3ro c 90 7
+		mknod /dev/mtd/4ro c 90 9
+		mknod /dev/mtd/5ro c 90 11
+
+		mknod /dev/tts/0 c 4 64
+		mknod /dev/tts/1 c 4 65
 	fi
+	# this is fragile because those are dynamic minor numbers
+	# and thus dependent on module load order :-(
+	mknod /dev/dbox/aviaEXT c 10 57
+	mknod /dev/dbox/saa0 c 10 58
+	mknod /dev/dbox/lcd0 c 10 59
+	mknod /dev/dbox/avs0 c 10 60
+	mknod /dev/lirc c 10 61
+	mknod /dev/dbox/fp0 c 10 62
+	mknod /dev/dbox/event0 c 10 63
+
+	ln -sf /dev/fb0 /dev/fb/0
+	ln -sf /dev/tty0 /dev/vc/0
+		
 	mount /dev/pts
 fi
 
@@ -128,8 +154,13 @@ else
 	fi
 fi
 
-# Mount file systems in /etc/fstab
-mount -a
+if [ $KMINOR -ge 6 ]; then
+	# everything else is already mounted
+	mount /var
+else
+	# Mount file systems in /etc/fstab
+	mount -a
+fi
 
 # Turn on swap
 ifmarkerfile({swap},{swapon -a})
@@ -144,12 +175,7 @@ runprogifexists({/var/tuxbox/config/target1.hdparm},{hdparm},{"`cat /var/tuxbox/
 hostname -F /etc/hostname
 ifup -a
 
-if test -x /sys ; then
-	mount /sys
-fi
-
-ifdef({insmod},{loadmodule(event)},{touch /etc/modules.conf
-depmod -ae}) dnl
+ifdef({insmod},{loadmodule(event)},{type -p depmod > /dev/null && touch /etc/modules.conf && depmod -ae}) dnl
 
 loadmodule(tuxbox)
 
@@ -179,6 +205,7 @@ if [ $KMINOR -ge 6 ]; then
 	dnl FIXME: using loadmodule makes no sense here
 	dnl since modprobe is used to pull in the dependencies
 
+	# I2C core
 	loadmodule(dbox2_i2c)
 	loadmodule(dbox2_napi)
 
@@ -192,7 +219,6 @@ if [ $KMINOR -ge 6 ]; then
 	loadmodule(avs)
 	loadmodule(lcd)
 	loadmodule(saa7126)
-	loadmodule(dvb2eth)
 	loadmodule(aviaEXT)
 else
 	# kernel 2.4
