@@ -5,6 +5,7 @@
 
 fun: gnuboy scummvm sdldoom
 
+# does not build with kernel 2.6 headers yet
 $(DEPDIR)/gnuboy: bootstrap @DEPENDS_gnuboy@
 	@PREPARE_gnuboy@
 	cd @DIR_gnuboy@ && \

@@ -38,6 +38,7 @@ $(DEPDIR)/dvbtext: bootstrap @DEPENDS_dvbtext@ Patches/dvbtext.diff
 	@CLEANUP_dvbtext@
 	touch $@
 
+# dvbtune build is broken since ages...
 $(DEPDIR)/dvbtune: bootstrap @DEPENDS_dvbtune@
 	@PREPARE_dvbtune@
 	cd @DIR_dvbtune@ && \
