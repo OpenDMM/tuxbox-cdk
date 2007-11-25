@@ -111,8 +111,8 @@ $(targetprefix)/sbin/hotplug: $(appsdir)/tuxbox/tools/config.status
 	$(MAKE) -C $(appsdir)/tuxbox/tools/hotplug install
 
 if TARGETRULESET_FLASH
-flash-hotplug: $(targetprefix)/sbin/hotplug
-	$(INSTALL) $(targetprefix)/sbin/hotplug $(flashprefix)/root/sbin
+flash-hotplug:  $(appsdir)/tuxbox/tools/hotplug/config.status
+	$(MAKE) -C $(appsdir)/tuxbox/tools/hotplug all install prefix="$(flashprefix)/root"
 	@FLASHROOTDIR_MODIFIED@
 endif
 endif
