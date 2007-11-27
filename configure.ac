@@ -72,7 +72,7 @@ if test -z "$CFLAGS" ; then
 fi
 
 if test -z "$TARGET_CFLAGS" -o -z "$TARGET_CXXFLAGS"; then
-	TARGET_CFLAGS="-mcpu=$CPU_MODEL -pipe"
+	TARGET_CFLAGS="-pipe"
 	if test "$enable_flashrules" != "yes"; then
 		TARGET_CFLAGS="$TARGET_CFLAGS -O2 -g3 -gdwarf-2"
 		TARGET_LDFLAGS=""
