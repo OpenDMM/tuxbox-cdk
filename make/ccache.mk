@@ -36,7 +36,7 @@ $(DEPDIR)/ccache: @DEPENDS_ccache@ directories
 			ln -s $(CCACHE_TUXBOX_BIN) $(CCACHE_BINDIR)/powerpc-tuxbox-linux-gnu-gcc ;\
 			ln -s $(CCACHE_TUXBOX_BIN) $(CCACHE_BINDIR)/powerpc-tuxbox-linux-gnu-g++ ;\
 			ln -s $(CCACHE_TUXBOX_BIN) $(CCACHE_BINDIR)/powerpc-tuxbox-linux-gnu-cpp ;\
-			ln -s $(CCACHE_TUXBOX_BIN) $(CCACHE_BINDIR)/powerpc-tuxbox-linux-gnu-gcc-.3.4.4 ;\
+			ln -s $(CCACHE_TUXBOX_BIN) $(CCACHE_BINDIR)/powerpc-tuxbox-linux-gnu-gcc-.$(VERSION_gcc) ;\
 		$(CCACHE_TUXBOX_BIN) -M $(maxcachesize) ;\
 		$(CCACHE_TUXBOX_BIN) -F $(maxcachefiles) ;\
 		$(CCACHE_TUXBOX_BIN) -s ;\
@@ -52,7 +52,7 @@ CCACHE_LINKS = 	ln -sf $(ccachedir)/ccache $(CCACHE_BINDIR)/gcc;\
 				ln -sf $(ccachedir)/ccache $(CCACHE_BINDIR)/powerpc-tuxbox-linux-gnu-gcc;\
 				ln -sf $(ccachedir)/ccache $(CCACHE_BINDIR)/powerpc-tuxbox-linux-gnu-g++;\
 				ln -sf $(ccachedir)/ccache $(CCACHE_BINDIR)/powerpc-tuxbox-linux-gnu-cpp;\
-				ln -sf $(ccachedir)/ccache $(CCACHE_BINDIR)/powerpc-tuxbox-linux-gnu-gcc-.3.4.4 
+				ln -sf $(ccachedir)/ccache $(CCACHE_BINDIR)/powerpc-tuxbox-linux-gnu-gcc-.$(VERSION_gcc) 
 
 # ccache test will show you ccache statistics
 CCACHE_TEST =	$(ccachedir)/ccache -s 
@@ -63,3 +63,4 @@ CCACHE_SETUP =	$(ccachedir)/ccache -M $(maxcachesize);\
 
 # cleans the markerfiles in .deps for make ccache
 CCACHE_DEPSCLEANUP = rm -f .deps/ccache
+
