@@ -118,15 +118,7 @@ if [ $KMINOR -ge 6 ]; then
 		mknod /dev/tts/0 c 4 64
 		mknod /dev/tts/1 c 4 65
 	fi
-	# this is fragile because those are dynamic minor numbers
-	# and thus dependent on module load order :-(
-	mknod /dev/dbox/aviaEXT c 10 57
-	mknod /dev/dbox/saa0 c 10 58
-	mknod /dev/dbox/lcd0 c 10 59
-	mknod /dev/dbox/avs0 c 10 60
-	mknod /dev/lirc c 10 61
-	mknod /dev/dbox/fp0 c 10 62
-	mknod /dev/dbox/event0 c 10 63
+	# devices with dynamic minor numbers are created by /sbin/hotplug
 
 	ln -sf /dev/fb0 /dev/fb/0
 	ln -sf /dev/tty0 /dev/vc/0
@@ -207,18 +199,22 @@ if [ $KMINOR -ge 6 ]; then
 
 	# I2C core
 	loadmodule(dbox2_i2c)
-	loadmodule(dbox2_napi)
+	# load order is somehow important, if dbox2_napi (which pulls in
+	# e.g. the demodulator drivers) is loaded first, at least tda80{xx,44h}
+	# hang while initalizing the i2c-bus :-(
+	loadmodule(saa7126)
+	loadmodule(avs)
+	loadmodule(lcd)
 
 	loadmodule(dbox2_fp_input)
+
+	loadmodule(dbox2_napi)
 
 	loadmodule(avia_gt_fb)
 	loadmodule(avia_gt_lirc)
 	loadmodule(avia_gt_oss)
 	loadmodule(avia_gt_v4l2)
 
-	loadmodule(avs)
-	loadmodule(lcd)
-	loadmodule(saa7126)
 	loadmodule(aviaEXT)
 else
 	# kernel 2.4
@@ -229,11 +225,13 @@ else
 	# Frontprocessor
 	loadmodule(dbox2_fp)
 	if [ -e /var/etc/.oldrc ]; then
-    	    loadmodule(dbox2_fp_input, disable_new_rc=1)
+    		loadmodule(dbox2_fp_input, disable_new_rc=1)
 	elif [ -e /var/etc/.newrc ]; then
-		loadmodule(dbox2_fp_input.o, disable_old_rc=1)
+		loadmodule(dbox2_fp_input, disable_old_rc=1)
+	elif [ -e /var/etc/.philips_rc_patch ]; then
+		loadmodule(dbox2_fp_input, philips_rc_patch=1)
 	else
-    	loadmodule(dbox2_fp_input)
+			loadmodule(dbox2_fp_input)
 	fi
 
 	# Misc IO
