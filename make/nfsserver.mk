@@ -13,7 +13,9 @@ $(DEPDIR)/nfs-utils: bootstrap @DEPENDS_nfs_utils@
 		CC_FOR_BUILD=$(target)-gcc \
 		--disable-gss \
 		--disable-nfsv4 \
-		--prefix= && \
+		--prefix= \
+		--without-tcp-wrappers \
+		--disable-uuid && \
 		$(MAKE) && \
 		$(MAKE) install DESTDIR=$(targetprefix)
 	rm -rf @DIR_nfs_utils@
@@ -35,7 +37,9 @@ $(flashprefix)/root/sbin/rpc.nfsd: bootstrap @DEPENDS_nfs_utils@ | $(flashprefix
 		CC_FOR_BUILD=$(target)-gcc \
 		--disable-gss \
 		--disable-nfsv4 \
-		--prefix= && \
+		--prefix= \
+		--without-tcp-wrappers \
+		--disable-uuid && \
 		$(MAKE) && \
 		$(MAKE) install DESTDIR=$(flashprefix)/root SUBDIRS= && \
 		$(MAKE) -C utils/exportfs DESTDIR=$(flashprefix)/root install && \
