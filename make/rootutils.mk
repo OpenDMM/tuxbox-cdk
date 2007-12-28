@@ -64,7 +64,7 @@ $(DEPDIR)/procps: bootstrap libncurses @DEPENDS_procps@
 	@PREPARE_procps@
 	cd @DIR_procps@ && \
 		$(BUILDENV) \
-		$(MAKE) top ps && \
+		$(MAKE) CFLAGS="$(CFLAGS) -I$(targetprefix)/include/ncurses -D__GNU_LIBRARY__" top ps/ps && \
 		@INSTALL_procps@
 	@CLEANUP_procps@
 	touch $@
