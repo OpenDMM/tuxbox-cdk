@@ -47,3 +47,15 @@ endif
 	rm -rf @DIR_squashfs@
 
 endif
+
+
+# if we cannot use the host's depmod for whatever reason, use this one.
+$(DEPDIR)/host_module_init_tools: $(hostprefix)/bin/depmod
+$(hostprefix)/bin/depmod:
+	@PREPARE_module_init_tools@
+	cd @DIR_module_init_tools@ && \
+		./configure \
+			--prefix= && \
+		$(MAKE)
+	$(INSTALL) -m755 @DIR_module_init_tools@/depmod $@
+	@CLEANUP_module_init_tools@
