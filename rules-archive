@@ -20,7 +20,7 @@ gcc-core-3.4.4.tar.bz2;ftp://$(gnuserver)/gcc/gcc-3.4.4
 gcc-g++-3.4.4.tar.bz2;ftp://$(gnuserver)/gcc/gcc-3.4.4
 glibc-2.3.2.tar.bz2;ftp://$(gnuserver)/glibc
 glibc-2.3.2-r0.diff.bz2;http://sources.dreamboxupdate.com/download/patches
-nptl-0.60.tar.bz2;http://www.arte.unipi.it/Public/Linux
+nptl-0.60.tar.bz2;ftp://www.arte.unipi.it/pub/Linux
 uClibc-0.9.11.tar.bz2
 watchdog_5.2.orig.tar.gz;ftp://ftp.debian.org/debian/pool/main/w/watchdog
 
