@@ -2357,6 +2357,20 @@ $(flashprefix)/.part_plugin_dreamdata: $(flashprefix)/.flash .mrouted .plugins
 	$(INSTALL) $(targetprefix)/bin/mrouted $(flashprefix)/root/bin
 	@touch $@
 
+flash-plugin_mosaic: $(flashprefix)/.part_plugin_mosaic
+$(flashprefix)/.part_plugin_mosaic: $(flashprefix)/.flash .enigma .plugins
+	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/mosaic.so $(flashprefix)/root/lib/tuxbox/plugins/
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/mosaic.cfg $(flashprefix)/root/lib/tuxbox/plugins/
+	@touch $@
+
+flash-plugin_pip: $(flashprefix)/.part_plugin_pip
+$(flashprefix)/.part_plugin_pip: $(flashprefix)/.flash .enigma .plugins
+	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/pip.so $(flashprefix)/root/lib/tuxbox/plugins/
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/pip.cfg $(flashprefix)/root/lib/tuxbox/plugins/
+	@touch $@
+
 flash-plugin_rss: $(flashprefix)/.part_plugin_rss
 $(flashprefix)/.part_plugin_rss: $(flashprefix)/.flash .plugins flash-enigma
 	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
