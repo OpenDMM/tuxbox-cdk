@@ -63,7 +63,11 @@ endif
 
 $(DEPDIR)/linuxdir: $(KERNEL_DEPENDS) directories
 	$(KERNEL_PREPARE)
+if KERNEL26
 	cp Patches/linux-$(KERNELVERSION).config $(KERNEL_DIR)/.config
+else
+	cp Patches/linux-2.4.35.5-dbox2.config $(KERNEL_DIR)/.config
+endif
 	$(MAKE) -C $(KERNEL_DIR) oldconfig \
 		ARCH=ppc
 if KERNEL26
