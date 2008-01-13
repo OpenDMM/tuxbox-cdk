@@ -172,12 +172,7 @@ ifdef({insmod},{loadmodule(event)},{type -p depmod > /dev/null && touch /etc/mod
 loadmodule(tuxbox)
 
 # Get info about the current box
-VENDOR=`/bin/tuxinfo -V`
-VENDOR_ID=`/bin/tuxinfo -v`
-MODEL=`/bin/tuxinfo -M`
-MODEL_ID=`/bin/tuxinfo -m`
-SUBMODEL=`/bin/tuxinfo -S`
-SUBMODEL_ID=`/bin/tuxinfo -s`
+eval `/bin/tuxinfo -e`
 
 echo "Detected STB:"
 echo "	Vendor: $VENDOR"
