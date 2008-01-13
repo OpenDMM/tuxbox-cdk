@@ -2,10 +2,11 @@ $(flashprefix)/root-cramfs: bootstrap $(hostprefix)/bin/mkimage
 	rm -rf $@
 if KERNEL26
 	m4 --define=rootfs=cramfs --define=rootsize=$(ROOT_PARTITION_SIZE) Patches/dbox2-flash.c-26.m4 > linux/drivers/mtd/maps/dbox2-flash.c
+	sed -e 's/.*CONFIG_CRAMFS[= ].*$$/CONFIG_CRAMFS=y/' $(IDE_SED_CONF) $(EXT3_SED_CONF) $(XFS_SED_CONF) $(NFSSERVER_SED_CONF) Patches/linux-$(KERNELVERSION).config-flash > $(KERNEL_DIR)/.config
 else
 	m4 --define=rootfs=cramfs --define=rootsize=$(ROOT_PARTITION_SIZE) Patches/dbox2-flash.c.m4 > linux/drivers/mtd/maps/dbox2-flash.c
+	sed -e 's/.*CONFIG_CRAMFS[= ].*$$/CONFIG_CRAMFS=y/' $(IDE_SED_CONF) $(EXT3_SED_CONF) $(XFS_SED_CONF) $(NFSSERVER_SED_CONF) Patches/linux-2.4.35.5-dbox2.config-flash > $(KERNEL_DIR)/.config
 endif
-	sed -e 's/.*CONFIG_CRAMFS[= ].*$$/CONFIG_CRAMFS=y/' $(IDE_SED_CONF) $(EXT3_SED_CONF) $(XFS_SED_CONF) $(NFSSERVER_SED_CONF) Patches/linux-$(KERNELVERSION).config-flash > $(KERNEL_DIR)/.config
 	$(MAKE) $(KERNEL_BUILD_FILENAME) targetprefix=$@
 if KERNEL26
 	$(INSTALL) -m644 $(KERNEL_DIR)/arch/ppc/boot/images/uImage $@/vmlinuz
