@@ -77,7 +77,7 @@ else
 if KERNEL26
 IDE_SED_CONF=$(foreach param,CONFIG_IDE CONFIG_BLK_DEV_IDE CONFIG_BLK_DEV_IDEDISK,-e s"/^.*$(param)[= ].*/\# $(param) is not set/")
 else
-IDE_SET_CONF=-e ""
+IDE_SED_CONF=-e ""
 endif
 endif
 
@@ -102,7 +102,12 @@ endif
 endif
 
 if ENABLE_NFSSERVER
+if KERNEL26
+NFSSERVER_SED_CONF=$(foreach param,CONFIG_NFSD CONFIG_EXPORTFS,-e s"/^.*$(param)[= ].*/$(param)=m/")
+NFSSERVER_SED_CONF+=$(foreach param,CONFIG_NFSD_V3 CONFIG_NFSD_TCP,-e s"/^.*$(param)[= ].*/$(param)=y/")
+else
 NFSSERVER_SED_CONF=$(foreach param,CONFIG_NFSD CONFIG_NFSD_V3 CONFIG_NFSD_TCP,-e s"/^.*$(param)[= ].*/$(param)=m/")
+endif
 else
 if KERNEL26
 NFSSERVER_SED_CONF=$(foreach param,CONFIG_NFSD CONFIG_NFSD_V3 CONFIG_NFSD_TCP,-e s"/^.*$(param)[= ].*/\# $(param) is not set/")
