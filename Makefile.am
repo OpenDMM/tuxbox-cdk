@@ -1829,7 +1829,7 @@ $(appsdir)/dvb/zapit/Makefile: .bootstrap .misc_libs
 # dvb/tools
 
 $(appsdir)/dvb/tools/Makefile: .bootstrap .misc_libs
-	cd $(appsdir)/dvb/tools && $(CONFIGURE)
+	cd $(appsdir)/dvb/tools && $(CONFIGURE) --with-boxtype=dreambox
 
 .stream: $(appsdir)/dvb/tools/Makefile .busybox
 	$(MAKE) -C $(appsdir)/dvb/tools/stream all install
