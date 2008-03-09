@@ -2660,8 +2660,8 @@ $(flashprefix)/.part_neutrino: $(flashprefix)/.flash .neutrino
 	$(INSTALL) -d $(flashprefix)/root/share/iso-codes
 	$(INSTALL) -d $(flashprefix)/root/share/tuxbox
 	$(INSTALL) -d $(flashprefix)/root/etc/init.d
-	$(INSTALL) -d $(flashprefix)/root/var/etc/init.d
-	$(INSTALL) -d $(flashprefix)/root/var/tuxbox/config/lirc
+	$(INSTALL) -d $(flashprefix)/root/var_init/etc/init.d
+	$(INSTALL) -d $(flashprefix)/root/var_init/tuxbox/config/lirc
 	$(INSTALL) $(targetprefix)/bin/controld $(targetprefix)/bin/neutrino \
 		$(targetprefix)/bin/nhttpd $(targetprefix)/bin/timerd \
 		$(flashprefix)/root/bin
@@ -2685,6 +2685,8 @@ $(flashprefix)/.part_neutrino: $(flashprefix)/.flash .neutrino
 	cp -pa $(targetprefix)/share/iso-codes/iso-639.tab $(flashprefix)/root/share/iso-codes
 	@ln -sf /var/etc/network $(targetprefix)/etc/network
 	ln -sf /var/etc/localtime $(flashprefix)/root/etc
+	rm -rf $(flashprefix)/root/var_init/run
+	ln -sf /tmp $(flashprefix)/root/var_init/run
 	@touch $@
 
 flash-lcars: $(flashprefix)/.part_lcars
