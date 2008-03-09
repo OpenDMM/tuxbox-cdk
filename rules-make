@@ -26,11 +26,13 @@ watchdog;5.2;watchdog-5.2.orig;watchdog_5.2.orig.tar.gz:watchdog.diff;extract:wa
 #
 busybox;1.01;busybox-1.01;busybox-1.01.tar.bz2;extract:busybox-1.01.tar.bz2;patch:busybox.diff
 busybox12;1.2.1;busybox-1.2.1;busybox-1.2.1.tar.bz2;extract:busybox-1.2.1.tar.bz2;patch:busybox12.diff
+busybox17;1.7.2;busybox-1.7.2;busybox-1.7.2.tar.bz2;extract:busybox-1.7.2.tar.bz2;patch:busybox17.diff
 automount;4.1.4;autofs-4.1.4;autofs-4.1.4.tar.bz2;extract:autofs-4.1.4.tar.bz2;patch:autofs.diff
 ftpd;1.1.0;vsftpd-1.1.0;vsftpd-1.1.0.tar.gz:ftpd.diff;extract:vsftpd-1.1.0.tar.gz;patch:ftpd.diff
 modutils;2.4.21;modutils-2.4.21;modutils-2.4.21.tar.bz2;extract:modutils-2.4.21.tar.bz2
 portmap;5;portmap-5;portmap-5.tar.bz2:portmap_5-8.diff.gz:portmap.diff;extract:portmap-5.tar.bz2;patch:portmap_5-8.diff.gz;patch:portmap.diff
 procps;010114;procps-010114;procps-010114.tar.gz:procps.diff;extract:procps-010114.tar.gz;patch:procps.diff
+procps3;3.2.7;procps-3.2.7;procps-3.2.7.tar.gz:procps3.diff;extract:procps-3.2.7.tar.gz;patch:procps3.diff
 mrouted;3.9-beta3;mrouted-3.9-beta3.orig;mrouted_3.9-beta3.orig.tar.gz:mrouted_3.9-beta3-3.diff;extract:mrouted_3.9-beta3.orig.tar.gz;patch:mrouted_3.9-beta3-3.diff
 
 squashfs;2.2-r2;mksquashfs;squashfs2.2-r2.tar.gz:mksquashfs_lzma.diff:lzma442.tar.bz2:lzma_zlib-stream.diff;dircreate:mksquashfs;extract:lzma442.tar.bz2;patch:lzma_zlib-stream.diff;extract:squashfs2.2-r2.tar.gz;patch:mksquashfs_lzma.diff

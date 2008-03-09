@@ -244,6 +244,18 @@ root: \
 root_optional: \
 	.portmap .mrouted
 
+if BUSYBOX_17
+.busybox: .bootstrap @DEPENDS_busybox17@
+	@PREPARE_busybox17@
+	cat Patches/busybox17.config > @DIR_busybox17@/.config
+	cd @DIR_busybox17@ && \
+		$(MAKE) all install \
+			CROSS_COMPILE=$(target)- \
+			CFLAGS_EXTRA="-Os -msoft-float" \
+			ARCH=ppc PREFIX=$(targetprefix)
+	@CLEANUP_busybox17@
+	touch $@
+else
 if BUSYBOX_12
 .busybox: .bootstrap @DEPENDS_busybox12@
 	@PREPARE_busybox12@
@@ -266,6 +278,7 @@ else
 		@INSTALL_busybox@
 	@CLEANUP_busybox@
 	touch $@
+endif
 endif
 
 .root:
@@ -316,6 +329,15 @@ endif
 		$(MAKE) top ps && \
 		@INSTALL_procps@
 	@CLEANUP_procps@
+	touch $@
+
+.procps3: .bootstrap .libncurses @DEPENDS_procps3@
+	@PREPARE_procps3@
+	cd @DIR_procps3@ && \
+		$(BUILDENV) \
+		$(MAKE) CFLAGS="$(CFLAGS) -I$(targetprefix)/include/ncurses -D__GNU_LIBRARY__" top ps/ps && \
+		@INSTALL_procps3@
+	@CLEANUP_procps3@
 	touch $@
 
 .watchdog: .bootstrap @DEPENDS_watchdog@
@@ -1895,7 +1917,7 @@ $(appsdir)/dvb/config/config.status:
 	$(MAKE) -C $(appsdir)/dvb/config all install
 	touch $@
 
-$(appsdir)/tuxbox/neutrino/Makefile: .bootstrap .libboost .libcurl .libfreetype .libtuxbox .misc_libs .libsigc .plugins .tuxbox_libs .zapit .tuxbox_tools .libid3tag .libmad .libvorbisidec .misc_tools .config
+$(appsdir)/tuxbox/neutrino/Makefile: .bootstrap .libboost .libcurl .libfreetype .libtuxbox .misc_libs .libsigc .plugins .tuxbox_libs .zapit .tuxbox_tools_all .libid3tag .libmad .libvorbisidec .misc_tools .config
 	cd $(appsdir)/tuxbox/neutrino && $(CONFIGURE)
 
 .neutrino: $(appsdir)/tuxbox/neutrino/Makefile
@@ -1919,6 +1941,10 @@ $(appsdir)/tuxbox/tools/Makefile: .bootstrap .libtuxbox
 
 .tuxbox_tools: $(appsdir)/tuxbox/tools/Makefile
 	$(MAKE) -C $(appsdir)/tuxbox/tools/misc all install
+	touch $@
+
+.tuxbox_tools_all: $(appsdir)/tuxbox/tools/Makefile
+	$(MAKE) -C $(appsdir)/tuxbox/tools all install
 	touch $@
 
 #######################
@@ -2140,7 +2166,7 @@ $(flashprefix)/.part_dreamfiles: $(flashprefix)/.flash .dreamfiles
 # share
 	@cp -R $(targetprefix)/share/udhcpc $(flashprefix)/root/share
 if BOXTYPE_DM500
-	@if [ -e $(flashprefix)/.part_enigma ] ; then \
+	@if [ -e $(flashprefix)/.part_enigma -o -e $(flashprefix)/.part_neutrino ] ; then \
 		for i in cables.xml satellites.xml terrestrial.xml; do \
 			cp -R $(targetprefix)/share/tuxbox/$$i $(flashprefix)/root/share/tuxbox; \
 			ln -sf tuxbox/$$i $(flashprefix)/root/share; \
@@ -2643,9 +2669,10 @@ $(flashprefix)/.part_neutrino: $(flashprefix)/.flash .neutrino
 		$(flashprefix)/root/share/tuxbox
 #	$(INSTALL) $(targetprefix)/bin/camd2 $(flashprefix)/root/bin
 	$(INSTALL) $(targetprefix)/bin/sectionsd $(flashprefix)/root/bin
+	$(INSTALL) $(targetprefix)/bin/sectionsdcontrol $(flashprefix)/root/bin
 	$(INSTALL) $(targetprefix)/bin/pzapit $(flashprefix)/root/bin
-#	$(INSTALL) $(targetprefix)/bin/satfind $(flashprefix)/root/bin
 	$(INSTALL) $(targetprefix)/bin/zapit $(flashprefix)/root/bin
+	$(INSTALL) $(targetprefix)/bin/satfind $(flashprefix)/root/bin
 	cp -pa $(appsdir)/tuxbox/enigma/data/fonts/bluebold.ttf $(flashprefix)/root/share/fonts
 	cp -pa $(appsdir)/tuxbox/enigma/data/fonts/bluehigh.ttf $(flashprefix)/root/share/fonts
 	cp -pa $(appsdir)/tuxbox/enigma/data/fonts/md_khmurabi_10.ttf $(flashprefix)/root/share/fonts
@@ -2682,8 +2709,9 @@ $(flashprefix)/.lib: $(flashprefix)/.flash $(shell ls -r -1 $(flashprefix)/.part
 	@find $(flashprefix)/root/lib -maxdepth 1 -type f -o -type l | xargs rm -f
 	@cp -a $(targetprefix)/lib/libnss_dns-?.*.so $(flashprefix)/root/lib
 	@cp -a $(targetprefix)/lib/libnss_files-?.*.so $(flashprefix)/root/lib
-	@if [ -x ./customize-flash-pre ] ; then \
-		./customize-flash-pre ; \
+	@if [ -e ./customize-flash-pre ] ; then \
+		chmod +x ./customize-flash-pre; \
+		./customize-flash-pre $(flashprefix) ; \
 	fi
 	@$(PYTHON) $(flashprefix)/mklibs.py --target $(target) --ldlib ld.so.1 --libc-extras-dir $(targetprefix)/lib/libc_pic \
 		-d $(flashprefix)/root/lib \
@@ -2695,8 +2723,9 @@ $(flashprefix)/.lib: $(flashprefix)/.flash $(shell ls -r -1 $(flashprefix)/.part
 		`find $(flashprefix)/root/lib/autofs/ -name "*.so" -type f` \
 		`find $(flashprefix)/root/sbin/ -path "*sbin/?*"`
 	cd $(flashprefix)/root/lib && ln -sf libgcc_s_nof.so.1 libgcc_s.so.1
-	@if [ -x ./customize-flash ] ; then \
-		./customize-flash ; \
+	@if [ -e ./customize-flash ] ; then \
+		chmod +x ./customize-flash; \
+		./customize-flash $(flashprefix); \
 	fi
 	@$(target)-strip --remove-section=.comment --remove-section=.note --strip-unneeded \
 		`find $(flashprefix)/root/ -path "*bin/?*"` 2>/dev/null || /bin/true
@@ -2774,7 +2803,7 @@ distclean-local:
 	-rm Makefile-archive
 	-rm .bootstrap
 	-rm .directories .linuxdir .binutils .glibc .gcc .rpcgen
-	-rm .root .busybox .ftpd .modutils .procps .watchdog .mrouted
+	-rm .root .busybox .ftpd .modutils .procps .procps3 .watchdog .mrouted
 	-rm .libboost .libcommoncplusplus .libcrypto .libcurl .libdb2 .libdvbpsi .libevent .libffi .libfreetype
 	-rm .libncurses .libfribidi .libjpeg .libmad .libid3tag .libnet .libnids .libpcap .libpng .libpopt
 	-rm .libreadline .libsdl .libsigc .libungif .libxml2 .libxmlwrapp .libz .libvorbisidec .libgmp
@@ -2787,7 +2816,7 @@ distclean-local:
 	-rm .console_data .console_tools .dropbear .dsniff .fbset .lirc 
 	-rm .polipo .pump .ssh .tcpdump .tor .xrc .thttpd
 	-rm .dvbdate .dvbstream .dvbtext .dvbtune .vls
-	-rm .misc_libs .misc_tools .plugins .libtuxbox .tuxbox_libs .tuxbox_tools
+	-rm .misc_libs .misc_tools .plugins .libtuxbox .tuxbox_libs .tuxbox_tools .tuxbox_tools_all
 	-rm -rf $(targetprefix)
 	-rm -rf $(hostprefix)
 if TARGETRULESET_FLASH

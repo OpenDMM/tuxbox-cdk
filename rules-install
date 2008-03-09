@@ -24,12 +24,14 @@ watchdog;make:install:DESTDIR=TARGET
 #
 busybox;make:install:PREFIX=TARGET
 busybox12;make:install:PREFIX=TARGET
+busybox17;make:install:PREFIX=TARGET
 ftpd;install:-m755:vsftpd:TARGET/sbin/in.ftpd;install:-m644:vsftpd-dbox2.conf:TARGET/etc/vsftpd.conf;install:-d:TARGET/share/empty
 inetd;install:-m755:inetd:TARGET/sbin
 modutils;make:install-bin:sbindir=TARGET/sbin
 netkit_telnet;install:-m755:telnet/telnet:TARGET/bin/telnet;install:-m755:telnetd/telnetd:TARGET/sbin/in.telnetd
 portmap;make:install:BASEDIR=TARGET
 procps;remove:TARGET/bin/ps;install:-m755:top:ps/ps:TARGET/bin
+procps3;remove:TARGET/bin/ps;install:-m755:top:ps/ps:TARGET/bin;install:-m755:proc/libproc-3.2.7.so:TARGET/lib
 
 #
 # contrib libs
