@@ -68,6 +68,7 @@ libsdl_sound;make:install:DESTDIR=TARGET
 libsdl_net;make:install:DESTDIR=TARGET
 libsigc;rewrite-pkgconfig:sigc++-1.2.pc;make:install:DESTDIR=TARGET
 libungif;make:install:DESTDIR=TARGET
+libupnp;make:install:DESTDIR=TARGET
 libvorbisidec;rewrite-pkgconfig:vorbisidec.pc;make:install:DESTDIR=TARGET;install:-m644:vorbisidec.pc:TARGET/lib/pkgconfig
 libxmlparse;make:install
 libxmlwrapp;make:install;link:TARGET/bin/xmlwrapp-config:HOST/bin/xmlwrapp-config
@@ -88,6 +89,7 @@ pump;make:install:DEST=TARGET
 ssh;make:install:DESTDIR=TARGET
 tcpdump;make:install
 tor;make:install:DESTDIR=TARGET
+ushare;make:install:DESTDIR=TARGET
 xrc;make:install
 thttpd;make:install
 e2fsprogs;make:install

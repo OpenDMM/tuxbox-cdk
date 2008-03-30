@@ -41,6 +41,7 @@ linux-2.6.9
 .libsigc
 .libtuxbox
 .libungif
+.libupnp
 .libvorbisidec
 .libz
 .linuxdir
@@ -64,6 +65,7 @@ linux-2.6.9
 .tor
 .tuxbox_libs
 .tuxbox_tools
+.ushare
 .utillinux
 .watchdog
 .wxbase

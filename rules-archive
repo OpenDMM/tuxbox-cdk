@@ -56,6 +56,7 @@ ncurses-5.3.tar.gz;ftp://$(gnuserver)/ncurses
 jpegsrc.v6b.tar.gz;http://www.ijg.org/files
 libpng-1.2.8.tar.bz2;http://mesh.dl.sourceforge.net/sourceforge/libpng
 popt-1.6.4.tar.gz;ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.0.x
+libupnp-1.6.5.tar.bz2;http://easynews.dl.sourceforge.net/sourceforge/pupnp
 libxml2-2.4.22.tar.bz2;ftp://ftp.gnome.org/pub/GNOME/sources/libxml2/2.4
 zlib-1.2.3.tar.bz2;http://www.zlib.net
 libffi-1.20.tar.gz;ftp://sourceware.cygnus.com/pub/libffi
@@ -95,6 +96,7 @@ pump-0.8.11.tar.bz2;
 openssh-3.5p1.tar.gz;ftp://ftp.de.openbsd.org/pub/unix/OpenBSD/OpenSSH/portable;ftp://ftp.freenet.de/pub/ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
 tcpdump-3.9.3.tar.gz;http://www.tcpdump.org/release
 tor-0.1.2.16.tar.gz;http://tor.eff.org/dist
+ushare-1.1a.tar.bz2;http://ushare.geexbox.org/releases
 xrc-0.6.3.tar.gz;http://switch.dl.sourceforge.net/sourceforge/lirc
 thttpd-2.23beta1.tar.gz;http://www.acme.com/software/thttpd
 lsof_4.64_src.tar.bz2;

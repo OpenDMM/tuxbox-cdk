@@ -957,6 +957,20 @@ endif
 	@CLEANUP_libungif@
 	touch $@
 
+.libupnp: .bootstrap @DEPENDS_libupnp@
+	@PREPARE_libupnp@
+	cd @DIR_libupnp@ && \
+		$(BUILDENV) \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--prefix= \
+			--without-documentation && \
+		$(MAKE) && \
+		@INSTALL_libupnp@
+	@CLEANUP_libupnp@
+	touch $@
+
 .libxml2: .bootstrap @DEPENDS_libxml2@
 	@PREPARE_libxml2@
 	cd @DIR_libxml2@ && \
@@ -1320,6 +1334,23 @@ contrib_apps_optional: .dsniff .pump .thttpd
 		$(MAKE) all && \
 		@INSTALL_thttpd@
 	@CLEANUP_thttpd@
+	touch $@
+
+.ushare: .bootstrap .libupnp @DEPENDS_ushare@
+	@PREPARE_ushare@
+	cd @DIR_ushare@ && \
+		$(BUILDENV) \
+		./configure \
+			--prefix= \
+			--disable-dlna \
+			--disable-nls \
+			--disable-strip \
+			--disable-optimize \
+			--cross-compile && \
+		$(MAKE) && \
+		@INSTALL_ushare@
+		mv $(targetprefix)/etc/ushare.conf $(targetprefix)/etc/ushare.conf.orig
+	@CLEANUP_ushare@
 	touch $@
 
 .xrc: .bootstrap .lirc @DEPENDS_xrc@
@@ -2274,6 +2305,22 @@ endif
 
 	@touch $@
 
+flash-ushare: $(flashprefix)/.part_ushare
+$(flashprefix)/.part_ushare: $(flashprefix)/.flash .ushare
+	$(INSTALL) $(targetprefix)/bin/ushare $(flashprefix)/root/bin
+	$(INSTALL) -d $(flashprefix)/root/etc
+	@ln -sf /var/etc/ushare.conf $(flashprefix)/root/etc
+	$(INSTALL) -d $(flashprefix)/root/var_init/etc
+	$(INSTALL) $(targetprefix)/etc/ushare.conf.orig $(flashprefix)/root/var_init/etc/ushare.conf
+	@sed -i "{s#USHARE_NAME=#USHARE_NAME=Dreambox#};{s#USHARE_DIR=#USHARE_DIR=/hdd,/var/mnt#}" \
+		$(flashprefix)/root/var_init/etc/ushare.conf
+	@if [ ! -e $(flashprefix)/root/var_init/etc/init ]; then \
+		echo "#!/bin/sh" >> $(flashprefix)/root/var_init/etc/init; fi
+	@echo "#ushare - delayed start, wait until network is up" >> $(flashprefix)/root/var_init/etc/init
+	@echo "sleep 30 && ushare -Do &" >> $(flashprefix)/root/var_init/etc/init
+	@chmod 755 $(flashprefix)/root/var_init/etc/init
+	@touch $@
+
 flash-amule: $(flashprefix)/.part_amule
 $(flashprefix)/.part_amule: $(flashprefix)/.flash .amule
 	@rm -rf $(flashprefix)/aMule $(flashprefix)/aMule.tar
@@ -2808,7 +2855,7 @@ distclean-local:
 	-rm .root .busybox .ftpd .modutils .procps .procps3 .watchdog .mrouted
 	-rm .libboost .libcommoncplusplus .libcrypto .libcurl .libdb2 .libdvbpsi .libevent .libffi .libfreetype
 	-rm .libncurses .libfribidi .libjpeg .libmad .libid3tag .libnet .libnids .libpcap .libpng .libpopt
-	-rm .libreadline .libsdl .libsigc .libungif .libxml2 .libxmlwrapp .libz .libvorbisidec .libgmp
+	-rm .libreadline .libsdl .libsigc .libungif .libupnp .libxml2 .libxmlwrapp .libz .libvorbisidec .libgmp
 	-rm .cabextract
 	-rm .gdb .gdb-remote .insight .ksymoops .ltrace .strace .nano
 	-rm .kaffeh .kaffe
@@ -2816,7 +2863,7 @@ distclean-local:
 	-rm .linuxkernel .reiserfsprogs .e2fsprogs .samba .dreamfiles .etherwake .utillinux
 	-rm .dvbsnoop .enigma .lcars .lcdmenu .neutrino .stream .zapit
 	-rm .console_data .console_tools .dropbear .dsniff .fbset .lirc 
-	-rm .polipo .pump .ssh .tcpdump .tor .xrc .thttpd
+	-rm .polipo .pump .ssh .tcpdump .tor .ushare .xrc .thttpd
 	-rm .dvbdate .dvbstream .dvbtext .dvbtune .vls
 	-rm .misc_libs .misc_tools .plugins .libtuxbox .tuxbox_libs .tuxbox_tools .tuxbox_tools_all
 	-rm -rf $(targetprefix)
