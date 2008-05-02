@@ -18,6 +18,9 @@ $(flashprefix)/root-enigma: $(appsdir)/tuxbox/enigma/config.status
 	$(INSTALL) $(appsdir)/tuxbox/neutrino/daemons/controld/scart.conf $@/var/tuxbox/config
 	cp $(appsdir)/tuxbox/neutrino/data/fonts/*.pcf.gz $@/share/fonts
 	cp $(appsdir)/tuxbox/neutrino/data/fonts/micron*.ttf $@/share/fonts
+	cp -pa $(appsdir)/tuxbox/enigma/po/locale.alias.image $@/share/locale/locale.alias
+	mkdir $@/lib
+	tar -C $@/lib -xjvf $(appsdir)/tuxbox/enigma/po/locale.image.tar.bz2
 	cp -rd $(targetprefix)/share/zoneinfo $@/share
 	cp -rd $(targetprefix)/share/locale/de/LC_MESSAGES/libc.mo $@/share/locale/de/LC_MESSAGES
 	cp -rd $(targetprefix)/share/locale/fr/LC_MESSAGES/libc.mo $@/share/locale/fr/LC_MESSAGES
