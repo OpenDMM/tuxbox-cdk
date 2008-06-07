@@ -3,9 +3,9 @@
 #   contrib apps
 #
 
-contrib_apps: bzip2 console_data console_tools fbset lirc lsof dropbear ssh tcpdump bonnie lufs kermit wget ncftp
+contrib_apps: bzip2 console_data console_tools fbset lirc lsof dropbear ssh tcpdump bonnie lufs kermit wget ncftp screen openvpn
 
-CONTRIB_DEPSCLEANUP = rm -f .deps/bzip2 .deps/console_data .deps/console_tools .deps/directfb_examples .deps/fbset .deps/lirc .deps/lsof .deps/ssh .deps/tcpdump .deps/bonnie .deps/vdr .deps/lufs .deps/dropbear .deps/kermit .deps/wget .deps/ncftp
+CONTRIB_DEPSCLEANUP = rm -f .deps/bzip2 .deps/console_data .deps/console_tools .deps/directfb_examples .deps/fbset .deps/lirc .deps/lsof .deps/ssh .deps/tcpdump .deps/bonnie .deps/vdr .deps/lufs .deps/dropbear .deps/kermit .deps/wget .deps/ncftp .deps/screen
 
 #bzip2
 $(DEPDIR)/bzip2: bootstrap @DEPENDS_bzip2@
@@ -364,9 +364,9 @@ $(DEPDIR)/wget: bootstrap @DEPENDS_wget@
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
-			--prefix=$(targetprefix) && \
+			--prefix=&& \
 		$(MAKE) all && \
-	$(MAKE) install $(targetprefix)/bin
+		@INSTALL_wget@
 	@CLEANUP_wget@
 	touch $@
 
@@ -391,7 +391,7 @@ $(DEPDIR)/ncftp: bootstrap @DEPENDS_ncftp@
 			--host=$(target) \
 			--prefix= && \
 		$(MAKE) clean all LD=$(target)-ld && \
-		$(MAKE) install DESTDIR=$(targetprefix)
+		@INSTALL_ncftp@
 	@CLEANUP_ncftp@
 	touch $@
 
@@ -407,4 +407,30 @@ $(flashprefix)/root/bin/ncftp: ncftp | $(flashprefix)/root
 	@FLASHROOTDIR_MODIFIED@
 
 endif
+
+#screen
+$(DEPDIR)/screen: bootstrap @DEPENDS_screen@
+	@PREPARE_screen@
+	cd @DIR_screen@ && \
+		$(BUILDENV) \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--prefix= && \
+		$(MAKE) all && \
+		@INSTALL_screen@
+	@CLEANUP_screen@
+	touch $@
+
+if TARGETRULESET_FLASH
+flash-screen: $(flashprefix)/root/bin/screen
+
+$(flashprefix)/root/bin/screen: screen | $(flashprefix)/root
+	rm -f $(flashprefix)/root/bin/screen
+	@$(INSTALL) -d $(flashprefix)/root/bin
+	$(INSTALL) $(targetprefix)/bin/screen $(flashprefix)/root/bin
+	@FLASHROOTDIR_MODIFIED@
+
+endif
+
 
