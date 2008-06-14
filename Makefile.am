@@ -1615,14 +1615,16 @@ fun: .gnuboy .scummvm .sdldoom
 		    --disable-debug \
 		    --disable-zlib \
 		    --disable-mt32emu \
-		    --with-sdl-prefix=$(hostprefix)/bin && \
+		    --disable-tremor \
+		    --prefix=$(targetprefix) \
+		    --with-sdl-prefix=$(hostprefix) && \
 		$(MAKE) \
 			AR="$(target)-ar cru" \
 			LD=$(target)-ld \
 			CC=$(target)-gcc \
 			CXX=$(target)-g++ \
 			CFLAGS="$(TARGET_CFLAGS)" \
-			LDFLAGS="$(TAGET_LDFLAGS)" && \
+			LDFLAGS="$(TARGET_LDFLAGS)" && \
 		@INSTALL_scummvm@
 	@CLEANUP_scummvm@
 	touch $@
@@ -2679,6 +2681,13 @@ $(flashprefix)/.part_plugin_dreamflash: $(flashprefix)/.flash .plugins
 	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
 	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/dreamflash.so $(flashprefix)/root/lib/tuxbox/plugins/
 	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/dreamflash.cfg $(flashprefix)/root/lib/tuxbox/plugins/
+	@touch $@
+
+flash-plugin_scummvm: $(flashprefix)/.part_plugin_scummvm
+$(flashprefix)/.part_plugin_scummvm: $(flashprefix)/.flash .plugins
+	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/scummvm.so $(flashprefix)/root/lib/tuxbox/plugins/
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/scummvm.cfg $(flashprefix)/root/lib/tuxbox/plugins/
 	@touch $@
 
 flash-less: $(flashprefix)/.part_less
