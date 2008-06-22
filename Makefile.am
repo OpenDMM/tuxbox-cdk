@@ -2793,6 +2793,9 @@ $(flashprefix)/.lib: $(flashprefix)/.flash $(shell ls -r -1 $(flashprefix)/.part
 	@if [ -e $(flashprefix)/.part_plugin_links ] ; then \
 		mv $(flashprefix)/root/lib/tuxbox/plugins/links.* $(flashprefix); \
 	fi
+	@if [ -e $(flashprefix)/.part_scummvm ] ; then \
+		mv $(flashprefix)/root/bin/scummvm $(flashprefix); \
+	fi
 	@if [ -e $(flashprefix)/.part_amule ]; then \
 		for i in amulecmd amuled amulestart amuleweb ed2k; do \
 			mv $(flashprefix)/root/bin/$$i $(flashprefix)/aMule; done && \
