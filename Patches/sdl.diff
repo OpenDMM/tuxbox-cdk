@@ -1,5 +1,5 @@
 --- orig/SDL-1.2.9/include/SDL_keysym.h	2004-01-04 17:49:07.000000000 +0100
-+++ SDL-1.2.9/include/SDL_keysym.h	2008-05-24 17:01:31.000000000 +0200
++++ SDL-1.2.9/include/SDL_keysym.h	2008-06-27 19:47:32.000000000 +0200
 @@ -313,4 +313,46 @@
  #define KMOD_ALT	(KMOD_LALT|KMOD_RALT)
  #define KMOD_META	(KMOD_LMETA|KMOD_RMETA)
@@ -48,7 +48,7 @@
 +
  #endif /* _SDL_keysym_h */
 --- orig/SDL-1.2.9/src/video/fbcon/SDL_fbevents.c	2005-01-04 20:04:14.000000000 +0100
-+++ SDL-1.2.9/src/video/fbcon/SDL_fbevents.c	2008-06-08 15:36:43.000000000 +0200
++++ SDL-1.2.9/src/video/fbcon/SDL_fbevents.c	2008-06-28 14:22:32.000000000 +0200
 @@ -69,6 +69,139 @@
  static Uint16 keymap_temp[128]; /* only used at startup */
  static SDL_keysym *TranslateKey(int scancode, SDL_keysym *keysym);
@@ -56,8 +56,8 @@
 +static long keytimer;
 +static int oldkey;
 +static int keycounter;
-+
-+
++static int mousehandled;
++static SDLKey oldkeysym;
 +#define	RC1_1		0x0001
 +#define	RC1_2		0x0002
 +#define	RC1_3		0x0003
@@ -198,7 +198,7 @@
  			}
  		}
  
-@@ -240,11 +373,21 @@
+@@ -240,11 +373,22 @@
  			close(keyboard_fd);
  		}
  	}
@@ -215,12 +215,13 @@
 +	rc_fd = open("/dev/dbox/rc0", O_RDONLY); //TODO DREAMBOX PATH!
 +	gettimeofday(&tv, &tz);
 +	keytimer = (tv.tv_sec * 1000) + (int)(tv.tv_usec / 1000) + 3600000;
-+	oldkey = -1;
++	oldkey = -1;oldkeysym = 27;
 +	keycounter = 0;
++	mousehandled=0;
  	/* Open only if not already opened */
   	if ( keyboard_fd < 0 ) {
  		static const char * const tty0[] = { "/dev/tty0", "/dev/vc/0", NULL };
-@@ -883,14 +1026,162 @@
+@@ -883,14 +1027,173 @@
  	SDL_mutexV(hw_lock);
  }
  
@@ -235,8 +236,8 @@
 +	unsigned short read_code = 0;
 +	struct timezone tz;
 +	struct timeval tv;
-+
-+	printf("--------------\nwhat: %d\nold_key:%x\nkeytimer: %ld\n", what, oldkey, keytimer);
+
++	printf("what: %d old_key:%x keytimer: %ld mousehandled:%d\n", what, oldkey, keytimer,mousehandled);
 +	if (what == 1)
 +	{
 +		read(rc_fd, &read_code, 2);
@@ -264,23 +265,32 @@
 +				case RC1_OK:
 +				case RC2_OK: button = 0x04; break;
 +			}
-+			if (button || dx || dy || oldkey == RC1_OK || oldkey == RC2_OK)
++			if ((button || dx || dy ) && oldkey != RC1_OK && oldkey != RC2_OK)
 +			{
 +				FB_vgamousecallback(button, 1, dx, dy);
 +				oldkey=read_code;
++				mousehandled = 1;
++				if (keycounter < 50)
++					keycounter+= 2; 
++				return;
++
 +			}
-+	
++			if (oldkey == RC1_OK || oldkey == RC2_OK)
++			{
++				FB_vgamousecallback(0, 1, 0, 0);
++				oldkey = -1;
++				return;
++			}
 +		}
 +		if (read_code == oldkey)
 +		{
-+			if (keycounter < 50) keycounter+= 2;
 +			gettimeofday(&tv, &tz);
 +			keytimer = (tv.tv_sec * 1000) + (int)(tv.tv_usec / 1000);
 +			printf("tv_sec: %ld\ntv_usec: %ld\n", tv.tv_sec, tv.tv_usec);
 +			return;
 +		}
 +		keycounter = 0;
-+	}
++	} 
 +	if (what == 2)
 +	{
 +		read_code = oldkey;
@@ -345,7 +355,7 @@
 +				oldkey = -1;
 +				what = 2;
 +				break;
- 
++
 +		}
 +		if (mapping != TUXBOX_RC_NONE)
 +		{
@@ -359,32 +369,34 @@
 +	{
 +		if (oldkey != read_code)
 +		{
++			SDLKey k = keysym.sym; keysym.sym = oldkeysym;
 +			pressed = SDL_RELEASED;
-+	                posted += SDL_PrivateKeyboard(pressed, &keysym);
++			posted += SDL_PrivateKeyboard(pressed, &keysym);
++			keysym.sym = k;
 +		}
 +		pressed = SDL_PRESSED;
 +		posted += SDL_PrivateKeyboard(pressed, &keysym);
++		mousehandled = 0;
++		oldkeysym = keysym.sym;
 +		gettimeofday(&tv, &tz);
 +		keytimer = (tv.tv_sec * 1000) + (int)(tv.tv_usec / 1000);
 +		printf("tv_sec: %ld\ntv_usec: %ld\n", tv.tv_sec, tv.tv_usec);
 +		oldkey = read_code;
-+		
-+		//pressed = SDL_RELEASED;
-+		//posted += SDL_PrivateKeyboard(pressed, &keysym);
 +	}
-+	if (what == 2)
++	if (what == 2 && !mousehandled && read_code != 0xffff) 
 +	{
++		keysym.sym = oldkeysym;
 +		pressed = SDL_RELEASED;
 +		posted += SDL_PrivateKeyboard(pressed, &keysym);
 +		oldkey = -1;
++		oldkeysym = 27;
 +	}
 +	if (what == 0)
 +	{
-+	
  	nread = read(keyboard_fd, keybuf, BUFSIZ);
  	for ( i=0; i<nread; ++i ) {
  		scancode = keybuf[i] & 0x7F;
-@@ -926,6 +1217,7 @@
+@@ -926,6 +1226,7 @@
  			break;
  		}
  	}
@@ -392,7 +404,7 @@
  }
  
  void FB_PumpEvents(_THIS)
-@@ -933,8 +1225,18 @@
+@@ -933,8 +1234,19 @@
  	fd_set fdset;
  	int max_fd;
  	static struct timeval zero;
@@ -406,12 +418,13 @@
 +		if (currenttime - keytimer > 220)
 +		{
 +			keytimer += 3600000;
-+			handle_keyboard(this, 2);
++			if (!mousehandled)
++				handle_keyboard(this, 2);
 +		}
  		posted = 0;
  
  		FD_ZERO(&fdset);
-@@ -945,6 +1248,12 @@
+@@ -945,6 +1257,12 @@
  				max_fd = keyboard_fd;
  			}
  		}
@@ -424,7 +437,7 @@
  		if ( mouse_fd >= 0 ) {
  			FD_SET(mouse_fd, &fdset);
  			if ( max_fd < mouse_fd ) {
-@@ -954,9 +1263,14 @@
+@@ -954,9 +1272,14 @@
  		if ( select(max_fd+1, &fdset, NULL, NULL, &zero) > 0 ) {
  			if ( keyboard_fd >= 0 ) {
  				if ( FD_ISSET(keyboard_fd, &fdset) ) {
@@ -441,7 +454,7 @@
  				if ( FD_ISSET(mouse_fd, &fdset) ) {
  					handle_mouse(this);
 --- orig/SDL-1.2.9/src/video/fbcon/SDL_fbvideo.c	2005-02-12 19:03:54.000000000 +0100
-+++ SDL-1.2.9/src/video/fbcon/SDL_fbvideo.c	2008-05-03 18:17:11.000000000 +0200
++++ SDL-1.2.9/src/video/fbcon/SDL_fbvideo.c	2008-06-27 19:47:32.000000000 +0200
 @@ -97,6 +97,7 @@
  #ifdef USE_VESA_TIMINGS	/* Only tested on Matrox Millenium I */
  	{  640,  400, 39771,  48, 16, 39,  8,  96, 2, 2, 0 },	/* 70 Hz */
@@ -477,7 +490,7 @@
  	console_fd = open(SDL_fbdev, O_RDWR, 0);
  	if ( console_fd < 0 ) {
 --- orig/SDL-1.2.9/src/video/fbcon/SDL_fbvideo.h	2004-01-04 17:49:25.000000000 +0100
-+++ SDL-1.2.9/src/video/fbcon/SDL_fbvideo.h	2008-05-03 18:17:11.000000000 +0200
++++ SDL-1.2.9/src/video/fbcon/SDL_fbvideo.h	2008-06-27 19:47:32.000000000 +0200
 @@ -61,6 +61,7 @@
  	int current_vt;
  	int saved_vt;
