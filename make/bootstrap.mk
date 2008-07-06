@@ -89,6 +89,7 @@ $(DEPDIR)/binutils: @DEPENDS_binutils@ directories
 			--target=$(target) \
 			--prefix=$(hostprefix) \
 			--disable-nls \
+			--disable-werror \
 			--without-fp && \
 		$(MAKE) all all-gprof && \
 		@INSTALL_binutils@
