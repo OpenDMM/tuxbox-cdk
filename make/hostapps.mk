@@ -27,15 +27,15 @@ $(hostprefix)/bin/mkcramfs: @DEPENDS_cramfs@
 
 #######################
 #
-# mksquashfs with LZMA support
+# mksquashfs with or without LZMA support
 #
-$(hostprefix)/bin/mksquashfs: @DEPENDS_squashfs@
+mksquashfs: $(MKSQUASHFS)
+$(MKSQUASHFS): @DEPENDS_squashfs@
 	rm -rf @DIR_squashfs@
 	mkdir -p @DIR_squashfs@
 	cd @DIR_squashfs@ && \
 	gunzip -cd ../Archive/squashfs3.0.tar.gz | TAPE=- tar -x
-# TODO: implement LZMA in kernel, then remove this if-clause
-if !KERNEL26
+if ENABLE_LZMA
 	cd @DIR_squashfs@ && \
 	bunzip2 -cd ../Archive/lzma442.tar.bz2 | TAPE=- tar -x && \
 	patch -p1 < ../Patches/lzma_zlib-stream.diff && \

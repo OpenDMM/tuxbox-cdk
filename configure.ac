@@ -19,6 +19,20 @@ AC_ARG_ENABLE(kernel26,
 	,[enable_kernel26=no])
 AM_CONDITIONAL(KERNEL26,test "$enable_kernel26" = "yes")
 
+AC_ARG_ENABLE(lzma,
+	AS_HELP_STRING(--enable-lzma,use LZMA compression when generating images),
+	,[enable_lzma=yes])
+AM_CONDITIONAL(ENABLE_LZMA,test "$enable_lzma" = "yes")
+
+if test "$enable_kernel26" = "yes" && test "$enable_lzma" = "yes"; then
+	echo
+	echo "*************************************************************"
+	echo "***** NO LZMA FOR KERNEL 2.6 YET - use \"--disable-lzma\" *****"
+	echo "*************************************************************"
+	echo
+	exit 1
+fi
+
 AC_ARG_ENABLE(nptl,
 	AS_HELP_STRING(--disable-nptl,do not use native posix threads for glibc (only meaningful for kernel 2.6.x, default for 2.4.x)),
 	,[
@@ -660,6 +674,7 @@ host prefix:			$hostprefix
 boot prefix:			$bootprefix
 build prefix:			$buildprefix
 root partition size:		$ROOT_PARTITION_SIZE
+LZMA support:			$enable_lzma
 default locale:			$DEFAULTLOCALE
 serversupport:			$serversupport
 checkImage:			$CHECKIMAGE_BEHAVIOR

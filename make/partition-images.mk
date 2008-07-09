@@ -46,6 +46,12 @@ else
 UBOOT_TEMPLATE = u-boot.dbox2.h.m4
 endif
 
+if ENABLE_LZMA
+POSSIBLY_LZMA=--define=lzma=1
+else
+POSSIBLY_LZMA=--define=lzma=0
+endif
+
 $(flashprefix)/cramfs.flfs1x $(flashprefix)/cramfs.flfs2x: \
 $(hostprefix)/bin/mkflfs $(bootdir)/u-boot-config/$(UBOOT_TEMPLATE) \
 | $(flashprefix)
@@ -59,7 +65,7 @@ $(hostprefix)/bin/mkflfs $(bootdir)/u-boot-config/$(UBOOT_TEMPLATE) \
 $(flashprefix)/squashfs.flfs1x $(flashprefix)/squashfs.flfs2x: \
 $(hostprefix)/bin/mkflfs $(bootdir)/u-boot-config/$(UBOOT_TEMPLATE)  \
 | $(flashprefix)
-	m4 --define=rootfstype=squashfs --define=rootsize=$(ROOT_PARTITION_SIZE) $(bootdir)/u-boot-config/$(UBOOT_TEMPLATE) > $(bootdir)/u-boot-config/u-boot.config
+	m4 --define=rootfstype=squashfs --define=rootsize=$(ROOT_PARTITION_SIZE) $(POSSIBLY_LZMA) $(bootdir)/u-boot-config/$(UBOOT_TEMPLATE) > $(bootdir)/u-boot-config/u-boot.config
 	$(MAKE) @DIR_uboot@/u-boot.stripped
 	$(hostprefix)/bin/mkflfs 1x -o $(flashprefix)/squashfs.flfs1x @DIR_uboot@/u-boot.stripped
 	$(hostprefix)/bin/mkflfs 2x -o $(flashprefix)/squashfs.flfs2x @DIR_uboot@/u-boot.stripped
