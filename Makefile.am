@@ -1907,7 +1907,7 @@ endif
 
 # tuxbox/lcars
 
-$(appsdir)/tuxbox/lcars/Makefile: .bootstrap .libcurl .libfreetype .plugins core
+$(appsdir)/tuxbox/lcars/Makefile: .bootstrap .linuxkernel .libcurl .libtuxbox .libfreetype .plugins core
 	cd $(appsdir)/tuxbox/lcars && $(CONFIGURE)
 
 .lcars: $(appsdir)/tuxbox/lcars/Makefile
@@ -2751,7 +2751,10 @@ $(flashprefix)/.part_lcars: $(flashprefix)/.flash .lcars
 	$(INSTALL) $(targetprefix)/bin/lcars $(flashprefix)/root/bin
 	cp -pa $(targetprefix)/share/fonts/ds9.ttf $(flashprefix)/root/share/fonts
 	cp -pa $(targetprefix)/share/tuxbox/lcars $(flashprefix)/root/share/tuxbox
-	cp -pa $(targetprefix)/var/tuxbox/config/lcars $(flashprefix)/root/var/tuxbox/config
+	mkdir $(flashprefix)/root/var_init
+	mkdir $(flashprefix)/root/var_init/tuxbox
+	mkdir $(flashprefix)/root/var_init/tuxbox/config
+	cp -pa $(targetprefix)/var/tuxbox/config/lcars $(flashprefix)/root/var_init/tuxbox/config
 	@touch $@
 
 flash-lcdmenu: $(flashprefix)/.part_lcdmenu
