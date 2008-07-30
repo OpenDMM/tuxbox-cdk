@@ -614,7 +614,7 @@ endif
 	rm -f $(targetprefix)/lib/libdirectfb.la.old
 	rm -f $(targetprefix)/lib/libfusion.la.old
 	touch $@
-	
+
 .libdirectfbpp: .bootstrap .libdirectfb @DEPENDS_libdirectfbpp@
 	@PREPARE_libdirectfbpp@
 	cd @DIR_libdirectfbpp@ && \
@@ -630,7 +630,7 @@ endif
 	sed -e "s, /lib, $(targetprefix)/lib,g" < $(targetprefix)/lib/libdfb++.la.old >$(targetprefix)/lib/libdfb++.la
 	rm -f $(targetprefix)/lib/libdfb++.la.old
 	touch $@
-																																	
+
 .libppdirectfb: .bootstrap .libdirectfb @DEPENDS_libppdirectfb@
 	@PREPARE_libppdirectfb@
 	cd @DIR_libppdirectfb@ && \
@@ -646,7 +646,7 @@ endif
 	sed -e "s, /lib, $(targetprefix)/lib,g" < $(targetprefix)/lib/lib++dfb.la.old >$(targetprefix)/lib/lib++dfb.la
 	rm -f $(targetprefix)/lib/lib++dfb.la.old
 	touch $@
-		
+
 .libmad: .bootstrap .libz @DEPENDS_libmad@
 	@PREPARE_libmad@
 	cd @DIR_libmad@ && \
@@ -679,7 +679,7 @@ endif
 		@INSTALL_libid3tag@
 	@CLEANUP_libid3tag@
 	touch $@
-	
+
 .libncurses: .bootstrap @DEPENDS_libncurses@
 	@PREPARE_libncurses@
 	cd @DIR_libncurses@ && \
@@ -1907,7 +1907,7 @@ endif
 
 # tuxbox/lcars
 
-$(appsdir)/tuxbox/lcars/Makefile: .bootstrap .linuxkernel .libcurl .libtuxbox .libfreetype .plugins core
+$(appsdir)/tuxbox/lcars/Makefile: .bootstrap .linuxkernel .libcurl .libtuxbox .libfreetype .lcdmenu .plugins core
 	cd $(appsdir)/tuxbox/lcars && $(CONFIGURE)
 
 .lcars: $(appsdir)/tuxbox/lcars/Makefile
