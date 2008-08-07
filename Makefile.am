@@ -1907,7 +1907,7 @@ endif
 
 # tuxbox/lcars
 
-$(appsdir)/tuxbox/lcars/Makefile: .bootstrap .linuxkernel .libcurl .libtuxbox .libfreetype .lcdmenu .plugins core
+$(appsdir)/tuxbox/lcars/Makefile: .bootstrap .linuxkernel .libcurl .libtuxbox .libfreetype .plugins core
 	cd $(appsdir)/tuxbox/lcars && $(CONFIGURE)
 
 .lcars: $(appsdir)/tuxbox/lcars/Makefile
