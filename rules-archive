@@ -54,7 +54,7 @@ freetype-2.0.9.tar.bz2;http://gd.tuwien.ac.at/graphics/libs/freetype/freetype2
 freetype-2.1.4.tar.bz2;http://gd.tuwien.ac.at/graphics/libs/freetype/freetype2
 ncurses-5.3.tar.gz;ftp://$(gnuserver)/ncurses
 jpegsrc.v6b.tar.gz;http://www.ijg.org/files
-libpng-1.2.8.tar.bz2;http://mesh.dl.sourceforge.net/sourceforge/libpng
+libpng-1.2.8.tar.bz2;ftp://ftp.gware.org/10.2/2.12.2/source/devlib/libpng;http://mesh.dl.sourceforge.net/sourceforge/libpng
 popt-1.6.4.tar.gz;ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.0.x
 libupnp-1.6.5.tar.bz2;http://easynews.dl.sourceforge.net/sourceforge/pupnp
 libxml2-2.4.22.tar.bz2;ftp://ftp.uni-duesseldorf.de/pub/unix/linux/src/GNOME-2.0;ftp://ftp.gnome.org/pub/GNOME/sources/libxml2/2.4
@@ -66,7 +66,7 @@ SDL_net-1.2.5.tar.gz;http://www.libsdl.org/projects/SDL_net/release
 SDL_sound-1.0.1.tar.gz;http://icculus.org/SDL_sound/downloads
 SDL_mixer-1.2.6.tar.gz;http://www.libsdl.org/projects/SDL_net/release
 readline-4.3.tar.gz;ftp://$(gnuserver)/readline
-libsigc++-1.2.5.tar.gz;http://switch.dl.sourceforge.net/sourceforge/libsigc
+libsigc++-1.2.5.tar.gz;http://familiar.handhelds.org/source/v0.8.2;http://switch.dl.sourceforge.net/sourceforge/libsigc
 libpcap-0.9.3.tar.gz;http://www.tcpdump.org/release
 xmlwrapp-0.2.1.tar.gz;http://pmade.org/pjones/software/xmlwrapp/download
 commoncpp2-1.3.1.tar.gz;ftp://ftp.uni-kassel.de/Mirrors/ftp.gnu.org/pub/gnu/commoncpp
@@ -77,9 +77,9 @@ libnids-1.16.tar.gz;http://www.packetfactory.net/Projects/Libnids/dist
 db-2.7.7.tar.gz;http://www.sleepycat.com/update/snapshot
 tremor-20040525.tar.bz2;http://tuxbox.berlios.de/pub/tuxbox/cdk/src
 boost_1_29_0.tar.gz;http://surfnet.dl.sourceforge.net/sourceforge/boost
-fribidi-0.10.4.tar.bz2;http://surfnet.dl.sourceforge.net/sourceforge/fribidi
+fribidi-0.10.4.tar.bz2;ftp://196.12.10.6/pub/openpkg/sources/DST/fribidi;http://surfnet.dl.sourceforge.net/sourceforge/fribidi
 gmp-4.1.2.tar.gz;ftp://mirrors.kernel.org/gnu/gmp/
-libungif-4.1.3.tar.bz2;http://surfnet.dl.sourceforge.net/sourceforge/libungif
+libungif-4.1.3.tar.bz2;ftp://131.220.120.17/home/ef/pkgsrc/distfiles;http://surfnet.dl.sourceforge.net/sourceforge/libungif
 dropbear-0.48.1.tar.gz;http://matt.ucc.asn.au/dropbear
 libevent-1.3b.tar.gz;http://monkey.org/~provos
 
@@ -133,8 +133,8 @@ kaffe-1.0.6.tar.gz;ftp://ftp.kaffe.org/pub/kaffe/v1.0.x-production
 # fun
 #
 gnuboy-1.0.3.tar.gz;http://gnuboy.unix-fu.org/src
-libmad-0.15.0b.tar.gz;http://surfnet.dl.sourceforge.net/sourceforge/mad
-libid3tag-0.15.0b.tar.gz;http://surfnet.dl.sourceforge.net/sourceforge/mad
+libmad-0.15.0b.tar.gz;ftp://64.50.236.52/.1/nslu2/sources;http://surfnet.dl.sourceforge.net/sourceforge/mad
+libid3tag-0.15.0b.tar.gz;ftp://64.50.236.52/.1/nslu2/sources;http://surfnet.dl.sourceforge.net/sourceforge/mad
 scummvm-0.11.1.tar.bz2;http://heanet.dl.sourceforge.net/sourceforge/scummvm
 sdldoom-1.10.tar.gz;ftp://ftp2.3ddownloads.com/89958/doomworld/ports/sdldoom-1.10.tar.gz
 wxBase-2.6.3.tar.bz2;http://mesh.dl.sourceforge.net/sourceforge/wxwindows
