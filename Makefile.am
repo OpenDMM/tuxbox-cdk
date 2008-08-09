@@ -22,6 +22,11 @@ extra: java contrib_apps fun dvb_apps
 
 core: .directories .binutils .linuxdir .glibc .gcc
 
+checkout_lcars:
+	CURRENT_PATH=`pwd`;
+	cd ../apps/tuxbox/lcars && cvs update -d -P -A;
+	cd $$CURRENT_PATH;
+
 checkout_neutrino:
 	CURRENT_PATH=`pwd`;
 	cd ../apps && cvs update -d -P -A;
@@ -1907,7 +1912,7 @@ endif
 
 # tuxbox/lcars
 
-$(appsdir)/tuxbox/lcars/Makefile: .bootstrap .linuxkernel .libcurl .libtuxbox .libfreetype .plugins .automount core
+$(appsdir)/tuxbox/lcars/Makefile: .bootstrap .linuxkernel .libcurl .libtuxbox .libfreetype .misc_libs .tuxbox_libs .tuxbox_tools .plugins .automount core
 	cd $(appsdir)/tuxbox/lcars && $(CONFIGURE)
 
 .lcars: $(appsdir)/tuxbox/lcars/Makefile
@@ -2758,6 +2763,8 @@ flash-lcars: $(flashprefix)/.part_lcars
 $(flashprefix)/.part_lcars: $(flashprefix)/.flash .lcars
 	$(INSTALL) -d $(flashprefix)/root/share/fonts
 	$(INSTALL) $(targetprefix)/bin/lcars $(flashprefix)/root/bin
+	$(INSTALL) $(targetprefix)/bin/aniplay $(flashprefix)/root/bin
+	$(INSTALL) $(targetprefix)/bin/lcdstars $(flashprefix)/root/bin
 	cp -pa $(targetprefix)/share/fonts/ds9.ttf $(flashprefix)/root/share/fonts
 	cp -pa $(targetprefix)/share/tuxbox/lcars $(flashprefix)/root/share/tuxbox
 	mkdir $(flashprefix)/root/var_init
