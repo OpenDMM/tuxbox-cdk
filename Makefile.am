@@ -1907,11 +1907,20 @@ endif
 
 # tuxbox/lcars
 
-$(appsdir)/tuxbox/lcars/Makefile: .bootstrap .linuxkernel .libcurl .libtuxbox .libfreetype .plugins core
+$(appsdir)/tuxbox/lcars/Makefile: .bootstrap .linuxkernel .libcurl .libtuxbox .libfreetype .plugins .automount core
 	cd $(appsdir)/tuxbox/lcars && $(CONFIGURE)
 
 .lcars: $(appsdir)/tuxbox/lcars/Makefile
 	$(MAKE) -C $(appsdir)/tuxbox/lcars all install
+	touch $@
+
+# lcd-savers
+
+$(appsdir)/tuxbox/funstuff/lcd-savers/Makefile: .bootstrap .libfreetype .misc_libs .tuxbox_libs
+	cd $(appsdir)/tuxbox/funstuff && $(CONFIGURE)
+
+.lcdsavers: $(appsdir)/tuxbox/funstuff/lcd-savers/Makefile
+	$(MAKE) -C $(appsdir)/tuxbox/funstuff/lcd-savers all install
 	touch $@
 
 # tuxbox/lcd
