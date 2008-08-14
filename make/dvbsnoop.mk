@@ -3,7 +3,7 @@
 $(appsdir)/dvb/dvbsnoop/config.status: bootstrap
 	cd $(appsdir)/dvb/dvbsnoop && $(CONFIGURE) CPPFLAGS="$(CPPFLAGS) -I$(driverdir)/dvb/include"
 
-dvbsnoop: $(appsdir)/dvb/dvbsnoop/config.status
+$(DEPDIR)/dvbsnoop: $(appsdir)/dvb/dvbsnoop/config.status
 	$(MAKE) -C $(appsdir)/dvb/dvbsnoop all install
 
 if TARGETRULESET_FLASH

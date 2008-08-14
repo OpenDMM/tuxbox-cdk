@@ -3,9 +3,9 @@
 #   contrib apps
 #
 
-contrib_apps: bzip2 console_data console_tools fbset lirc lsof dropbear ssh tcpdump bonnie lufs kermit wget ncftp screen
+contrib_apps: bzip2 console_data console_tools fbset lirc lsof dropbear ssh tcpdump bonnie lufs kermit wget ncftp screen lzma_utils
 
-CONTRIB_DEPSCLEANUP = rm -f .deps/bzip2 .deps/console_data .deps/console_tools .deps/directfb_examples .deps/fbset .deps/lirc .deps/lsof .deps/ssh .deps/tcpdump .deps/bonnie .deps/vdr .deps/lufs .deps/dropbear .deps/kermit .deps/wget .deps/ncftp .deps/screen
+CONTRIB_DEPSCLEANUP = rm -f .deps/bzip2 .deps/console_data .deps/console_tools .deps/directfb_examples .deps/fbset .deps/lirc .deps/lsof .deps/ssh .deps/tcpdump .deps/bonnie .deps/vdr .deps/lufs .deps/dropbear .deps/kermit .deps/wget .deps/ncftp .deps/screen .deps/lzma_utils
 
 #bzip2
 $(DEPDIR)/bzip2: bootstrap @DEPENDS_bzip2@
@@ -433,4 +433,34 @@ $(flashprefix)/root/bin/screen: screen | $(flashprefix)/root
 
 endif
 
+#lzma_utils
+$(DEPDIR)/lzma_utils: bootstrap @DEPENDS_lzma_utils@
+	@PREPARE_lzma_utils@
+	cd @DIR_lzma_utils@ && \
+		$(BUILDENV) \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--prefix=&& \
+		$(MAKE) all && \
+		@INSTALL_lzma_utils@
+	@CLEANUP_lzma_utils@
+	touch $@
+
+if TARGETRULESET_FLASH
+flash-lzma_utils: $(flashprefix)/root/bin/lzma
+
+$(flashprefix)/root/bin/lzma: lzma_utils | $(flashprefix)/root
+	rm -f $(flashprefix)/root/bin/lzma
+	@$(INSTALL) -d $(flashprefix)/root/bin
+	@for i in lzdiff lzgrep lzma lzmadec lzmainfo lzmore; do \
+	$(INSTALL) $(targetprefix)/bin/$$i $(flashprefix)/root/bin; done;
+		@ln -sf lzma $(flashprefix)/root/bin/lzcat
+		@ln -sf lzdiff $(flashprefix)/root/bin/lzcmp
+		@ln -sf lzgrep $(flashprefix)/root/bin/lzfgrep
+		@ln -sf lzgrep $(flashprefix)/root/bin/lzegrep
+		@ln -sf lzmore $(flashprefix)/root/bin/lzless
+	@FLASHROOTDIR_MODIFIED@
+
+endif
 
