@@ -100,11 +100,11 @@ ushare-1.1a.tar.bz2;http://ushare.geexbox.org/releases
 xrc-0.6.3.tar.gz;http://switch.dl.sourceforge.net/sourceforge/lirc
 thttpd-2.23beta1.tar.gz;http://www.acme.com/software/thttpd
 lsof_4.64_src.tar.bz2;
-e2fsprogs-1.35.tar.gz;http://surfnet.dl.sourceforge.net/sourceforge/e2fsprogs/
-reiserfsprogs-3.6.14.tar.gz;http://www.namesys.com/pub/reiserfsprogs/
-util-linux-2.12i.tar.bz2;http://www.kernel.org/pub/linux/utils/util-linux/
+e2fsprogs-1.35.tar.gz;ftp://ftp.uni-kassel.de/Mirrors/ftp.fhh.opensource-mirror.de/gentoo/distfiles; http://surfnet.dl.sourceforge.net/sourceforge/e2fsprogs
+reiserfsprogs-3.6.19.tar.gz;http://ftp.icm.edu.pl/packages/linux-reiserfs/reiserfsprogs;http://www.namesys.com/pub/reiserfsprogs/
+util-linux-2.12r.tar.bz2;http://www.kernel.org/pub/linux/utils/util-linux/
 samba-1.9.18p8.tar.gz;http://mirrors.xmission.com/samba/ftp/stable/
-etherwake_1.08.orig.tar.gz;http://ftp.debian.org/debian/pool/main/e/etherwake/
+etherwake_1.09.orig.tar.gz;http://ftp.debian.org/debian/pool/main/e/etherwake
 dreamfiles_20061230.tar.bz2;http://sources.dreamboxupdate.com/download/snapshots
 dreamdriver_dm7000_20071022.tar.bz2;http://sources.dreamboxupdate.com/download/snapshots
 dreamdriver_dm56x0_20071022.tar.bz2;http://sources.dreamboxupdate.com/download/snapshots
