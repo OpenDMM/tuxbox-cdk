@@ -97,10 +97,10 @@ ushare;1.1a;ushare-1.1a;ushare-1.1a.tar.bz2;extract:ushare-1.1a.tar.bz2;patch:us
 xrc;0.6.3;xrc-0.6.3;xrc-0.6.3.tar.gz:xrc.diff;extract:xrc-0.6.3.tar.gz;patch:xrc.diff
 thttpd;2.23beta1;thttpd-2.23beta1;thttpd-2.23beta1.tar.gz;extract:thttpd-2.23beta1.tar.gz;patch:thttpd.diff
 e2fsprogs;1.35;e2fsprogs-1.35;e2fsprogs-1.35.tar.gz;extract:e2fsprogs-1.35.tar.gz;patch:e2fsprogs_gcc4_build_fix.diff
-reiserfsprogs;3.6.14;reiserfsprogs-3.6.14;reiserfsprogs-3.6.14.tar.gz;extract:reiserfsprogs-3.6.14.tar.gz;patch:reiserfsprogs_add_credits.diff
-utillinux;2.12i;util-linux-2.12i;util-linux-2.12i.tar.bz2;extract:util-linux-2.12i.tar.bz2;patch:util-linux.diff
+reiserfsprogs;3.6.19;reiserfsprogs-3.6.19;reiserfsprogs-3.6.19.tar.gz;extract:reiserfsprogs-3.6.19.tar.gz
+utillinux;2.12r;util-linux-2.12r;util-linux-2.12r.tar.bz2;extract:util-linux-2.12r.tar.bz2;patch:util-linux_2_12r.diff
 samba;1.9.18p8;samba-1.9.18p8;samba-1.9.18p8.tar.gz:samba_ppc.diff;extract:samba-1.9.18p8.tar.gz;patch:samba_ppc.diff
-etherwake;1.08;etherwake-1.08.orig;etherwake_1.08.orig.tar.gz;extract:etherwake_1.08.orig.tar.gz;patch:etherwake.diff
+etherwake;1.09;etherwake-1.09.orig;etherwake_1.09.orig.tar.gz;extract:etherwake_1.09.orig.tar.gz;patch:etherwake.diff
 dreamfiles;20061230;dreamfiles_20061230;dreamfiles_20061230.tar.bz2;extract:dreamfiles_20061230.tar.bz2
 dreamdriver_dm7000;20071022;dreamdriver_dm7000_20071022;dreamdriver_dm7000_20071022.tar.bz2;extract:dreamdriver_dm7000_20071022.tar.bz2
 dreamdriver_dm56x0;20071022;dreamdriver_dm56x0_20071022;dreamdriver_dm56x0_20071022.tar.bz2;extract:dreamdriver_dm56x0_20071022.tar.bz2
