@@ -169,18 +169,22 @@ if [ -e /bin/neutrino ] ; then
 		mkdir /var/etc/network
 	fi
 	ifup -a
-	sectionsd -tc
+	if [ -e /var/etc/neutrino-variables ] ; then
+		echo "reading config from /var/etc/neutrino-variables"
+		eval sh /var/etc/neutrino-variables && . /var/etc/neutrino-variables
+	fi
+	sectionsd $SECTIONSD_OPTS
 	timerd
 	dccamd
-	zapit
+	zapit $ZAPIT_OPTS
 	controld
 	nhttpd
 	until neutrino -f -u ; do
 		echo "Neutrino exited with nonzero exit status, restarting..."
-		pidof sectionsd >/dev/null || sectionsd -tc
+		pidof sectionsd >/dev/null || sectionsd $SECTIONSD_OPTS
 		pidof timerd    >/dev/null || timerd
 		pidof dccamd    >/dev/null || dccamd
-		pidof zapit     >/dev/null || zapit
+		pidof zapit     >/dev/null || zapit $ZAPIT_OPTS
 		pidof controld  >/dev/null || controld
 		pidof nhttpd    >/dev/null || nhttpd
 	done
@@ -211,8 +215,6 @@ if [ -e /bin/neutrino ] ; then
 		killall -q zapit
 		killall -q controld
 		killall -q nhttpd
-		saa --fbas
-		switch -fnc 0 -fblk 0
 		echo "Neutrino and its daemons terminated (hopefully)"
 		exit
 	fi
