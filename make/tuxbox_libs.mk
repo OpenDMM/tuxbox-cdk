@@ -4,7 +4,7 @@
 $(targetprefix)/lib/pkgconfig/tuxbox-tuxtxt.pc:
 	$(MAKE) tuxbox_libs
 
-$(appsdir)/tuxbox/libs/config.status: bootstrap libfreetype libpng
+$(appsdir)/tuxbox/libs/config.status: bootstrap libfreetype libpng libtuxbox
 	cd $(appsdir)/tuxbox/libs && $(CONFIGURE)
 
 tuxbox_libs: $(appsdir)/tuxbox/libs/config.status
