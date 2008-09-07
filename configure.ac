@@ -163,6 +163,9 @@ if test -z "$CFLAGS" ; then
 fi
 
 TARGET_CFLAGS="-mcpu=$CPU_MODEL -msoft-float -mmultiple -mstring -meabi -pipe -Os -ggdb3 -DHAVE_DREAMBOX_HARDWARE"
+if test "$BOXTYPE" = "dm500" ; then
+	TARGET_CFLAGS="$TARGET_CFLAGS -DHAVE_DREAMBOX_DM500"
+fi
 TARGET_LDFLAGS=""
 TARGET_CXXFLAGS="$TARGET_CFLAGS"
 
