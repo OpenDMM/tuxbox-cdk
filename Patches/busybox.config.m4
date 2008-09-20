@@ -424,7 +424,7 @@ option(`CONFIG_FEATURE_MODPROBE_MULTIPLE_OPTIONS', `n', `n')'
 option(`CONFIG_FEATURE_MODPROBE_FANCY_ALIAS', `n', `n')
 option(`CONFIG_FEATURE_CHECK_TAINTED_MODULE', `n', `n')
 ifdef(`kernel26',
-`option(`CONFIG_FEATURE_2_4_MODULES', `n', `n')
+`option(`CONFIG_FEATURE_2_4_MODULES', `y', `y')
 option(`CONFIG_FEATURE_2_6_MODULES', `y', `y')',
 `option(`CONFIG_FEATURE_2_4_MODULES', `y', `y')
 option(`CONFIG_FEATURE_2_6_MODULES', `n', `n')'
