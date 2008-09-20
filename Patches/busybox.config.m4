@@ -147,8 +147,8 @@ option(`CONFIG_CP', `y', `y')
 option(`CONFIG_CUT', `y', `n')
 option(`CONFIG_DATE', `y', `y')
 option(`CONFIG_FEATURE_DATE_ISOFMT', `y', `n')
-option(`CONFIG_DD', `y', `n')
-option(`CONFIG_FEATURE_DD_SIGNAL_HANDLING', `n', `n')
+option(`CONFIG_DD', `y', `y')
+option(`CONFIG_FEATURE_DD_SIGNAL_HANDLING', `y', `y')
 option(`CONFIG_FEATURE_DD_IBS_OBS', `n', `n')
 option(`CONFIG_DF', `y', `y')
 option(`CONFIG_DIFF', `n', `n')
@@ -415,12 +415,20 @@ option(`CONFIG_FEATURE_INSMOD_LOAD_MAP_FULL', `n', `n')
 option(`CONFIG_RMMOD', `n', `y')
 option(`CONFIG_LSMOD', `n', `y')
 option(`CONFIG_FEATURE_LSMOD_PRETTY_2_6_OUTPUT', `n', `n')
-option(`CONFIG_MODPROBE', `n', `n')
-option(`CONFIG_FEATURE_MODPROBE_MULTIPLE_OPTIONS', `n', `n')
+ifdef(`kernel26',
+`option(`CONFIG_MODPROBE', `y', `y')
+option(`CONFIG_FEATURE_MODPROBE_MULTIPLE_OPTIONS', `y', `y')',
+`option(`CONFIG_MODPROBE', `n', `n')
+option(`CONFIG_FEATURE_MODPROBE_MULTIPLE_OPTIONS', `n', `n')'
+)
 option(`CONFIG_FEATURE_MODPROBE_FANCY_ALIAS', `n', `n')
 option(`CONFIG_FEATURE_CHECK_TAINTED_MODULE', `n', `n')
-option(`CONFIG_FEATURE_2_4_MODULES', `n', `y')
-option(`CONFIG_FEATURE_2_6_MODULES', `n', `n')
+ifdef(`kernel26',
+`option(`CONFIG_FEATURE_2_4_MODULES', `n', `n')
+option(`CONFIG_FEATURE_2_6_MODULES', `y', `y')',
+`option(`CONFIG_FEATURE_2_4_MODULES', `y', `y')
+option(`CONFIG_FEATURE_2_6_MODULES', `n', `n')'
+)
 option(`CONFIG_FEATURE_QUERY_MODULE_INTERFACE', `n', `y')
 
 #
