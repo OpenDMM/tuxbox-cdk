@@ -3,9 +3,9 @@
 #   contrib apps
 #
 
-contrib_apps: bzip2 console_data console_tools fbset lirc lsof dropbear ssh tcpdump bonnie lufs kermit wget ncftp screen lzma_utils
+contrib_apps: bzip2 console_data kbd fbset lirc lsof dropbear ssh tcpdump bonnie lufs kermit wget ncftp screen lzma_utils
 
-CONTRIB_DEPSCLEANUP = rm -f .deps/bzip2 .deps/console_data .deps/console_tools .deps/directfb_examples .deps/fbset .deps/lirc .deps/lsof .deps/ssh .deps/tcpdump .deps/bonnie .deps/vdr .deps/lufs .deps/dropbear .deps/kermit .deps/wget .deps/ncftp .deps/screen .deps/lzma_utils
+CONTRIB_DEPSCLEANUP = rm -f .deps/bzip2 .deps/console_data .deps/kbd .deps/directfb_examples .deps/fbset .deps/lirc .deps/lsof .deps/ssh .deps/tcpdump .deps/bonnie .deps/vdr .deps/lufs .deps/dropbear .deps/kermit .deps/wget .deps/ncftp .deps/screen .deps/lzma_utils
 
 #bzip2
 $(DEPDIR)/bzip2: bootstrap @DEPENDS_bzip2@
@@ -60,12 +60,32 @@ $(DEPDIR)/console_tools: bootstrap console_data @DEPENDS_console_tools@
 	@CLEANUP_console_tools@
 	touch $@
 
+$(DEPDIR)/kbd: bootstrap console_data @DEPENDS_kbd@
+	@PREPARE_kbd@
+	cd @DIR_kbd@ && \
+		autoconf && \
+		sed -i \
+		-e "s:install -s:install:" \
+		src/Makefile.in && \
+		$(BUILDENV) \
+		ac_cv_func_realloc_0_nonnull=yes \
+		ac_cv_func_malloc_0_nonnull=yes \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--prefix=$(targetprefix) \
+			--disable-nls && \
+		$(BUILDENV) \
+		@INSTALL_kbd@
+	@CLEANUP_kbd@
+	touch $@
+
 if TARGETRULESET_FLASH 
 
 # This is ugly, very ugly. But I do not know of a completely clean way
 # of installing just the minimum.
 
-flash-german-keymaps: $(DEPDIR)/console_tools
+flash-german-keymaps: $(DEPDIR)/kbd
 	$(INSTALL) $(targetprefix)/bin/loadkeys $(flashprefix)/root/bin
 	$(INSTALL) -d $(flashprefix)/root/share/keymaps/i386/qwertz
 	$(INSTALL) -d $(flashprefix)/root/share/keymaps/i386/include

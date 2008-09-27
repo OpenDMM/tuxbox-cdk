@@ -107,7 +107,7 @@ AC_SUBST(CDKVCINFO)
 AC_ARG_ENABLE(german_keymaps,
 	AS_HELP_STRING(--enable-german-keymaps,	include loadkey and German keymaps in yadds and images),
 	[case "${enableval}" in
-		yes) CONSOLE_TOOLS=console_tools ;;
+		yes) CONSOLE_TOOLS=kbd ;;
 	esac],[enable_german_keymaps=no])
 AM_CONDITIONAL(ENABLE_GERMAN_KEYMAPS,test "$enable_german_keymaps" = "yes")
 AC_SUBST(CONSOLE_TOOLS)
@@ -550,6 +550,7 @@ TUXBOX_RULES_MAKE(libFLAC)
 TUXBOX_RULES_MAKE(bzip2)
 TUXBOX_RULES_MAKE(console_data)
 TUXBOX_RULES_MAKE(console_tools)
+TUXBOX_RULES_MAKE(kbd)
 TUXBOX_RULES_MAKE(directfb_examples)
 TUXBOX_RULES_MAKE(fbset)
 TUXBOX_RULES_MAKE(lirc)
