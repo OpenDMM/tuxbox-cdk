@@ -82,6 +82,7 @@ $(DEPDIR)/libdirectfb: bootstrap libfreetype libjpeg libpng libz @DEPENDS_libdir
 			--disable-debug \
 			--with-inputdrivers=linuxinput \
 			--disable-sdl \
+			--disable-vnc \
 			--disable-multi \
 			--without-tools \
 			--with-gfxdrivers=none && \
@@ -322,7 +323,9 @@ $(DEPDIR)/libpng: bootstrap libz @DEPENDS_libpng@
 			--host=$(target) \
 			--prefix=$(targetprefix) && \
 		$(MAKE) all $(BUILDENV) && \
-		$(MAKE) install && $(target)-ar cru $(targetprefix)/lib/libpng12_pic.a *.o
+		$(MAKE) install && $(target)-ar cru $(targetprefix)/lib/libpng12_pic.a *.o && \
+		rm -f $(hostprefix)/bin/libpng-config && \
+		ln -s $(targetprefix)/bin/libpng-config $(hostprefix)/bin/libpng-config
 	@CLEANUP_libpng@
 	touch $@
 
