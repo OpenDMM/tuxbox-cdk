@@ -316,7 +316,6 @@ $(DEPDIR)/libpcap: bootstrap @DEPENDS_libpcap@ Patches/libpcap.diff
 $(DEPDIR)/libpng: bootstrap libz @DEPENDS_libpng@
 	@PREPARE_libpng@
 	cd @DIR_libpng@ && \
-		./autogen.sh && \
 		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
