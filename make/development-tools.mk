@@ -27,6 +27,14 @@ $(DEPDIR)/gdb: bootstrap libncurses @DEPENDS_gdb@
 	@CLEANUP_gdb@
 	touch $@
 
+if TARGETRULESET_FLASH
+flash-gdbserver: $(flashprefix)/root/bin/gdbserver
+$(flashprefix)/root/bin/gdbserver: gdb
+	$(INSTALL) $(targetprefix)/bin/gdbserver $(flashprefix)/root/bin
+	$(INSTALL) $(targetprefix)/lib/libthread_db-1.0.so $(flashprefix)/root/lib
+	@FLASHROOTDIR_MODIFIED@
+endif
+
 $(DEPDIR)/gdb-remote: @DEPENDS_gdb@
 	@PREPARE_gdb@
 	cd @DIR_gdb@ && \
