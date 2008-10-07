@@ -13,7 +13,6 @@ AM_INIT_AUTOMAKE([])
 AM_MAINTAINER_MODE
 
 AC_PROG_CC
-AC_PROG_LIBTOOL
 
 AC_ARG_ENABLE(kernel26,
 	AS_HELP_STRING(--enable-kernel26,set up the CDK to use the 2.6 kernel (experimental)),
