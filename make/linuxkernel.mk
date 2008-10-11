@@ -157,19 +157,11 @@ driver: $(KERNEL_BUILD_FILENAME)
 	$(MAKE) -C $(driverdir) \
 		KERNEL_LOCATION=$(buildprefix)/linux \
 		CROSS_COMPILE=$(target)-
-if KERNEL26
 	$(MAKE) -C $(driverdir) \
 		KERNEL_LOCATION=$(buildprefix)/linux \
 		BIN_DEST=$(targetprefix)/bin \
 		INSTALL_MOD_PATH=$(targetprefix) \
 		install
-else
-	$(MAKE) -C $(driverdir) \
-		KERNEL_LOCATION=$(buildprefix)/linux \
-		BIN_DEST=$(targetprefix)/bin \
-		INSTALL_MOD_PATH=$(targetprefix) \
-		install
-endif
 
 driver-clean:
 	$(MAKE) -C $(driverdir) \
