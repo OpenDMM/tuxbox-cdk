@@ -1,5 +1,4 @@
 PATH := $(hostprefix)/ccache-bin:$(hostprefix)/bin:$(PATH)
-#PATH := $(hostprefix)/bin:$(PATH)
 BUILDENV := \
 	AR=$(target)-ar \
 	AS=$(target)-as \
@@ -2023,12 +2022,12 @@ endif
 
 if BOXTYPE_DM7000
 dreamboximage_root: core .enigma .reiserfsprogs .e2fsprogs .samba \
-	.etherwake .utillinux .linuxkernel .dreamfiles .dvbsnoop \
+	.etherwake .utillinux .linuxkernel .dreamfiles .dvbsnoop .automount \
 	flash-enigma flash-plugin_tetris flash-plugin_snake \
 	flash-plugin_pacman flash-plugin_tuxtxt flash-plugin_ngrabstartstop \
 	flash-ftpd flash-dvb-tools flash-reiserfs flash-fstools flash-sambaserver \
 	flash-etherwake flash-dreamfiles flash-sambaclient flash-cifs flash-dvbsnoop \
-	flash-plugin_tuxcom
+	flash-plugin_tuxcom flash-automount
 if REISERFS_YES
 	$(MAKE) flash-mkreiserfs
 endif
