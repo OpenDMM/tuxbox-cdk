@@ -25,6 +25,7 @@ watchdog;make:install:DESTDIR=TARGET
 busybox;make:install:PREFIX=TARGET
 busybox12;make:install:PREFIX=TARGET
 busybox17;make:install:PREFIX=TARGET
+busybox113;make:install:DESTDIR=$(targetprefix)
 ftpd;install:-m755:vsftpd:TARGET/sbin/in.ftpd;install:-m644:vsftpd-dbox2.conf:TARGET/etc/vsftpd.conf;install:-d:TARGET/share/empty
 inetd;install:-m755:inetd:TARGET/sbin
 modutils;make:install-bin:sbindir=TARGET/sbin

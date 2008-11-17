@@ -248,6 +248,18 @@ root: \
 root_optional: \
 	.portmap .mrouted
 
+if BUSYBOX_113
+.busybox: .bootstrap @DEPENDS_busybox113@
+	@PREPARE_busybox113@
+	cat Patches/busybox113.config > @DIR_busybox113@/.config
+	cd @DIR_busybox113@ && \
+		$(MAKE) all install \
+			CROSS_COMPILE=$(target)- \
+			CFLAGS_EXTRA="-Os -msoft-float" \
+			ARCH=powerpc PREFIX=$(targetprefix) && \
+	@CLEANUP_busybox113@
+	touch $@
+else
 if BUSYBOX_17
 .busybox: .bootstrap @DEPENDS_busybox17@
 	@PREPARE_busybox17@
@@ -282,6 +294,7 @@ else
 		@INSTALL_busybox@
 	@CLEANUP_busybox@
 	touch $@
+endif
 endif
 endif
 
@@ -2901,7 +2914,6 @@ distclean-local:
 if TARGETRULESET_FLASH
 	-rm -rf $(flashprefix)
 endif
-
 
 @ARCHIVE@
 

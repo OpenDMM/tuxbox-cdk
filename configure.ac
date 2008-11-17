@@ -89,11 +89,12 @@ AM_CONDITIONAL(EPG_STANDARD,test "$EPG" = "standard")
 AM_CONDITIONAL(EPG_PRIVATE,test "$EPG" = "private")
 
 AC_ARG_WITH(busybox,
-	[  --with-busybox=NAME dreambox busybox [[1.0,1.2,1.7]]],
+	[  --with-busybox=NAME dreambox busybox [[1.0,1.2,1.7,1.13]]],
 	[BUSYBOX="$withval"],[BUSYBOX="1.0"])
 AC_SUBST(BUSYBOX)
 AM_CONDITIONAL(BUSYBOX_12,test "$BUSYBOX" = "1.2")
 AM_CONDITIONAL(BUSYBOX_17,test "$BUSYBOX" = "1.7")
+AM_CONDITIONAL(BUSYBOX_113,test "$BUSYBOX" = "1.13")
 
 AC_ARG_WITH(freetype,
 	[  --with-freetype=NAME dreambox freetype [[2.0,2.1]]],
@@ -357,6 +358,7 @@ TUXBOX_RULES_MAKE(squashfs)
 TUXBOX_RULES_MAKE(busybox)
 TUXBOX_RULES_MAKE(busybox12)
 TUXBOX_RULES_MAKE(busybox17)
+TUXBOX_RULES_MAKE(busybox113)
 TUXBOX_RULES_MAKE(ftpd)
 TUXBOX_RULES_MAKE(modutils)
 TUXBOX_RULES_MAKE(portmap)

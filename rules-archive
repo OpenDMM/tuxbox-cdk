@@ -27,6 +27,7 @@ watchdog_5.2.orig.tar.gz;ftp://ftp.debian.org/debian/pool/main/w/watchdog
 #
 # root
 #
+busybox-1.13.0.tar.bz2;http://www.busybox.net/downloads
 busybox-1.7.2.tar.bz2;http://www.busybox.net/downloads
 busybox-1.2.1.tar.bz2;http://www.busybox.net/downloads
 busybox-1.01.tar.bz2;http://www.busybox.net/downloads
