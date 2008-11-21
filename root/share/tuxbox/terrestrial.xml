@@ -7,7 +7,7 @@
 	and combinations of this.
 -->
 <!-- transponder parameters:
-	bandwitdh: 0 = 8 MHz, 1 = 7 MHz, 2 = 6 MHz, 3 = Auto (unsupported, default)
+	bandwidth: 0 = 8 MHz, 1 = 7 MHz, 2 = 6 MHz, 3 = Auto (unsupported, default)
 	constellation: 0 = QPSK, 1 = 16-QAM (default), 2 = 64-QAM, 3 = Auto
 	code_rate_{lp,hp}: 0 = 1/2, 1 = 2/3, 2 = 3/4, 3 = 5/6, 4 = 7/8, 5 = Auto (default), 6 = None
 	guard_interval: 0 = 1/32, 1 = 1/16, 2 = 1/8, 3 = 1/4, 4 = Auto (default)
