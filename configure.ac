@@ -9,7 +9,8 @@ fi
 AC_CANONICAL_TARGET
 AC_SUBST(target)
 
-AM_INIT_AUTOMAKE([])
+# automake1.10 comes with verbose warning output, but we don't want them
+AM_INIT_AUTOMAKE([-Wno-portability])
 AM_MAINTAINER_MODE
 
 AC_PROG_CC
