@@ -544,6 +544,7 @@ TUXBOX_RULES_MAKE(libglib)
 TUXBOX_RULES_MAKE(libiconv)
 TUXBOX_RULES_MAKE(libtool)
 TUXBOX_RULES_MAKE(libFLAC)
+TUXBOX_RULES_MAKE(libgettext)
 
 #
 # contrib apps

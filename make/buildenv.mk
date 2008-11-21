@@ -16,8 +16,6 @@ BUILDENV := \
 	LDFLAGS="$(TARGET_LDFLAGS)" \
 	PKG_CONFIG_PATH=$(targetprefix)/lib/pkgconfig
 
-BUILDENV_LIBS := $(BUILDENV)
-
 DEPDIR = .deps
 
 VPATH = $(DEPDIR)

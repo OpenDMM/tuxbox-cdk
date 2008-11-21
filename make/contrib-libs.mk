@@ -26,7 +26,7 @@ $(DEPDIR)/libboost: bootstrap @DEPENDS_libboost@
 $(DEPDIR)/libcommoncplusplus: bootstrap libxml2 @DEPENDS_libcommoncplusplus@
 	@PREPARE_libcommoncplusplus@
 	cd @DIR_libcommoncplusplus@ && \
-		$(BUILDENV_LIBS) \
+		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
@@ -54,7 +54,7 @@ $(DEPDIR)/libcrypto: bootstrap @DEPENDS_libcrypto@
 $(DEPDIR)/libcurl: bootstrap @DEPENDS_libcurl@
 	@PREPARE_libcurl@
 	cd @DIR_libcurl@ && \
-		$(BUILDENV_LIBS) \
+		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
@@ -77,7 +77,7 @@ $(DEPDIR)/libcurl: bootstrap @DEPENDS_libcurl@
 $(DEPDIR)/libdirectfb: bootstrap libfreetype libjpeg libpng libz @DEPENDS_libdirectfb@
 	@PREPARE_libdirectfb@
 	cd @DIR_libdirectfb@ && \
-		$(BUILDENV_LIBS) \
+		$(BUILDENV) \
 		LDFLAGS=-L$(targetprefix)/lib \
 		CPPFLAGS="-I$(buildprefix)/linux/arch/ppc" \
 		CFLAGS="$(TARGET_CFLAGS) -I$(buildprefix)/linux/arch/ppc" \
@@ -106,7 +106,7 @@ $(DEPDIR)/libdirectfb: bootstrap libfreetype libjpeg libpng libz @DEPENDS_libdir
 $(DEPDIR)/libdirectfbpp: bootstrap libdirectfb @DEPENDS_libdirectfbpp@
 	@PREPARE_libdirectfbpp@
 	cd @DIR_libdirectfbpp@ && \
-		$(BUILDENV_LIBS) \
+		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
@@ -122,7 +122,7 @@ $(DEPDIR)/libdirectfbpp: bootstrap libdirectfb @DEPENDS_libdirectfbpp@
 $(DEPDIR)/libppdirectfb: bootstrap libdirectfb @DEPENDS_libppdirectfb@
 	@PREPARE_libppdirectfb@
 	cd @DIR_libppdirectfb@ && \
-		$(BUILDENV_LIBS) \
+		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
@@ -140,13 +140,13 @@ $(DEPDIR)/libdvb: bootstrap @DEPENDS_libdvb@
 if !KERNEL26
 	cd @DIR_libdvb@ && \
 		$(MAKE) libdvb.a libdvbci.a libdvbmpegtools.a \
-		$(BUILDENV_LIBS) \
+		$(BUILDENV) \
 		CFLAGS="$(TARGET_CFLAGS) -I$(driverdir)/dvb/include -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE" && \
 		@INSTALL_libdvb@
 else
 	cd @DIR_libdvb@ && \
 		$(MAKE) libdvb.a libdvbci.a libdvbmpegtools.a \
-		$(BUILDENV_LIBS) \
+		$(BUILDENV) \
 		CFLAGS="$(TARGET_CFLAGS) -I$(targetprefix)/include -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE" && \
 		@INSTALL_libdvb@
 endif
@@ -156,7 +156,7 @@ endif
 $(DEPDIR)/libdvbpsi: bootstrap @DEPENDS_libdvbpsi@
 	@PREPARE_libdvbpsi@
 	cd @DIR_libdvbpsi@ && \
-		$(BUILDENV_LIBS) \
+		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
@@ -169,7 +169,7 @@ $(DEPDIR)/libdvbpsi: bootstrap @DEPENDS_libdvbpsi@
 $(DEPDIR)/libexpat: bootstrap @DEPENDS_libexpat@
 	@PREPARE_libexpat@
 	cd @DIR_libexpat@ && \
-		$(BUILDENV_LIBS) \
+		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
@@ -182,7 +182,7 @@ $(DEPDIR)/libexpat: bootstrap @DEPENDS_libexpat@
 $(DEPDIR)/libffi: bootstrap @DEPENDS_libffi@
 	@PREPARE_libffi@
 	cd @DIR_libffi@ && \
-		$(BUILDENV_LIBS) \
+		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
@@ -195,7 +195,7 @@ $(DEPDIR)/libffi: bootstrap @DEPENDS_libffi@
 $(DEPDIR)/libfreetype: bootstrap @DEPENDS_libfreetype@
 	@PREPARE_libfreetype@
 	cd @DIR_libfreetype@ && \
-		$(BUILDENV_LIBS) \
+		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
@@ -211,7 +211,7 @@ $(DEPDIR)/libfreetype: bootstrap @DEPENDS_libfreetype@
 $(DEPDIR)/libfribidi: bootstrap @DEPENDS_libfribidi@
 	@PREPARE_libfribidi@
 	cd @DIR_libfribidi@ && \
-		$(BUILDENV_LIBS) \
+		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
@@ -225,7 +225,7 @@ $(DEPDIR)/libfribidi: bootstrap @DEPENDS_libfribidi@
 $(DEPDIR)/libgmp: bootstrap @DEPENDS_libgmp@
 	@PREPARE_libgmp@
 	cd @DIR_libgmp@ && \
-		$(BUILDENV_LIBS) \
+		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
@@ -238,7 +238,7 @@ $(DEPDIR)/libgmp: bootstrap @DEPENDS_libgmp@
 $(DEPDIR)/libid3tag: bootstrap libz @DEPENDS_libid3tag@
 	@PREPARE_libid3tag@
 	cd @DIR_libid3tag@ && \
-		$(BUILDENV_LIBS) \
+		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
@@ -252,7 +252,7 @@ $(DEPDIR)/libid3tag: bootstrap libz @DEPENDS_libid3tag@
 $(DEPDIR)/libjpeg: bootstrap @DEPENDS_libjpeg@
 	@PREPARE_libjpeg@
 	cd @DIR_libjpeg@ && \
-		$(BUILDENV_LIBS) \
+		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
@@ -265,7 +265,7 @@ $(DEPDIR)/libjpeg: bootstrap @DEPENDS_libjpeg@
 $(DEPDIR)/libmad: bootstrap libz @DEPENDS_libmad@
 	@PREPARE_libmad@
 	cd @DIR_libmad@ && \
-		$(BUILDENV_LIBS) \
+		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
@@ -282,7 +282,7 @@ $(DEPDIR)/libmad: bootstrap libz @DEPENDS_libmad@
 $(DEPDIR)/libncurses: bootstrap @DEPENDS_libncurses@
 	@PREPARE_libncurses@
 	cd @DIR_libncurses@ && \
-		$(BUILDENV_LIBS) \
+		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
@@ -308,7 +308,7 @@ $(DEPDIR)/libncurses: bootstrap @DEPENDS_libncurses@
 $(DEPDIR)/libpcap: bootstrap @DEPENDS_libpcap@ Patches/libpcap.diff
 	@PREPARE_libpcap@
 	cd @DIR_libpcap@ && \
-		$(BUILDENV_LIBS) \
+		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
@@ -322,12 +322,12 @@ $(DEPDIR)/libpcap: bootstrap @DEPENDS_libpcap@ Patches/libpcap.diff
 $(DEPDIR)/libpng: bootstrap libz @DEPENDS_libpng@
 	@PREPARE_libpng@
 	cd @DIR_libpng@ && \
-		$(BUILDENV_LIBS) \
+		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
 			--prefix=$(targetprefix) && \
-		$(MAKE) all $(BUILDENV_LIBS) && \
+		$(MAKE) all $(BUILDENV) && \
 		$(MAKE) install && $(target)-ar cru $(targetprefix)/lib/libpng12_pic.a *.o && \
 		rm -f $(hostprefix)/bin/libpng-config && \
 		ln -s $(targetprefix)/bin/libpng-config $(hostprefix)/bin/libpng-config
@@ -338,7 +338,7 @@ $(DEPDIR)/libreadline: bootstrap @DEPENDS_libreadline@
 	@PREPARE_libreadline@
 	cd @DIR_libreadline@ && \
 		autoconf && \
-		$(BUILDENV_LIBS) \
+		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
@@ -351,7 +351,7 @@ $(DEPDIR)/libreadline: bootstrap @DEPENDS_libreadline@
 $(DEPDIR)/libsdl: bootstrap libdirectfb @DEPENDS_libsdl@
 	@PREPARE_libsdl@
 	cd @DIR_libsdl@ && \
-		$(BUILDENV_LIBS) \
+		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
@@ -389,7 +389,7 @@ $(DEPDIR)/libsdl: bootstrap libdirectfb @DEPENDS_libsdl@
 $(DEPDIR)/libsigc: bootstrap @DEPENDS_libsigc@
 	@PREPARE_libsigc@
 	cd @DIR_libsigc@ && \
-		$(BUILDENV_LIBS) \
+		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
@@ -403,7 +403,7 @@ $(DEPDIR)/libsigc: bootstrap @DEPENDS_libsigc@
 $(DEPDIR)/libvorbisidec: bootstrap @DEPENDS_libvorbisidec@
 	@PREPARE_libvorbisidec@
 	cd @DIR_libvorbisidec@ && \
-		$(BUILDENV_LIBS) \
+		$(BUILDENV) \
 		./autogen.sh \
 			--build=$(build) \
 			--host=$(target) \
@@ -416,7 +416,7 @@ $(DEPDIR)/libvorbisidec: bootstrap @DEPENDS_libvorbisidec@
 $(DEPDIR)/libxml2: bootstrap @DEPENDS_libxml2@
 	@PREPARE_libxml2@
 	cd @DIR_libxml2@ && \
-		$(BUILDENV_LIBS) \
+		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
@@ -443,7 +443,7 @@ $(DEPDIR)/libxml2: bootstrap @DEPENDS_libxml2@
 $(DEPDIR)/libz: bootstrap @DEPENDS_libz@
 	@PREPARE_libz@
 	cd @DIR_libz@ && \
-		$(BUILDENV_LIBS) \
+		$(BUILDENV) \
 		./configure \
 			--prefix= \
 			--shared && \
@@ -458,7 +458,7 @@ $(DEPDIR)/libglib: bootstrap @DEPENDS_libglib@
 	echo "glib_cv_stack_grows=no" >> @DIR_libglib@/config.cache
 	echo "glib_cv_uscore=no" >> @DIR_libglib@/config.cache
 	cd @DIR_libglib@ && \
-		$(BUILDENV_LIBS) \
+		$(BUILDENV) \
 		./configure \
 			--cache-file=config.cache \
 			--build=$(build) \
@@ -472,7 +472,7 @@ $(DEPDIR)/libglib: bootstrap @DEPENDS_libglib@
 $(DEPDIR)/libungif: bootstrap @DEPENDS_libungif@
 	@PREPARE_libungif@
 	cd @DIR_libungif@ && \
-		$(BUILDENV_LIBS) \
+		$(BUILDENV) \
 		./configure \
 			--host=$(target) \
 			--build=$(build) \
@@ -486,7 +486,7 @@ $(DEPDIR)/libungif: bootstrap @DEPENDS_libungif@
 $(DEPDIR)/libiconv: bootstrap @DEPENDS_libiconv@
 	@PREPARE_libiconv@
 	cd @DIR_libiconv@ && \
-		$(BUILDENV_LIBS) \
+		$(BUILDENV) \
 		./configure \
 			--host=$(target) \
 			--build=$(build) \
@@ -499,7 +499,7 @@ $(DEPDIR)/libiconv: bootstrap @DEPENDS_libiconv@
 $(DEPDIR)/libFLAC: bootstrap @DEPENDS_libFLAC@
 	@PREPARE_libFLAC@
 	cd @DIR_libFLAC@ && \
-		$(BUILDENV_LIBS) \
+		$(BUILDENV) \
 		./configure \
 			--host=$(target) \
 			--build=$(build) \
@@ -512,11 +512,25 @@ $(DEPDIR)/libFLAC: bootstrap @DEPENDS_libFLAC@
 	@CLEANUP_libFLAC@
 	touch $@
 
+$(DEPDIR)/libgettext: bootstrap @DEPENDS_libgettext@
+	@PREPARE_libgettext@
+	cd @DIR_libgettext@ && \
+		$(BUILDENV) \
+		./configure \
+			--host=$(target) \
+			--build=$(build) \
+			--disable-java \
+			--prefix= && \
+		$(MAKE) && \
+		@INSTALL_libgettext@
+	@CLEANUP_libgettext@
+	touch $@
+
 # ripped from uclibc/.../libtool.mk
 $(DEPDIR)/libtool: bootstrap @DEPENDS_libtool@
 	@PREPARE_libtool@
 	cd @DIR_libtool@ && \
-		$(BUILDENV_LIBS) \
+		$(BUILDENV) \
 		./configure \
 			--target=$(target) \
 			--host=$(target) \
