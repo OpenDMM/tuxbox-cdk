@@ -63,7 +63,6 @@ $(DEPDIR)/libcurl: bootstrap @DEPENDS_libcurl@
 			--disable-ldap \
 			--disable-dict \
 			--disable-telnet \
-			--disable-dict \
 			--without-ssl \
 			--with-random && \
 		$(MAKE) all && \
