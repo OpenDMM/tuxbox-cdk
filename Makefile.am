@@ -97,7 +97,7 @@ endif
 	@PREPARE_binutils@
 	cd @DIR_binutils@ && \
 		CC=$(CC) \
-		CFLAGS="$(CFLAGS)" \
+		CFLAGS="$(CFLAGS) -D_FORTIFY_SOURCE=0" \
 		@CONFIGURE_binutils@ \
 			--target=$(target) \
 			--prefix=$(hostprefix) \
@@ -123,7 +123,7 @@ bootstrap_gcc: @DEPENDS_bootstrap_gcc@
 		ln -sf $(buildprefix)/linux/include/$$i $(hostprefix)/$(target)/include; \
 	done;
 	cd @DIR_bootstrap_gcc@ && \
-		CC=$(CC) CFLAGS="$(CFLAGS)" \
+		CC=$(CC) CFLAGS="$(CFLAGS) -D_FORTIFY_SOURCE=0" \
 		@CONFIGURE_bootstrap_gcc@ \
 			--build=$(build) \
 			--host=$(build) \
@@ -212,7 +212,7 @@ bootstrap_gcc: @DEPENDS_bootstrap_gcc@
 	fi
 	cp -p $(hostprefix)/$(target)/include/limits.h $(hostprefix)/$(target)/sys-include/
 	cd @DIR_gcc@ && \
-		CC=$(CC) CFLAGS="$(CFLAGS)" \
+		CC=$(CC) CFLAGS="$(CFLAGS) -D_FORTIFY_SOURCE=0" \
 		@CONFIGURE_gcc@ \
 			--build=$(build) \
 			--host=$(build) \
