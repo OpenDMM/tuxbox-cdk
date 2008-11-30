@@ -128,10 +128,12 @@ if [ $mID -eq 05 ] ; then
 			rm /hdd/epg.*
 		fi
 	fi
-	
-	mount -n -t usbfs usbfs /proc/bus/usb
-	mount /dev/scsi/host0/bus0/target0/lun0/part1 /mnt/usb
-	mount /dev/scsi/host0/bus0/target0/lun0/disc /mnt/usb
+
+	if [ ! -e /var/etc/.dont_mount_usb ] ; then	
+		mount -n -t usbfs usbfs /proc/bus/usb
+		mount /dev/scsi/host0/bus0/target0/lun0/part1 /mnt/usb
+		mount /dev/scsi/host0/bus0/target0/lun0/disc /mnt/usb
+	fi
 fi
 
 if [ -e /var/etc/install.tar ] ; then
