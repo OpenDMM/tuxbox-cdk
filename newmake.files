@@ -29,7 +29,6 @@ cdk/make/ccache.mk
 cdk/make/cleantargets.mk
 cdk/make/contrib-apps.mk
 cdk/make/contrib-libs.mk
-cdk/make/cramfs.urls.mk
 cdk/make/defaultlocale.mk
 cdk/make/defaultvalues.mk
 cdk/make/development-tools.mk
@@ -80,6 +79,7 @@ cdk/make/tuxbox_libs.mk
 cdk/make/tuxbox_tools.mk
 cdk/make/u-boot.mk
 cdk/make/ucodes.mk
+cdk/make/update.urls.mk
 cdk/make/upnp.mk
 cdk/make/version.mk
 cdk/make/zapit.mk

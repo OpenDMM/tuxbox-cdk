@@ -2,10 +2,9 @@
 # nonempty.
 
 # Create a file with URLs containing lists of possible image files for
-# updating. Don't let the name confuse: This convers all sort of image
-# files, not just cramfs. The file name is well established though.
+# updating. 
 
-$(flashprefix)/root/etc/cramfs.urls:
+$(flashprefix)/root/etc/update.urls:
 	@rm -f $@
 	@touch $@
 	if [ ! -z $(updatehttpprefix) ] ; then \

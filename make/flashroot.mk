@@ -24,7 +24,7 @@ endif
 if ENABLE_IDE
 	$(INSTALL) -d $@/hdd
 endif
-	$(MAKE) $@/etc/cramfs.urls
+	$(MAKE) $@/etc/update.urls
 	$(MAKE) flash-tuxinfo
 	$(MAKE) flash-tools_misc
 	$(MAKE) flash-fcp

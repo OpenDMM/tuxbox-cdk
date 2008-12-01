@@ -171,8 +171,8 @@ include make/flash-streampes.mk
 # Build distribution lists in neutrino internet update format
 include make/distribution-lists.mk
 
-# /etc/cramfs.urls contains URLs for update lists
-include make/cramfs.urls.mk
+# /etc/update.urls contains URLs for update lists
+include make/update.urls.mk
 endif
 
 # Files not to be deleted, even though they are intermediate products
