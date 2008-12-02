@@ -121,7 +121,7 @@ endif
 			--disable-threads \
 			--disable-nls \
 			--without-fp && \
-		$(MAKE) all && \
+		$(MAKE) -j $(J) all && \
 		@INSTALL_bootstrap_gcc@
 	rm -rf $(hostprefix)/$(target)/sys-include
 	@CLEANUP_bootstrap_gcc@
@@ -154,7 +154,7 @@ $(DEPDIR)/glibc: @DEPENDS_glibc@ bootstrap_gcc install-linux-headers
 			--without-fp \
 			--cache-file=config.cache \
 			$(GLIBC_EXTRA_FLAGS) && \
-		$(MAKE) all && \
+		$(MAKE) -j $(J) all && \
 		@INSTALL_glibc@
 	@CLEANUP_glibc@
 	sed -e's, /lib/, $(targetprefix)/lib/,g' < $(targetprefix)/lib/libc.so > $(targetprefix)/lib/libc.so.new
@@ -201,7 +201,7 @@ $(DEPDIR)/gcc: @DEPENDS_gcc@ glibc
 			--enable-threads \
 			--disable-nls \
 			--without-fp && \
-		$(MAKE) all && \
+		$(MAKE) -j $(J) all && \
 		@INSTALL_gcc@
 	rm -rf $(hostprefix)/$(target)/sys-include
 	for i in `find $(hostprefix)/$(target)/lib/nof` ; do mv $$i $(hostprefix)/$(target)/lib; done

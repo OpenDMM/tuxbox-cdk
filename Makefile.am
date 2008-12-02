@@ -1,5 +1,7 @@
 ## Makefile for Tuxbox
 
+J := 1
+
 # Define high-level and yadd targets
 include make/high-level-yadd.mk
 
