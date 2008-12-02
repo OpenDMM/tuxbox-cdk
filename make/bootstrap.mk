@@ -91,7 +91,9 @@ $(DEPDIR)/binutils: @DEPENDS_binutils@ directories
 			--disable-nls \
 			--disable-werror \
 			--without-fp && \
-		$(MAKE) all all-gprof && \
+		$(MAKE) configure-host && \
+		$(MAKE) -j $(J) all && \
+		$(MAKE) -j $(J) all-gprof && \
 		@INSTALL_binutils@
 	@CLEANUP_binutils@
 	touch $@
