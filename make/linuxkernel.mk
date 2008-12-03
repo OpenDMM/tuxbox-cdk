@@ -159,6 +159,7 @@ driver: $(KERNEL_BUILD_FILENAME)
 		CROSS_COMPILE=$(target)-
 	$(MAKE) -C $(driverdir) \
 		KERNEL_LOCATION=$(buildprefix)/linux \
+		CROSS_COMPILE=$(target)- \
 		BIN_DEST=$(targetprefix)/bin \
 		INSTALL_MOD_PATH=$(targetprefix) \
 		install

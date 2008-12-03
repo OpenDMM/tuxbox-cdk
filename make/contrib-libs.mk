@@ -53,9 +53,13 @@ $(DEPDIR)/libcrypto: bootstrap @DEPENDS_libcrypto@
 	touch $@
 
 $(DEPDIR)/libcurl: bootstrap @DEPENDS_libcurl@
+if TARGETRULESET_UCLIBC
+CURL_UCLIBC=ac_cv_func_inet_ntoa_r=no
+endif
 	@PREPARE_libcurl@
 	cd @DIR_libcurl@ && \
 		$(BUILDENV) \
+		$(CURL_UCLIBC) \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \

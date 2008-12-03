@@ -3,7 +3,15 @@ AC_PREREQ(2.57a)
 
 AC_CANONICAL_BUILD
 AC_SUBST(build)
-if test "$target_alias" = "" ; then
+
+AC_ARG_ENABLE(uclibc,
+	AS_HELP_STRING(--enable-uclibc,	enable rules for creating uclibc linked targets),
+	,[enable_uclibc=no])
+AM_CONDITIONAL(TARGETRULESET_UCLIBC,test "$enable_uclibc" = "yes")
+
+if test "$enable_uclibc" = "yes"; then
+	target_alias="powerpc-tuxbox-linux-uclibc"
+else
 	target_alias="powerpc-tuxbox-linux-gnu"
 fi
 AC_CANONICAL_TARGET
@@ -89,6 +97,12 @@ if test -z "$TARGET_CFLAGS" -o -z "$TARGET_CXXFLAGS"; then
 	TARGET_CXXFLAGS="$TARGET_CFLAGS"
 fi
 
+if test "$enable_uclibc" = "yes"; then
+	CFLAGS="$CFLAGS -fPIC"
+	TARGET_CFLAGS="$TARGET_CFLAGS -fPIC"
+	TARGET_CXXFLAGS="$TARGET_CXXFLAGS -fPIC"
+fi
+
 AC_ARG_ENABLE(lirc,
 	AS_HELP_STRING(--enable-lirc,	include lirc in yadds and images),
 	[case "${enableval}" in
@@ -141,6 +155,15 @@ AM_CONDITIONAL(ENABLE_IDE,test "$enable_ide" = "yes")
 AM_CONDITIONAL(ENABLE_EXT3,test "$enable_ext3" = "yes")
 AM_CONDITIONAL(ENABLE_XFS,test "$enable_xfs" = "yes")
 
+if test "$enable_uclibc" = "yes" && test "$enable_xfs" = "yes"; then
+	echo
+	echo "*******************************************************************"
+	echo "***** XFS does not work with uClibc yet - use \"--disable-xfs\" *****"
+	echo "*******************************************************************"
+	echo
+	exit 1
+fi
+
 AC_ARG_ENABLE(nfsserver,
 	AS_HELP_STRING(--enable-nfsserver,	enable the dBox NFS server),
 	[case "${enableval}" in
@@ -161,7 +184,7 @@ AC_ARG_ENABLE(dosfstools,
 	AS_HELP_STRING(--enable-dosfstools,    enable the dosfstools),
 	[case "${enableval}" in
 		yes) DOSFSTOOLS=dosfstools ;;
-	esac])
+	esac],[enable_dosfstools=no])
 AM_CONDITIONAL(ENABLE_DOSFSTOOLS,test "$enable_dosfstools" = "yes")
 AC_SUBST(DOSFSTOOLS)
 
@@ -174,6 +197,15 @@ AC_ARG_ENABLE(flac,
 	AS_HELP_STRING(--enable-flac,include Neutrino flac audio decoder with libFLAC),
 	,[enable_flac=no])
 AM_CONDITIONAL(ENABLE_FLAC,test "$enable_flac" = "yes")
+
+if test "$enable_uclibc" = "yes" && test "$enable_flac" = "yes" && test "$enable_flashrules" = "yes"; then
+	echo
+	echo "*********************************************************************"
+	echo "***** FLAC does not work with uClibc yet - use \"--disable-flac\" *****"
+	echo "*********************************************************************"
+	echo
+	exit 1
+fi
 
 AC_ARG_WITH(rootpartitionsize,
 	[  --with-rootpartitionsize=SIZE	size of the root partition],
@@ -390,7 +422,12 @@ if test "$YACC" != "bison -y"; then
 fi
 
 if test "$enable_flashrules" = "yes"; then
-	MKLIBS="$hostappsdir/mklibs/mklibs.py"
+	if test "$enable_uclibc" = "yes"; then
+		MKLIBS="$hostappsdir/mklibs/mklibs_uclibc.py"
+	else
+		MKLIBS="$hostappsdir/mklibs/mklibs.py"
+	fi
+	[[ -x "$MKLIBS" ] && true || chmod +x "$MKLIBS" ]
 	AC_SUBST(MKLIBS)
 
 	AC_PATH_PROG(MKCRAMFS,mkcramfs,no)
@@ -655,12 +692,19 @@ else
 	used_kernelversion="2.4.x"
 fi
 
+if test "$enable_uclibc" == "yes"; then
+	used_libc="uclibc"
+else
+	used_libc="glibc"
+fi
+
 AC_MSG_RESULT([
 summary:
 ----------------------------------------
 target cpu:			$CPU_MODEL
 kernel:				$used_kernelversion
-glibc-pthreads:			$GLIBC_PTHREADS
+libc:				$used_libc
+threads:			$GLIBC_PTHREADS
 target:				$target
 host:				$host
 flash rules:			$enable_flashrules

@@ -129,7 +129,32 @@ endif
 	@CLEANUP_bootstrap_gcc@
 	touch $@
 
-$(DEPDIR)/glibc: @DEPENDS_glibc@ bootstrap_gcc install-linux-headers
+if TARGETRULESET_UCLIBC
+
+$(DEPDIR)/libc: @DEPENDS_uclibc@ bootstrap_gcc install-linux-headers
+if KERNEL26
+KHEADERS="$(buildprefix)/$(KERNEL_DIR)/usr/include"
+else
+KHEADERS="$(buildprefix)/$(KERNEL_DIR)/include"
+endif
+	@PREPARE_uclibc@
+	cp Patches/uclibc-@VERSION_uclibc@.config @DIR_uclibc@/.config
+	sed -i -e 's,^KERNEL_HEADERS=.*,KERNEL_HEADERS=$(KHEADERS),g' @DIR_uclibc@/.config
+	$(MAKE) -C @DIR_uclibc@ oldconfig ARCH=ppc
+	cd @DIR_uclibc@ && \
+		$(BUILDENV) \
+		$(MAKE) \
+		PREFIX= \
+		HOSTCC=$(CC) \
+		all && \
+		@INSTALL_uclibc@
+	sed -i -e 's,/lib/,$(targetprefix)/lib/,g' $(targetprefix)/lib/libc.so
+	@CLEANUP_uclibc@
+	touch $@
+
+else
+
+$(DEPDIR)/libc: @DEPENDS_glibc@ bootstrap_gcc install-linux-headers
 	@PREPARE_glibc@
 	touch @DIR_glibc@/config.cache
 	@if [ $(GLIBC_PTHREADS) = "nptl" ]; then \
@@ -165,28 +190,21 @@ $(DEPDIR)/glibc: @DEPENDS_glibc@ bootstrap_gcc install-linux-headers
 	mv $(targetprefix)/lib/libpthread.so.new $(targetprefix)/lib/libpthread.so
 	touch $@
 
-#
-# uClibc
-# a minimalistic libc, won't currently work with libstdc++
-#
-$(DEPDIR)/uclibc: @DEPENDS_uclibc@
-	@PREPARE_uclibc@
-	cd @DIR_uclibc@ && \
-		$(MAKE) all CROSS=$(target)- && \
-		@INSTALL_uclibc@
-	@CLEANUP_uclibc@
-	touch $@
+endif
 
 #
 # gcc second stage
 #
-$(DEPDIR)/gcc: @DEPENDS_gcc@ glibc
+$(DEPDIR)/gcc: @DEPENDS_gcc@ libc
 # if we have a symlink inside the libdir (in case gcc has already been built)
 # we remove it here
 	@if [ -h $(hostprefix)/$(target)/lib/nof ]; then \
 		rm -f $(hostprefix)/$(target)/lib/nof; \
 	fi
 	@PREPARE_gcc@
+if TARGETRULESET_UCLIBC
+	cd @SOURCEDIR_gcc@ && patch -p1 -E -i $(buildprefix)/Patches/gcc-uclibc.diff
+endif
 	$(INSTALL) -d $(hostprefix)/$(target)/sys-include
 	cp -p $(hostprefix)/$(target)/include/limits.h $(hostprefix)/$(target)/sys-include/
 	cd @DIR_gcc@ && \

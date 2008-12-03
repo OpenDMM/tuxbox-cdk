@@ -1,6 +1,10 @@
 # tuxbox/enigma
 
+if TARGETRULESET_UCLIBC
+$(appsdir)/tuxbox/enigma/config.status: bootstrap libfreetype libfribidi libmad libid3tag libpng libsigc libjpeg libungif libgettext $(targetprefix)/lib/pkgconfig/tuxbox.pc $(targetprefix)/lib/pkgconfig/tuxbox-xmltree.pc $(targetprefix)/include/tuxbox/plugin.h
+else
 $(appsdir)/tuxbox/enigma/config.status: bootstrap libfreetype libfribidi libmad libid3tag libpng libsigc libjpeg libungif $(targetprefix)/lib/pkgconfig/tuxbox.pc $(targetprefix)/lib/pkgconfig/tuxbox-xmltree.pc $(targetprefix)/include/tuxbox/plugin.h
+endif
 	cd $(appsdir)/tuxbox/enigma && $(CONFIGURE)
 
 enigma: $(appsdir)/tuxbox/enigma/config.status | tuxbox_tools
@@ -21,9 +25,11 @@ $(flashprefix)/root-enigma: $(appsdir)/tuxbox/enigma/config.status
 	cp -pa $(appsdir)/tuxbox/enigma/po/locale.alias.image $@/share/locale/locale.alias
 	mkdir $@/lib
 	tar -C $@/lib -xjvf $(appsdir)/tuxbox/enigma/po/locale.image.tar.bz2
+if !TARGETRULESET_UCLIBC
 	cp -rd $(targetprefix)/share/zoneinfo $@/share
 	cp -rd $(targetprefix)/share/locale/de/LC_MESSAGES/libc.mo $@/share/locale/de/LC_MESSAGES
 	cp -rd $(targetprefix)/share/locale/fr/LC_MESSAGES/libc.mo $@/share/locale/fr/LC_MESSAGES
+endif
 	rm -rf $@/share/locale/[a-c]* $@/share/locale/da $@/share/locale/e* $@/share/locale/fi $@/share/locale/[g-t]* $@/share/locale/[m-z]*
 	cp $(appsdir)/tuxbox/enigma/po/locale.alias.image $@/share/locale/locale.alias
 	$(MAKE) -C $(appsdir)/tuxbox/plugins/enigma/dbswitch all install prefix=$@

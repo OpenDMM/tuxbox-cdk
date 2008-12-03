@@ -71,6 +71,10 @@ $(flashprefix)/root/sbin/fdisk: utillinux
 
 endif
 
+if TARGETRULESET_UCLIBC
+E2FSPROGSOPT=--disable-tls
+endif
+
 #e2fs2progs
 $(DEPDIR)/e2fsprogs: bootstrap @DEPENDS_e2fsprogs@
 	@PREPARE_e2fsprogs@
@@ -98,6 +102,7 @@ $(DEPDIR)/e2fsprogs: bootstrap @DEPENDS_e2fsprogs@
 			--enable-dynamic-e2fsck \
 			--enable-fsck \
 			--with-gnu-ld \
+			$(E2FSPROGSOPT) \
 			--disable-nls && \
 		$(MAKE) libs progs && \
 		$(MAKE) install-libs && \
@@ -135,6 +140,7 @@ $(flashprefix)/root/sbin/e2fsck: bootstrap @DEPENDS_e2fsprogs@ | $(flashprefix)/
 			--enable-dynamic-e2fsck \
 			--enable-fsck \
 			--with-gnu-ld \
+			$(E2FSPROGSOPT) \
 			--disable-nls && \
 		$(MAKE) libs progs && \
 		$(MAKE) install-libs && \
@@ -237,6 +243,7 @@ $(DEPDIR)/xfsprogs: bootstrap libtool @DEPENDS_e2fsprogs@ @DEPENDS_xfsprogs@
 			--enable-dynamic-e2fsck \
 			--enable-fsck \
 			--with-gnu-ld \
+			$(E2FSPROGSOPT) \
 			--disable-nls && \
 		$(MAKE) libs && \
 		$(INSTALL) -d $(targetprefix)/include/uuid && \
@@ -292,6 +299,7 @@ $(flashprefix)/root/sbin/mkfs.xfs: bootstrap libtool @DEPENDS_e2fsprogs@ @DEPEND
 			--enable-dynamic-e2fsck \
 			--enable-fsck \
 			--with-gnu-ld \
+			$(E2FSPROGSOPT) \
 			--disable-nls && \
 		$(MAKE) libs && \
 		$(INSTALL) -d $(targetprefix)/include/uuid && \
