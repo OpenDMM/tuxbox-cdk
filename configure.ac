@@ -687,9 +687,9 @@ ${srcdir}/rules-archive.pl ${srcdir}/rules-archive > Makefile-archive
 #
 
 if test "$enable_kernel26" == "yes"; then
-	used_kernelversion="2.6.x"
+	used_kernelversion="2.6"
 else
-	used_kernelversion="2.4.x"
+	used_kernelversion="2.4"
 fi
 
 if test "$enable_uclibc" == "yes"; then
@@ -755,9 +755,9 @@ AC_MSG_RESULT([
 ])
 fi
 
-TUXBOX_CUSTOMIZE='[[ -x $(customizationsdir)/$(notdir $@)-local.sh ] && $(customizationsdir)/$(notdir $@)-local.sh $(flashprefix) $(buildprefix) || true]'
+TUXBOX_CUSTOMIZE='[[ -x $(customizationsdir)/$(notdir $@)-local.sh ] && KERNEL='$used_kernelversion' KERNELVERSION=$(KERNELVERSION) LIBC='$used_libc' $(customizationsdir)/$(notdir $@)-local.sh $(flashprefix) $(buildprefix) || true]'
 AC_SUBST(TUXBOX_CUSTOMIZE)
-TUXBOX_YADD_CUSTOMIZE='[[ -x $(customizationsdir)/$(notdir $@)-local.sh ] && $(customizationsdir)/$(notdir $@)-local.sh $(targetprefix) $(buildprefix) || true]'
+TUXBOX_YADD_CUSTOMIZE='[[ -x $(customizationsdir)/$(notdir $@)-local.sh ] && KERNEL='$used_kernelversion' KERNELVERSION=$(KERNELVERSION) LIBC='$used_libc' $(customizationsdir)/$(notdir $@)-local.sh $(targetprefix) $(buildprefix) || true]'
 AC_SUBST(TUXBOX_YADD_CUSTOMIZE)
 FLASHROOTDIR_MODIFIED='touch $(flashprefix)/root'
 AC_SUBST(FLASHROOTDIR_MODIFIED)
