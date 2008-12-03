@@ -393,6 +393,8 @@ $(DEPDIR)/libsdl: bootstrap libdirectfb @DEPENDS_libsdl@
 $(DEPDIR)/libsigc: bootstrap @DEPENDS_libsigc@
 	@PREPARE_libsigc@
 	cd @DIR_libsigc@ && \
+		sed -i  -e 's,^SUBDIRS = sigc++.*,SUBDIRS = sigc++,g' \
+			-e 's,^DIST_SUBDIRS = $(SUBDIRS).*,DIST_SUBDIRS = \$$\(SUBDIRS\),g'  Makefile.in && \
 		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
@@ -476,6 +478,7 @@ $(DEPDIR)/libglib: bootstrap @DEPENDS_libglib@
 $(DEPDIR)/libungif: bootstrap @DEPENDS_libungif@
 	@PREPARE_libungif@
 	cd @DIR_libungif@ && \
+		sed -i -e 's,^SUBDIRS = lib.*,SUBDIRS = lib,g' Makefile.in && \
 		$(BUILDENV) \
 		./configure \
 			--host=$(target) \
@@ -518,14 +521,14 @@ $(DEPDIR)/libFLAC: bootstrap @DEPENDS_libFLAC@
 
 $(DEPDIR)/libgettext: bootstrap @DEPENDS_libgettext@
 	@PREPARE_libgettext@
-	cd @DIR_libgettext@ && \
+	cd @DIR_libgettext@/gettext-runtime && \
 		$(BUILDENV) \
 		./configure \
 			--host=$(target) \
 			--build=$(build) \
 			--disable-java \
 			--prefix= && \
-		$(MAKE) && \
+		$(MAKE) -C intl && \
 		@INSTALL_libgettext@
 	@CLEANUP_libgettext@
 	touch $@
