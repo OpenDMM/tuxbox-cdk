@@ -52,6 +52,10 @@ endif
 		ln -sf liblufs-ftpfs.so.2.0.0 $</lib/liblufs-ftpfs.so.2 ; \
 		ln -sf liblufs-ftpfs.so.2.0.0 $</lib/liblufs-ftpfs.so ; \
 	fi
+	if [ -e $</lib/libfx2.so -a -e $</lib/tuxbox/plugins/libfx2.so ]; then \
+		rm -f $</lib/libfx2.so ; \
+		ln -s /lib/tuxbox/plugins/libfx2.so $</lib/libfx2.so; \
+	fi
 	$(target)-strip --remove-section=.comment --remove-section=.note \
 		`find $</bin/ -path "*bin/?*"` \
 		`find $</sbin/ -path "*sbin/?*"` 2>/dev/null || /bin/true
@@ -61,3 +65,4 @@ endif
 	chmod u+rwX,go+rX -R $</
 	find $</lib -name *.la | xargs rm -f
 	rm -rf $</include
+	rm -rf $</lib/pkgconfig
