@@ -126,32 +126,42 @@ if [ $KMINOR -ge 6 ]; then
 	mount /dev/pts
 fi
 
-# If appropriate, load ide drivers and file system drivers
-if [ $KMINOR -ge 6 ]; then
-	# kernel 2.6
-	if [ -e /lib/modules/$(uname -r)/extra/ide/dboxide.ko ] ; then
-		loadmodule(dboxide)
-	fi
-else
-	# kernel 2.4
-	if [ -e /lib/modules/$(uname -r)/misc/dboxide.o ] ; then
-		loadmodule(ide-core)
-		loadmodule(dboxide)
-		loadmodule(ide-detect)
-		loadmodule(ide-disk)
-		loadmodule(ext2)
-		loadmodule(jbd)
-		loadmodule(ext3)
-		loadmodule(xfs)
-	fi
-fi
 
 if [ $KMINOR -ge 6 ]; then
 	# everything else is already mounted
 	mount /var
 else
-	# Mount file systems in /etc/fstab
+	# we must mount here, so some linked files in /var/etc can be found, important for using fstab
+	mount -n -t proc proc /proc
+	mount -t jffs2 /dev/mtdblock/3 /var
+	mount -n -t tmpfs tmpfs /tmp
+	# mount file systems with /var/etc/fstab, should primarily used for hdd and mmc support!
 	mount -a
+fi
+
+# If appropriate, load ide drivers and file system drivers
+echo "ide test..."
+IDE_TEST=$(/bin/tuxinfo -C 16)
+
+if [ $IDE_TEST -eq 16 ]; then
+	if [ $KMINOR -ge 6 ]; then
+		# kernel 2.6
+		if [ -e /lib/modules/$(uname -r)/extra/ide/dboxide.ko ] ; then
+			loadmodule(dboxide)
+		fi
+	else
+		# kernel 2.4
+		if [ -e /lib/modules/$(uname -r)/misc/dboxide.o ] ; then
+			loadmodule(ide-core)
+			loadmodule(dboxide)
+			loadmodule(ide-detect)
+			loadmodule(ide-disk)
+			loadmodule(ext2)
+			loadmodule(jbd)
+			loadmodule(ext3)
+			loadmodule(xfs)
+		fi
+	fi
 fi
 
 # Turn on swap
@@ -219,6 +229,7 @@ else
 
 	# Frontprocessor
 	loadmodule(dbox2_fp)
+	loadmodule(lcd)
 	if [ -e /var/etc/.oldrc ]; then
     		loadmodule(dbox2_fp_input, disable_new_rc=1)
 	elif [ -e /var/etc/.newrc ]; then
@@ -271,7 +282,6 @@ else
 	loadmodule(avia_gt, {ucode=/var/tuxbox/ucodes/ucode.bin ${GTOPTS}})
   
 	loadmodule(avia_gt_fb, console_transparent=0)
-	loadmodule(lcd)
 	loadmodule(avia_gt_lirc)
 	loadmodule(avia_gt_oss)
 	loadmodule(avia_gt_v4l2)
