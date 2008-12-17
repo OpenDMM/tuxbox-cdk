@@ -33,7 +33,7 @@ $(DEPDIR)/ccache: @DEPENDS_ccache@ directories
 		$(INSTALL) -d $(CCACHE_BINDIR) ;\
 			ln -s $(CCACHE_TUXBOX_BIN) $(CCACHE_BINDIR)/gcc ;\
 			ln -s $(CCACHE_TUXBOX_BIN) $(CCACHE_BINDIR)/g++ ;\
-			ln -s $(CCACHE_TUXBOX_BIN) $(CCACHE_BINDIR)/$(targe)-gcc ;\
+			ln -s $(CCACHE_TUXBOX_BIN) $(CCACHE_BINDIR)/$(target)-gcc ;\
 			ln -s $(CCACHE_TUXBOX_BIN) $(CCACHE_BINDIR)/$(target)-g++ ;\
 			ln -s $(CCACHE_TUXBOX_BIN) $(CCACHE_BINDIR)/$(target)-cpp ;\
 			ln -s $(CCACHE_TUXBOX_BIN) $(CCACHE_BINDIR)/$(target)-gcc-$(VERSION_gcc) ;\
