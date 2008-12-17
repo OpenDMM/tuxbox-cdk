@@ -33,10 +33,10 @@ $(DEPDIR)/ccache: @DEPENDS_ccache@ directories
 		$(INSTALL) -d $(CCACHE_BINDIR) ;\
 			ln -s $(CCACHE_TUXBOX_BIN) $(CCACHE_BINDIR)/gcc ;\
 			ln -s $(CCACHE_TUXBOX_BIN) $(CCACHE_BINDIR)/g++ ;\
-			ln -s $(CCACHE_TUXBOX_BIN) $(CCACHE_BINDIR)/powerpc-tuxbox-linux-gnu-gcc ;\
-			ln -s $(CCACHE_TUXBOX_BIN) $(CCACHE_BINDIR)/powerpc-tuxbox-linux-gnu-g++ ;\
-			ln -s $(CCACHE_TUXBOX_BIN) $(CCACHE_BINDIR)/powerpc-tuxbox-linux-gnu-cpp ;\
-			ln -s $(CCACHE_TUXBOX_BIN) $(CCACHE_BINDIR)/powerpc-tuxbox-linux-gnu-gcc-$(VERSION_gcc) ;\
+			ln -s $(CCACHE_TUXBOX_BIN) $(CCACHE_BINDIR)/$(targe)-gcc ;\
+			ln -s $(CCACHE_TUXBOX_BIN) $(CCACHE_BINDIR)/$(target)-g++ ;\
+			ln -s $(CCACHE_TUXBOX_BIN) $(CCACHE_BINDIR)/$(target)-cpp ;\
+			ln -s $(CCACHE_TUXBOX_BIN) $(CCACHE_BINDIR)/$(target)-gcc-$(VERSION_gcc) ;\
 		$(CCACHE_TUXBOX_BIN) -M $(maxcachesize) ;\
 		$(CCACHE_TUXBOX_BIN) -F $(maxcachefiles) ;\
 		$(CCACHE_TUXBOX_BIN) -s ;\
@@ -49,10 +49,10 @@ CCACHE_BINDIR = $(hostprefix)/ccache-bin
 # generate links
 CCACHE_LINKS = 	ln -sf $(ccachedir)/ccache $(CCACHE_BINDIR)/gcc;\
  				ln -sf $(ccachedir)/ccache $(CCACHE_BINDIR)/g++;\
-				ln -sf $(ccachedir)/ccache $(CCACHE_BINDIR)/powerpc-tuxbox-linux-gnu-gcc;\
-				ln -sf $(ccachedir)/ccache $(CCACHE_BINDIR)/powerpc-tuxbox-linux-gnu-g++;\
-				ln -sf $(ccachedir)/ccache $(CCACHE_BINDIR)/powerpc-tuxbox-linux-gnu-cpp;\
-				ln -sf $(ccachedir)/ccache $(CCACHE_BINDIR)/powerpc-tuxbox-linux-gnu-gcc-$(VERSION_gcc) 
+				ln -sf $(ccachedir)/ccache $(CCACHE_BINDIR)/$(target)-gcc;\
+				ln -sf $(ccachedir)/ccache $(CCACHE_BINDIR)/$(target)-g++;\
+				ln -sf $(ccachedir)/ccache $(CCACHE_BINDIR)/$(target)-cpp;\
+				ln -sf $(ccachedir)/ccache $(CCACHE_BINDIR)/$(target)-gcc-$(VERSION_gcc) 
 
 # ccache test will show you ccache statistics
 CCACHE_TEST =	$(ccachedir)/ccache -s 
