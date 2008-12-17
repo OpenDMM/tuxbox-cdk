@@ -9,11 +9,14 @@ AC_ARG_ENABLE(uclibc,
 	,[enable_uclibc=no])
 AM_CONDITIONAL(TARGETRULESET_UCLIBC,test "$enable_uclibc" = "yes")
 
-if test "$enable_uclibc" = "yes"; then
-	target_alias="powerpc-tuxbox-linux-uclibc"
-else
-	target_alias="powerpc-tuxbox-linux-gnu"
+if test "$target_alias" = "" ; then
+	if test "$enable_uclibc" = "yes"; then
+		target_alias="powerpc-tuxbox-linux-uclibc"
+	else
+		target_alias="powerpc-tuxbox-linux-gnu"
+	fi
 fi
+
 AC_CANONICAL_TARGET
 AC_SUBST(target)
 
