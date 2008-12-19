@@ -126,41 +126,31 @@ if [ $KMINOR -ge 6 ]; then
 	mount /dev/pts
 fi
 
-
 if [ $KMINOR -ge 6 ]; then
 	# everything else is already mounted
 	mount /var
 else
-	# we must mount here, so some linked files in /var/etc can be found, important for using fstab
-	mount -n -t proc proc /proc
-	mount -t jffs2 /dev/mtdblock/3 /var
-	mount -n -t tmpfs tmpfs /tmp
-	# mount file systems with /var/etc/fstab, should primarily used for hdd and mmc support!
+	# Mount file systems in /etc/fstab
 	mount -a
 fi
 
 # If appropriate, load ide drivers and file system drivers
-echo "ide test..."
-IDE_TEST=$(/bin/tuxinfo -C 16)
-
-if [ $IDE_TEST -eq 16 ]; then
-	if [ $KMINOR -ge 6 ]; then
-		# kernel 2.6
-		if [ -e /lib/modules/$(uname -r)/extra/ide/dboxide.ko ] ; then
-			loadmodule(dboxide)
-		fi
-	else
-		# kernel 2.4
-		if [ -e /lib/modules/$(uname -r)/misc/dboxide.o ] ; then
-			loadmodule(ide-core)
-			loadmodule(dboxide)
-			loadmodule(ide-detect)
-			loadmodule(ide-disk)
-			loadmodule(ext2)
-			loadmodule(jbd)
-			loadmodule(ext3)
-			loadmodule(xfs)
-		fi
+if [ $KMINOR -ge 6 ]; then
+	# kernel 2.6
+	if [ -e /lib/modules/$(uname -r)/extra/ide/dboxide.ko ] ; then
+		loadmodule(dboxide)
+	fi
+else
+	# kernel 2.4
+	if [ -e /lib/modules/$(uname -r)/misc/dboxide.o ] ; then
+		loadmodule(ide-core)
+		loadmodule(dboxide)
+		loadmodule(ide-detect)
+		loadmodule(ide-disk)
+		loadmodule(ext2)
+		loadmodule(jbd)
+		loadmodule(ext3)
+		loadmodule(xfs)
 	fi
 fi
 
