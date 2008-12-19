@@ -28,10 +28,6 @@ $(flashprefix)/root-% $(flashprefix)/root
 	if [ -e $(flashprefix)/root/etc/profile.local ]; then \
 		cp $(flashprefix)/root/etc/profile.local $@/etc; \
 	fi
-	echo "/dev/mtdblock/3     /var     jffs2     defaults     0 0" >> $@/etc/fstab
-if ENABLE_IDE
-	echo $(HDD_MOUNT_ENTRY)	>> $@/etc/fstab
-endif
 	$(INSTALL) -d $@/plugins
 	$(INSTALL) -d $@/tuxbox/plugins
 	$(MAKE) -C $(appsdir)/tuxbox/tools/camd install prefix=$@
@@ -71,6 +67,10 @@ $(flashprefix)/root-% $(flashprefix)/root $(flashprefix)/root-neutrino
 	$(MAKE) -C root install-flash flashprefix_ro=$@ flashprefix_rw=$(flashprefix)/.junk
 	rm -rf $(flashprefix)/.junk
 	rm -fr $@/var/*
+	echo "/dev/mtdblock/3     /var     jffs2     defaults     0 0" >> $@/etc/fstab
+if ENABLE_IDE
+	echo $(HDD_MOUNT_ENTRY)	>> $@/etc/fstab
+endif
 	if [ -d $@/etc/ssh ] ; then \
 		rm -fr $@/etc/ssh ; \
 		ln -sf /var/etc/ssh $@/etc/ssh ; \
@@ -80,10 +80,6 @@ $(flashprefix)/root-% $(flashprefix)/root $(flashprefix)/root-neutrino
 	if [ -e $@/etc/profile.local ]; then \
 		rm $@/etc/profile.local; \
 		ln -sf /var/etc/profile.local $@/etc/profile.local; \
-	fi
-	if [ -e $@/etc/fstab ]; then \
-		rm $@/etc/fstab; \
-		ln -sf /var/etc/fstab $@/etc/fstab; \
 	fi
 if !KERNEL26
 	mv $@/etc/init.d/rcS.insmod $@/etc/init.d/rcS
@@ -110,6 +106,10 @@ $(flashprefix)/root-% $(flashprefix)/root $(flashprefix)/root-radiobox
 	$(MAKE) -C root install-flash flashprefix_ro=$@ flashprefix_rw=$(flashprefix)/.junk
 	rm -rf $(flashprefix)/.junk
 	rm -fr $@/var/*
+	echo "/dev/mtdblock/3     /var     jffs2     defaults     0 0" >> $@/etc/fstab
+if ENABLE_IDE
+	echo $(HDD_MOUNT_ENTRY)	>> $@/etc/fstab
+endif
 	if [ -d $@/etc/ssh ] ; then \
 		rm -fr $@/etc/ssh ; \
 		ln -sf /var/etc/ssh $@/etc/ssh ; \
@@ -119,10 +119,6 @@ $(flashprefix)/root-% $(flashprefix)/root $(flashprefix)/root-radiobox
 	if [ -e $@/etc/profile.local ]; then \
 		rm $@/etc/profile.local; \
 		ln -sf /var/etc/profile.local $@/etc/profile.local; \
-	fi
-	if [ -e $@/etc/fstab ]; then \
-		rm $@/etc/fstab; \
-		ln -sf /var/etc/fstab $@/etc/fstab; \
 	fi
 if !KERNEL26
 	mv $@/etc/init.d/rcS.insmod $@/etc/init.d/rcS
@@ -141,6 +137,10 @@ $(flashprefix)/root-% $(flashprefix)/root $(flashprefix)/root-enigma
 	$(MAKE) -C root install-flash flashprefix_ro=$@ flashprefix_rw=$(flashprefix)/.junk
 	rm -rf $(flashprefix)/.junk
 	rm -fr $@/var/*
+	echo "/dev/mtdblock/3     /var     jffs2     defaults     0 0" >> $@/etc/fstab
+if ENABLE_IDE
+	echo $(HDD_MOUNT_ENTRY)	>> $@/etc/fstab
+endif
 	if [ -d $@/etc/ssh ] ; then \
 		rm -fr $@/etc/ssh ; \
 		ln -sf /var/etc/ssh $@/etc/ssh ; \
@@ -151,10 +151,6 @@ $(flashprefix)/root-% $(flashprefix)/root $(flashprefix)/root-enigma
 	if [ -e $@/etc/profile.local ]; then \
 		rm $@/etc/profile.local; \
 		ln -sf /var/etc/profile.local $@/etc/profile.local; \
-	fi
-	if [ -e $@/etc/fstab ]; then \
-		rm $@/etc/fstab; \
-		ln -sf /var/etc/fstab $@/etc/fstab; \
 	fi
 if !KERNEL26
 	mv $@/etc/init.d/rcS.insmod $@/etc/init.d/rcS
