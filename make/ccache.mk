@@ -58,8 +58,9 @@ CCACHE_LINKS = 	ln -sf $(ccachedir)/ccache $(CCACHE_BINDIR)/gcc;\
 CCACHE_TEST =	$(ccachedir)/ccache -s 
 
 # sets the options for ccache which are configured
-CCACHE_SETUP =	$(ccachedir)/ccache -M $(maxcachesize);\
-				$(ccachedir)/ccache -F $(maxcachefiles)
+CCACHE_SETUP =	test "$(maxcachesize)" != -1 && $(ccachedir)/ccache -M $(maxcachesize);\
+		test "$(maxcachefiles)" != -1 && $(ccachedir)/ccache -F $(maxcachefiles);\
+		true
 
 # cleans the markerfiles in .deps for make ccache
 CCACHE_DEPSCLEANUP = rm -f .deps/ccache

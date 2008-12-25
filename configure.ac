@@ -471,16 +471,20 @@ AC_ARG_WITH(ccachedir,
 
 AC_ARG_WITH(maxcachesize,
 	[  --with-maxcachesize=SIZE maximal ccachesize for ccache ],
-	[maxcachesize="$with_maxcachesize"],[maxcachesize="0"])
+	[maxcachesize="$with_maxcachesize"],[maxcachesize="-1"])
 
 AC_ARG_WITH(maxcachefiles,
 	[  --with-maxcachefiles=COUNT maximal count of cachefiles for ccache ],
-	[maxcachefiles="$with_maxcachefiles"],[maxcachefiles="0"])
+	[maxcachefiles="$with_maxcachefiles"],[maxcachefiles="-1"])
 
 if test "$enable_ccache" = "yes"; then
 	if  [[ -e $ccachedir/ccache ]]; then
-		$ccachedir/ccache -M $maxcachesize
-		$ccachedir/ccache -F $maxcachefiles
+		if test $maxcachesize != -1; then
+			$ccachedir/ccache -M $maxcachesize
+		fi
+		if test $maxcachefiles != -1; then
+			$ccachedir/ccache -F $maxcachefiles
+		fi
 		ccacheinfo=$($ccachedir/ccache -s)
 	else
 		enable_ccache="no"
