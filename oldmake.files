@@ -1,4 +1,3 @@
-boot/u-boot-config/u-boot.dbox2.h.m4
 cdk/acinclude.m4
 cdk/doc/FAQ.en
 cdk/root/etc/Makefile.am
