@@ -8,7 +8,6 @@ apps/tuxbox/plugins/configure.ac
 apps/tuxbox/plugins/fx2/tetris/Makefile.am
 apps/tuxbox/plugins/pluginx/.cvsignore
 apps/tuxbox/plugins/pluginx/Makefile.am
-apps/tuxbox/plugins/pluginx/pluginx.c
 apps/tuxbox/tools/configure.ac
 apps/tuxbox/tools/misc/Makefile.am
 cdk/Makefile.am
