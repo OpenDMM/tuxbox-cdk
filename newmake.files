@@ -1,7 +1,3 @@
-apps/tuxbox/neutrino/data/icons/blau.raw
-apps/tuxbox/neutrino/data/icons/gelb.raw
-apps/tuxbox/neutrino/data/icons/gruen.raw
-apps/tuxbox/neutrino/data/icons/rot.raw
 apps/tuxbox/plugins/acinclude.m4
 apps/tuxbox/plugins/configure.ac
 apps/tuxbox/plugins/fx2/tetris/Makefile.am
