@@ -317,7 +317,7 @@ $(DEPDIR)/lufs: bootstrap @DEPENDS_lufs@
 	cd @DIR_lufs@ && \
 		$(BUILDENV) \
 		aclocal && \
-		libtoolize --force && \
+		libtoolize --force --install && \
 		autoconf && \
 		./configure \
 			--build=$(build) \
@@ -339,7 +339,7 @@ $(flashprefix)/root/bin/lufsd: bootstrap @DEPENDS_lufs@ | $(flashprefix)/root
 	cd @DIR_lufs@ && \
 		$(BUILDENV) \
 		aclocal && \
-		libtoolize --force && \
+		libtoolize --force --install && \
 		autoconf && \
 		./configure \
 			--build=$(build) \
