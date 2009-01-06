@@ -1,5 +1,4 @@
 #
-# $Id$
 #
 # This document describes the steps needed to set up a cross compile
 # environment (CDK) for linux on embedded PowerPC using a GNU system.
@@ -15,6 +14,10 @@
 # This document is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+# $Log$
+# Revision 1.28.2.1  2009/01/06 21:04:25  dbt
+# prepared for oldmake branch
 #
 
 ------------------------------------------------------------------------------
@@ -62,18 +65,35 @@ II. Getting the sources:
    you@pc:~$ mkdir $HOME/tuxbox-cvs
    you@pc:~$ cd $HOME/tuxbox-cvs
    you@pc:~/tuxbox-cvs$ export CVS_RSH=ssh
-   you@pc:~/tuxbox-cvs$ cvs -danoncvs@cvs.tuxbox.org:/cvs/tuxbox -z3 co -P .
+   you@pc:~/tuxbox-cvs$ cvs -d anoncvs@cvs.tuxbox.org:/cvs/tuxbox -z3 co -f -r oldmake -P .
    anoncvs@cvs.tuxbox.org's password: anoncvs
 
    Note: There is a dot at the end of the cvs command line
 	 and, yes, it actually belongs to the command.
 
- - Remember that you do not ever have to fetch the complete cvs tree again,
-   if you don't delete it. You can update the tree by typing:
+ - Checkout as cvs user with this example script: 
 
-   you@pc:~/tuxbox-cvs$ export CVS_RSH=ssh
-   you@pc:~/tuxbox-cvs$ cvs -danoncvs@cvs.tuxbox.org:/cvs/tuxbox -z3 up -dP
-   anoncvs@cvs.tuxbox.org's password: anoncvs
+   echo "Checkout HEAD"
+   CVSNAME="<username>"
+   echo "--------------------------------------------------------------"
+   cvs -z3 -d "$CVSNAME@cvs.tuxbox.org:/cvs/tuxbox" co -P .
+   echo "--------------------------------------------------------------"
+   echo "Checkout oldmake registred"
+   echo "--------------------------------------------------------------"
+   cvs -z3 -d "$CVSNAME@cvs.tuxbox.org:/cvs/tuxbox" co -r oldmake -P cdk/oldmake.files
+   cvs -z3 -d "$CVSNAME@cvs.tuxbox.org:/cvs/tuxbox" co -r oldmake `cat cdk/oldmake.files`
+
+ - Remove some not needed files 
+
+   echo "removing not needed files..."
+   echo "--------------------------------------------------------------"
+   rm -fv cdk/root/etc/init.drcS.m4
+   rm -rfv cdk/make
+   rm -fv apps/tuxbox/plugins/pluginx/pluginx.cpp
+
+ - updating 
+
+   cvs up -f -r oldmake -dP > cvs.log 2>&1
 
    Please do that, even if you have a broadband internet connection, to
    reduce our traffic costs. Thank you!
