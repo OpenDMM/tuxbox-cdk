@@ -14,6 +14,7 @@ cdk/doc/README.3rdparty.de
 cdk/doc/README.3rdparty.en
 cdk/doc/README-flash.de
 cdk/doc/README.u-boot-via-net
+cdk/Patches/busybox.config.m4
 cdk/root/Makefile.inc
 cdk/root/etc/Makefile.am
 cdk/root/etc/init.d/Makefile.am
