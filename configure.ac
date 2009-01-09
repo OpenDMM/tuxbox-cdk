@@ -140,7 +140,7 @@ AM_CONDITIONAL(ENIGMA_DEBUG_NO,test "$ENIGMA_DEBUG" = "no")
 AM_CONDITIONAL(ENIGMA_DEBUG_YES,test "$ENIGMA_DEBUG" = "yes")
 
 AC_ARG_ENABLE(sqlite,
-	[  --with-sqlite          enable sql storage (default off)],
+	[  --enable-sqlite          enable sql storage (default off)],
 	[SQLITE="$withval"],[SQLITE="no"])
 
 AC_SUBST(SQLITE)
