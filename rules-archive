@@ -157,3 +157,8 @@ vls-0.4.0.tar.bz2;http://www.videolan.org/pub/videolan/vls/0.4.0
 #
 squashfs2.2-r2.tar.gz;http://heanet.dl.sourceforge.net/sourceforge/squashfs
 lzma442.tar.bz2;http://heanet.dl.sourceforge.net/sourceforge/sevenzip
+
+#
+# Database
+#
+sqlite-3.6.7.tar.gz;http://www.sqlite.org

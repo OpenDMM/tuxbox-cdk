@@ -1059,6 +1059,25 @@ endif
 
 #######################
 #
+#	Database
+#
+
+if WITH_SQLITE
+.sqlite: .bootstrap @DEPENDS_sqlite@
+	@PREPARE_sqlite@
+	cd @DIR_sqlite@ && \
+		$(BUILDENV) \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--prefix=$(targetprefix) && \
+		$(MAKE) all && \
+		@INSTALL_sqlite@
+	@CLEANUP_sqlite@
+	touch $@
+endif
+#######################
+#
 #   contrib apps
 #
 
@@ -2331,6 +2350,9 @@ endif
 	$(INSTALL) $(targetprefix)/bin/chttpd $(flashprefix)/root/bin
 endif
 
+if WITH_SQLITE
+	$(INSTALL) $(targetprefix)/bin/sqlite3 $(flashprefix)/root/bin
+endif
 	@touch $@
 
 flash-ushare: $(flashprefix)/.part_ushare
@@ -2808,6 +2830,9 @@ $(flashprefix)/.lib: $(flashprefix)/.flash $(shell ls -r -1 $(flashprefix)/.part
 		--root $(flashprefix)/root \
 		`find $(flashprefix)/root/bin/ -path "*bin/?*"` \
 		`find $(flashprefix)/root/lib/ -name "libnss_*"` \
+if WITH_SQLITE
+		`find $(flashprefix)/root/lib/ -name "libsqlite3*"` \
+endif
 		`find $(flashprefix)/root/lib/tuxbox/ -name "*.so" -type f` \
 		`find $(flashprefix)/root/lib/autofs/ -name "*.so" -type f` \
 		`find $(flashprefix)/root/sbin/ -path "*sbin/?*"`
@@ -2907,7 +2932,7 @@ distclean-local:
 	-rm .dvbsnoop .enigma .lcars .lcdmenu .neutrino .stream .zapit
 	-rm .console_data .console_tools .dropbear .dsniff .fbset .lirc 
 	-rm .polipo .pump .ssh .tcpdump .tor .ushare .xrc .thttpd
-	-rm .dvbdate .dvbstream .dvbtext .dvbtune .vls
+	-rm .dvbdate .dvbstream .dvbtext .dvbtune .vls .sqlite
 	-rm .misc_libs .misc_tools .plugins .libtuxbox .tuxbox_libs .tuxbox_tools .tuxbox_tools_all
 	-rm -rf $(targetprefix)
 	-rm -rf $(hostprefix)

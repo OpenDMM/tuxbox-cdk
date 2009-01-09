@@ -143,4 +143,8 @@ vls;make:install:DESTDIR=TARGET
 #
 squashfs
 
+#
+# Database
+#
+sqlite;make:install:prefix=TARGET
 >>?;rules-install-local

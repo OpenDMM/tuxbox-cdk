@@ -139,6 +139,13 @@ AC_SUBST(ENIGMA_DEBUG)
 AM_CONDITIONAL(ENIGMA_DEBUG_NO,test "$ENIGMA_DEBUG" = "no")
 AM_CONDITIONAL(ENIGMA_DEBUG_YES,test "$ENIGMA_DEBUG" = "yes")
 
+AC_ARG_WITH(sqlite,
+	[  --with-sqlite          enable sql storage (default off)],
+	[SQLITE="$withval"],[SQLITE="no"])
+
+AC_SUBST(SQLITE)
+AM_CONDITIONAL(WITH_SQLITE,test "$SQLITE" = "yes")
+
 AC_SUBST(EXTFLASHTOOL)
 AM_CONDITIONAL(EXTFLASHTOOL_NO,test "$EXTFLASHTOOL" = "no")
 AM_CONDITIONAL(EXTFLASHTOOL_YES,test "$EXTFLASHTOOL" = "yes")
@@ -477,6 +484,11 @@ TUXBOX_RULES_MAKE(dvbtune)
 TUXBOX_RULES_MAKE(vls)
 
 #
+# Database
+#
+TUXBOX_RULES_MAKE(sqlite)
+
+#
 # internal
 #
 AC_SUBST_FILE(ARCHIVE)
@@ -501,6 +513,7 @@ flashtool:		$FLASHTOOL
 external flashtool:	$EXTFLASHTOOL
 reiserfs:		$REISERFS
 enigma debug:		$ENIGMA_DEBUG
+sqlite3 storage:		$SQLITE
 host rule set:		$HOSTRULESET
 target rule set:	$TARGETRULESET
 target prefix:		$targetprefix
