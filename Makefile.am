@@ -1062,7 +1062,7 @@ endif
 #	Database
 #
 
-if WITH_SQLITE
+if ENABLE_SQLITE
 .sqlite: .bootstrap @DEPENDS_sqlite@
 	@PREPARE_sqlite@
 	cd @DIR_sqlite@ && \

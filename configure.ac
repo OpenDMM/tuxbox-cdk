@@ -139,12 +139,12 @@ AC_SUBST(ENIGMA_DEBUG)
 AM_CONDITIONAL(ENIGMA_DEBUG_NO,test "$ENIGMA_DEBUG" = "no")
 AM_CONDITIONAL(ENIGMA_DEBUG_YES,test "$ENIGMA_DEBUG" = "yes")
 
-AC_ARG_WITH(sqlite,
+AC_ARG_ENABLE(sqlite,
 	[  --with-sqlite          enable sql storage (default off)],
 	[SQLITE="$withval"],[SQLITE="no"])
 
 AC_SUBST(SQLITE)
-AM_CONDITIONAL(WITH_SQLITE,test "$SQLITE" = "yes")
+AM_CONDITIONAL(ENABLE_SQLITE,test "$enable_sqlite" = "yes")
 
 AC_SUBST(EXTFLASHTOOL)
 AM_CONDITIONAL(EXTFLASHTOOL_NO,test "$EXTFLASHTOOL" = "no")
@@ -513,7 +513,7 @@ flashtool:		$FLASHTOOL
 external flashtool:	$EXTFLASHTOOL
 reiserfs:		$REISERFS
 enigma debug:		$ENIGMA_DEBUG
-sqlite3 storage:		$SQLITE
+sqlite3 storage:	$enable_sqlite
 host rule set:		$HOSTRULESET
 target rule set:	$TARGETRULESET
 target prefix:		$targetprefix
