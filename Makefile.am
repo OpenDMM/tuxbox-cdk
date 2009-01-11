@@ -2350,7 +2350,7 @@ endif
 	$(INSTALL) $(targetprefix)/bin/chttpd $(flashprefix)/root/bin
 endif
 
-if WITH_SQLITE
+if ENABLE_SQLITE
 	$(INSTALL) $(targetprefix)/bin/sqlite3 $(flashprefix)/root/bin
 endif
 	@touch $@
@@ -2830,9 +2830,6 @@ $(flashprefix)/.lib: $(flashprefix)/.flash $(shell ls -r -1 $(flashprefix)/.part
 		--root $(flashprefix)/root \
 		`find $(flashprefix)/root/bin/ -path "*bin/?*"` \
 		`find $(flashprefix)/root/lib/ -name "libnss_*"` \
-if WITH_SQLITE
-		`find $(flashprefix)/root/lib/ -name "libsqlite3*"` \
-endif
 		`find $(flashprefix)/root/lib/tuxbox/ -name "*.so" -type f` \
 		`find $(flashprefix)/root/lib/autofs/ -name "*.so" -type f` \
 		`find $(flashprefix)/root/sbin/ -path "*sbin/?*"`
