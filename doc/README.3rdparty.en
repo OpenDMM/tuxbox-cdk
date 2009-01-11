@@ -18,6 +18,9 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #
 
+For more informations see:
+http://wiki.dbox2-tuning.net/Category:Development:Oldmake
+
 And this is how you add new tools to the cdk
 --------------------------------------------
 First of all start thinking if whatever you intend to add really is a useful

@@ -17,6 +17,9 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #
 
+For more details see:
+http://wiki.dbox2-tuning.net/README.3rdparty.de_%28Oldmake%29
+
 Und so baut man neue Tools in das cdk ein:
 ------------------------------------------
 Zunaechst macht man sich Gedanken darueber, ob das, was man einbauen will Sinn
