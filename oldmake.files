@@ -15,10 +15,18 @@ cdk/doc/README.3rdparty.en
 cdk/doc/README-flash.de
 cdk/doc/README.u-boot-via-net
 cdk/Patches/busybox.config.m4
+cdk/Patches/nfs-utils.diff
+cdk/Patches/linux-2.4.35.5-dbox2.config
+cdk/Patches/linux-2.4.35.5-dbox2.config-flash
+cdk/rules-archive
+cdk/rules-install
+cdk/rules-make
 cdk/root/Makefile.inc
 cdk/root/etc/Makefile.am
 cdk/root/etc/init.d/Makefile.am
 cdk/root/etc/init.d/rcS.insmod
 cdk/root/etc/init.d/rcS
 cdk/root/share/udhcpc/Makefile.am
+driver/Config.make
+driver/Makefile
 
