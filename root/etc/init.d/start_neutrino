@@ -6,7 +6,12 @@ date -s 010101001970
 sectionsd
 timerd
 camd2
-zapit
+if [ -e /var/etc/.pmt_update -a `cat /proc/bus/avia_version` = "avia600" ] ; then
+    zapit -u
+else
+    zapit
+fi
+
 controld
 nhttpd
 until neutrino -f -u ; do
