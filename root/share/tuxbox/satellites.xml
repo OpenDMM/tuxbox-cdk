@@ -1206,7 +1206,7 @@
 		<transponder fec_inner="3" frequency="12735000" modulation="1" polarization="0" symbol_rate="1850000" system="0"/>
 		<transponder fec_inner="3" frequency="12739500" modulation="1" polarization="0" symbol_rate="2400000" system="0"/>
 	</sat>
-	<sat flags="1" name="Astra/Eurobird (28.2E)" position="282">
+	<sat flags="1" name="Astra/Eurobird (28.2E)" position="284">
 		<transponder fec_inner="4" frequency="10714000" modulation="1" onid="2" polarization="0" symbol_rate="22000000" system="0" tsid="2041"/>
 		<transponder fec_inner="4" frequency="10729000" modulation="1" onid="2" polarization="1" symbol_rate="22000000" system="0" tsid="2042"/>
 		<transponder fec_inner="4" frequency="10744000" modulation="1" polarization="0" symbol_rate="22000000" system="0"/>
