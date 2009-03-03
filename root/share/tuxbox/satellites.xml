@@ -851,7 +851,7 @@
 		<transponder fec_inner="3" frequency="11938000" modulation="1" onid="318" polarization="0" symbol_rate="27500000" system="0" tsid="6100"/>
 		<transponder fec_inner="3" frequency="11958000" modulation="1" onid="64511" polarization="1" symbol_rate="27500000" system="0" tsid="6200"/>
 		<transponder fec_inner="3" frequency="11977000" modulation="1" polarization="0" symbol_rate="27500000" system="0"/>
-		<transponder fec_inner="2" frequency="11996000" modulation="2" onid="64511" polarization="1" symbol_rate="27500000" system="1" tsid="6400"/>
+		<transponder fec_inner="2" frequency="11996000" modulation="2" onid="64511" polarization="1" symbol_rate="27500000" system="1" tsid="6200"/>
 		<transponder fec_inner="3" frequency="12015000" modulation="1" onid="318" polarization="0" symbol_rate="27500000" system="0" tsid="6500"/>
 		<transponder fec_inner="3" frequency="12034000" modulation="1" onid="64511" polarization="1" symbol_rate="27500000" system="0" tsid="6600"/>
 		<transponder fec_inner="3" frequency="12054000" modulation="1" onid="64511" polarization="0" symbol_rate="27500000" system="0" tsid="6700"/>
