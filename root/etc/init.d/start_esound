@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# $Id$
+
+/bin/esd -tcp -public -nobeeps -d /dev/sound/dsp -r 44100 &
