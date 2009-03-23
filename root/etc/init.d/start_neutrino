@@ -30,7 +30,7 @@ pzapit -kill
 i=9
 while expr $i != 0 > /dev/null
 do
-elif pidof timerd > /dev/null; then echo "Waiting for timerd (max. $i seconds)"
+if pidof timerd > /dev/null; then echo "Waiting for timerd (max. $i seconds)"
 elif pidof zapit > /dev/null; then echo "Waiting for zapit (max. $i seconds)"
 elif pidof tuxmaild > /dev/null; then echo "Waiting for tuxmaild (max. $i seconds)"
 elif pidof tuxcald > /dev/null; then echo "Waiting for tuxcald (max. $i seconds)"
