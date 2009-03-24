@@ -2,4 +2,10 @@
 
 # $Id$
 
-/bin/esd -tcp -public -nobeeps -d /dev/sound/dsp -r 44100 &
+ESD=/bin/esd
+
+if [ -x /var/bin/esd ] ; then
+	ESD=/var/bin/esd
+fi
+
+$ESD -tcp -public -nobeeps -d /dev/sound/dsp -r 44100 &
