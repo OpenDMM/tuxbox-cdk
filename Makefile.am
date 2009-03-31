@@ -2766,7 +2766,7 @@ $(flashprefix)/.part_neutrino: $(flashprefix)/.flash .neutrino
 	$(INSTALL) -d $(flashprefix)/root/etc/init.d
 	$(INSTALL) -d $(flashprefix)/root/var_init/etc/init.d
 	$(INSTALL) -d $(flashprefix)/root/var_init/tuxbox/config/lirc
-	$(INSTALL) $(targetprefix)/bin/controld $(targetprefix)/bin/neutrino \
+	$(INSTALL) $(targetprefix)/bin/neutrino \
 		$(targetprefix)/bin/nhttpd $(targetprefix)/bin/timerd \
 		$(flashprefix)/root/bin
 	cp -pa $(targetprefix)/share/tuxbox/neutrino $(targetprefix)/share/tuxbox/lcdd \
