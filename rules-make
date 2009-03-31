@@ -31,7 +31,7 @@ busybox113;1.13.0;busybox-1.13.0;busybox-1.13.0.tar.bz2;extract:busybox-1.13.0.t
 automount;4.1.4;autofs-4.1.4;autofs-4.1.4.tar.bz2;extract:autofs-4.1.4.tar.bz2;patch:autofs.diff
 ftpd;1.1.0;vsftpd-1.1.0;vsftpd-1.1.0.tar.gz:ftpd.diff;extract:vsftpd-1.1.0.tar.gz;patch:ftpd.diff
 modutils;2.4.21;modutils-2.4.21;modutils-2.4.21.tar.bz2;extract:modutils-2.4.21.tar.bz2
-portmap;5;portmap-5;portmap-5.tar.bz2:portmap_5-8.diff.gz:portmap.diff;extract:portmap-5.tar.bz2;patch:portmap_5-8.diff.gz;patch:portmap.diff
+portmap;5;portmap_5beta;portmap_5.orig.tar.gz:portmap_5-9.diff.gz:portmap.diff;extract:portmap_5.orig.tar.gz;patch:portmap_5-9.diff.gz;patch:portmap.diff
 procps;010114;procps-010114;procps-010114.tar.gz:procps.diff;extract:procps-010114.tar.gz;patch:procps.diff
 procps3;3.2.7;procps-3.2.7;procps-3.2.7.tar.gz:procps3.diff;extract:procps-3.2.7.tar.gz;patch:procps3.diff
 mrouted;3.9-beta3;mrouted-3.9-beta3.orig;mrouted_3.9-beta3.orig.tar.gz:mrouted_3.9-beta3-3.diff;extract:mrouted_3.9-beta3.orig.tar.gz;patch:mrouted_3.9-beta3-3.diff
@@ -44,7 +44,7 @@ squashfs;2.2-r2;mksquashfs;squashfs2.2-r2.tar.gz:mksquashfs_lzma.diff:lzma442.ta
 libdirectfb;0.9.22;DirectFB;DirectFB-0.9.22-cvs20050601.tar.bz2;extract:DirectFB-0.9.22-cvs20050601.tar.bz2
 libdirectfbpp;0.9.22;DFB++-0.9.22;DFB++-0.9.22-cvs20050216.tar.gz;extract:DFB++-0.9.22-cvs20050216.tar.gz
 libppdirectfb;0.9.22;++DFB;++DFB-0.9.22-cvs20050601.tar.bz2;extract:++DFB-0.9.22-cvs20050601.tar.bz2
-libboost;1.29.0;boost_1_29_0;boost_1_29_0.tar.gz;extract:boost_1_29_0.tar.gz
+libboost;boost-1.38.0;boost_1_38_0;boost_1_38_0.tar.bz2;extract:boost_1_38_0.tar.bz2
 libcommoncplusplus;1.3.1;commoncpp2-1.3.1;commoncpp2-1.3.1.tar.gz;extract:commoncpp2-1.3.1.tar.gz
 libcrypto;0.9.7a;openssl-0.9.7a;openssl-0.9.7a.tar.gz:libcrypto.diff;extract:openssl-0.9.7a.tar.gz;patch:libcrypto.diff
 libcurl;7.10.1;curl-7.10.1;curl-7.10.1.tar.bz2:libcurl.diff;extract:curl-7.10.1.tar.bz2;patch:libcurl.diff
@@ -90,7 +90,7 @@ fbset;2.1;fbset-2.1;fbset-2.1.tar.gz:fbset.diff;extract:fbset-2.1.tar.gz;patch:f
 lirc;0.6.6;lirc-0.6.6;lirc-0.6.6.tar.bz2;extract:lirc-0.6.6.tar.bz2;patch:lirc.diff
 lsof;4.64;lsof_4.64_src;lsof_4.64_src.tar.bz2:lsof.diff;extract:lsof_4.64_src.tar.bz2;patch:lsof.diff
 polipo;1.0.1;polipo-1.0.1;polipo-1.0.1.tar.gz;extract:polipo-1.0.1.tar.gz;patch:polipo.diff
-pump;0.8.11;pump-0.8.11;pump-0.8.11.tar.bz2:pump.diff;extract:pump-0.8.11.tar.bz2;patch:pump.diff
+pump;0.8.11;pump-0.8.11;pump_0.8.11.orig.tar.gz:pump.diff;extract:pump_0.8.11.orig.tar.gz;patch:pump.diff
 ssh;3.5p1;openssh-3.5p1;openssh-3.5p1.tar.gz:ssh.diff;extract:openssh-3.5p1.tar.gz;patch:ssh.diff
 tcpdump;3.9.3;tcpdump-3.9.3;tcpdump-3.9.3.tar.gz;extract:tcpdump-3.9.3.tar.gz;patch:tcpdump.diff
 tor;0.1.2.16;tor-0.1.2.16;tor-0.1.2.16.tar.gz;extract:tor-0.1.2.16.tar.gz

@@ -22,7 +22,7 @@ glibc-2.3.2.tar.bz2;ftp://$(gnuserver)/glibc
 glibc-2.3.2-r0.diff.bz2;http://sources.dreamboxupdate.com/download/patches
 nptl-0.60.tar.bz2;ftp://www.arte.unipi.it/pub/Linux
 uClibc-0.9.11.tar.bz2
-watchdog_5.2.orig.tar.gz;ftp://ftp.debian.org/debian/pool/main/w/watchdog
+watchdog_5.2.orig.tar.gz;ftp://ftp.debian.de/archive/debian/pool/main/w/watchdog
 
 #
 # root
@@ -36,12 +36,12 @@ modutils-2.4.21.tar.bz2;ftp://ftp.de.kernel.org/pub/linux/utils/kernel/modutils/
 netkit-base-0.17.tar.gz;ftp://ftp.uk.linux.org/pub/linux/Networking/base
 netkit-rsh-0.17.tar.gz;ftp://ftp.uk.linux.org/pub/linux/Networking/netkit
 netkit-telnet-0.17.tar.gz;ftp://ftp.uk.linux.org/pub/linux/Networking/netkit
-portmap-5.tar.bz2
-portmap_5-8.diff.gz;http://www.uk.debian.org/debian/pool/main/p/portmap
+portmap_5.orig.tar.gz;ftp://ftp.debian.de/archive/debian/pool/main/p/portmap
+portmap_5-9.diff.gz;ftp://ftp.debian.de/archive/debian/pool/main/p/portmap
 procps-010114.tar.gz;http://www.cs.uml.edu/~acahalan/procps/
 procps-3.2.7.tar.gz;http://procps.sourceforge.net/
 vsftpd-1.1.0.tar.gz;ftp://vsftpd.beasts.org/users/cevans/
-mrouted_3.9-beta3.orig.tar.gz;ftp://ftp.debian.org/debian/pool/non-free/m/mrouted
+mrouted_3.9-beta3.orig.tar.gz;ftp://ftp.debian.de/archive/debian/pool/non-free/m/mrouted
 
 #
 # contrib libs
@@ -56,32 +56,32 @@ freetype-2.1.4.tar.bz2;http://gd.tuwien.ac.at/graphics/libs/freetype/freetype2
 ncurses-5.3.tar.gz;ftp://$(gnuserver)/ncurses
 jpegsrc.v6b.tar.gz;http://www.ijg.org/files
 libpng-1.2.8.tar.bz2;ftp://ftp.gware.org/10.2/2.12.2/source/devlib/libpng;http://mesh.dl.sourceforge.net/sourceforge/libpng
-popt-1.6.4.tar.gz;ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.0.x
+popt-1.6.4.tar.gz;http://www.mirrorservice.org/sites/ftp.rpm.org/pub/rpm/dist/rpm-4.0.x/
 libupnp-1.6.5.tar.bz2;http://easynews.dl.sourceforge.net/sourceforge/pupnp
 libxml2-2.4.22.tar.bz2;ftp://ftp.uni-duesseldorf.de/pub/unix/linux/src/GNOME-2.0;ftp://ftp.gnome.org/pub/GNOME/sources/libxml2/2.4
 zlib-1.2.3.tar.bz2;http://www.zlib.net
-libffi-1.20.tar.gz;ftp://sourceware.cygnus.com/pub/libffi
+libffi-1.20.tar.gz;http://www.mirrorservice.org/sites/sources.redhat.com/pub/libffi/
 SDL-1.2.9.tar.gz;http://www.libsdl.org/release
 SDL_image-1.2.4.tar.gz;http://www.libsdl.org/projects/SDL_image/release
 SDL_net-1.2.5.tar.gz;http://www.libsdl.org/projects/SDL_net/release
 SDL_sound-1.0.1.tar.gz;http://icculus.org/SDL_sound/downloads
-SDL_mixer-1.2.6.tar.gz;http://www.libsdl.org/projects/SDL_net/release
+SDL_mixer-1.2.6.tar.gz;http://www.libsdl.org/projects/SDL_mixer/release
 readline-4.3.tar.gz;ftp://$(gnuserver)/readline
 libsigc++-1.2.5.tar.gz;http://familiar.handhelds.org/source/v0.8.2;http://switch.dl.sourceforge.net/sourceforge/libsigc
 libpcap-0.9.3.tar.gz;http://www.tcpdump.org/release
 xmlwrapp-0.2.1.tar.gz;http://pmade.org/pjones/software/xmlwrapp/download
 commoncpp2-1.3.1.tar.gz;ftp://ftp.uni-kassel.de/Mirrors/ftp.gnu.org/pub/gnu/commoncpp
 libdvbpsi-0.1.2.tar.gz;http://www.videolan.org/pub/videolan/libdvbpsi/0.1.2
-xmlparse_0.9.3.tar.bz2;http://private.addcom.de/morus_walter/xmlparse
+xmlparse_0.9.3.tar.bz2;http://www.info-sat.org/Archive
 libnet-1.0.2a.tar.gz;http://www.packetfactory.net/libnet/dist/deprecated
-libnids-1.16.tar.gz;http://www.packetfactory.net/Projects/Libnids/dist
+libnids-1.16.tar.gz;http://www.packetfactory.net/Projects/libnids/dist
 db-2.7.7.tar.gz;http://www.sleepycat.com/update/snapshot
 tremor-20040525.tar.bz2;http://tuxbox.berlios.de/pub/tuxbox/cdk/src
-boost_1_29_0.tar.gz;http://surfnet.dl.sourceforge.net/sourceforge/boost
+boost_1_38_0.tar.bz2;http://heanet.dl.sourceforge.net/sourceforge/boost
 fribidi-0.10.4.tar.bz2;ftp://196.12.10.6/pub/openpkg/sources/DST/fribidi;http://surfnet.dl.sourceforge.net/sourceforge/fribidi
 gmp-4.1.2.tar.gz;ftp://mirrors.kernel.org/gnu/gmp/
 libungif-4.1.3.tar.bz2;ftp://ftp.gwdg.de/pub/FreeBSD/ports/distfiles;http://surfnet.dl.sourceforge.net/sourceforge/libungif
-dropbear-0.48.1.tar.gz;http://matt.ucc.asn.au/dropbear
+dropbear-0.48.1.tar.gz;http://matt.ucc.asn.au/dropbear/releases
 libevent-1.3b.tar.gz;http://monkey.org/~provos
 
 #
@@ -92,15 +92,15 @@ console-tools-0.2.3.tar.gz;http://switch.dl.sourceforge.net/sourceforge/lct
 dsniff-2.4b1.tar.gz;http://monkey.org/~dugsong/dsniff/beta
 fbset-2.1.tar.gz;http://home.tvd.be/cr26864/Linux/fbdev
 lirc-0.6.6.tar.bz2;http://mars.wiwi.uni-halle.de/lirc/software/
-polipo-1.0.1.tar.gz;http://www.pps.jussieu.fr/~jch/software/files/polipo
-pump-0.8.11.tar.bz2;
+polipo-1.0.1.tar.gz;http://www.pps.jussieu.fr/~jch/software/files/polipo/old
+pump_0.8.11.orig.tar.gz;ftp://ftp.debian.de/archive/debian/pool/main/p/pump
 openssh-3.5p1.tar.gz;ftp://ftp.de.openbsd.org/pub/unix/OpenBSD/OpenSSH/portable;ftp://ftp.freenet.de/pub/ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
 tcpdump-3.9.3.tar.gz;http://www.tcpdump.org/release
 tor-0.1.2.16.tar.gz;http://tor.eff.org/dist
 ushare-1.1a.tar.bz2;http://ushare.geexbox.org/releases
 xrc-0.6.3.tar.gz;http://switch.dl.sourceforge.net/sourceforge/lirc
 thttpd-2.23beta1.tar.gz;http://www.acme.com/software/thttpd
-lsof_4.64_src.tar.bz2;
+lsof_4.64_src.tar.bz2;http://www.info-sat.org/Archive
 e2fsprogs-1.35.tar.gz;ftp://ftp.uni-kassel.de/Mirrors/ftp.fhh.opensource-mirror.de/gentoo/distfiles; http://surfnet.dl.sourceforge.net/sourceforge/e2fsprogs
 reiserfsprogs-3.6.19.tar.gz;http://ftp.icm.edu.pl/packages/linux-reiserfs/reiserfsprogs;http://www.namesys.com/pub/reiserfsprogs/
 util-linux-2.12r.tar.bz2;http://www.kernel.org/pub/linux/utils/util-linux/
@@ -110,17 +110,17 @@ dreamfiles_20061230.tar.bz2;http://sources.dreamboxupdate.com/download/snapshots
 dreamdriver_dm7000_20071022.tar.bz2;http://sources.dreamboxupdate.com/download/snapshots
 dreamdriver_dm56x0_20071022.tar.bz2;http://sources.dreamboxupdate.com/download/snapshots
 dreamdriver_dm500_20071022.tar.bz2;http://sources.dreamboxupdate.com/download/snapshots
-nfs-utils-1.0.6.tar.gz;http://belnet.dl.sourceforge.net/sourceforge/nfs
+nfs-utils-1.0.6.tar.gz;http://www.kernel.org/pub/linux/utils/nfs
 diffutils-2.8.1.tar.gz;ftp://$(gnuserver)/diffutils
 less-381.tar.gz;http://www.greenwoodsoftware.com/less
 
 #
 # development tools
 #
-gdb-6.3.tar.bz2;ftp://sources.redhat.com/pub/gdb/releases
+gdb-6.3.tar.bz2;http://ftp.gnu.org/gnu/gdb
 insight-6.1.tar.bz2;ftp://sources.redhat.com/pub/gdb/releases
-ltrace_0.3.35.tar.gz;ftp://ftp.debian.org/debian/pool/main/l/ltrace
-strace-4.5.7.tar.bz2;http://switch.dl.sourceforge.net/sourceforge/strace
+ltrace_0.3.35.tar.gz;http://www.info-sat.org/Archive
+strace-4.5.7.tar.bz2;http://downloads.sourceforge.net/strace
 ksymoops-2.4.9.tar.bz2;ftp://ftp.de.kernel.org/pub/linux/utils/kernel/ksymoops/v2.4
 nano-1.2.4.tar.gz;http://www.nano-editor.org/dist/v1.2
 joe-3.1.tar.gz;http://heanet.dl.sourceforge.net/sourceforge/joe-editor
