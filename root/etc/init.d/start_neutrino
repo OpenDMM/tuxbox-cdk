@@ -6,11 +6,11 @@ date -s 010101001970
 sectionsd
 timerd
 camd2
+ZAPIT=""
 if [ -e /var/etc/.pmt_update -a `cat /proc/bus/avia_version` = "avia600" ] ; then
-    zapit -u
-else
-    zapit
+    ZAPIT=-u
 fi
+zapit $ZAPIT
 
 nhttpd
 until neutrino -f -u ; do
@@ -18,7 +18,7 @@ until neutrino -f -u ; do
     pidof sectionsd >/dev/null || sectionsd
     pidof timerd    >/dev/null || timerd
     pidof camd2     >/dev/null || camd2
-    pidof zapit     >/dev/null || zapit
+    pidof zapit     >/dev/null || zapit $ZAPIT
     pidof nhttpd    >/dev/null || nhttpd
 done
 

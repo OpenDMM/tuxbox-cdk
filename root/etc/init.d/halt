@@ -11,3 +11,4 @@ mount | grep /hdd >/dev/null && umount /hdd
 switch -fnc 0 -fblk 0
 
 mount | grep /var >/dev/null && umount /var
+umount -l /var
