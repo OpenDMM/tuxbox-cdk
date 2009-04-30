@@ -17,7 +17,7 @@ sectionsd $SECTIONSD
 timerd
 camd2
 ZAPIT=""
-if [ -e /var/etc/.pmt_update -a `cat /proc/bus/avia_version` = "avia600" ] ; then
+if [ ! -e /var/etc/.no_pmt_update -a `cat /proc/bus/avia_version` = "avia600" ] ; then
     ZAPIT=-u
 fi
 zapit $ZAPIT
