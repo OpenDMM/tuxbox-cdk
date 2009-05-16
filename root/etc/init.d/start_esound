@@ -2,10 +2,16 @@
 
 # $Id$
 
+x=$1
+port=""
+if [ "`expr $x - $x 2>/dev/null`" == "0" ]; then
+    port="-port $x"
+fi
+
 ESD=/bin/esd
 
 if [ -x /var/bin/esd ] ; then
 	ESD=/var/bin/esd
 fi
 
-$ESD -tcp -public -nobeeps -d /dev/sound/dsp -r 44100 &
+$ESD $port -tcp -public -nobeeps -d /dev/sound/dsp -r 44100 &
