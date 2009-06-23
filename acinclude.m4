@@ -34,3 +34,17 @@ AC_SUBST(SOURCEDIR_$1)dnl
 AC_SUBST(VERSION_$1)dnl
 AC_MSG_RESULT(done)
 ])
+
+AC_DEFUN([TUXBOX_NEWMAKE_WARNING],[
+AC_MSG_RESULT([
+******************************************************************
+*                       !!!WARNING!!!                            *
+*     You are using a CVS checkout from the newmake branch.      *
+*   Please note that this branch is not updated anymore since    *
+*  it was moved to CVS HEAD, where current commits take place.   *
+*              In order to use current code remove               *
+*         "-r newmake" from your CVS checkout command.           *
+*                       !!!WARNING!!!                            *
+******************************************************************
+])
+])

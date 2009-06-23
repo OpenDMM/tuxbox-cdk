@@ -1,5 +1,6 @@
 AC_INIT([tuxbox-cdk],[0])
 AC_PREREQ(2.57a)
+TUXBOX_NEWMAKE_WARNING
 
 AC_CANONICAL_BUILD
 AC_SUBST(build)
@@ -16,7 +17,6 @@ if test "$target_alias" = "" ; then
 		target_alias="powerpc-tuxbox-linux-gnu"
 	fi
 fi
-
 AC_CANONICAL_TARGET
 AC_SUBST(target)
 
@@ -514,6 +514,7 @@ AC_SUBST(DEPSCLEANUP)
 # core
 #
 AC_SUBST(KERNELVERSION)
+TUXBOX_NEWMAKE_WARNING
 TUXBOX_RULES_MAKE(uboot)
 
 TUXBOX_RULES_MAKE(linux)
@@ -705,6 +706,8 @@ else
 	used_libc="glibc"
 fi
 
+TUXBOX_NEWMAKE_WARNING
+
 AC_MSG_RESULT([
 summary:
 ----------------------------------------
@@ -750,6 +753,8 @@ $ccacheinfo
 ----------------------------------------
 ])
 
+TUXBOX_NEWMAKE_WARNING
+
 if test "$dircheck" = "fail"; then
 AC_MSG_RESULT([
 ******************************************************************
@@ -786,3 +791,5 @@ rules-downcheck.pl
 AC_CONFIG_COMMANDS([rules-downcheck-chmod],[chmod +x rules-downcheck.pl])
 
 AC_OUTPUT
+
+TUXBOX_NEWMAKE_WARNING
