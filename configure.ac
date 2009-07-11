@@ -139,6 +139,11 @@ AC_SUBST(ENIGMA_DEBUG)
 AM_CONDITIONAL(ENIGMA_DEBUG_NO,test "$ENIGMA_DEBUG" = "no")
 AM_CONDITIONAL(ENIGMA_DEBUG_YES,test "$ENIGMA_DEBUG" = "yes")
 
+AC_ARG_ENABLE(freesatepg,
+	AS_HELP_STRING(--enable-freesatepg,enable UK FreeSat EPG),
+	,[enable_freesatepg=no])
+AM_CONDITIONAL(ENABLE_FREESATEPG,test "$enable_freesatepg" = "yes")
+
 AC_ARG_ENABLE(sqlite,
 	[  --enable-sqlite          enable sql storage (default off)],
 	[SQLITE="$withval"],[SQLITE="no"])
