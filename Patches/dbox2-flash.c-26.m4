@@ -32,7 +32,7 @@ static struct mtd_partition partition_info[]= {
 	.mask_flags	= 0
 	},
 ifelse(rootfs,`jffs2',`	{
-	.name		= "root (JFFS2)",
+	.name		= "root (ifdef(`jffs2lzma',`jffs2+lzma',`jffs2'))",
 	.size		= (8192-128-128) * 1024,
 	.offset		= MTDPART_OFS_APPEND,
 	.mask_flags	= 0
@@ -43,7 +43,7 @@ ifelse(rootfs,`jffs2',`	{
 	.mask_flags	= 0
 	},
 	{
-	.name		= "var (JFFS2)",
+	.name		= "var (jffs2)",
 	.size		= (8192-128-128) * 1024 - rootsize,
 	.offset		= MTDPART_OFS_APPEND,
 	.mask_flags	= 0
