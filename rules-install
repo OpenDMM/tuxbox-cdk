@@ -48,8 +48,8 @@ libdb2;make:install:DESTDIR=TARGET
 libdvbpsi;make:install:DESTDIR=TARGET
 libevent;make:install:DESTDIR=TARGET
 libffi;make:install
-libfreetype;make:install:libdir=TARGET/lib:includedir=TARGET/include:bindir=TARGET/bin:prefix=TARGET
-libfreetype21;make:install:libdir=TARGET/lib:includedir=TARGET/include:bindir=TARGET/bin:prefix=TARGET
+libfreetype;make:install:libdir=TARGET/lib:includedir=TARGET/include:bindir=TARGET/bin:prefix=TARGET;rewrite-libtool:TARGET/lib/libfreetype.la
+libfreetype21;make:install:libdir=TARGET/lib:includedir=TARGET/include:bindir=TARGET/bin:prefix=TARGET;rewrite-libtool:TARGET/lib/libfreetype.la
 libfribidi;rewrite-pkgconfig:fribidi.pc;make:install:DESTDIR=TARGET
 libgmp;make:install
 libjpeg;make:install-lib:prefix=TARGET
