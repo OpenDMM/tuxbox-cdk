@@ -22,7 +22,9 @@ if [ ! -e /var/etc/.no_pmt_update -a `cat /proc/bus/avia_version` = "avia600" ] 
 fi
 zapit $ZAPIT
 
-nhttpd
+# start nhttpd a bit later, for faster startup
+{ sleep 20; nhttpd; } &
+
 until neutrino -f -u ; do
     echo "Neutrino exited with nonzero exit status, restarting..."
     pidof sectionsd >/dev/null && sectionsdcontrol --nopause || sectionsd $SECTIONSD
