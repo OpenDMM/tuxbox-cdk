@@ -2097,9 +2097,9 @@ dreamboximage_root: core .enigma .etherwake .linuxkernel .dreamfiles .dvbsnoop \
 	flash-plugin_pacman flash-plugin_tuxtxt flash-plugin_ngrabstartstop \
 	flash-ftpd flash-dvb-tools flash-etherwake flash-dreamfiles flash-dvbsnoop \
 	flash-sambaclient
-+if ENABLE_IPKG
-+   $(MAKE) flash-ipkg
-+endif
+if ENABLE_IPKG
+   $(MAKE) flash-ipkg
+endif
 endif
 
 dreamboximage_neutrinoroot: core .neutrino .etherwake .linuxkernel .dreamfiles .dvbsnoop .automount\
