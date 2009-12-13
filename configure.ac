@@ -139,10 +139,10 @@ AC_SUBST(ENIGMA_DEBUG)
 AM_CONDITIONAL(ENIGMA_DEBUG_NO,test "$ENIGMA_DEBUG" = "no")
 AM_CONDITIONAL(ENIGMA_DEBUG_YES,test "$ENIGMA_DEBUG" = "yes")
 
-AC_ARG_ENABLE(freesatepg,
-	AS_HELP_STRING(--enable-freesatepg,enable UK FreeSat EPG),
-	,[enable_freesatepg=no])
-AM_CONDITIONAL(ENABLE_FREESATEPG,test "$enable_freesatepg" = "yes")
+AC_ARG_ENABLE(ipkg,
+   AS_HELP_STRING(--enable-ipkg,enable ipkg package system),
+   ,[enable_ipkg=no])
+AM_CONDITIONAL(ENABLE_IPKG,test "$enable_ipkg" = "yes")
 
 AC_ARG_ENABLE(sqlite,
 	[  --enable-sqlite          enable sql storage (default off)],
@@ -452,6 +452,7 @@ TUXBOX_RULES_MAKE(nfs_utils)
 TUXBOX_RULES_MAKE(less)
 TUXBOX_RULES_MAKE(diffutils)
 TUXBOX_RULES_MAKE(dropbear)
+TUXBOX_RULES_MAKE(ipkg)
 
 #
 # additional
@@ -516,6 +517,7 @@ epg:			$EPG
 mhw-epg:		$MHW_EPG
 flashtool:		$FLASHTOOL
 external flashtool:	$EXTFLASHTOOL
+ipkg:         $enable_ipkg
 reiserfs:		$REISERFS
 enigma debug:		$ENIGMA_DEBUG
 sqlite3 storage:	$enable_sqlite

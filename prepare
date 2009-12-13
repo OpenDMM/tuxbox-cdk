@@ -20,4 +20,5 @@ fi
 	--with-flashtool=standard \
 	--with-reiserfs=no \
 	--with-ext-flashtool=yes \
-	--with-enigma-debug=yes
+	--with-enigma-debug=yes \
+	--enable-ipkg=no

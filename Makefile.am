@@ -1460,6 +1460,24 @@ contrib_apps_optional: .dsniff .pump .thttpd
 	@CLEANUP_dropbear@
 	touch $@
 
+.ipkg: .bootstrap @DEPENDS_ipkg@
+   @PREPARE_ipkg@
+   cd @DIR_ipkg@ && \
+      $(BUILDENV) \
+      ./configure \
+         crosscompiling=yes \
+         --build=$(build) \
+         --host=$(target) \
+         --with-ipkglibdir=/var/ && \
+      $(MAKE) all && \
+      $(INSTALL) -d $(targetprefix)/bin && \
+      mv .libs/ipkg-cl .libs/ipkg && \
+      ln -sf /var/etc/ipkg.conf $(targetprefix)/etc/ipkg.conf && \
+      $(INSTALL) .libs/ipkg $(targetprefix)/bin && \
+      $(INSTALL) .libs/libipkg.so.0 $(targetprefix)/lib
+   @CLEANUP_ipkg@
+   touch $@
+
 #######################
 #
 #   development tools
@@ -1865,9 +1883,9 @@ if MAINTAINER_MODE
 CONFIGURE_OPTS_MAINTAINER = \
 	--enable-maintainer-mode
 endif
-if ENABLE_FREESATEPG
-CONFIGURE_OPTS_EPG = \
-	--enable-freesatepg
+if ENABLE_IPKG
+CONFIGURE_OPTS_IPKG = \
+   --enable-ipkg
 endif
 if TARGETRULESET_FLASH
 CONFIGURE_OPTS_DEBUG = \
@@ -1880,7 +1898,7 @@ CONFIGURE = \
 	CXX=$(target)-g++ \
 	CFLAGS="-Wall $(TARGET_CFLAGS)" \
 	CXXFLAGS="-Wall $(TARGET_CXXFLAGS)" \
-	./configure $(CONFIGURE_OPTS) $(CONFIGURE_OPTS_MAINTAINER) $(CONFIGURE_OPTS_DEBUG) $(CONFIGURE_OPTS_EPG)
+	./configure $(CONFIGURE_OPTS) $(CONFIGURE_OPTS_MAINTAINER) $(CONFIGURE_OPTS_DEBUG) $(CONFIGURE_OPTS_EPG) $(CONFIGURE_OPTS_IPKG
 
 # dvb/svbsnoop
 
@@ -2070,12 +2088,18 @@ if WEBIF_EXPERT
 	$(MAKE) flash-plugin_dreamflash
 	$(MAKE) flash-plugin_movieplayer
 endif
+if ENABLE_IPKG
+   $(MAKE) flash-ipkg
+endif
 else
 dreamboximage_root: core .enigma .etherwake .linuxkernel .dreamfiles .dvbsnoop \
 	flash-enigma flash-plugin_tetris flash-plugin_snake \
 	flash-plugin_pacman flash-plugin_tuxtxt flash-plugin_ngrabstartstop \
 	flash-ftpd flash-dvb-tools flash-etherwake flash-dreamfiles flash-dvbsnoop \
 	flash-sambaclient
++if ENABLE_IPKG
++   $(MAKE) flash-ipkg
++endif
 endif
 
 dreamboximage_neutrinoroot: core .neutrino .etherwake .linuxkernel .dreamfiles .dvbsnoop .automount\
@@ -2759,6 +2783,13 @@ $(flashprefix)/.part_dropbear: $(flashprefix)/.flash .dropbear
 	mkdir -p $(flashprefix)/root/var_init/.ssh
 	ln -sf /var/.ssh $(flashprefix)/root/.ssh
 	@touch $@
+
+flash-ipkg: $(flashprefix)/.part_ipkg
+$(flashprefix)/.part_ipkg: $(flashprefix)/.flash .ipkg
+   $(INSTALL) $(targetprefix)/bin/ipkg $(flashprefix)/root/bin
+   $(INSTALL) $(targetprefix)/lib/libipkg.so.0 $(flashprefix)/root/lib
+   ln -sf  /var/etc/ipkg.conf $(flashprefix)/root/etc/ipkg.conf
+   @touch $@
 
 ############################# UNTESTED!!! ##################################
 flash-neutrino: $(flashprefix)/.part_neutrino
