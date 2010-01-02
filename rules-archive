@@ -81,7 +81,7 @@ boost_1_38_0.tar.bz2;http://heanet.dl.sourceforge.net/sourceforge/boost
 fribidi-0.10.4.tar.bz2;ftp://196.12.10.6/pub/openpkg/sources/DST/fribidi;http://surfnet.dl.sourceforge.net/sourceforge/fribidi
 gmp-4.1.2.tar.gz;ftp://mirrors.kernel.org/gnu/gmp/
 libungif-4.1.3.tar.bz2;ftp://ftp.gwdg.de/pub/FreeBSD/ports/distfiles;http://surfnet.dl.sourceforge.net/sourceforge/libungif
-dropbear-0.48.1.tar.gz;http://matt.ucc.asn.au/dropbear/releases
+dropbear-0.52.tar.gz;http://matt.ucc.asn.au/dropbear
 libevent-1.3b.tar.gz;http://monkey.org/~provos
 ipkg-0.99.163.tar.gz;http://www.handhelds.org/download/packages/ipkg/
 

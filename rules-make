@@ -109,7 +109,7 @@ dreamdriver_dm500;20071022;dreamdriver_dm500_20071022;dreamdriver_dm500_20071022
 nfs_utils;1.0.6;nfs-utils-1.0.6;nfs-utils-1.0.6.tar.gz:nfs-utils.diff;extract:nfs-utils-1.0.6.tar.gz;patch:nfs-utils.diff
 diffutils;2.8.1;diffutils-2.8.1;diffutils-2.8.1.tar.gz;extract:diffutils-2.8.1.tar.gz;
 less;3.81;less-381;less-381.tar.gz;extract:less-381.tar.gz;
-dropbear;0.48.1;dropbear-0.48.1;dropbear-0.48.1.tar.gz;extract:dropbear-0.48.1.tar.gz
+dropbear;0.52;dropbear-0.52;dropbear-0.52.tar.gz;extract:dropbear-0.52.tar.gz
 ipkg;0.99.163;ipkg-0.99.163;ipkg-0.99.163.tar.gz;extract:ipkg-0.99.163.tar.gz;patch:ipkg.diff
 
 #
