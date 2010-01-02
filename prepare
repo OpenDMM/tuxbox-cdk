@@ -21,4 +21,5 @@ fi
 	--with-reiserfs=no \
 	--with-ext-flashtool=yes \
 	--with-enigma-debug=yes \
+	--enable-sqlite=no \
 	--enable-ipkg=no
