@@ -150,10 +150,8 @@ AC_ARG_ENABLE(ipkg,
 AM_CONDITIONAL(ENABLE_IPKG,test "$enable_ipkg" = "yes")
 
 AC_ARG_ENABLE(sqlite,
-	[  --enable-sqlite          enable sql storage (default off)],
-	[SQLITE="$withval"],[SQLITE="no"])
-
-AC_SUBST(SQLITE)
+	AS_HELP_STRING(--enable-sqlite,enable sql storage),
+	,[enable_sqlite=no])
 AM_CONDITIONAL(ENABLE_SQLITE,test "$enable_sqlite" = "yes")
 
 AC_SUBST(EXTFLASHTOOL)
@@ -324,26 +322,6 @@ if test "$TARGETRULESET" = "flash"; then
 	if test "$PYTHON" = "no"; then
 		AC_MSG_WARN(can't build lib dir)
 		PYTHON=/bin/false
-	fi
-	AC_PATH_PROG(FAKEROOT,fakeroot,no)
-	if test "$FAKEROOT" = "no"; then
-		AC_MSG_WARN(can't build images with uid 0 as non-root)
-		FAKEROOT=
-	fi
-	AC_PATH_PROG(MKCRAMFS,mkcramfs,no,"$PATH:/usr/sbin")
-	if test "$MKCRAMFS" = "no"; then
-		AC_MSG_WARN(can't build cramfs)
-		MKCRAMFS=/bin/false
-	fi
-	AC_PATH_PROG(MKJFFS2,mkjffs2,no)
-	if test "$MKJFFS2" = "no"; then
-		AC_PATH_PROG(MKFSJFFS2,mkfs.jffs2,no)
-		if test "$MKFSJFFS2" = "no"; then
-			AC_MSG_WARN(can't build jffs2)
-			MKJFFS2=/bin/false
-		else
-			MKJFFS2=$MKFSJFFS2
-		fi
 	fi
 fi
 
