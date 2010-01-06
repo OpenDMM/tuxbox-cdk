@@ -2720,6 +2720,19 @@ $(flashprefix)/.part_plugin_tankwars: $(flashprefix)/.flash flash-plugin_libfx2
 	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/tank.cfg $(flashprefix)/root/lib/tuxbox/plugins/
 	@touch $@
 
+flash-plugin_tuxwetter: $(flashprefix)/.part_plugin_tuxwetter
+$(flashprefix)/.part_plugin_tuxwetter: $(flashprefix)/.flash .plugins
+	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
+	$(INSTALL) -d $(flashprefix)/root/share/tuxbox/tuxwetter/
+	$(INSTALL) -d $(flashprefix)/root/var_init/tuxbox/config/tuxwetter
+	$(INSTALL) $(targetprefix)/bin/tuxwetter $(flashprefix)/root/bin
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/tuxwetter.so $(flashprefix)/root/lib/tuxbox/plugins/
+	$(INSTALL) $(targetprefix)/lib/tuxbox/plugins/tuxwetter.cfg $(flashprefix)/root/lib/tuxbox/plugins/
+	$(INSTALL) -m644 $(targetprefix)/share/tuxbox/tuxwetter/* $(flashprefix)/root/share/tuxbox/tuxwetter/
+	$(INSTALL) $(targetprefix)/var/tuxbox/config/tuxwetter/convert.list $(flashprefix)/root/var_init/tuxbox/config/tuxwetter/
+	$(INSTALL) $(targetprefix)/var/tuxbox/config/tuxwetter/tuxwetter.conf $(flashprefix)/root/var_init/tuxbox/config/tuxwetter/
+	@touch $@
+
 flash-plugin_viergewinnt: $(flashprefix)/.part_plugin_viergewinnt
 $(flashprefix)/.part_plugin_viergewinnt: $(flashprefix)/.flash flash-plugin_libfx2
 	$(INSTALL) -d $(flashprefix)/root/lib/tuxbox/plugins
