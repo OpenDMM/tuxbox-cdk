@@ -1469,7 +1469,7 @@ contrib_apps_optional: .dsniff .pump .thttpd
 			--build=$(build) \
 			--host=$(target) \
 			--with-ipkglibdir=/var/ && \
-		xyz   $(MAKE) all && \
+		$(MAKE) all && \
 		$(INSTALL) -d $(targetprefix)/bin && \
 		mv .libs/ipkg-cl .libs/ipkg && \
 		ln -sf /var/etc/ipkg.conf $(targetprefix)/etc/ipkg.conf && \
