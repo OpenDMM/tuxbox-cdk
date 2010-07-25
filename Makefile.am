@@ -2037,6 +2037,7 @@ $(appsdir)/tuxbox/plugins/Makefile: .bootstrap .libcurl .libjpeg .libpng .libung
 	cd $(appsdir)/tuxbox/plugins && $(CONFIGURE)
 
 .plugins: $(appsdir)/tuxbox/plugins/Makefile
+	$(MAKE) -C $(appsdir)/tuxbox/plugins/fx2/lib all install
 	$(MAKE) -C $(appsdir)/tuxbox/plugins all install
 	cd $(hostprefix)/$(target)/lib && ln -sf tuxbox/plugins/libfx2.so libfx2.so
 	touch $@
